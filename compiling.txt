@@ -1,0 +1,21 @@
+
+==Compiling LogicSim==
+
+Extract the binary distribution LogicZip.zip
+Extract the source archive LogicSim_source.zip
+Copy the directory logicsim from the source archive into the directory LogicSim of the binary archive.
+Compile with "javac logicsim/*.java"
+Run with "java logicsim.App"
+
+
+==Creating JAR==
+
+Create a file MANIFEST.MF with the following content:
+Manifest-Version: 1.0
+Main-Class: logicsim.App
+
+Create JAR with:
+jar -cf LogicSim.jar -m MANIFEST.MF logicsim/*.class logicsim/images/
+
+
+

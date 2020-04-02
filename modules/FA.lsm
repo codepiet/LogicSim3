@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<logicsim version="3">
+    <info>
+        <description>Full Adder</description>
+    </info>
+    <gates>
+        <gate type="modin" x="150" y="100"/>
+        <gate type="modout" x="470" y="100"/>
+        <gate module="true" type="HA" x="320" y="100"/>
+        <gate module="true" type="HA" x="250" y="140"/>
+        <gate type="or" x="390" y="140"/>
+        <gate type="switch" x="80" y="60"/>
+        <gate type="switch" x="80" y="100"/>
+        <gate type="switch" x="80" y="140"/>
+        <gate type="led" x="560" y="90"/>
+        <gate type="led" x="560" y="130"/>
+    </gates>
+    <wires>
+        <wire>
+            <from id="modin@150:100" number="0"/>
+            <to id="HA@320:100" number="0"/>
+        </wire>
+        <wire>
+            <from id="modin@150:100" number="1"/>
+            <to id="HA@250:140" number="0"/>
+            <point node="false" number="0" x="250" y="120"/>
+        </wire>
+        <wire>
+            <from id="modin@150:100" number="2"/>
+            <to id="HA@250:140" number="1"/>
+            <point node="false" number="0" x="240" y="130"/>
+            <point node="false" number="1" x="240" y="190"/>
+        </wire>
+        <wire>
+            <from id="modout@470:100" number="0"/>
+            <to id="led@560:90" number="0"/>
+        </wire>
+        <wire>
+            <from id="modout@470:100" number="1"/>
+            <to id="led@560:130" number="0"/>
+            <point node="false" number="0" x="550" y="120"/>
+            <point node="false" number="1" x="550" y="150"/>
+        </wire>
+        <wire>
+            <from id="HA@320:100" number="0"/>
+            <to id="modout@470:100" number="0"/>
+        </wire>
+        <wire>
+            <from id="HA@320:100" number="1"/>
+            <to id="or@390:140" number="0"/>
+        </wire>
+        <wire>
+            <from id="HA@250:140" number="0"/>
+            <to id="HA@320:100" number="1"/>
+        </wire>
+        <wire>
+            <from id="HA@250:140" number="1"/>
+            <to id="or@390:140" number="1"/>
+        </wire>
+        <wire>
+            <from id="or@390:140" number="0"/>
+            <to id="modout@470:100" number="1"/>
+            <point node="false" number="0" x="460" y="170"/>
+            <point node="false" number="1" x="460" y="120"/>
+        </wire>
+        <wire>
+            <from id="switch@80:60" number="0"/>
+            <to id="modin@150:100" number="0"/>
+            <point node="false" number="0" x="120" y="110"/>
+        </wire>
+        <wire>
+            <from id="switch@80:100" number="0"/>
+            <to id="modin@150:100" number="1"/>
+        </wire>
+        <wire>
+            <from id="switch@80:140" number="0"/>
+            <to id="modin@150:100" number="2"/>
+            <point node="false" number="0" x="120" y="130"/>
+        </wire>
+    </wires>
+</logicsim>

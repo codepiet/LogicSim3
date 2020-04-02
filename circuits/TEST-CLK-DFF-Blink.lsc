@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<logicsim version="3">
+    <info/>
+    <gates>
+        <gate type="dff" x="190" y="70"/>
+        <gate type="clock" x="40" y="70">
+            <properties>
+                <property key="hightime">200</property>
+                <property key="lowtime">200</property>
+            </properties>
+        </gate>
+        <gate type="led" x="310" y="70"/>
+    </gates>
+    <wires>
+        <wire>
+            <from id="dff@190:70" number="0"/>
+            <to id="led@310:70" number="0"/>
+        </wire>
+        <wire>
+            <from id="dff@190:70" number="1"/>
+            <to id="dff@190:70" number="0"/>
+            <point node="false" number="0" x="250" y="140"/>
+            <point node="false" number="1" x="410" y="140"/>
+            <point node="false" number="2" x="410" y="40"/>
+            <point node="false" number="3" x="150" y="40"/>
+            <point node="false" number="4" x="150" y="90"/>
+        </wire>
+        <wire>
+            <from id="clock@40:70" number="0"/>
+            <to id="dff@190:70" number="1"/>
+        </wire>
+    </wires>
+</logicsim>

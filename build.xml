@@ -1,0 +1,74 @@
+<project name="LogicSim" basedir="." default="main">
+
+	<property name="version" value="3.0b" />
+	<property name="main-class" value="logicsim.App" />
+
+	<property name="dist.dir" value="dist" />
+	<property name="src.dir" value="src" />
+	<property name="build.dir" value="build" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="jar.dir" value="${build.dir}/jar" />
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+		<delete dir="${dist.dir}" />
+		<delete file="./${ant.project.name}.jar" />
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}">
+			<exclude name="logicsim/test/**" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<mkdir dir="${jar.dir}" />
+		<copy todir="${classes.dir}/logicsim/images">
+			<fileset dir="${src.dir}/logicsim/images" />
+		</copy>
+		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${main-class}" />
+				<attribute name="Built-By" value="${user.name}" />
+				<section name="logicsim">
+					<attribute name="Implementation-Title" value="logicsim" />
+					<attribute name="Implementation-Version" value="${version}" />
+					<attribute name="Implementation-Vendor" value="${user.name}" />
+				</section>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="run" depends="jar">
+		<copy file="${jar.dir}/${ant.project.name}.jar" todir="." />
+		<java jar="./${ant.project.name}.jar" fork="true" />
+	</target>
+
+	<target name="clean-build" depends="clean,jar" />
+
+	<target name="dist" depends="jar">
+		<mkdir dir="${dist.dir}" />
+		<copy todir="${dist.dir}" flatten="true">
+			<resources>
+				<file file="${jar.dir}/${ant.project.name}.jar" />
+				<file file="logicsim.cfg" />
+				<file file="gpl.txt" />
+				<file file="icon.png" />
+				<file file="modules" />
+				<file file="README.md" />
+			</resources>
+		</copy>
+		<copy todir="${dist.dir}/modules">
+			<fileset dir="modules" />
+		</copy>
+		<copy todir="${dist.dir}/circuits">
+			<fileset dir="circuits" />
+		</copy>
+		<copy todir="${dist.dir}/languages">
+			<fileset dir="languages" />
+		</copy>
+	</target>
+
+	<target name="main" depends="clean,run" />
+</project>

@@ -1,0 +1,118 @@
+[menu]
+MENU_FILE=Dosya
+MENU_NEW=Yeni
+MENU_OPEN=Aç
+MENU_SAVE=Kaydet
+MENU_SAVEAS=Farkl\u0131 Kaydet
+MENU_EXPORT=Ç\u0131kart
+MENU_PRINT=Yazd\u0131r
+MENU_EXIT=Ç\u0131k\u0131\u015f
+
+MENU_MODULE=Mod\u00fcl
+MENU_CREATEMODULE=Mod\u00fcl Olu\u015ftur
+MENU_MODULEPROPERTIES=Mod\u00fcl Özellikleri
+
+MENU_SETTINGS=Ayarlar
+MENU_PAINTGRID=Izgara çiz
+MENU_GATEDESIGN=Kap\u0131 stili
+MENU_GATEDESIGN_DIN=IEC
+MENU_GATEDESIGN_ISO=US
+MENU_LANGUAGE=Dil
+
+MENU_HELP=Yard\u0131m
+MENU_ABOUT=LogicSim Hakk\u0131nda
+
+[context menu]
+MENU_REMOVEGATE=Kap\u0131y\u0131 kald\u0131r
+MENU_PROPERTIES=Öznitelikler
+MENU_DELETEMODULE=Mod\u00fcl\u00fc sil
+
+[messages]
+MESSAGE_INPUTS=Giri\u015fler
+MESSAGE_DELETE=Gerçekten silmek istiyor musunuz\n%s ?
+MESSAGE_LANGUAGE_RESTART=LogicSim yeniden ba\u015flat\u0131lmal\u0131.
+MESSAGE_SAVEDIALOG=Devreyi dosya olarak kaydet
+MESSAGE_ENTER_TIME_HIGH=HIGH level pulse s\u00fcresini giriniz.(ms)
+MESSAGE_ENTER_TIME_LOW=LOW level pulse s\u00fcresini giriniz.(ms)
+MESSAGE_MODULE_NAME=modul ismi
+MESSAGE_MODULE_DESCRIPTION=modul tanimi
+MESSAGE_MODULE_LABEL=modul label
+MESSAGE_MODULE_IMAGE=modul resmi
+MESSAGE_ENTER_LABEL=Label giriniz.
+MESSAGE_REALLYNEW=Devrede de\u011fi\u015fiklikler yap\u0131ld\u0131.\nKaydetmeden ç\u0131kmak istiyor musunuz??
+
+[tooltip texts]
+TOOLTIP_ADDPOINT=Hat \u00fczerine nokta ekle
+
+[messages in status bar]
+STATUS_INPUTNORMAL=giri\u015f ayar\u0131n\u0131 kald\u0131rmak için giri\u015fi t\u0131klay\u0131n
+STATUS_INPUTINV=Invertor'\u00fc ayarlamak için giri\u015fi t\u0131klay\u0131n
+STATUS_INPUTHIGH=high level giri\u015fe ayarlamak için giri\u015fi t\u0131klay\u0131n
+STATUS_INPUTLOW=low level giri\u015fe ayarlamak için giri\u015fi t\u0131klay\u0131n
+STATUS_ADDPOINT=hatta nokta eklemek için t\u0131klay\u0131n
+STATUS_REMOVEPOINT=hat \u00fczerinden noktay\u0131 kald\u0131rmak için t\u0131klay\u0131n
+STATUS_SAVED=Devre kaydedildi : %s
+STATUS_SETINPUT=Ba\u011flanmak için t\u0131klay\u0131n
+STATUS_CONNECTED=Ba\u011fland\u0131.
+STATUS_ABORTED=Ba\u011flant\u0131 koptu.
+
+[error messages]
+ERROR_NOMODULE=Bu devre bir mod\u00fcl de\u011fil.
+ERROR_FILENOTFOUND=Dosya bulunamad\u0131.
+ERROR_READ=Dosya okuma hatas\u0131 (wrong LogicSim-version?)
+ERROR_FILECORRUPTED=Dosya bozuk.(wrong LogicSim-version?)
+ERROR_CLASS=S\u0131n\u0131f bulunamad\u0131.
+ERROR_SAVE=Dosya kaydetme hatas\u0131.
+ERROR_MODULENOTFOUND=Mod\u00fcl bulunamad\u0131\n%s\nL\u00fctfen do\u011fru mod\u00fcl\u00fc mod\u00fcl klasör\u00fcnden kopyalay\u0131n\u0131z.
+ERROR_APPLET=Bu fonksiyon applet'ler ile desteklenmiyor..\nL\u00fctfen LogicSim masa\u00fcst\u00fc uygulamas\u0131n\u0131 kullan\u0131n..
+
+[BUTTONS]
+BUTTON_SIMULATE=Çal\u0131\u015ft\u0131r
+BUTTON_RESET=Reset
+BUTTON_REMOVE_WIRE_POINT=Noktay\u0131 hat \u00fczerinden kald\u0131r
+BUTTON_USE=Kullan
+BUTTON_CANCEL=\u0130ptal
+
+[GATES]
+GATE_SWITCH=Anahtar
+GATE_SWITCH_TYPE=Anahtar tipi
+GATE_SWITCH_TOGGLE=Toggle-Buton
+GATE_SWITCH_CLICK=Buton
+GATE_LED=LED
+GATE_AND=Ve Kap\u0131s\u0131 (AND)
+GATE_NAND=Ve-De\u011fil Kap\u0131s\u0131 (NAND)
+GATE_OR=Veya Kap\u0131s\u0131 (OR)
+GATE_NOR=Veya-De\u011fil Kap\u0131s\u0131 (NOR)
+GATE_NOT=De\u011fil kap\u0131s\u0131 (Inverter)
+GATE_XOR=Özel-Veya Kap\u0131s\u0131 (XOR)
+GATE_EQUIVALENCE=<-> (Equivalence)
+GATE_NORMALINPUT=Normal Giri\u015f
+GATE_INPUT_INVERTER=Ters giri\u015f
+GATE_INPUT_HIGH=Giri\u015f High
+GATE_INPUT_LOW=Giri\u015f Low
+GATE_RSFF=RS FlipFlop
+GATE_DFF=D FlipFlop
+GATE_DRFF=D FlipFlop & Reset
+GATE_JKFF=JK FF (tetiklemeli)
+GATE_JKMSFF=JKMS FlipFlop
+GATE_TFF=T FlipFlop
+GATE_CLOCK=Saat (Clock)
+GATE_MONOFLOP=Monoflop
+GATE_TURNONDELAY=Gecikmeyi aç
+GATE_TURNOFFDELAY=Gecikmeyi kapat
+GATE_BINARYINPUT=\u0130kili giri\u015f
+GATE_LCD=LCD
+GATE_SEVENSEGMENT=7-segment display
+GATE_TEXTLABEL=Metin ekle
+
+GATE_BINARYINPUT_DISPLAYTYPE=Ekran tipi
+GATE_BINARYINPUT_PROPERTIES=\u0130kili giri\u015f öznitelikleri
+GATE_BINARYINPUT_HEX=Hexadecimal (00..FF)
+GATE_BINARYINPUT_DEC=Decimal (00..99)
+
+GATE_LCD_PROPERTIES=LCD Özellikler
+GATE_MONOFLOP_PROPERTIES=MonoFlop Özellikler
+
+GATE_TURNONDELAY_TIME=Gecikme s\u00fcresini giriniz (ms)
+GATE_TURNOFFDELAY_TIME=Gecikme s\u00fcresini giriniz (ms)
+
