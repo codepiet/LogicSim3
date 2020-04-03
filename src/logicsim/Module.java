@@ -7,9 +7,6 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
-import logicsim.gates.MODIN;
-import logicsim.gates.MODOUT;
-
 /**
  * Module implementation
  * 
@@ -54,14 +51,15 @@ public class Module extends Gate {
 		try {
 			lsFile = XMLLoader.loadXmlFile(filename);
 		} catch (RuntimeException x) {
-			JOptionPane.showMessageDialog(null, I18N.getString(Lang.ERR_FILECORRUPT));
+			JOptionPane.showMessageDialog(null, I18N.getString(Lang.ERR_READ) + ": " + x.getMessage());
+			return;
 		}
 
 		if (lsFile == null)
 			return;
 		if (lsFile.circuit == null)
 			return;
-		// lsFile.circuit.reconnect();
+
 		label = lsFile.getLabel();
 
 		// in der geladenen GateList nach MODIN und MODOUT Gattern suchen

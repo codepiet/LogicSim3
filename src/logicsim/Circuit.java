@@ -3,8 +3,6 @@ package logicsim;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
 
-import logicsim.gates.MODIN;
-
 /**
  * Title: LogicSim Description: digital logic circuit simulator Copyright:
  * Copyright (c) 2001 Company:

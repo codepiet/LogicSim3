@@ -46,11 +46,10 @@ public class XMLLoader {
 				try {
 					Gate g = App.getGate(type);
 					if (g == null)
-						throw new RuntimeException(
-								I18N.getString(Lang.ERR_READ) + ": gate type '" + type + "' not there");
-					gate = GateInstanciator.create(g);
+						throw new RuntimeException("gate type '" + type + "' not there");
+					gate = GateLoaderHelper.create(g);
 				} catch (Exception e) {
-					throw new RuntimeException(I18N.getString(Lang.ERR_READ) + ": " + e.getMessage());
+					throw new RuntimeException(e.getMessage());
 				}
 
 				if (optInputs != null)

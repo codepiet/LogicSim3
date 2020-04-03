@@ -18,7 +18,10 @@
 	<target name="compile">
 		<mkdir dir="${classes.dir}" />
 		<javac srcdir="${src.dir}" destdir="${classes.dir}">
-			<exclude name="logicsim/test/**" />
+			<exclude name="gates/**" />
+		</javac>
+		<mkdir dir="${classes.dir}2" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}2">
 		</javac>
 	</target>
 
@@ -58,6 +61,10 @@
 				<file file="modules" />
 				<file file="README.md" />
 			</resources>
+		</copy>
+		<mkdir dir="${dist.dir}/gates"/>
+		<copy todir="${dist.dir}/gates">
+			<fileset dir="${classes.dir}2/gates" />
 		</copy>
 		<copy todir="${dist.dir}/modules">
 			<fileset dir="modules" />

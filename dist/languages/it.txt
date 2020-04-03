@@ -1,0 +1,118 @@
+[menu]
+MENU_FILE=File
+MENU_NEW=Nuovo
+MENU_OPEN=Apri...
+MENU_SAVE=Salva
+MENU_SAVEAS=Salva con nome...
+MENU_EXPORT=Export...
+MENU_PRINT=Stampa...
+MENU_EXIT=Esci
+
+MENU_MODULE=Modulo
+MENU_CREATEMODULE=Crea Modulo
+MENU_MODULEPROPERTIES=Proprietà modulo
+
+MENU_SETTINGS=Impostazioni
+MENU_PAINTGRID=Visualizza Griglia
+MENU_GATEDESIGN=Impostazioni Porte
+MENU_GATEDESIGN_DIN=Simboli IEC
+MENU_GATEDESIGN_ISO=Simboli US
+MENU_LANGUAGE=Lingua
+
+MENU_HELP=Help
+MENU_ABOUT=About LogicSim
+
+[context menu]
+MENU_REMOVEGATE=Elimina
+MENU_PROPERTIES=Proprietà
+MENU_DELETEMODULE=Elimina Modulo
+
+[messages]
+MESSAGE_INPUTS=Ingressi
+MESSAGE_DELETE=Confermi eliminazione\n%s ?
+MESSAGE_LANGUAGE_RESTART=LogicSim deve essere riavviato.
+MESSAGE_SAVEDIALOG=Salva il Circuito
+MESSAGE_ENTER_TIME_HIGH=Inserisci tempo per livello ALTO (ms)
+MESSAGE_ENTER_TIME_LOW=Inserisci il tempo per livello BASSO (ms)
+MESSAGE_MODULE_NAME=Nome Modulo
+MESSAGE_MODULE_DESCRIPTION=Descrizione
+MESSAGE_MODULE_LABEL=Etichetta Modulo
+MESSAGE_MODULE_IMAGE=Immagine Modulo
+MESSAGE_ENTER_LABEL=Inserisci Etichetta
+MESSAGE_REALLYNEW=The circuit has been modified.\nDo you really want to discard the current circuit?
+
+[tooltip texts]
+TOOLTIP_ADDPOINT=Aggiungi giunzione
+
+[messages in status bar]
+STATUS_INPUTNORMAL=Click sull'ingresso per rimuovere le impostazioni
+STATUS_INPUTINV=Click sull'ingresso per impostare la negazione
+STATUS_INPUTHIGH=Click sull'ingresso per impostarlo a livello ALTO
+STATUS_INPUTLOW=Click sull'ingresso per impostarlo a livello BASSO
+STATUS_ADDPOINT=Click sul filo per aggiungere una giunzione
+STATUS_REMOVEPOINT=Click sulla giunzione per rimuoverla
+STATUS_SAVED=Il circuito %s è stato salvato
+STATUS_SETINPUT=Click sull'ingresso per effettuare la connessione
+STATUS_CONNECTED=Connesso
+STATUS_ABORTED=Annullato
+
+[error messages]
+ERROR_NOMODULE=Il circuito non è un modulo
+ERROR_FILENOTFOUND=File non trovato
+ERROR_READ=Errore di lettura file (errata versione di LogicSim?)
+ERROR_FILECORRUPTED=File rovinato (errata versione di LogicSim?)
+ERROR_CLASS=Classe non trovata
+ERROR_SAVE=Errore di scrittura file
+ERROR_MODULENOTFOUND=Impossibile trovare il Modulo\n%s\ncopiare il modulo corretto nella cartella moduli
+ERROR_APPLET=This function is not available when running as applet.\nPlease download LogicSim and run it as application.
+
+[BUTTONS]
+BUTTON_SIMULATE=Avvia Simulazione
+BUTTON_RESET=risistemazione
+BUTTON_REMOVE_WIRE_POINT=Rimuovi giunzione
+BUTTON_USE=OK
+BUTTON_CANCEL=Annulla
+
+[GATES]
+GATE_SWITCH=Switch
+GATE_SWITCH_TYPE=Tipo di switch
+GATE_SWITCH_TOGGLE=Interruttore
+GATE_SWITCH_CLICK=Pulsante
+GATE_LED=LED
+GATE_AND=AND
+GATE_NAND=NAND
+GATE_OR=OR
+GATE_NOR=NOR
+GATE_NOT=NOT (Inverter)
+GATE_XOR=XOR
+GATE_EQUIVALENCE=EXNOR (Comp. Dig.)
+GATE_NORMALINPUT=Ingresso NORMALE
+GATE_INPUT_INVERTER=Ingresso NEGATO
+GATE_INPUT_HIGH=Ingresso ALTO
+GATE_INPUT_LOW=Ingresso BASSO
+GATE_RSFF=RS FlipFlop
+GATE_DFF=D FlipFlop
+GATE_DRFF=D FlipFlop & Reset
+GATE_JKFF=JK FF (Edge Trigg)
+GATE_JKMSFF=JKMS FlipFlop
+GATE_TFF=T FlipFlop
+GATE_CLOCK=Clock
+GATE_MONOFLOP=Monostabile
+GATE_TURNONDELAY=Ritardo OFF-ON
+GATE_TURNOFFDELAY=Ritardo ON-OFF
+GATE_BINARYINPUT=Contraves Binario
+GATE_LCD=Display LCD
+GATE_SEVENSEGMENT=7-segment display
+GATE_TEXTLABEL=Etichetta di Testo
+
+GATE_BINARYINPUT_DISPLAYTYPE=Tipo di Display
+GATE_BINARYINPUT_PROPERTIES=Proprietà Contraves
+GATE_BINARYINPUT_HEX=Hex (00..FF)
+GATE_BINARYINPUT_DEC=Dec (00..99)
+
+GATE_LCD_PROPERTIES=Proprietà Display LCD
+GATE_MONOFLOP_PROPERTIES=Proprietà MonoFlop
+
+GATE_TURNONDELAY_TIME=Inserisci Tempo di Ritardo (ms)
+GATE_TURNOFFDELAY_TIME=Inserisci Tempo di Ritardo (ms)
+
