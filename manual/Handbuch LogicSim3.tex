@@ -1,0 +1,70 @@
+\documentclass[12pt]{scrartcl}
+\include{if}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage{multirow}
+
+\cfoot{}
+\geometry{bottom=0mm}
+
+\begin{document}
+
+\newcommand{\lsN}{\textit{LogicSim 3}}
+\newcommand{\lsA}{\textit{LogicSim 2}}
+
+
+\title{Handbuch - LogicSim 3}
+\author{P. Gabriel}
+\date{April 2020}
+
+\vspace*{-11mm}
+
+\section{Einleitung}
+Der \textit{Logic Simulator}, im folgenden abgekürzt durch \lsN{}, ist der Nachfolger von Andreas Tetzls \lsA{}. \lsA{} ist auf seiner Webseite \url{http://tetzl.de} veröffentlicht.\\
+
+Neue Versionen von \lsN{} sind auf der Webseite \url{http://sis.schule} veröffentlicht. Der Quelltext kann unter GitHub (Projektname: LogicSim3) heruntergeladen werden. Das Programm ist unter der GPL veröffentlicht und darf daher frei verändert werden, sofern der geänderte Quelltext wieder veröffentlicht wird. Eine kommerzielle closed-source Verwendung ist damit ausgeschlossen.\\
+
+Die Entwicklung von \lsA{} wurde seit 11 Jahren nicht mehr fortgeführt, mittlerweile ist die Applet-Technik abgekündigt und ist evtl. bald nicht mehr in den verfügbaren \textit{Java Runtimes} enthalten. Der Autor der fortgeführten Software fehlten einige Funktionen, speziell eine Zoom-Funktion sowie Kopieren und Einfügen von Elementen. Auch konnten keine Beschriftungen zu Ein- und Ausgängen festgelegt werden. Dies war insbesondere bei Modulen problematisch. Auch das Rotieren von Elementen ist noch nicht möglich.\\
+
+Einige dieser Funktionen wurden bereits implementiert. Interessant ist auch die Verwendung von XML als Ausgabesprache für die Schaltplandateien. So können die Dateien auch händisch bearbeitet werden.\\
+
+Wichtig für die neue Version war ein Einsatz in der Schule. Da \lsA{} einfach zu bedienen ist und man direkt mit der Modellierung von Schaltkreisen beginnen kann, sollte der Einsatz in der Schule weiter verbessert werden. Die einzelnen >>Gatter<< sind nun in ein Verzeichnis ausgelagert worden und sind damit nicht mehr fest im \textit{Java Archiv} (.jar-Datei) verankert. Dadurch können nun aus didaktischen Gründen einzelne Gatter entfernt werden, um z.B. nur die Grundgatter, Schalter und LEDs zur Verfügung zu stellen.\\
+
+An der Erstellung der Software darf mitgearbeitet werden. Dazu ist das GitHub-Projekt vorhanden. Bitte nehmen Sie daher Kontakt über die GitHub-Projektseite auf.\\
+
+Bitte verwenden Sie auch diesen Weg, falls Sie Fehler der Software melden möchten.\\
+
+\subsection{History}
+\begin{tabular}{p{4cm}p{10cm}}
+2020-04-03 & Erstellung des Dokuments\\
+\end{tabular}
+
+\section{Bedienung}
+Die Softwarebedienung erschließt sich in weiten Teilen von selbst. Besonderheiten:
+\begin{compactitem}
+\item Bauteile werden in die Arbeitsfläche eingefügt, indem zunächst das Bauteil links in der Liste angeklickt wird. Durch einen Klick auf eine freie Stelle in der Arbeitsfläche wird das Teil mit dem oberen linken Punkt am Mauszeiger eingefügt.
+\item Neue Kabel werden eingefügt, indem stets \textit{ein Ausgang} eines Gatters angeklickt wird. Das freie Kabelende ist immer am Mauszeiger. Jeder weitere Klick auf eine freie Stelle fügt in dem Kabel ein >>Knick<< ein. Ein Kabel wird fertiggestellt, in dem \textit{ein Eingang} eines Bauteils angeklickt wird.\\
+Während der Bearbeitung des Kabels kann die Taste \textit{Escape} gedrückt werden, um den zuletzt eingefügten Punkt zu löschen, falls versehentlich ein Punkt platziert wurde.
+\item Das Anklicken eines Bauteils oder eines Kabels führt zur Auswahl (\textit{Selektion}) des Teils. Es kann dann per Pfeiltasten oder durch Drag\&Drop mit der Maus verschoben werden. Bei Kabeln werden nur die inneren Punkte bewegt, die äußeren Punkte bleiben an angeschlossenen Bauteile. Werden Bauteilen bewegt, werden entsprechend nur die Kabelenden der angeschlossenen Kabel mitbewegt.
+\item Selektierte Bauteile oder Kabel können durch Druck auf die Backspace-Taste (auch Entf- oder Lösch-Taste) entfernt werden. Werden Bauteile gelöscht, so werden automatisch alle angeschlossenen Kabel mitgelöscht.
+\item Kabel müssen immer an zwei Enden angeschlossen sein, es gibt keine >>Luftenden<<.
+\end{compactitem}
+
+\subsection{Einsatz in der Schule}
+\section{Module}
+\section{Aufbau der digitalen Schaltungsdateien}
+\section{Erweiterung}
+\subsection{Übersetzung der Texte in andere Sprachen}
+Als Muster stehen die Dateien \texttt{de.txt} und \texttt{en.txt} zur Verfügung. Diese Dateien enthalten die neuen Sprachtexte, die von \lsN{} verwendet werden. Vorhandene, andere Sprachdateien sind zwar übersetzt, nur sind die Sprachtextbezeichner noch nicht auf \lsN{} umgestellt.
+
+\subsection{Weiterentwicklung, Implementierung neuer Bauteile}
+Eine Erweiterung ist ohne Weiteres möglich. Dazu kann der Source-Tree von Github heruntergeladen werden\footnote{s. im Internet: \url{https://github.com/codepiet/LogicSim3}}. Wird Eclipse verwendet, so kann direkt die Struktur aus Github übernommen werden. Das \textit{src}-Verzeichnis enthält die Quelltexte zum Programm und den Bauteilen. Es sind keine externen Bibliotheken erforderlich.\\
+
+Die Klasse \texttt{App.java} enthält die \texttt{main}-Methode für den Start der Software.
+Die Datei \texttt{build.xml} wird für das Generieren von Releases mittels \textit{ant}verwendet.
+
+Da der Aufbau der implementierten Logikgatter sehr einfach ist, können auch Schüler in Facharbeiten weitere, komplexere Gatter implementieren. Die Klasse \texttt{logicsim.Gate} stellt die API, gemeinsam mit der Oberklasse \texttt{logicsim.CircuitPart} bereit. Alle vorhandenen Gatter verwenden lediglich die definierten Methoden. Anhand der vorhandenen Gatterklassen kann das Vorgehen für weiterführende Bauteile abgeschaut werden. Auch Komponenten wie die 7-Segment-Anzeige sind Unterklassen von \texttt{logicsim.Gate}.\\
+
+\section{Nächste Schritte}
+
+\end{document}

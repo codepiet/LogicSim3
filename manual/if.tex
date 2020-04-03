@@ -1,0 +1,18 @@
+\usepackage{if}
+\usepackage{framed}
+\usepackage{color}
+
+\definecolor{col_bg}{rgb}{0.7,0.9,0.7}
+\definecolor{col_bg_light}{rgb}{0.9,0.98,0.9}
+% text color for reddish text
+\definecolor{col_high}{rgb}{0.6353,0.1569,0.1569}
+
+
+\newenvironment{fshaded}{%
+\def\FrameCommand{\fboxrule0.3mm\fboxsep5mm\fcolorbox{col_bg}{col_bg_light}}%
+%\def\FrameCommand{\fboxrule0.3mm\fboxsep5mm\colorbox{col_bg_light}}%
+\MakeFramed {\FrameRestore}}%
+{\endMakeFramed}
+
+\newenvironment{colbox}{%
+\begin{fshaded}}{\end{fshaded}}

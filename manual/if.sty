@@ -1,0 +1,134 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{if}[2019/07/01]
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[ngerman]{babel}
+\RequirePackage{geometry}
+\RequirePackage{graphicx}
+\RequirePackage{listings}
+\RequirePackage{titling}
+\RequirePackage{tikz}
+\RequirePackage{paralist}
+\RequirePackage{setspace} 
+\onehalfspacing
+
+\RequirePackage{pdfcomment}
+\RequirePackage{pdfmarginpar}
+
+\RequirePackage{hyperref}
+
+\usepackage{paralist}
+
+\RequirePackage{wrapfig}
+\RequirePackage{tabularx}
+%\RequirePackage[headsepline]{scrpage2}
+\RequirePackage{scrpage2}
+\pagestyle{scrheadings}
+\clearscrheadfoot
+
+\KOMAoptions{%
+footsepline=false,
+headsepline=false
+}
+
+\geometry{a4paper,
+ left=17mm,right=13mm,top=10mm,bottom=15mm,
+ portrait, 
+ heightrounded, 
+ marginparwidth=0pt,
+ nomarginpar,
+ headheight=20mm,
+ textwidth=16cm, 
+% showframe, 
+ includehead, 
+ includefoot,
+ footnotesep=0mm,
+% twoside
+ }
+
+\newcommand{\degC}{$^\circ$C}
+\newcommand{\etitem}[3]%
+{  #1 & #2 (#3) & ~ \\ \hline
+}
+
+%\renewcommand{\figurename}{Material}% 
+%\renewcommand{\tablename}{Tabelle}% 
+%\renewcaptionname{ngerman}{\figurename}{Material}
+%\renewcommand{\thefigure}{\Alph{figure}}
+\newcommand{\ccbync}{\ofoot{\includegraphics[width=2cm]{cc-by-nc}}}
+
+\newcommand{\parage}[3]{
+  \colorbox{#1}{
+    \begin{tabularx}{\textwidth}{lc}       
+      \begin{minipage}[t]{0.1\linewidth}
+        \vspace{0px}
+        \hspace*{-1cm}
+        #2
+      \end{minipage} &
+      \begin{minipage}[t]{0.85\linewidth}
+        \vspace{0.4ex}
+        \hspace*{-5mm}
+        #3
+        \vspace*{1ex}
+      \end{minipage}
+    \end{tabularx}
+  }
+  \smallskip
+}
+
+\newcommand{\paragen}[3]{
+  \colorbox{#1}{
+    \begin{tabularx}{\textwidth}{cc}       
+      \begin{minipage}[t]{0.15\linewidth}
+        \vspace{0px}
+        \centering\textbf{\small #2}
+      \end{minipage} &
+      \begin{minipage}[t]{0.8\linewidth}
+        \vspace{0px}
+        #3
+        \vspace*{1ex}        
+      \end{minipage}
+    \end{tabularx}
+  }
+  \smallskip
+}
+% displays "Aufgabe"-pic and text
+\newcommand{\exercise}[2]{\vspace*{1.5ex}\parage{white}{%
+\setlength{\unitlength}{0.1mm}
+\begin{picture}(0,50)%
+    \put(0,0){\includegraphics[scale=0.75]{./abbildungen/style/marker-exercise}}%
+    \put(110,-73){\includegraphics[scale=0.75]{./abbildungen/digit#1}}%
+\end{picture}}{#2}}
+
+
+\newcommand{\changefont}[3]{\fontfamily{#1} \fontseries{#2}\fontshape{#3} \selectfont}
+
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\figurename}{Material}% 
+\renewcommand{\tablename}{Tabelle}% 
+
+\parindent0cm
+
+%\hypersetup{
+%pdfauthor={Peter Gabriel},
+%pdftitle={\thetitle}
+%}
+
+%\ohead{\includegraphics[width=18mm]{lgrs-logo}\\\hspace*{-5mm}\includegraphics[width=18cm]{abbildungen/style/deko}}
+\ohead{\vspace*{-15mm}\hspace*{-5mm}\includegraphics[width=18cm]{abbildungen/style/deko}}
+%\ohead{\includegraphics[width=40mm]{schule-logo}\\\hspace*{-5mm}\includegraphics[width=18cm]{abbildungen/style/deko}}
+\chead{\setlength{\unitlength}{1 mm}
+\begin{picture}(0,0)
+\put(65, -262){\includegraphics[width=2cm]{abbildungen/cc-by-nc}}
+\put(65, -265){{\tiny \theauthor}}
+\end{picture}}
+\ihead{%
+\setlength{\unitlength}{0.1mm}
+\begin{picture}(0,0)%
+    \put(-5,-50){\includegraphics[width=12mm]{abbildungen/if}}%
+    \put(160, 50){\Large \textnormal{\textbf{Informatik}}}%
+\end{picture}
+{\\\upshape{\vspace*{-3mm}\hspace*{17.5mm}\textbf{{\large \thetitle{}}}}}}
+\ifoot{}
+\cfoot{\thepage}
+\ofoot{}
