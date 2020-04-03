@@ -1,0 +1,119 @@
+[menu]
+MENU_FILE=Fichier
+MENU_NEW=Nouveau
+MENU_OPEN=Ouvrir...
+MENU_SAVE=Enregistrer
+MENU_SAVEAS=Enregistrer sous...
+MENU_EXPORT=Exporter...
+MENU_PRINT=Imprimer...
+MENU_EXIT=Quitter
+
+MENU_MODULE=Module
+MENU_CREATEMODULE=Créer un module
+MENU_MODULEPROPERTIES=Propriétés du module
+
+MENU_SETTINGS=Réglage
+MENU_PAINTGRID=Dessiner la grille
+MENU_GATEDESIGN=Représentation
+MENU_GATEDESIGN_DIN=IEC
+MENU_GATEDESIGN_ISO=US
+MENU_LANGUAGE=Langue
+
+MENU_HELP=Aide
+MENU_ABOUT=À propos de LogicSim
+
+[context menu]
+MENU_REMOVEGATE=Effacer le composant
+MENU_PROPERTIES=Propriétés
+MENU_DELETEMODULE=Effacer le module
+
+[messages]
+MESSAGE_INPUTS=Entrée
+MESSAGE_DELETE=Voulez vous vraiment effacer le fichier %s ?
+MESSAGE_LANGUAGE_RESTART=LogicSim doit être redémarré.
+MESSAGE_SAVEDIALOG=Enregistrer le schéma
+MESSAGE_ENTER_TIME_HIGH=Durée du palier haut (ms)
+MESSAGE_ENTER_TIME_LOW=Durée du palier bas (ms)
+MESSAGE_MODULE_NAME=Nom
+MESSAGE_MODULE_DESCRIPTION=Description
+MESSAGE_MODULE_LABEL=Étiquette
+MESSAGE_MODULE_IMAGE=Image du module
+MESSAGE_ENTER_LABEL=Entrer le texte
+MESSAGE_REALLYNEW=Le circuit a été modifié.\nVoulez vous vraiment perdre ce circuit?
+
+[tooltip texts]
+TOOLTIP_ADDPOINT=Ajouter un point de connexion
+
+[messages in status bar]
+STATUS_INPUTNORMAL=Sélectionnez l'entrée pour effacer la configuration actuelle
+STATUS_INPUTINV=Sélectionnez l'entrée pour l'inverser
+STATUS_INPUTHIGH=Sélectionnez l'entrée pour la mettre au niveau haut
+STATUS_INPUTLOW=Sélectionnez l'entrée pour la mettre au niveau bas
+STATUS_ADDPOINT=Sélectionnez un fil pour rajouter un point
+STATUS_REMOVEPOINT=Sélectionnez un point de connexion pour le supprimer
+STATUS_SAVED=Le schéma %s a été enregistré
+STATUS_SETINPUT=Sélectionnez l'entrée pour raccorder la connexion
+STATUS_CONNECTED=Connecté
+STATUS_ABORTED=Abandonné
+
+[error messages]
+ERROR_NOMODULE=Ce schéma n'est pas un module
+ERROR_FILENOTFOUND=Donnée non trouvée
+ERROR_READ=Erreur de lecture
+ERROR_FILECORRUPTED=Mauvais format de fichier (Mauvaise version de LogicSim ?)
+ERROR_CLASS=La classe Java n'a pas été trouvée (Mauvaise version de LogicSim ?)
+ERROR_SAVE=Erreur pendant la sauvegarde
+ERROR_MODULENOTFOUND=Le module \n%s n'a pas été trouvé.\nCopiez le module dans le répertoire approprié.
+ERROR_APPLET=Cette fonction n'est pas disponible en mode applet.\nTéléchargez l'application LogicSim.
+
+[BUTTONS]
+BUTTON_SIMULATE=Simuler
+BUTTON_RESET=RAZ
+BUTTON_REMOVE_WIRE_POINT=Supprimer un point de connexion
+BUTTON_USE=Valider
+BUTTON_CANCEL=Annuler
+
+[GATES]
+GATE_SWITCH=Bouton
+GATE_SWITCH_TYPE=Type de bouton
+GATE_SWITCH_TOGGLE=Interrupteur
+GATE_SWITCH_CLICK=Bouton poussoir
+GATE_LED=LED
+GATE_AND=Et (AND)
+GATE_NAND=Non Et (NAND)
+GATE_OR=OU (OR)
+GATE_NOR=Non Ou (NOR)
+GATE_NOT=Non (NOT)
+GATE_XOR=Ou exclusif (XOR)
+GATE_EQUIVALENCE=<-> (NXOR)
+GATE_NORMALINPUT=Entrée normale
+GATE_INPUT_INVERTER=Entrée inversée
+GATE_INPUT_HIGH=Entrée au niveau haut
+GATE_INPUT_LOW=Entrée au niveau bas
+GATE_RSFF=Bascule RS
+GATE_DFF=Bascule D
+GATE_DRFF=D FlipFlop & Reset
+GATE_JKFF=Bascule JK (Front montant)
+GATE_JKMSFF=Bascule JKMS
+GATE_TFF=Bascule T
+GATE_CLOCK=Horloge
+GATE_MONOFLOP=Monostable
+GATE_TURNONDELAY=Temporisation travail
+GATE_TURNOFFDELAY=Temporisation repos
+GATE_BINARYINPUT=Roue codeuse
+GATE_LCD=Afficheur
+GATE_SEVENSEGMENT=Afficheur 7 segments
+GATE_TEXTLABEL=Étiquette
+
+GATE_BINARYINPUT_DISPLAYTYPE=Type d'affichage
+GATE_BINARYINPUT_PROPERTIES=Caractéristiques des roues codeuse
+GATE_BINARYINPUT_HEX=Hexadécimal (00..FF)
+GATE_BINARYINPUT_DEC=Décimal (00..99)
+
+GATE_LCD_PROPERTIES=Caractéristiques de l'afficheur
+
+GATE_MONOFLOP_PROPERTIES=Réglage du monostable
+
+GATE_TURNONDELAY_TIME=Décalage (ms)
+GATE_TURNOFFDELAY_TIME=Décalage (ms)
+

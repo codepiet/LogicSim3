@@ -75,16 +75,16 @@ public class TEST extends Gate {
 		boolean b = true;
 		for (int i = 0; i < getNumInputs(); i++) {
 			b = getInputLevel(i);
-			Connector output = getOutput(0);
-			output.setLevel(!b);
+			Connector output = getOutput(i);
+			output.setLevel(b);
 		}
 	}
 
 	@Override
 	public void reset() {
-		setOutputLevel(0, false);
-		setOutputLevel(1, true);
-		setOutputLevel(2, false);
-		setOutputLevel(3, false);
+		setOutputLevel(0, getInputLevel(0));
+		setOutputLevel(1, getInputLevel(1));
+		setOutputLevel(2, getInputLevel(2));
+		setOutputLevel(3, getInputLevel(3));
 	}
 }

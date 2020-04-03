@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<logicsim version="3">
+    <info/>
+    <gates>
+        <gate type="test" x="360" y="90"/>
+        <gate type="switch" x="110" y="100"/>
+        <gate type="led" x="660" y="90"/>
+        <gate type="switch" x="110" y="140"/>
+        <gate type="led" x="660" y="130"/>
+        <gate type="switch" x="110" y="180"/>
+        <gate type="switch" x="110" y="220"/>
+        <gate type="led" x="660" y="170"/>
+        <gate type="led" x="660" y="210"/>
+    </gates>
+    <wires>
+        <wire>
+            <from id="test@360:90" number="0"/>
+            <to id="led@660:90" number="0"/>
+            <point node="false" number="0" x="320" y="140"/>
+            <point node="false" number="1" x="320" y="220"/>
+            <point node="false" number="2" x="570" y="220"/>
+            <point node="false" number="3" x="570" y="110"/>
+        </wire>
+        <wire>
+            <from id="test@360:90" number="1"/>
+            <to id="led@660:130" number="0"/>
+            <point node="false" number="0" x="410" y="180"/>
+            <point node="false" number="1" x="550" y="180"/>
+            <point node="false" number="2" x="550" y="150"/>
+        </wire>
+        <wire>
+            <from id="test@360:90" number="2"/>
+            <to id="led@660:170" number="0"/>
+            <point node="false" number="0" x="560" y="120"/>
+            <point node="false" number="1" x="560" y="190"/>
+        </wire>
+        <wire>
+            <from id="test@360:90" number="3"/>
+            <to id="led@660:210" number="0"/>
+            <point node="false" number="0" x="390" y="60"/>
+            <point node="false" number="1" x="540" y="60"/>
+            <point node="false" number="2" x="540" y="230"/>
+        </wire>
+        <wire>
+            <from id="switch@110:100" number="0"/>
+            <to id="test@360:90" number="0"/>
+        </wire>
+        <wire>
+            <from id="switch@110:140" number="0"/>
+            <to id="test@360:90" number="1"/>
+            <point node="false" number="0" x="210" y="160"/>
+            <point node="false" number="1" x="210" y="190"/>
+            <point node="false" number="2" x="390" y="190"/>
+        </wire>
+        <wire>
+            <from id="switch@110:180" number="0"/>
+            <to id="test@360:90" number="2"/>
+            <point node="false" number="0" x="450" y="200"/>
+            <point node="false" number="1" x="450" y="140"/>
+        </wire>
+        <wire>
+            <from id="switch@110:220" number="0"/>
+            <to id="test@360:90" number="3"/>
+            <point node="false" number="0" x="210" y="240"/>
+            <point node="false" number="1" x="210" y="210"/>
+            <point node="false" number="2" x="490" y="210"/>
+            <point node="false" number="3" x="490" y="70"/>
+            <point node="false" number="4" x="410" y="70"/>
+        </wire>
+    </wires>
+</logicsim>

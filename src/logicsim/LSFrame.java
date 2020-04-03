@@ -83,8 +83,6 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 
 	Simulation sim;
 
-	JFrame window;
-
 	// button bar
 	JButton btnOpen = new JButton();
 	JButton btnNew = new JButton();
@@ -179,10 +177,7 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 		component1 = Box.createHorizontalStrut(8);
 		component2 = Box.createHorizontalStrut(8);
 		contentPane.setLayout(borderLayout1);
-		if (window != null) {
-			// window.setSize(new Dimension(1024, 768));
-			window.setTitle("LogicSim");
-		}
+		setTitle("LogicSim");
 		statusBar.add(sbText, BorderLayout.WEST);
 		statusBar.add(sbCoordinates, BorderLayout.EAST);
 		statusBar.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
@@ -435,9 +430,7 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 
 	/** Help | About action performed */
 	public void jMenuHelpAbout_actionPerformed(ActionEvent e) {
-		new LSFrame_AboutBox(window);
-		// JOptionPane.showMessageDialog(this, "LogicSim 2.0 BETA\n\nCopyright 2001
-		// Andreas Tetzl\nandreas@tetzl.de\nwww.tetzl.de");
+		new LSFrame_AboutBox(LSFrame.this);
 	}
 
 	public void actionPerformed(ActionEvent e) { // popup menu
@@ -556,9 +549,7 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 		if (showDiscardDialog(I18N.getString(Lang.MNU_NEW)) == false)
 			return;
 		lspanel.clear();
-		if (window != null) {
-			window.setTitle("LogicSim");
-		}
+		setTitle("LogicSim");
 
 		lsFile = new LogicSimFile(defaultCircuitFileName());
 		lspanel.setChangeListener(this);
@@ -615,9 +606,7 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 		name = "LogicSim - " + name;
 		if (lsFile.changed)
 			name += "*";
-		if (window != null) {
-			window.setTitle(name);
-		}
+		this.setTitle(name);
 	}
 
 	private static String extractFileName(String fileName) {

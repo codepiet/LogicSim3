@@ -10,6 +10,7 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
@@ -27,15 +28,17 @@ public class LSFrame_AboutBox extends JWindow {
 
 	public LSFrame_AboutBox(Frame parent) {
 		super(parent);
-		Dimension scrSize;
+		Dimension pS;
+		Point pL;
 		int imgWidth, imgHeight;
 
 		this.imgSplash = new ImageIcon(logicsim.LSFrame.class.getResource("images/about.jpg")).getImage();
 
 		imgWidth = imgSplash.getWidth(this);
-		imgHeight = imgSplash.getHeight(this) + 100;
-		scrSize = toolkit.getScreenSize();
-		setLocation((scrSize.width / 2) - (imgWidth / 2), (scrSize.height / 2) - (imgHeight / 2));
+		imgHeight = imgSplash.getHeight(this) + 140;
+		pS = parent.getSize();
+		pL = parent.getLocation();
+		setLocation(pL.x + pS.width / 2 - imgWidth / 2, pL.y + pS.height / 2 - imgHeight / 2);
 		setSize(imgWidth, imgHeight);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		getContentPane().add(splashPanel, "Center");
@@ -71,12 +74,11 @@ public class LSFrame_AboutBox extends JWindow {
 			g2.setFont(f);
 
 			String version = App.class.getPackage().getImplementationVersion();
-			g2.drawString("Version " + version + " - This program is free software - Released under the GPL", 10, 240);
-			g2.drawString("Programmed by Peter Gabriel since Version 3.0", 10, 260);
-			g2.drawString("Based on LogicSim 2.0 by Andreas Tetzl", 10, 280);
-			g2.drawString("andreas@tetzl.de         pngabriel@gmail.com        Download on Github", 10, 300);
-			// g2.drawString("Artwork by Jens Borsdorf, www.jens-borsdorf.de", 10, 310);
-
+			g2.drawString("Version " + version, 10, 240);
+			g2.drawString("Programmed 2020 by Peter Gabriel - http://sis.schule", 10, 260);
+			g2.drawString("Based on LogicSim 2.4 (2009) by Andreas Tetzl - http://tetzl.de", 10, 290);
+			g2.drawString("Artwork by Jens Borsdorf, http://jens.borsdorf.name", 10, 310);
+			g2.drawString("LogicSim is free software-Released under the GPL-Download on Github", 10, 340);
 		}
 	}
 
