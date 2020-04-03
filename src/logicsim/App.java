@@ -1,9 +1,7 @@
 package logicsim;
 
-import java.awt.AWTEvent;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -12,10 +10,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 public class App {
 
@@ -25,24 +22,29 @@ public class App {
 	public static String MODULE_FILE_SUFFIX = "lsm";
 	public static String GRAPHICS_FORMAT = "png";
 
+	public static boolean Running_From_Jar = false;
+	private static App instance;
+
 	/** Construct the application */
-	public App() {
+	private App() {
 		new I18N();
+
+		String protocol = this.getClass().getResource("").getProtocol();
+		if (Objects.equals(protocol, "jar")) {
+			Running_From_Jar = true;
+		}
+
 		initializeGateCategories();
-		JFrame frame = new MyFrame();
-		lsframe = new LSFrame(frame);
-		((BasicInternalFrameUI) lsframe.getUI()).setNorthPane(null);
-		lsframe.setBorder(null);
-		frame.getContentPane().add(lsframe);
 
-		lsframe.window = frame;
+		lsframe = new LSFrame();
+		// ((BasicInternalFrameUI) lsframe.getUI()).setNorthPane(null);
 
-		//Image si = new ImageIcon(App.class.getResource("images/splash.jpg")).getImage();
-		//Splash splash = new Splash(frame, si);
-		//splash.setVisible(true);
+		// Image si = new
+		// ImageIcon(App.class.getResource("images/splash.jpg")).getImage();
+		// Splash splash = new Splash(frame, si);
+		// splash.setVisible(true);
 
 		lsframe.validate();
-		frame.validate();
 		// Center the window
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension frameSize = new Dimension(1024, 768);
@@ -53,12 +55,8 @@ public class App {
 			frameSize.width = screenSize.width;
 		}
 		lsframe.setSize(frameSize);
-		frame.setSize(frameSize);
 		lsframe.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
-		frame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
 		lsframe.setVisible(true);
-		frame.setVisible(true);
-
 	}
 
 	private static void addToCategory(Gate g) {
@@ -81,6 +79,11 @@ public class App {
 	}
 
 	private static void initializeGateCategories() {
+		Category hidden = new Category("hidden");
+		hidden.addGate(new MODIN());
+		hidden.addGate(new MODOUT());
+		cats.add(hidden);
+
 		cats.add(new Category("basic"));
 		cats.add(new Category("input"));
 		cats.add(new Category("output"));
@@ -88,7 +91,7 @@ public class App {
 
 		List<Class<?>> classes;
 		try {
-			classes = GateLoaderHelper.getClasses("logicsim.gates");
+			classes = GateLoaderHelper.getClasses();
 			for (Class<?> c : classes) {
 				Gate gate = (Gate) c.getDeclaredConstructor().newInstance();
 				addToCategory(gate);
@@ -111,6 +114,10 @@ public class App {
 			e.printStackTrace();
 		}
 
+		loadModules();
+	}
+
+	private static void loadModules() {
 		/*
 		 * module part
 		 */
@@ -154,11 +161,6 @@ public class App {
 		}
 	}
 
-	/** Main method */
-	public static void main(String[] args) {
-		new App();
-	}
-
 	public static String getModulePath() {
 		File f = new File("");
 		String fname = f.getAbsolutePath() + "/modules/";
@@ -188,28 +190,6 @@ public class App {
 		return "";
 	}
 
-	class MyFrame extends JFrame {
-		static final long serialVersionUID = -6532037559895208999L;
-
-		public MyFrame() {
-			super();
-			enableEvents(AWTEvent.WINDOW_EVENT_MASK);
-		}
-
-		/**
-		 * Overridden so we can exit when window is closed
-		 */
-		@Override
-		protected void processWindowEvent(WindowEvent e) {
-			if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-				if (lsframe.showDiscardDialog(I18N.getString(Lang.MNU_EXIT)) == false)
-					return;
-				System.exit(0);
-			}
-		}
-
-	}
-
 	public static Gate getGate(String type) {
 		for (Category cat : cats) {
 			for (Gate g : cat.getGates()) {
@@ -220,4 +200,17 @@ public class App {
 		}
 		return null;
 	}
+
+	private static App getInstance() {
+		if (instance == null) {
+			instance = new App();
+		}
+		return instance;
+	}
+
+	/** Main method */
+	public static void main(String[] args) {
+		App.getInstance();
+	}
+
 }

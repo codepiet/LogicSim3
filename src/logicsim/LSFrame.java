@@ -1,5 +1,6 @@
 package logicsim;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -8,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,7 +28,6 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -44,10 +45,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import logicsim.gates.MODIN;
-import logicsim.gates.MODOUT;
-
-public class LSFrame extends JInternalFrame implements java.awt.event.ActionListener, CircuitChangedListener {
+public class LSFrame extends JFrame implements java.awt.event.ActionListener, CircuitChangedListener {
 
 	private static final long serialVersionUID = -5281157929385660575L;
 
@@ -130,13 +128,15 @@ public class LSFrame extends JInternalFrame implements java.awt.event.ActionList
 	Properties userProperties = new Properties();
 	String use_language;
 
-	public LSFrame(JFrame window) {
-		this.window = window;
+	public LSFrame() {
+		super();
 //		String iconloc = "images/icon.png";
 //		URL iconURL = getClass().getResource(iconloc);
 //		Toolkit kit = Toolkit.getDefaultToolkit();
 //		Image img = kit.createImage(iconURL);
 //		window.setIconImage(img);
+
+		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 
 		lsFile = new LogicSimFile(defaultCircuitFileName());
 		lspanel.setChangeListener(this);
@@ -144,6 +144,18 @@ public class LSFrame extends JInternalFrame implements java.awt.event.ActionList
 			jbInit();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Overridden so we can exit when window is closed
+	 */
+	@Override
+	protected void processWindowEvent(WindowEvent e) {
+		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+			if (showDiscardDialog(I18N.getString(Lang.MNU_EXIT)) == false)
+				return;
+			System.exit(0);
 		}
 	}
 
@@ -787,7 +799,7 @@ public class LSFrame extends JInternalFrame implements java.awt.event.ActionList
 		}
 
 		// gate is normal gate or module
-		gate = GateInstanciator.create((Gate) o);
+		gate = GateLoaderHelper.create((Gate) o);
 		if (gate instanceof Module) {
 			Module m = (Module) gate;
 			lspanel.setAction(m);
