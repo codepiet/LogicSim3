@@ -5,7 +5,7 @@
 \usepackage{multirow}
 
 \cfoot{}
-\geometry{bottom=0mm}
+\geometry{bottom=5mm, footskip=10mm, body=22cm}
 
 \begin{document}
 
@@ -16,7 +16,6 @@
 \title{Handbuch - LogicSim 3}
 \author{P. Gabriel}
 \date{April 2020}
-
 \vspace*{-11mm}
 
 \section{Einleitung}
@@ -61,7 +60,7 @@ Als Muster stehen die Dateien \texttt{de.txt} und \texttt{en.txt} zur Verfügung
 Eine Erweiterung ist ohne Weiteres möglich. Dazu kann der Source-Tree von Github heruntergeladen werden\footnote{s. im Internet: \url{https://github.com/codepiet/LogicSim3}}. Wird Eclipse verwendet, so kann direkt die Struktur aus Github übernommen werden. Das \textit{src}-Verzeichnis enthält die Quelltexte zum Programm und den Bauteilen. Es sind keine externen Bibliotheken erforderlich.\\
 
 Die Klasse \texttt{App.java} enthält die \texttt{main}-Methode für den Start der Software.
-Die Datei \texttt{build.xml} wird für das Generieren von Releases mittels \textit{ant}verwendet.
+Die Datei \texttt{build.xml} wird für das Generieren von Releases mittels \textit{ant} verwendet.
 
 Da der Aufbau der implementierten Logikgatter sehr einfach ist, können auch Schüler in Facharbeiten weitere, komplexere Gatter implementieren. Die Klasse \texttt{logicsim.Gate} stellt die API, gemeinsam mit der Oberklasse \texttt{logicsim.CircuitPart} bereit. Alle vorhandenen Gatter verwenden lediglich die definierten Methoden. Anhand der vorhandenen Gatterklassen kann das Vorgehen für weiterführende Bauteile abgeschaut werden. Auch Komponenten wie die 7-Segment-Anzeige sind Unterklassen von \texttt{logicsim.Gate}.\\
 
