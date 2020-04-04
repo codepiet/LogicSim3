@@ -2,6 +2,7 @@ package logicsim;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -12,16 +13,20 @@ import java.awt.Stroke;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 
-import javax.swing.JPanel;
-import javax.swing.event.MouseInputListener;
+import javax.swing.event.MouseInputAdapter;
 
-public class LSPanel extends JPanel implements Printable, MouseInputListener, CircuitChangedListener {
+public class LSPanel extends Viewer implements Printable, CircuitChangedListener {
 	private static final long serialVersionUID = -6414072156700139318L;
 	CircuitChangedListener changeListener;
 
@@ -49,6 +54,7 @@ public class LSPanel extends JPanel implements Printable, MouseInputListener, Ci
 	static final int ACTION_ADDPOINT = 16;
 	static final int ACTION_DELPOINT = 17;
 	static final int ACTION_MODULE = 18;
+	public static final Color gridColor = Color.black;
 
 	public LSPanel() {
 		circuit.setChangeListener(this);
@@ -63,8 +69,14 @@ public class LSPanel extends JPanel implements Printable, MouseInputListener, Ci
 				myKeyPressed(e);
 			}
 		});
-		this.addMouseMotionListener(this);
-		this.addMouseListener(this);
+
+		setZoomingSpeed(0.02);
+		addPainter(new LogicSimPainterGraphics());
+		
+		MouseControl mouseControl = new MouseControl();
+		addMouseListener(mouseControl);
+		addMouseMotionListener(mouseControl);
+		addMouseWheelListener(mouseControl);
 	}
 
 	public void clear() {
@@ -106,42 +118,21 @@ public class LSPanel extends JPanel implements Printable, MouseInputListener, Ci
 			gate.draw(g2);
 	}
 
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
-		// set anti-aliasing
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
-		// AffineTransform at = new AffineTransform();
-		// at.scale(scaleX, scaleY);
-		// at.translate(offsetX, offsetY);
-		// at.scale(1, 1);
-		// at.translate(0, 0);
-		// g2.transform(at);
-
-		g2.setColor(Color.white);
-		g2.fillRect(0, 0, panelSize.width, panelSize.height);
-
-		if (paintGrid) {
-			g2.setColor(Color.LIGHT_GRAY);
-			Path2D grid = new Path2D.Double();
-			g2.setStroke(new BasicStroke(2));
-			for (int x = 0; x < panelSize.width; x += 10) {
-				for (int y = 0; y < panelSize.height; y += 10) {
-					grid.moveTo(x, y);
-					grid.lineTo(x, y);
-				}
-			}
-			g2.draw(grid);
-		}
-
-		draw(g2);
-
-		if (currentPart != null) {
-			currentPart.draw(g2);
-		}
-	}
+//	public void paintComponent(Graphics g) {
+//		super.paintComponent(g);
+//		Graphics2D g2 = (Graphics2D) g;
+//		// set anti-aliasing
+//		//g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//		//g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+//
+//		// AffineTransform at = new AffineTransform();
+//		// at.scale(scaleX, scaleY);
+//		// at.translate(offsetX, offsetY);
+//		// at.scale(1, 1);
+//		// at.translate(0, 0);
+//		// g2.transform(at);
+//
+//	}
 
 	/**
 	 * check for escape, delete and space key
@@ -242,168 +233,13 @@ public class LSPanel extends JPanel implements Printable, MouseInputListener, Ci
 		this.changeListener = changeListener;
 	}
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-		CircuitPart cp = circuit.findPartAt(e.getX(), e.getY());
-		if (cp == null) {
-			// empty space has been clicked
-			if (currentPart instanceof Gate && !circuit.gates.contains(currentPart)) {
-				// add a new gate
-				Gate gate = (Gate) currentPart;
-				int x = CircuitPart.round(e.getX());
-				int y = CircuitPart.round(e.getY());
-				gate.moveTo(x, y);
-				circuit.addGate(gate);
-				lastClicked = gate;
-			} else if (currentPart instanceof Wire && ((Wire) currentPart).isNotFinished()) {
-				// we are drawing a wire: add a new point and change nothing else
-				Wire wire = (Wire) currentPart;
-				wire.addPoint(CircuitPart.round(e.getX()), CircuitPart.round(e.getY()));
-				Log.getInstance().print(wire);
-			} else {
-				// nothing happened
-				circuit.deactivateAll();
-				if (currentPart != null) {
-					currentPart = null;
-				}
-			}
-			repaint();
-			return;
-		}
-		CircuitPart[] activeParts = new CircuitPart[] { currentPart };
-		int lsAction = currentAction;
+	private MouseEvent convertToWorld(MouseEvent e) {
+		int x = (int) Math.round(getTransformer().screenToWorldX(e.getX()));
+		int y = (int) Math.round(getTransformer().screenToWorldY(e.getY()));
 
-		if (cp instanceof Connector) {
-			Connector conn = ((Connector) cp);
-			// if we are drawing a wire then this is the endpoint
-			if (conn.isInput() && activeParts.length == 1 && activeParts[0] instanceof Wire) {
-				Wire activeWire = (Wire) activeParts[0];
-				// check for existing wire, if there is one, delete!
-				if (conn.isConnected()) {
-					for (Wire w : conn.wires) {
-						w.clear();
-					}
-				}
-				activeWire.connect(conn);
-				activeWire.setTempPoint(null);
-				activeParts = new CircuitPart[] {};
-				activeWire.setChangeListener(circuit);
-				repaint();
-				// now we have a finished wire, the wire stays active, don't make further
-				// changes
-				return;
-			}
-
-			// of course we cannot edit a Connector, but we can
-			// 1. set an input to inverted or high or low or revert to normal type
-			if (conn.isInput()) {
-				if (lsAction == Connector.HIGH || lsAction == Connector.LOW || lsAction == Connector.INVERTED
-						|| lsAction == Connector.NORMAL) {
-					// 1. if we clicked on an input modificator
-					conn.setLevelType(lsAction);
-					notifyChangeListener("MSG_INPUT_CHANGED_TO" + " " + Connector.actionToString(lsAction));
-					repaint();
-					return;
-				}
-			} else {
-				// is output
-				// 3. start a new wire
-				// output is clicked
-				Wire newWire = new Wire(null, null);
-				newWire.connect(conn);
-				notifyChangeListener("MSG_NEW_WIRE_STARTED");
-				currentPart = newWire;
-				circuit.deactivateAll();
-				newWire.activate();
-				notifyChangeListener();
-				return;
-			}
-		}
-		if (cp instanceof Gate) {
-			circuit.deactivateAll();
-			currentPart = cp;
-		}
-		if (cp instanceof Wire) {
-			circuit.deactivateAll();
-			currentPart = cp;
-		}
-		if (cp instanceof WirePoint) {
-			circuit.deactivateAll();
-			currentPart = cp;
-			cp.activate();
-			repaint();
-		}
-
-		if (lastClicked != null && lastClicked != cp)
-			lastClicked.deactivate();
-		lastClicked = cp;
-		cp.mousePressed(new LSMouseEvent(e, currentAction, activeParts));
-		currentAction = 0;
-		repaint();
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		int x = e.getPoint().x;
-		int y = e.getPoint().y;
-		this.requestFocusInWindow();
-
-		// Maustaste losgelassen
-		if (Simulation.getInstance().isRunning() && lastClicked != null) {
-			// Das Loslassen der Maustasten an Gatter melden
-			lastClicked.mouseReleased(x, y);
-		}
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		if (!Simulation.getInstance().isRunning()) {
-			if (currentPart != null) {
-				currentPart.mouseDragged(e);
-				repaint();
-			}
-		}
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		// System.err.println("MOVED mouse");
-		int rx = CircuitPart.round(e.getX());
-		int ry = CircuitPart.round(e.getY());
-		changeListener.changedCoordinates("(" + rx + "/" + ry + ")");
-
-		if (currentPart instanceof Wire) {
-			Wire wire = (Wire) currentPart;
-
-			if (wire.isNotFinished()) {
-				if (e.isShiftDown()) {
-					// pressed SHIFT while moving and drawing wire
-					WirePoint wp = wire.getLastPoint();
-					int lastx = wp.getX();
-					int lasty = wp.getY();
-					if (Math.abs(rx - lastx) < Math.abs(ry - lasty))
-						rx = lastx;
-					else
-						ry = lasty;
-				}
-				// the selected wire is unfinished - force draw
-				wire.setTempPoint(new Point(rx, ry));
-				repaint();
-			}
-		}
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
+		MouseEvent ec = new MouseEvent((Component) e.getSource(), e.getID(), e.getWhen(), e.getModifiersEx(), x, y,
+				e.getClickCount(), e.isPopupTrigger(), e.getButton());
+		return ec;
 	}
 
 	@Override
@@ -435,4 +271,215 @@ public class LSPanel extends JPanel implements Printable, MouseInputListener, Ci
 		repaint();
 	}
 
+	public class LogicSimPainterGraphics implements Painter {
+		@Override
+		public void paint(Graphics2D g2, AffineTransform at, int w, int h) {
+			// set anti-aliasing
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+			g2.transform(at);
+
+			if (paintGrid) {
+				g2.setColor(gridColor);
+				Path2D grid = new Path2D.Double();
+				g2.setStroke(new BasicStroke(1));
+				for (int x = 0; x < w; x += 10) {
+					for (int y = 0; y < w; y += 10) {
+						grid.moveTo(x, y);
+						grid.lineTo(x, y);
+					}
+				}
+				g2.draw(grid);
+			}
+
+			draw(g2);
+
+			if (currentPart != null) {
+				currentPart.draw(g2);
+			}
+		}
+	}
+
+	/**
+	 * A class summarizing the mouse interaction for this viewer.
+	 */
+	private class MouseControl extends MouseInputAdapter
+			implements MouseListener, MouseMotionListener, MouseWheelListener {
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			System.err.println("zooming viewer");
+			zoom(e.getX(), e.getY(), e.getWheelRotation() * zoomingSpeed);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			e = convertToWorld(e);
+			int x = e.getPoint().x;
+			int y = e.getPoint().y;
+			LSPanel.this.requestFocusInWindow();
+
+			// Maustaste losgelassen
+			if (Simulation.getInstance().isRunning() && lastClicked != null) {
+				// Das Loslassen der Maustasten an Gatter melden
+				lastClicked.mouseReleased(x, y);
+			}
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			System.err.println("dragged");
+			int dx = e.getX() - previousPoint.x;
+			int dy = e.getY() - previousPoint.y;
+			translate(dx, dy);
+			previousPoint.setLocation(e.getX(), e.getY());
+			
+			//---
+			
+			e = convertToWorld(e);
+			if (!Simulation.getInstance().isRunning()) {
+				if (currentPart != null) {
+					currentPart.mouseDragged(e);
+					repaint();
+				}
+			}
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			previousPoint.setLocation(e.getX(), e.getY());
+
+			//----
+			
+			e = convertToWorld(e);
+			// System.err.println("MOVED mouse");
+			int rx = CircuitPart.round(e.getX());
+			int ry = CircuitPart.round(e.getY());
+			changeListener.changedCoordinates("(" + rx + "/" + ry + ")");
+
+			if (currentPart instanceof Wire) {
+				Wire wire = (Wire) currentPart;
+
+				if (wire.isNotFinished()) {
+					if (e.isShiftDown()) {
+						// pressed SHIFT while moving and drawing wire
+						WirePoint wp = wire.getLastPoint();
+						int lastx = wp.getX();
+						int lasty = wp.getY();
+						if (Math.abs(rx - lastx) < Math.abs(ry - lasty))
+							rx = lastx;
+						else
+							ry = lasty;
+					}
+					// the selected wire is unfinished - force draw
+					wire.setTempPoint(new Point(rx, ry));
+					repaint();
+				}
+			}
+		}
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+			e = convertToWorld(e);
+			CircuitPart cp = circuit.findPartAt(e.getX(), e.getY());
+			if (cp == null) {
+				// empty space has been clicked
+				if (currentPart instanceof Gate && !circuit.gates.contains(currentPart)) {
+					// add a new gate
+					Gate gate = (Gate) currentPart;
+					int x = CircuitPart.round(e.getX());
+					int y = CircuitPart.round(e.getY());
+					gate.moveTo(x, y);
+					circuit.addGate(gate);
+					lastClicked = gate;
+				} else if (currentPart instanceof Wire && ((Wire) currentPart).isNotFinished()) {
+					// we are drawing a wire: add a new point and change nothing else
+					Wire wire = (Wire) currentPart;
+					wire.addPoint(CircuitPart.round(e.getX()), CircuitPart.round(e.getY()));
+					Log.getInstance().print(wire);
+				} else {
+					// nothing happened
+					circuit.deactivateAll();
+					if (currentPart != null) {
+						currentPart = null;
+					}
+				}
+				repaint();
+				return;
+			}
+			CircuitPart[] activeParts = new CircuitPart[] { currentPart };
+			int lsAction = currentAction;
+
+			if (cp instanceof Connector) {
+				Connector conn = ((Connector) cp);
+				// if we are drawing a wire then this is the endpoint
+				if (conn.isInput() && activeParts.length == 1 && activeParts[0] instanceof Wire) {
+					Wire activeWire = (Wire) activeParts[0];
+					// check for existing wire, if there is one, delete!
+					if (conn.isConnected()) {
+						for (Wire w : conn.wires) {
+							w.clear();
+						}
+					}
+					activeWire.connect(conn);
+					activeWire.setTempPoint(null);
+					activeParts = new CircuitPart[] {};
+					activeWire.setChangeListener(circuit);
+					repaint();
+					// now we have a finished wire, the wire stays active, don't make further
+					// changes
+					return;
+				}
+
+				// of course we cannot edit a Connector, but we can
+				// 1. set an input to inverted or high or low or revert to normal type
+				if (conn.isInput()) {
+					if (lsAction == Connector.HIGH || lsAction == Connector.LOW || lsAction == Connector.INVERTED
+							|| lsAction == Connector.NORMAL) {
+						// 1. if we clicked on an input modificator
+						conn.setLevelType(lsAction);
+						notifyChangeListener("MSG_INPUT_CHANGED_TO" + " " + Connector.actionToString(lsAction));
+						repaint();
+						return;
+					}
+				} else {
+					// is output
+					// 3. start a new wire
+					// output is clicked
+					Wire newWire = new Wire(null, null);
+					newWire.connect(conn);
+					notifyChangeListener("MSG_NEW_WIRE_STARTED");
+					currentPart = newWire;
+					circuit.deactivateAll();
+					newWire.activate();
+					notifyChangeListener();
+					return;
+				}
+			}
+			if (cp instanceof Gate) {
+				circuit.deactivateAll();
+				currentPart = cp;
+			}
+			if (cp instanceof Wire) {
+				circuit.deactivateAll();
+				currentPart = cp;
+			}
+			if (cp instanceof WirePoint) {
+				circuit.deactivateAll();
+				currentPart = cp;
+				cp.activate();
+				repaint();
+			}
+
+			if (lastClicked != null && lastClicked != cp)
+				lastClicked.deactivate();
+			lastClicked = cp;
+			cp.mousePressed(new LSMouseEvent(e, currentAction, activeParts));
+			currentAction = 0;
+			repaint();
+		}
+		
+	}
+
+	
 }

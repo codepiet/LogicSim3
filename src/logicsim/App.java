@@ -79,12 +79,19 @@ public class App {
 	}
 
 	private static void initializeGateCategories() {
-		Category hidden = new Category("hidden");
-		hidden.addGate(new MODIN());
-		hidden.addGate(new MODOUT());
-		cats.add(hidden);
+		Category cat = new Category("hidden");
+		cat.addGate(new MODIN());
+		cat.addGate(new MODOUT());
+		cats.add(cat);
 
 		cats.add(new Category("basic"));
+
+		cat = new Category("gatemodifiers");
+		cat.addGate(new Gate("inputinvert", Connector.INVERTED));
+		cat.addGate(new Gate("inputhigh", Connector.HIGH));
+		cat.addGate(new Gate("inputlow", Connector.LOW));
+		cat.addGate(new Gate("inputnormal", Connector.NORMAL));
+		cats.add(cat);
 		cats.add(new Category("input"));
 		cats.add(new Category("output"));
 		cats.add(new Category("flipflop"));

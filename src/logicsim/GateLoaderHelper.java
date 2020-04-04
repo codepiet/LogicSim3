@@ -55,7 +55,7 @@ public class GateLoaderHelper {
 
 		File file = new File(".");
 		try {
-			// Convert File to a URL
+			// Convert File to URL
 			URL url = file.toURI().toURL();
 			URL[] urls = new URL[] { url };
 
@@ -65,9 +65,11 @@ public class GateLoaderHelper {
 				Class<?> cls = cl.loadClass("gates." + className);
 				classes.add(cls);
 			}
-			// cl.close();
+			cl.close();
 		} catch (MalformedURLException e) {
 		} catch (ClassNotFoundException e) {
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return classes;
 	}

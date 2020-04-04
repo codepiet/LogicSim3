@@ -23,9 +23,7 @@ Der \textit{Logic Simulator}, im folgenden abgekürzt durch \lsN{}, ist der Nach
 
 Neue Versionen von \lsN{} sind auf der Webseite \url{http://sis.schule} veröffentlicht. Der Quelltext kann unter GitHub (Projektname: LogicSim3) heruntergeladen werden. Das Programm ist unter der GPL veröffentlicht und darf daher frei verändert werden, sofern der geänderte Quelltext wieder veröffentlicht wird. Eine kommerzielle closed-source Verwendung ist damit ausgeschlossen.\\
 
-Die Entwicklung von \lsA{} wurde seit 11 Jahren nicht mehr fortgeführt, mittlerweile ist die Applet-Technik abgekündigt und ist evtl. bald nicht mehr in den verfügbaren \textit{Java Runtimes} enthalten. Der Autor der fortgeführten Software fehlten einige Funktionen, speziell eine Zoom-Funktion sowie Kopieren und Einfügen von Elementen. Auch konnten keine Beschriftungen zu Ein- und Ausgängen festgelegt werden. Dies war insbesondere bei Modulen problematisch. Auch das Rotieren von Elementen ist noch nicht möglich.\\
-
-Einige dieser Funktionen wurden bereits implementiert. Interessant ist auch die Verwendung von XML als Ausgabesprache für die Schaltplandateien. So können die Dateien auch händisch bearbeitet werden.\\
+Die Entwicklung von \lsA{} wurde seit 11 Jahren nicht mehr fortgeführt, mittlerweile ist die Applet-Technik abgekündigt und ist evtl. bald nicht mehr in den verfügbaren \textit{Java Runtimes} enthalten. Der Autor der fortgeführten Software fehlten einige Funktionen, speziell eine Zoom-Funktion sowie Kopieren und Einfügen von Elementen. Auch konnten keine Beschriftungen zu Ein- und Ausgängen festgelegt werden. Dies war insbesondere bei Modulen problematisch. Auch das Rotieren von Elementen ist noch nicht möglich. Einige dieser Funktionen wurden bereits implementiert. Das Dateiformat wurde auf XML umgestellt, so können die Dateien auch händisch bearbeitet werden.\\
 
 Wichtig für die neue Version war ein Einsatz in der Schule. Da \lsA{} einfach zu bedienen ist und man direkt mit der Modellierung von Schaltkreisen beginnen kann, sollte der Einsatz in der Schule weiter verbessert werden. Die einzelnen >>Gatter<< sind nun in ein Verzeichnis ausgelagert worden und sind damit nicht mehr fest im \textit{Java Archiv} (.jar-Datei) verankert. Dadurch können nun aus didaktischen Gründen einzelne Gatter entfernt werden, um z.B. nur die Grundgatter, Schalter und LEDs zur Verfügung zu stellen.\\
 
@@ -39,6 +37,11 @@ Bitte verwenden Sie auch diesen Weg, falls Sie Fehler der Software melden möcht
 \end{tabular}
 
 \section{Bedienung}
+
+\subsection{Start}
+\lsN{} wird als JAR-Datei ausgeliefert. Hierbei handelt es sich um ein Java-Archiv, dass nur dann lauffähig ist, wenn auf dem Computer JAVA installiert ist. Der Start des Programms geschieht im Normalfall über einen Doppelklick. Sollte dies nicht funktionieren, so kann die Einrichtung des Doppelklicks i
+
+
 Die Softwarebedienung erschließt sich in weiten Teilen von selbst. Besonderheiten:
 \begin{compactitem}
 \item Bauteile werden in die Arbeitsfläche eingefügt, indem zunächst das Bauteil links in der Liste angeklickt wird. Durch einen Klick auf eine freie Stelle in der Arbeitsfläche wird das Teil mit dem oberen linken Punkt am Mauszeiger eingefügt.
@@ -47,11 +50,22 @@ Während der Bearbeitung des Kabels kann die Taste \textit{Escape} gedrückt wer
 \item Das Anklicken eines Bauteils oder eines Kabels führt zur Auswahl (\textit{Selektion}) des Teils. Es kann dann per Pfeiltasten oder durch Drag\&Drop mit der Maus verschoben werden. Bei Kabeln werden nur die inneren Punkte bewegt, die äußeren Punkte bleiben an angeschlossenen Bauteile. Werden Bauteilen bewegt, werden entsprechend nur die Kabelenden der angeschlossenen Kabel mitbewegt.
 \item Selektierte Bauteile oder Kabel können durch Druck auf die Backspace-Taste (auch Entf- oder Lösch-Taste) entfernt werden. Werden Bauteile gelöscht, so werden automatisch alle angeschlossenen Kabel mitgelöscht.
 \item Kabel müssen immer an zwei Enden angeschlossen sein, es gibt keine >>Luftenden<<.
+\item Das Mausrad wird nun unterstützt, Zoomen ist damit möglich, Zusätzlich dazu gibt es passende Schaltflächen zum Vergrößern, Verkleinern und auf den verwendeten Bereich Zoomen.
 \end{compactitem}
 
 \subsection{Einsatz in der Schule}
+Neu ist das Verzeichnis >>gates<< im Hauptverzeichnis des Programms. In ihm sind kompilierte Klassen, die ihrerseits Gatter und Bauteile für \lsN{} bereitstellen. \lsN{} wird dadurch erweiter- und beschränkbar. Durch Entfernen von Klassendateien aus diesem Verzeichnis sind die entsprechenden Bauteile im Programm nicht mehr verfügbar. So kann in einer Unterrichtsreihe in der Schule zunächst mit Grundkomponenten wie AND, OR, NOT sowie Schaltern und LEDs begonnen werden. Später können dann weitere Komponenten hinzugenommen werden, so dass Schülerinnen und Schülern bei den gewünschten Funktionen bleiben.
+
 \section{Module}
+Module sind dort interessant, wo eine Innensicht auf Bauteile gewünscht ist. Es lassen sich z.B. komplexere Bauteile wie Volladdierer oder Schieberegister aus einzelnen Gattern zusammensetzen. Dafür stehen pro Modul immer 16 Ein- und 16 Ausgänge zur Verfügung. Solche Schaltungen lassen sich dann abspeichern und als neue Bauteile als Block verwenden.\\
+
+Neue Module werden über den Menüpunkt >>Neues Modul erstellen<< angelegt. Der Dateiname des Moduls entscheidet dann später über den Eintrag in der Liste der Bauteile links im Programm. Es dürfen zum Test an die Eingänge der \texttt{INPUTS} und an die Ausgänge der \texttt{OUTPUTS} weitere Bauteile angeschlossen werden und auch mit abgespeichert werden. Die Bauteile werden automatisch während der Verwendung als Block automatisch entfernt.
+Ein- und Ausgänge von Modulen können Beschriftungen tragen. Diese müssen derzeit noch per Hand eingetragen werden. Wie das geschieht, ist in Abschnitt \ref{labels} beschrieben.
+
 \section{Aufbau der digitalen Schaltungsdateien}
+\subsection{Beschriftungen für Ein- und Ausgänge}
+\label{labels}
+
 \section{Erweiterung}
 \subsection{Übersetzung der Texte in andere Sprachen}
 Als Muster stehen die Dateien \texttt{de.txt} und \texttt{en.txt} zur Verfügung. Diese Dateien enthalten die neuen Sprachtexte, die von \lsN{} verwendet werden. Vorhandene, andere Sprachdateien sind zwar übersetzt, nur sind die Sprachtextbezeichner noch nicht auf \lsN{} umgestellt.
@@ -66,4 +80,13 @@ Da der Aufbau der implementierten Logikgatter sehr einfach ist, können auch Sch
 
 \section{Nächste Schritte}
 
+\appendix
+\section{Jar-Doppelklick unter Windows 10 einrichten}
+Damit der Doppelklick unter einem System funktioniert, müssen die JAR-Dateien einem Programm zugewiesen werden. Oft ist unter Windows 10 der Doppelklick auf Jar-Dateien nicht richtig eingestellt. Ein bloßes Einrichten von >>Öffnen mit<< führt zu keinem Ergebnis. Dies liegt daran, dass dem Programm >>java.exe<<, dass seinerseits die JAR-Datei lädt, ein weiterer Parameter (-jar) mitgegeben werden muss. Dies lässt sich gut über die Registry lösen.
+\begin{compactenum}
+\item Notieren, wo Java installiert ist, oft in \texttt{C:\\Programme (x86)\\Java\\jreXXX\\bin\\java.exe}
+\item >>regedit<< als Administrator ausführen.
+\item Zum angegebenen Schlüssel in Abbildung \ref{regedit1} navigieren.
+\item Den Schlüssel wie in Abbildung \ref{regedit2} angegeben ändern, dabei den richtigen Pfad von Schritt 1 übernehmen.
+\end{compactenum}
 \end{document}

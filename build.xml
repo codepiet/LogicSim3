@@ -20,14 +20,12 @@
 	<target name="compile">
 		<mkdir dir="${classes.dir}" />
 		<javac srcdir="${src.dir}" destdir="${classes.dir}">
-			<exclude name="gates/**" />
-		</javac>
-		<mkdir dir="${classes.dir}2" />
-		<javac srcdir="${src.dir}" destdir="${classes.dir}2">
+			<exclude name="test/**" />
 		</javac>
 	</target>
 
 	<target name="jar" depends="compile">
+		<move file="${classes.dir}/gates" tofile="${dist.dir}/gates"/>
 		<mkdir dir="${jar.dir}" />
 		<copy todir="${classes.dir}/logicsim/images">
 			<fileset dir="${src.dir}/logicsim/images" />
@@ -63,10 +61,6 @@
 				<file file="modules" />
 				<file file="README.md" />
 			</resources>
-		</copy>
-		<mkdir dir="${dist.dir}/gates"/>
-		<copy todir="${dist.dir}/gates">
-			<fileset dir="${classes.dir}2/gates" />
 		</copy>
 		<copy todir="${dist.dir}/modules">
 			<fileset dir="modules" />

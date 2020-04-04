@@ -1,5 +1,6 @@
 package gates;
 
+import logicsim.Connector;
 import logicsim.Gate;
 
 /**
@@ -19,7 +20,7 @@ public class JKMSFlipFlop extends Gate {
 		setNumOutputs(2);
 
 		getInput(0).label = "J";
-		getInput(1).label = "Cl";
+		getInput(1).label = Connector.POS_EDGE_TRIG;
 		getInput(2).label = "K";
 
 		getOutput(0).label = "Q";

@@ -109,7 +109,7 @@ public class Switch extends Gate {
 		int x = getX();
 		int y = getY();
 
-		Rectangle2D rect = new Rectangle2D.Float(x + width - CONN_SIZE - 12, y + 5, 11, 30);
+		Rectangle2D rect = new Rectangle2D.Float(x + width - CONN_SIZE - 12, y + 5, 13, 30);
 		g.setStroke(new BasicStroke(1));
 		g.setPaint(Color.LIGHT_GRAY);
 		g.fill(rect);

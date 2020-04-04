@@ -109,8 +109,8 @@ public class Gate extends CircuitPart {
 	}
 
 	protected void drawFrame(Graphics2D g2) {
-		Rectangle2D border = new Rectangle2D.Double(getX() + CONN_SIZE, getY() + CONN_SIZE, width - 2 * CONN_SIZE,
-				height - 2 * CONN_SIZE);
+		Rectangle2D border = new Rectangle2D.Double(getX() + CONN_SIZE - 1, getY() + CONN_SIZE - 1,
+				(width + 2) - 2 * CONN_SIZE, (height + 2) - 2 * CONN_SIZE);
 		g2.setPaint(backgroundColor);
 		g2.fill(border);
 		g2.setPaint(Color.black);

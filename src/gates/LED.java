@@ -61,9 +61,9 @@ public class LED extends Gate {
 			c = color;
 		}
 		g.setPaint(c);
-		g.fillOval(x + CONN_SIZE, y1, ovalRadius * 2, ovalRadius * 2);
+		g.fillOval(x + CONN_SIZE - 1, y1, ovalRadius * 2, ovalRadius * 2);
 		g.setPaint(Color.BLACK);
-		g.drawOval(x + CONN_SIZE, y1, ovalRadius * 2, ovalRadius * 2);
+		g.drawOval(x + CONN_SIZE - 1, y1, ovalRadius * 2, ovalRadius * 2);
 	}
 
 	@Override

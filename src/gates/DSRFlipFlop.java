@@ -31,7 +31,7 @@ public class DSRFlipFlop extends Gate {
 		getInput(0).label = "D";
 		getInput(1).label = "S";
 		getInput(2).label = "R";
-		getInput(3).label = "Cl";
+		getInput(3).label = Connector.POS_EDGE_TRIG;
 
 		getOutput(0).label = "Q";
 		getOutput(1).label = "/Q";

@@ -1,9 +1,7 @@
 package gates;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
 
 import logicsim.Connector;
 import logicsim.Gate;
@@ -60,17 +58,11 @@ public class TEST extends Gate {
 	}
 
 	@Override
-	protected void drawFrame(Graphics2D g2) {
-		Rectangle2D border = new Rectangle2D.Double(getX() + CONN_SIZE, getY() + CONN_SIZE, width - 2 * CONN_SIZE,
-				height - 2 * CONN_SIZE);
-		g2.setPaint(Color.white);
-		g2.fill(border);
-		g2.setPaint(Color.black);
-		g2.setStroke(new BasicStroke(1));
-		g2.draw(border);
-		drawLabel(g2, label, bigFont);
+	protected void drawLabel(Graphics2D g2, String lbl, Font font) {
+		super.drawLabel(g2, label, bigFont);
 	}
 
+	@Override
 	public void simulate() {
 		boolean b = true;
 		for (int i = 0; i < getNumInputs(); i++) {

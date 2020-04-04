@@ -25,7 +25,7 @@ public class Connector extends CircuitPart {
 	public static final int DOWN = 0xa3;
 
 	public static final int BOUNDING_SPACE = 5;
-	public static final int CONN_SIZE = 7;
+	public static final int CONN_SIZE = 5;
 	public static final String POS_EDGE_TRIG = "PosEdgeTrig";
 	public static final String NEG_EDGE_TRIG = "NegEdgeTrig";
 
@@ -80,14 +80,14 @@ public class Connector extends CircuitPart {
 			if (paintDirection == RIGHT) {
 				if (POS_EDGE_TRIG.equals(label)) {
 					Polygon tr = new Polygon();
-					tr.addPoint(x, y - 4);
-					tr.addPoint(x, y + 4);
-					tr.addPoint(x + 4, y);
+					tr.addPoint(x + 1 + CONN_SIZE, y - 4);
+					tr.addPoint(x + 1 + CONN_SIZE, y + 4);
+					tr.addPoint(x + 1 + CONN_SIZE + 8, y);
 					g2.draw(tr);
 				} else
-					g2.drawString(label, x + CONN_SIZE + 2, y + 5);
+					g2.drawString(label, x + CONN_SIZE + 3, y + 5);
 			} else if (paintDirection == LEFT) {
-				g2.drawString(label, x - CONN_SIZE - lw - 1, y + 5);
+				g2.drawString(label, x - CONN_SIZE - lw - 2, y + 5);
 			} else if (paintDirection == UP) {
 				g2.drawString(label, x - lw / 2, y - CONN_SIZE - 3);
 			} else if (paintDirection == DOWN) {
@@ -111,15 +111,16 @@ public class Connector extends CircuitPart {
 
 		// g2.setPaint(getLevel() ? Color.red : Color.black);
 		if (levelType == INVERTED) {
+			int ovalSize = CONN_SIZE;
 			// g2.setPaint(!getLevel() ? Color.red : Color.black);
 			if (paintDirection == LEFT)
-				g2.drawOval(x + offset - CONN_SIZE, y - 1 - CONN_SIZE / 2, CONN_SIZE + 1, CONN_SIZE + 1);
+				g2.drawOval(x + offset - ovalSize - 1, y - 1 - ovalSize / 2, ovalSize + 1, ovalSize + 1);
 			else if (paintDirection == RIGHT)
-				g2.drawOval(x + offset + 6 - CONN_SIZE, y - 1 - CONN_SIZE / 2, CONN_SIZE + 1, CONN_SIZE + 1);
+				g2.drawOval(x + offset, y - 1 - ovalSize / 2, ovalSize + 1, ovalSize + 1);
 			else if (paintDirection == DOWN)
-				g2.drawOval(x + offset + 3 - CONN_SIZE, y + 2 - CONN_SIZE / 2, CONN_SIZE + 1, CONN_SIZE + 1);
+				g2.drawOval(x + offset + 2 - ovalSize, y + 2 - ovalSize / 2, ovalSize + 1, ovalSize + 1);
 			else // UP
-				g2.drawOval(x + offset + 3 - CONN_SIZE, y - 4 - CONN_SIZE / 2, CONN_SIZE + 1, CONN_SIZE + 1);
+				g2.drawOval(x + offset + 2 - ovalSize, y - 4 - ovalSize / 2, ovalSize + 1, ovalSize + 1);
 		} else if (levelType == HIGH) {
 			if (ioType == OUTPUT)
 				throw new RuntimeException("OUTPUT cannot be set HIGH");
@@ -131,17 +132,19 @@ public class Connector extends CircuitPart {
 			g2.drawString("0", x - 4, y + 4);
 		} else {
 			// normal
-			g2.setStroke(new BasicStroke(3));
+			g2.setStroke(new BasicStroke(1));
 			if (paintDirection == LEFT || paintDirection == RIGHT) {
 				if (paintDirection == LEFT) {
-					offset = -CONN_SIZE;
+					offset = -CONN_SIZE - 1;
+				} else {
+					offset = -1;
 				}
-				g2.drawLine(x + offset + 1, y, x + offset + 5, y);
+				g2.fillRect(x + offset + 1, y - 1, CONN_SIZE + 1, 3);
 			} else {
 				if (paintDirection == UP) {
 					offset = -CONN_SIZE;
 				}
-				g2.drawLine(x, y + offset + 1, x, y + offset + 5);
+				g2.fillRect(x - 1, y + offset, 3, CONN_SIZE + 1);
 			}
 		}
 		// draw wire(s)

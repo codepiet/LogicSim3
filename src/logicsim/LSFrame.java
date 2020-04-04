@@ -45,6 +45,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import logicsim.LSPanel.LogicSimPainterGraphics;
+
 public class LSFrame extends JFrame implements java.awt.event.ActionListener, CircuitChangedListener {
 
 	private static final long serialVersionUID = -5281157929385660575L;
@@ -74,7 +76,7 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 
 	LSPanel lspanel = new LSPanel();
 
-	JScrollPane jScrollPane_lspanel = new JScrollPane(lspanel);
+    JScrollPane jScrollPane_lspanel = new JScrollPane(lspanel);
 	JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
 
 	int popupGateIdx; // das Gatter �ber dem das Kontext-Menu ge�ffnet wurde
@@ -138,6 +140,7 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 
 		lsFile = new LogicSimFile(defaultCircuitFileName());
 		lspanel.setChangeListener(this);
+
 		try {
 			jbInit();
 		} catch (Exception e) {
@@ -202,8 +205,6 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 				jMenuHelpAbout_actionPerformed(e);
 			}
 		});
-		jScrollPane_lspanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		jScrollPane_lspanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 		jPanel1.setLayout(borderLayout3);
 		btnOpen.setIcon(new ImageIcon(logicsim.LSFrame.class.getResource("images/open.gif")));
@@ -338,7 +339,12 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 		pnlGateList.add(jComboBox_numinput, BorderLayout.SOUTH);
 
 		jSplitPane.add(pnlGateList, JSplitPane.LEFT);
-		jSplitPane.add(jScrollPane_lspanel, JSplitPane.RIGHT);
+		
+		//jSplitPane.add(lspanel, JSplitPane.RIGHT);
+		 jScrollPane_lspanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		 jScrollPane_lspanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		 jSplitPane.add(jScrollPane_lspanel, JSplitPane.RIGHT);
+
 		contentPane.add(jSplitPane, BorderLayout.CENTER);
 		jScrollPane_gates.getViewport().add(lstGates, null);
 		btnBar.add(btnNew, null);
