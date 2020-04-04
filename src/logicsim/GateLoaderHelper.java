@@ -85,9 +85,11 @@ public class GateLoaderHelper {
 			// Create a new class loader with the directory
 			URLClassLoader cl = new URLClassLoader(urls);
 			cls = cl.loadClass(className);
-			// cl.close();
+			cl.close();
 		} catch (MalformedURLException e) {
 		} catch (ClassNotFoundException e) {
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return cls;
 	}
