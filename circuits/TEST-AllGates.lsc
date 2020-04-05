@@ -10,7 +10,7 @@
         <gate type="xor" x="410" y="10"/>
         <gate type="equ" x="490" y="10"/>
         <gate type="switch4" x="20" y="90"/>
-        <gate type="switch" x="420" y="330"/>
+        <gate type="switch" x="420" y="320"/>
         <gate type="clock" x="20" y="140"/>
         <gate type="binin" x="150" y="120"/>
         <gate type="counter" x="250" y="150"/>
@@ -21,7 +21,11 @@
         <gate type="jkcff" x="340" y="250"/>
         <gate type="jkmsff" x="420" y="250"/>
         <gate type="tff" x="500" y="250"/>
-        <gate type="led" x="510" y="330"/>
+        <gate type="led" x="510" y="330">
+            <properties>
+                <property key="color">#3333ff</property>
+            </properties>
+        </gate>
         <gate type="bindisp" x="100" y="330"/>
         <gate type="sevenseg" x="280" y="330"/>
         <gate type="sevendrv" x="180" y="330"/>
@@ -37,22 +41,30 @@
         <gate inputs="4" type="and" x="410" y="80"/>
         <gate inputs="3" type="and" x="330" y="80"/>
         <gate type="and" x="250" y="80"/>
-        <gate type="switch" x="420" y="450">
+        <gate type="switch" x="420" y="440">
             <properties>
                 <property key="color">#66ff66</property>
                 <property key="type">toggle</property>
             </properties>
         </gate>
         <gate type="led" x="510" y="370"/>
-        <gate type="led" x="510" y="410"/>
-        <gate type="led" x="510" y="450"/>
-        <gate type="switch" x="420" y="410">
+        <gate type="led" x="510" y="410">
+            <properties>
+                <property key="color">#ffff00</property>
+            </properties>
+        </gate>
+        <gate type="led" x="510" y="450">
+            <properties>
+                <property key="color">#66ff33</property>
+            </properties>
+        </gate>
+        <gate type="switch" x="420" y="400">
             <properties>
                 <property key="color">#ffff66</property>
                 <property key="type">toggle</property>
             </properties>
         </gate>
-        <gate type="switch" x="420" y="370">
+        <gate type="switch" x="420" y="360">
             <properties>
                 <property key="color">#ff0066</property>
                 <property key="type">toggle</property>
@@ -60,6 +72,10 @@
         </gate>
     </gates>
     <wires>
+        <wire>
+            <from id="switch@420:320" number="0"/>
+            <to id="led@510:330" number="0"/>
+        </wire>
         <wire>
             <from id="sevendrv@180:330" number="0"/>
             <to id="sevenseg@280:330" number="0"/>
@@ -87,6 +103,18 @@
         <wire>
             <from id="sevendrv@180:330" number="6"/>
             <to id="sevenseg@280:330" number="6"/>
+        </wire>
+        <wire>
+            <from id="switch@420:440" number="0"/>
+            <to id="led@510:450" number="0"/>
+        </wire>
+        <wire>
+            <from id="switch@420:400" number="0"/>
+            <to id="led@510:410" number="0"/>
+        </wire>
+        <wire>
+            <from id="switch@420:360" number="0"/>
+            <to id="led@510:370" number="0"/>
         </wire>
     </wires>
 </logicsim>

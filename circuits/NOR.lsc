@@ -8,13 +8,13 @@
             </properties>
         </gate>
         <gate type="nor" x="270" y="190"/>
-        <gate type="switch" x="110" y="100">
+        <gate type="switch" x="110" y="170">
             <properties>
                 <property key="color">#ff66ff</property>
                 <property key="type">toggle</property>
             </properties>
         </gate>
-        <gate type="switch" x="90" y="220"/>
+        <gate type="switch" x="110" y="210"/>
     </gates>
     <wires>
         <wire>
@@ -22,11 +22,11 @@
             <to id="led@360:200" number="0"/>
         </wire>
         <wire>
-            <from id="switch@110:100" number="0"/>
+            <from id="switch@110:170" number="0"/>
             <to id="nor@270:190" number="0"/>
         </wire>
         <wire>
-            <from id="switch@90:220" number="0"/>
+            <from id="switch@110:210" number="0"/>
             <to id="nor@270:190" number="1"/>
         </wire>
     </wires>

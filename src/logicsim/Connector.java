@@ -32,7 +32,7 @@ public class Connector extends CircuitPart {
 	public final int number;
 
 	protected boolean level = false;
-	protected int paintDirection = RIGHT;
+	public int paintDirection = RIGHT;
 
 	public static Font smallFont = new Font(Font.SANS_SERIF, Font.PLAIN, 10);
 

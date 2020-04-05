@@ -3,20 +3,22 @@
     <info/>
     <gates>
         <gate module="true" type="HA" x="140" y="30"/>
-        <gate type="switch" x="40" y="20"/>
-        <gate type="switch" x="40" y="60"/>
+        <gate type="switch" x="40" y="10"/>
+        <gate type="switch" x="40" y="50"/>
         <gate type="led" x="260" y="20"/>
         <gate type="led" x="260" y="60"/>
         <gate module="true" type="FA" x="140" y="150"/>
-        <gate type="switch" x="40" y="120"/>
-        <gate type="switch" x="40" y="160"/>
-        <gate type="switch" x="40" y="200"/>
+        <gate type="switch" x="40" y="110"/>
+        <gate type="switch" x="40" y="150"/>
+        <gate type="switch" x="40" y="190"/>
         <gate type="led" x="260" y="140"/>
         <gate type="led" x="260" y="180"/>
         <gate module="true" rotate="90" type="FA" x="350" y="340"/>
         <gate module="true" rotate="90" type="FA" x="430" y="340"/>
         <gate module="true" rotate="90" type="FA" x="510" y="340"/>
-        <gate module="true" rotate="90" type="FA" x="590" y="340"/>
+        <gate module="true" rotate="90" type="FA" x="590" y="340">
+            <io iotype="input" number="0" type="low"/>
+        </gate>
         <gate rotate="90" type="led" x="620" y="430"/>
         <gate rotate="90" type="led" x="460" y="430"/>
         <gate rotate="90" type="led" x="300" y="430"/>
@@ -41,11 +43,11 @@
             <to id="led@260:60" number="0"/>
         </wire>
         <wire>
-            <from id="switch@40:20" number="0"/>
+            <from id="switch@40:10" number="0"/>
             <to id="HA@140:30" number="0"/>
         </wire>
         <wire>
-            <from id="switch@40:60" number="0"/>
+            <from id="switch@40:50" number="0"/>
             <to id="HA@140:30" number="1"/>
         </wire>
         <wire>
@@ -57,16 +59,16 @@
             <to id="led@260:180" number="0"/>
         </wire>
         <wire>
-            <from id="switch@40:120" number="0"/>
+            <from id="switch@40:110" number="0"/>
             <to id="FA@140:150" number="0"/>
             <point node="false" number="0" x="80" y="160"/>
         </wire>
         <wire>
-            <from id="switch@40:160" number="0"/>
+            <from id="switch@40:150" number="0"/>
             <to id="FA@140:150" number="1"/>
         </wire>
         <wire>
-            <from id="switch@40:200" number="0"/>
+            <from id="switch@40:190" number="0"/>
             <to id="FA@140:150" number="2"/>
             <point node="false" number="0" x="80" y="200"/>
         </wire>

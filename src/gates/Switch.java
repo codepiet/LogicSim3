@@ -19,6 +19,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import logicsim.ColorFactory;
+import logicsim.Connector;
 import logicsim.Gate;
 import logicsim.I18N;
 import logicsim.LSMouseEvent;
@@ -64,6 +65,8 @@ public class Switch extends Gate {
 		setNumOutputs(1);
 		setOutputLevel(0, false);
 		drawFrame = false;
+		getOutput(0).setX(getX() + width);
+		getOutput(0).setY(getY() + 30);
 
 		loadProperties();
 	}
@@ -109,7 +112,10 @@ public class Switch extends Gate {
 		int x = getX();
 		int y = getY();
 
-		Rectangle2D rect = new Rectangle2D.Float(x + width - CONN_SIZE - 12, y + 5, 13, 30);
+		Rectangle2D rect;
+		// rect = new Rectangle2D.Float(x + width - CONN_SIZE - 12, y + 5, 13, 30);
+		rect = new Rectangle2D.Float(x + 5, y + height - CONN_SIZE - 12, 30, 13);
+
 		g.setStroke(new BasicStroke(1));
 		g.setPaint(Color.LIGHT_GRAY);
 		g.fill(rect);
@@ -117,19 +123,49 @@ public class Switch extends Gate {
 		g.draw(rect);
 
 		int pos = getOutputLevel(0) ? 15 : 6;
+
+//		Polygon poly = new Polygon();
+//		poly.addPoint(x + width - 12 - CONN_SIZE, y + 8);
+//		poly.addPoint(x + pos + 3, y + 8);
+//		poly.addPoint(x + pos, y + 12);
+//		poly.addPoint(x + pos, y + 28);
+//		poly.addPoint(x + pos + 3, y + 32);
+//		poly.addPoint(x + width - 12 - CONN_SIZE, y + 32);
+
 		Polygon poly = new Polygon();
-		// begin in the upper right corner and go counterclockwise
-		poly.addPoint(x + width - 12 - CONN_SIZE, y + 8);
-		poly.addPoint(x + pos + 3, y + 8);
-		poly.addPoint(x + pos, y + 12);
-		poly.addPoint(x + pos, y + 28);
-		poly.addPoint(x + pos + 3, y + 32);
-		poly.addPoint(x + width - 12 - CONN_SIZE, y + 32);
+		// begin in the lower left corner and go counterclockwise
+		poly.addPoint(x + 8, y + height - 12 - CONN_SIZE);
+		poly.addPoint(x + 8, y + pos + 3);
+		poly.addPoint(x + 12, y + pos);
+		poly.addPoint(x + 28, y + pos);
+		poly.addPoint(x + 32, y + pos + 3);
+		poly.addPoint(x + 32, y + height - 12 - CONN_SIZE);
 
 		g.setPaint(color);
 		g.fillPolygon(poly);
 		g.setPaint(Color.BLACK);
 		g.drawPolygon(poly);
+	}
+
+	@Override
+	public void rotate() {
+		super.rotate();
+		// correction
+		Connector c = getOutput(0);
+		if (c.paintDirection == Connector.RIGHT) {
+			c.setX(getX());
+			c.setY(getY() + 30);
+		} else if (c.paintDirection == Connector.LEFT) {
+			c.setX(getX() + width);
+			c.setY(getY() + 30);
+		} else if (c.paintDirection == Connector.DOWN) {
+			c.setX(getX() + width / 2);
+			c.setY(getY());
+		} else {
+			c.setX(getX() + width / 2);
+			c.setY(getY() + height);
+		}
+
 	}
 
 	@Override

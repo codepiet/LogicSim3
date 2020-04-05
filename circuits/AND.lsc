@@ -8,30 +8,30 @@
             </properties>
         </gate>
         <gate type="and" x="170" y="40"/>
-        <gate type="switch" x="40" y="30">
+        <gate type="switch" x="40" y="20">
             <properties>
                 <property key="color">#ff66ff</property>
                 <property key="type">toggle</property>
             </properties>
         </gate>
-        <gate type="switch" x="40" y="70"/>
+        <gate type="switch" x="40" y="60"/>
         <gate inputs="3" type="and" x="170" y="160"/>
-        <gate type="switch" x="40" y="170"/>
-        <gate type="switch" x="40" y="130"/>
-        <gate type="switch" x="40" y="210"/>
+        <gate type="switch" x="40" y="160"/>
+        <gate type="switch" x="40" y="120"/>
+        <gate type="switch" x="40" y="200"/>
         <gate type="led" x="320" y="170"/>
-        <gate type="switch" x="40" y="270"/>
-        <gate type="switch" x="40" y="310"/>
-        <gate type="switch" x="40" y="350"/>
-        <gate type="switch" x="40" y="390"/>
+        <gate type="switch" x="40" y="260"/>
+        <gate type="switch" x="40" y="300"/>
+        <gate type="switch" x="40" y="340"/>
+        <gate type="switch" x="40" y="380"/>
         <gate inputs="4" type="and" x="170" y="320"/>
         <gate type="led" x="320" y="330"/>
         <gate inputs="5" type="and" x="170" y="520"/>
-        <gate type="switch" x="40" y="530"/>
-        <gate type="switch" x="40" y="490"/>
-        <gate type="switch" x="40" y="450"/>
-        <gate type="switch" x="40" y="570"/>
-        <gate type="switch" x="40" y="610"/>
+        <gate type="switch" x="40" y="520"/>
+        <gate type="switch" x="40" y="480"/>
+        <gate type="switch" x="40" y="440"/>
+        <gate type="switch" x="40" y="560"/>
+        <gate type="switch" x="40" y="600"/>
         <gate type="led" x="320" y="530"/>
     </gates>
     <wires>
@@ -40,11 +40,11 @@
             <to id="led@320:50" number="0"/>
         </wire>
         <wire>
-            <from id="switch@40:30" number="0"/>
+            <from id="switch@40:20" number="0"/>
             <to id="and@170:40" number="0"/>
         </wire>
         <wire>
-            <from id="switch@40:70" number="0"/>
+            <from id="switch@40:60" number="0"/>
             <to id="and@170:40" number="1"/>
         </wire>
         <wire>
@@ -52,31 +52,31 @@
             <to id="led@320:170" number="0"/>
         </wire>
         <wire>
-            <from id="switch@40:170" number="0"/>
+            <from id="switch@40:160" number="0"/>
             <to id="and@170:160" number="1"/>
         </wire>
         <wire>
-            <from id="switch@40:130" number="0"/>
+            <from id="switch@40:120" number="0"/>
             <to id="and@170:160" number="0"/>
         </wire>
         <wire>
-            <from id="switch@40:210" number="0"/>
+            <from id="switch@40:200" number="0"/>
             <to id="and@170:160" number="2"/>
         </wire>
         <wire>
-            <from id="switch@40:270" number="0"/>
+            <from id="switch@40:260" number="0"/>
             <to id="and@170:320" number="0"/>
         </wire>
         <wire>
-            <from id="switch@40:310" number="0"/>
+            <from id="switch@40:300" number="0"/>
             <to id="and@170:320" number="1"/>
         </wire>
         <wire>
-            <from id="switch@40:350" number="0"/>
+            <from id="switch@40:340" number="0"/>
             <to id="and@170:320" number="2"/>
         </wire>
         <wire>
-            <from id="switch@40:390" number="0"/>
+            <from id="switch@40:380" number="0"/>
             <to id="and@170:320" number="3"/>
         </wire>
         <wire>
@@ -88,23 +88,23 @@
             <to id="led@320:530" number="0"/>
         </wire>
         <wire>
-            <from id="switch@40:530" number="0"/>
+            <from id="switch@40:520" number="0"/>
             <to id="and@170:520" number="2"/>
         </wire>
         <wire>
-            <from id="switch@40:490" number="0"/>
+            <from id="switch@40:480" number="0"/>
             <to id="and@170:520" number="1"/>
         </wire>
         <wire>
-            <from id="switch@40:450" number="0"/>
+            <from id="switch@40:440" number="0"/>
             <to id="and@170:520" number="0"/>
         </wire>
         <wire>
-            <from id="switch@40:570" number="0"/>
+            <from id="switch@40:560" number="0"/>
             <to id="and@170:520" number="3"/>
         </wire>
         <wire>
-            <from id="switch@40:610" number="0"/>
+            <from id="switch@40:600" number="0"/>
             <to id="and@170:520" number="4"/>
         </wire>
     </wires>

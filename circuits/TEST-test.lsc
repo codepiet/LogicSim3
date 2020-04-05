@@ -3,12 +3,12 @@
     <info/>
     <gates>
         <gate type="test" x="360" y="90"/>
-        <gate type="switch" x="110" y="100"/>
+        <gate type="switch" x="110" y="90"/>
         <gate type="led" x="660" y="90"/>
-        <gate type="switch" x="110" y="140"/>
+        <gate type="switch" x="110" y="130"/>
         <gate type="led" x="660" y="130"/>
-        <gate type="switch" x="110" y="180"/>
-        <gate type="switch" x="110" y="220"/>
+        <gate type="switch" x="110" y="170"/>
+        <gate type="switch" x="110" y="210"/>
         <gate type="led" x="660" y="170"/>
         <gate type="led" x="660" y="210"/>
     </gates>
@@ -42,24 +42,24 @@
             <point node="false" number="2" x="540" y="230"/>
         </wire>
         <wire>
-            <from id="switch@110:100" number="0"/>
+            <from id="switch@110:90" number="0"/>
             <to id="test@360:90" number="0"/>
         </wire>
         <wire>
-            <from id="switch@110:140" number="0"/>
+            <from id="switch@110:130" number="0"/>
             <to id="test@360:90" number="1"/>
             <point node="false" number="0" x="210" y="160"/>
             <point node="false" number="1" x="210" y="190"/>
             <point node="false" number="2" x="390" y="190"/>
         </wire>
         <wire>
-            <from id="switch@110:180" number="0"/>
+            <from id="switch@110:170" number="0"/>
             <to id="test@360:90" number="2"/>
             <point node="false" number="0" x="450" y="200"/>
             <point node="false" number="1" x="450" y="140"/>
         </wire>
         <wire>
-            <from id="switch@110:220" number="0"/>
+            <from id="switch@110:210" number="0"/>
             <to id="test@360:90" number="3"/>
             <point node="false" number="0" x="210" y="240"/>
             <point node="false" number="1" x="210" y="210"/>

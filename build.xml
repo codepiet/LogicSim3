@@ -72,8 +72,8 @@
 		<copy todir="${dist.dir}/languages">
 			<fileset dir="languages" />
 		</copy>
-		<zip destfile="LogicSim-${version}.zip"
-		     basedir="${release.dir}"/>
+		<zip destfile="${release.dir}/LogicSim-${version}.zip"
+		     basedir="${dist.dir}"/>
 	</target>
 
 	<target name="main" depends="clean,run" />
