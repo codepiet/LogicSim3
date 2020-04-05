@@ -19,10 +19,10 @@ public class Connector extends CircuitPart {
 	public static final int HIGH = 12;
 	public static final int LOW = 13;
 
-	public static final int LEFT = 0xa0;
-	public static final int RIGHT = 0xa1;
-	public static final int UP = 0xa2;
-	public static final int DOWN = 0xa3;
+	public static final int RIGHT = 0xa0;
+	public static final int DOWN = 0xa1;
+	public static final int LEFT = 0xa2;
+	public static final int UP = 0xa3;
 
 	public static final int BOUNDING_SPACE = 5;
 	public static final int CONN_SIZE = 5;
@@ -87,11 +87,32 @@ public class Connector extends CircuitPart {
 				} else
 					g2.drawString(label, x + CONN_SIZE + 3, y + 5);
 			} else if (paintDirection == LEFT) {
-				g2.drawString(label, x - CONN_SIZE - lw - 2, y + 5);
+				if (POS_EDGE_TRIG.equals(label)) {
+					Polygon tr = new Polygon();
+					tr.addPoint(x - 1 - CONN_SIZE, y - 4);
+					tr.addPoint(x - 1 - CONN_SIZE, y + 4);
+					tr.addPoint(x - 1 - CONN_SIZE - 8, y);
+					g2.draw(tr);
+				} else
+					g2.drawString(label, x - CONN_SIZE - lw - 2, y + 5);
 			} else if (paintDirection == UP) {
-				g2.drawString(label, x - lw / 2, y - CONN_SIZE - 3);
+				if (POS_EDGE_TRIG.equals(label)) {
+					Polygon tr = new Polygon();
+					tr.addPoint(x - 4, y - 1 - CONN_SIZE);
+					tr.addPoint(x + 4, y - 1 - CONN_SIZE);
+					tr.addPoint(x, y - 1 - CONN_SIZE - 8);
+					g2.draw(tr);
+				} else
+					g2.drawString(label, x - lw / 2, y - CONN_SIZE - 3);
 			} else if (paintDirection == DOWN) {
-				g2.drawString(label, x - lw / 2, y + CONN_SIZE + 12);
+				if (POS_EDGE_TRIG.equals(label)) {
+					Polygon tr = new Polygon();
+					tr.addPoint(x - 4, y + 1 + CONN_SIZE);
+					tr.addPoint(x + 4, y + 1 + CONN_SIZE);
+					tr.addPoint(x, y + 1 + CONN_SIZE + 8);
+					g2.draw(tr);
+				} else
+					g2.drawString(label, x - lw / 2, y + CONN_SIZE + 12);
 			}
 		}
 	}
@@ -147,6 +168,9 @@ public class Connector extends CircuitPart {
 				g2.fillRect(x - 1, y + offset, 3, CONN_SIZE + 1);
 			}
 		}
+	}
+
+	public void drawWires(Graphics2D g2) {
 		// draw wire(s)
 		if (!isInput())
 			for (Wire wire : wires)

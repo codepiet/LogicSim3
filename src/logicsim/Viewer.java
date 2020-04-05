@@ -118,33 +118,29 @@ public class Viewer extends JPanel {
 	/**
 	 * The current offset (translation) in x-direction, in world units
 	 */
-	private double offsetX = 0;
+	double offsetX = 0;
 
 	/**
 	 * The current offset (translation) in y-direction, in world units
 	 */
-	private double offsetY = 0;
+	double offsetY = 0;
 
 	/**
 	 * The current scaling in x-direction
 	 */
-	private double scaleX = 1;
+	protected double scaleX = 1;
 
 	/**
 	 * The current scaling in y-direction
 	 */
-	private double scaleY = 1;
+	protected double scaleY = 1;
 
 	/**
 	 * The previous mouse position
 	 */
 	protected final Point previousPoint;
 
-	/**
-	 * The {@link Painter}s that will perform painting operations in the
-	 * {@link #paintComponent(Graphics)} method.
-	 */
-	private final List<Painter> painters;
+	private Painter painter;
 
 	/**
 	 * The {@link Transformer} instance of this Viewer
@@ -205,7 +201,7 @@ public class Viewer extends JPanel {
 	 * Creates a new Viewer.
 	 */
 	public Viewer() {
-		painters = new CopyOnWriteArrayList<Painter>();
+		painter = null;
 		previousPoint = new Point();
 		transformer = new SimpleTransformer();
 
@@ -228,20 +224,11 @@ public class Viewer extends JPanel {
 	 * 
 	 * @param painter The {@link Painter} to add
 	 */
-	public void addPainter(Painter painter) {
-		painters.add(painter);
+	public void setPainter(Painter painter) {
+		this.painter = painter;
 		repaint();
 	}
 
-	/**
-	 * Remove the given {@link Painter}
-	 * 
-	 * @param painter The {@link Painter} to remove
-	 */
-	public void removePainter(Painter painter) {
-		painters.remove(painter);
-		repaint();
-	}
 
 	/**
 	 * Return the {@link Transformer} that offers coordinate transformations for
@@ -261,12 +248,15 @@ public class Viewer extends JPanel {
 		AffineTransform at = new AffineTransform();
 		at.scale(scaleX, scaleY);
 		at.translate(offsetX, offsetY);
-
-		for (Painter painter : painters) {
-			painter.paint(g2, at, getWidth(), getHeight());
-		}
+		
+		painter.paint(g2, at, getWidth(), getHeight());
 	}
 
+	protected void zoomTo(int x, int y, double newScale) {
+		scaleX = newScale;
+		scaleY = newScale;
+	}
+	
 	/**
 	 * Zoom about the specified point (in screen coordinates) by the given amount
 	 * 
@@ -304,6 +294,10 @@ public class Viewer extends JPanel {
 	protected void translate(int dx, int dy) {
 		offsetX += dx / scaleX;
 		offsetY += dy / scaleY;
+//		if (offsetX > 0)
+//			offsetX = 0;
+//		if (offsetY > 0)
+//			offsetY = 0;
 		repaint();
 	}
 

@@ -53,7 +53,7 @@ public class ViewerTest {
 
 		final Viewer viewerComponent = new Viewer();
 		viewerComponent.setZoomingSpeed(0.02);
-		viewerComponent.addPainter(new TestPainterGraphics());
+		viewerComponent.setPainter(new TestPainterGraphics());
 		f.getContentPane().add(viewerComponent, BorderLayout.CENTER);
 
 		final JLabel infoLabel = new JLabel("");

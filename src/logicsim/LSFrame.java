@@ -45,8 +45,6 @@ import javax.swing.border.BevelBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import logicsim.LSPanel.LogicSimPainterGraphics;
-
 public class LSFrame extends JFrame implements java.awt.event.ActionListener, CircuitChangedListener {
 
 	private static final long serialVersionUID = -5281157929385660575L;
@@ -76,7 +74,7 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 
 	LSPanel lspanel = new LSPanel();
 
-    JScrollPane jScrollPane_lspanel = new JScrollPane(lspanel);
+	// JScrollPane jScrollPane_lspanel = new JScrollPane(lspanel);
 	JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
 
 	int popupGateIdx; // das Gatter �ber dem das Kontext-Menu ge�ffnet wurde
@@ -130,6 +128,7 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 
 	public LSFrame() {
 		super();
+
 //		String iconloc = "images/icon.png";
 //		URL iconURL = getClass().getResource(iconloc);
 //		Toolkit kit = Toolkit.getDefaultToolkit();
@@ -332,6 +331,7 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 		this.setJMenuBar(mnuBar);
 		contentPane.add(statusBar, BorderLayout.SOUTH);
 
+		lspanel.setPreferredSize(new Dimension(1000, 600));
 		lspanel.setBackground(Color.white);
 		lspanel.setDoubleBuffered(true);
 
@@ -339,11 +339,12 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 		pnlGateList.add(jComboBox_numinput, BorderLayout.SOUTH);
 
 		jSplitPane.add(pnlGateList, JSplitPane.LEFT);
-		
-		//jSplitPane.add(lspanel, JSplitPane.RIGHT);
-		 jScrollPane_lspanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		 jScrollPane_lspanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		 jSplitPane.add(jScrollPane_lspanel, JSplitPane.RIGHT);
+
+		// jSplitPane.add(lspanel, JSplitPane.RIGHT);
+		// jScrollPane_lspanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		// jScrollPane_lspanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		// jSplitPane.add(jScrollPane_lspanel, JSplitPane.RIGHT);
+		jSplitPane.add(lspanel, JSplitPane.RIGHT);
 
 		contentPane.add(jSplitPane, BorderLayout.CENTER);
 		jScrollPane_gates.getViewport().add(lstGates, null);
@@ -799,10 +800,12 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 			Module m = (Module) gate;
 			lspanel.setAction(m);
 			sbText.setText(m.lsFile.getDescription());
+			lspanel.requestFocus();
 		} else {
 			// gate is normal Gate-Object
 			if (gate.supportsVariableInputs())
 				gate.setNumInputs(numInputs);
+			lspanel.setAction(gate);
 
 			if (gate.type.contains("test"))
 				sbText.setText(gate.type);
@@ -811,12 +814,13 @@ public class LSFrame extends JFrame implements java.awt.event.ActionListener, Ci
 			} else {
 				sbText.setText(I18N.getString(gate.type, "title"));
 			}
-			lspanel.setAction(gate);
+			lspanel.requestFocus();
 		}
 		// TODO - this removes the selection from the list
 		// it would be nicer to hold the selection until a gate is placed on lspanel
 		// or any other button has been pressed
 		lstGates.clearSelection();
+
 	}
 
 	void jCheckBoxMenuItem_paintGrid_actionPerformed(ActionEvent e) {

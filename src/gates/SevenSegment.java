@@ -38,7 +38,7 @@ public class SevenSegment extends Gate {
 	@Override
 	public void draw(Graphics2D g) {
 		super.draw(g);
-		int xoffset = getX() + 22;
+		int xoffset = getX() + 19;
 		int yoffset = getY() + 11;
 		g.setStroke(new BasicStroke(1));
 		for (int i = 0; i < getNumInputs(); i++) {

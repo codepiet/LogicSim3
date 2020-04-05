@@ -24,6 +24,7 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 
+import javax.swing.JScrollPane;
 import javax.swing.event.MouseInputAdapter;
 
 public class LSPanel extends Viewer implements Printable, CircuitChangedListener {
@@ -43,6 +44,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	private boolean paintGrid = true;
 
 	private Dimension panelSize = new Dimension(1280, 1024);
+	public JScrollPane scrollpane;
 
 	final static Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 },
 			0);
@@ -71,8 +73,8 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		});
 
 		setZoomingSpeed(0.02);
-		addPainter(new LogicSimPainterGraphics());
-		
+		setPainter(new LogicSimPainterGraphics());
+
 		MouseControl mouseControl = new MouseControl();
 		addMouseListener(mouseControl);
 		addMouseMotionListener(mouseControl);
@@ -103,8 +105,20 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		currentAction = ACTION_GATE;
 		if (g != null) {
 			circuit.deactivateAll();
-			currentPart = g;
+			// place new gate
+			int posX = (int) -offsetX / 10 * 10 + 20;
+			int posY = (int) -offsetY / 10 * 10 + 20;
+			while (circuit.isPartAtCoordinates(posX, posY)) {
+				posX += 40;
+				posY += 40;
+			}
+			g.moveTo(posX, posY);
+			circuit.addGate((Gate) g);
+			g.activate();
+			lastClicked = g;
+
 			notifyChangeListener("MSG_ADD_NEW_GATE");
+			repaint();
 		}
 	}
 
@@ -116,23 +130,9 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		// Log.getInstance().print("Drawing panel");
 		for (CircuitPart gate : circuit.gates)
 			gate.draw(g2);
+		for (CircuitPart gate : circuit.gates)
+			((Gate) gate).drawWires(g2);
 	}
-
-//	public void paintComponent(Graphics g) {
-//		super.paintComponent(g);
-//		Graphics2D g2 = (Graphics2D) g;
-//		// set anti-aliasing
-//		//g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//		//g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-//
-//		// AffineTransform at = new AffineTransform();
-//		// at.scale(scaleX, scaleY);
-//		// at.translate(offsetX, offsetY);
-//		// at.scale(1, 1);
-//		// at.translate(0, 0);
-//		// g2.transform(at);
-//
-//	}
 
 	/**
 	 * check for escape, delete and space key
@@ -183,16 +183,63 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				currentPart = null;
 				currentAction = 0;
 				notifyChangeListener();
+				repaint();
 				return;
 			}
 			return;
 		}
+		if (keyCode == KeyEvent.VK_GREATER) {
+			scaleBy(0.2f);
+			return;
+		}
+		if (keyCode == KeyEvent.VK_LESS) {
+			scaleBy(-0.2f);
+			return;
+		}
+		if (keyCode == KeyEvent.VK_A) {
+			scaleAndMoveToAll();
+			return;
+		}
+		if (keyCode == KeyEvent.VK_H) {
+			zoomTo(30, 30, 1);
+			repaint();
+			return;
+		}
+
+		if (keyCode == KeyEvent.VK_R) {
+			if (currentPart instanceof Gate) {
+				((Gate) currentPart).rotate();
+				notifyChangeListener();
+				repaint();
+				return;
+			}
+			return;
+		}
+
 //		if (keyCode == KeyEvent.VK_SPACE) {
 //			setAction(currentAction);
 //			notifyChangeListener();
 //			repaint();
 //		}
 
+	}
+
+	private void scaleAndMoveToAll() {
+		repaint();
+	}
+
+	private void scaleBy(double scale) {
+		zoom((int) getTransformer().screenToWorldX(getWidth() / 2),
+				(int) getTransformer().screenToWorldY(getHeight() / 2), scale);
+		repaint();
+	}
+
+	private void scaleTo(double scale) {
+		double diff = scaleX - scale;
+		if (diff > 0)
+			scaleBy(-diff);
+		else
+			scaleBy(diff);
 	}
 
 	private void notifyChangeListener() {
@@ -279,13 +326,16 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 			g2.transform(at);
-
-			if (paintGrid) {
+			if (paintGrid && scaleX > 0.7f) {
+				int startX = CircuitPart.round((int) Math.round(getTransformer().screenToWorldX(0)));
+				int startY = CircuitPart.round((int) Math.round(getTransformer().screenToWorldY(0)));
+				int endX = (int) getTransformer().screenToWorldX(w + 9);
+				int endY = (int) getTransformer().screenToWorldY(h + 9);
 				g2.setColor(gridColor);
 				Path2D grid = new Path2D.Double();
 				g2.setStroke(new BasicStroke(1));
-				for (int x = 0; x < w; x += 10) {
-					for (int y = 0; y < w; y += 10) {
+				for (int x = startX; x < endX; x += 10) {
+					for (int y = startY; y < endY; y += 10) {
 						grid.moveTo(x, y);
 						grid.lineTo(x, y);
 					}
@@ -308,7 +358,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			implements MouseListener, MouseMotionListener, MouseWheelListener {
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			System.err.println("zooming viewer");
 			zoom(e.getX(), e.getY(), e.getWheelRotation() * zoomingSpeed);
 		}
 
@@ -328,14 +377,16 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			System.err.println("dragged");
-			int dx = e.getX() - previousPoint.x;
-			int dy = e.getY() - previousPoint.y;
-			translate(dx, dy);
-			previousPoint.setLocation(e.getX(), e.getY());
-			
-			//---
-			
+			if (currentPart == null) {
+				// drag world
+				int dx = e.getX() - previousPoint.x;
+				int dy = e.getY() - previousPoint.y;
+				translate(dx, dy);
+				previousPoint.setLocation(e.getX(), e.getY());
+				return;
+			}
+
+			// drag part
 			e = convertToWorld(e);
 			if (!Simulation.getInstance().isRunning()) {
 				if (currentPart != null) {
@@ -349,8 +400,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		public void mouseMoved(MouseEvent e) {
 			previousPoint.setLocation(e.getX(), e.getY());
 
-			//----
-			
 			e = convertToWorld(e);
 			// System.err.println("MOVED mouse");
 			int rx = CircuitPart.round(e.getX());
@@ -377,7 +426,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				}
 			}
 		}
-		
+
 		@Override
 		public void mousePressed(MouseEvent e) {
 			e = convertToWorld(e);
@@ -478,8 +527,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			currentAction = 0;
 			repaint();
 		}
-		
+
 	}
 
-	
 }

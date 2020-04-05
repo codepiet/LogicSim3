@@ -11,7 +11,14 @@
 
 \newcommand{\lsN}{\textit{LogicSim 3}}
 \newcommand{\lsA}{\textit{LogicSim 2}}
-
+\newcommand{\bild}[2]{%
+\begin{figure}[htb!]
+\centering
+\includegraphics[scale=1]{abbildungen/#1}
+\caption{#2}
+\label{#1}
+\end{figure}
+}
 
 \title{Handbuch - LogicSim 3}
 \author{P. Gabriel}
@@ -80,13 +87,19 @@ Da der Aufbau der implementierten Logikgatter sehr einfach ist, können auch Sch
 
 \section{Nächste Schritte}
 
+\section*{Anhang}
 \appendix
 \section{Jar-Doppelklick unter Windows 10 einrichten}
 Damit der Doppelklick unter einem System funktioniert, müssen die JAR-Dateien einem Programm zugewiesen werden. Oft ist unter Windows 10 der Doppelklick auf Jar-Dateien nicht richtig eingestellt. Ein bloßes Einrichten von >>Öffnen mit<< führt zu keinem Ergebnis. Dies liegt daran, dass dem Programm >>java.exe<<, dass seinerseits die JAR-Datei lädt, ein weiterer Parameter (-jar) mitgegeben werden muss. Dies lässt sich gut über die Registry lösen.
+
 \begin{compactenum}
-\item Notieren, wo Java installiert ist, oft in \texttt{C:\\Programme (x86)\\Java\\jreXXX\\bin\\java.exe}
+\item Notieren, wo Java installiert ist, oft in \verb+C:\Programme (x86)\Java\jreXXX\bin\java.exe+
 \item >>regedit<< als Administrator ausführen.
-\item Zum angegebenen Schlüssel in Abbildung \ref{regedit1} navigieren.
-\item Den Schlüssel wie in Abbildung \ref{regedit2} angegeben ändern, dabei den richtigen Pfad von Schritt 1 übernehmen.
+\item Zum angegebenen Schlüssel in Abbildung \ref{registryjar1} navigieren.
+\item Den Schlüssel wie in Abbildung \ref{registryjar2} angegeben ändern, dabei den richtigen Pfad von Schritt 1 übernehmen.
 \end{compactenum}
+
+\bild{registryjar1}{Regedit-Programm mit dargestelltem Pfad zum Schlüssel}
+\bild{registryjar2}{Bearbeiten des Schlüssels}
+
 \end{document}

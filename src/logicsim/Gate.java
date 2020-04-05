@@ -55,6 +55,7 @@ public class Gate extends CircuitPart {
 	protected Color backgroundColor = Color.white;
 
 	public String category;
+	public int rotate90 = 0;
 
 	public Gate() {
 		this(0, 0);
@@ -122,6 +123,11 @@ public class Gate extends CircuitPart {
 	protected void drawIO(Graphics2D g2) {
 		for (Connector c : conns)
 			c.draw(g2);
+	}
+
+	protected void drawWires(Graphics2D g2) {
+		for (Connector c : conns)
+			c.drawWires(g2);
 	}
 
 	protected void drawLabel(Graphics2D g2, String lbl, Font font) {
@@ -578,6 +584,58 @@ public class Gate extends CircuitPart {
 			}
 		}
 		return wires;
+	}
+
+	public void rotate() {
+		if (height != width) {
+			rotate90 += 2;
+			if (rotate90 > 3)
+				rotate90 = 0;
+
+			for (Connector c : conns) {
+				if (c.paintDirection == Connector.RIGHT) {
+					c.paintDirection = Connector.LEFT;
+					c.setY(2 * getY() + height - c.getY());
+					c.setX(getX() + width);
+				} else if (c.paintDirection == Connector.DOWN) {
+					c.paintDirection = Connector.UP;
+					c.setY(getY() + height);
+					c.setX(2 * getX() + width - c.getX());
+				} else if (c.paintDirection == Connector.LEFT) {
+					c.paintDirection = Connector.RIGHT;
+					c.setX(getX());
+					c.setY(2 * getY() + height - c.getY());
+				} else {
+					c.paintDirection = Connector.DOWN;
+					c.setY(getY());
+					c.setX(2 * getX() + width - c.getX());
+				}
+			}
+		} else {
+			rotate90++;
+			if (rotate90 > 3)
+				rotate90 = 0;
+
+			for (Connector c : conns) {
+				if (c.paintDirection == Connector.RIGHT) {
+					c.paintDirection = Connector.DOWN;
+					c.setX(getX() + width - (c.getY() - getY()));
+					c.setY(getY());
+				} else if (c.paintDirection == Connector.DOWN) {
+					c.paintDirection = Connector.LEFT;
+					c.setY(getY() + (c.getX() - getX()));
+					c.setX(getX() + width);
+				} else if (c.paintDirection == Connector.LEFT) {
+					c.paintDirection = Connector.UP;
+					c.setX(getX() + width - (c.getY() - getY()));
+					c.setY(getY() + height);
+				} else {
+					c.paintDirection = Connector.RIGHT;
+					c.setY(getY() + c.getX() - getX());
+					c.setX(getX());
+				}
+			}
+		}
 	}
 
 }

@@ -40,6 +40,7 @@ public class XMLLoader {
 				String type = gnode.string("type").toLowerCase();
 				int x = Integer.parseInt(gnode.string("x"));
 				int y = Integer.parseInt(gnode.string("y"));
+				String optRot = gnode.optString("rotate");
 				String optInputs = gnode.optString("inputs");
 
 				Gate gate = null;
@@ -55,6 +56,15 @@ public class XMLLoader {
 				if (optInputs != null)
 					gate.setNumInputs(Integer.parseInt(optInputs));
 				gate.moveTo(x, y);
+				if (optRot != null) {
+					int rot = Integer.parseInt(optRot) / 90;
+					if (gate.height != gate.width) {
+						gate.rotate();
+					} else {
+						for (int i = 0; i < rot; i++)
+							gate.rotate();
+					}
+				}
 
 				// settings
 				Xml snode = gnode.optChild("properties");

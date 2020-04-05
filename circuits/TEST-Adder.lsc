@@ -13,6 +13,23 @@
         <gate type="switch" x="40" y="200"/>
         <gate type="led" x="260" y="140"/>
         <gate type="led" x="260" y="180"/>
+        <gate module="true" rotate="90" type="FA" x="350" y="340"/>
+        <gate module="true" rotate="90" type="FA" x="430" y="340"/>
+        <gate module="true" rotate="90" type="FA" x="510" y="340"/>
+        <gate module="true" rotate="90" type="FA" x="590" y="340"/>
+        <gate rotate="90" type="led" x="620" y="430"/>
+        <gate rotate="90" type="led" x="460" y="430"/>
+        <gate rotate="90" type="led" x="300" y="430"/>
+        <gate rotate="90" type="led" x="380" y="430"/>
+        <gate rotate="90" type="led" x="540" y="430"/>
+        <gate rotate="90" type="switch" x="360" y="230"/>
+        <gate rotate="90" type="switch" x="420" y="280"/>
+        <gate rotate="90" type="switch" x="500" y="280"/>
+        <gate rotate="90" type="switch" x="340" y="280"/>
+        <gate rotate="90" type="switch" x="600" y="230"/>
+        <gate rotate="90" type="switch" x="520" y="230"/>
+        <gate rotate="90" type="switch" x="440" y="230"/>
+        <gate rotate="90" type="switch" x="580" y="280"/>
     </gates>
     <wires>
         <wire>
@@ -52,6 +69,77 @@
             <from id="switch@40:200" number="0"/>
             <to id="FA@140:150" number="2"/>
             <point node="false" number="0" x="80" y="200"/>
+        </wire>
+        <wire>
+            <from id="FA@350:340" number="0"/>
+            <to id="led@380:430" number="0"/>
+        </wire>
+        <wire>
+            <from id="FA@350:340" number="1"/>
+            <to id="led@300:430" number="0"/>
+            <point node="false" number="0" x="360" y="430"/>
+        </wire>
+        <wire>
+            <from id="FA@430:340" number="0"/>
+            <to id="led@460:430" number="0"/>
+        </wire>
+        <wire>
+            <from id="FA@430:340" number="1"/>
+            <to id="FA@350:340" number="0"/>
+            <point node="false" number="0" x="420" y="400"/>
+            <point node="false" number="1" x="420" y="340"/>
+        </wire>
+        <wire>
+            <from id="FA@510:340" number="0"/>
+            <to id="led@540:430" number="0"/>
+        </wire>
+        <wire>
+            <from id="FA@510:340" number="1"/>
+            <to id="FA@430:340" number="0"/>
+            <point node="false" number="0" x="500" y="400"/>
+            <point node="false" number="1" x="500" y="340"/>
+        </wire>
+        <wire>
+            <from id="FA@590:340" number="0"/>
+            <to id="led@620:430" number="0"/>
+        </wire>
+        <wire>
+            <from id="FA@590:340" number="1"/>
+            <to id="FA@510:340" number="0"/>
+            <point node="false" number="0" x="580" y="400"/>
+            <point node="false" number="1" x="580" y="340"/>
+        </wire>
+        <wire>
+            <from id="switch@360:230" number="0"/>
+            <to id="FA@350:340" number="1"/>
+        </wire>
+        <wire>
+            <from id="switch@420:280" number="0"/>
+            <to id="FA@430:340" number="2"/>
+        </wire>
+        <wire>
+            <from id="switch@500:280" number="0"/>
+            <to id="FA@510:340" number="2"/>
+        </wire>
+        <wire>
+            <from id="switch@340:280" number="0"/>
+            <to id="FA@350:340" number="2"/>
+        </wire>
+        <wire>
+            <from id="switch@600:230" number="0"/>
+            <to id="FA@590:340" number="1"/>
+        </wire>
+        <wire>
+            <from id="switch@520:230" number="0"/>
+            <to id="FA@510:340" number="1"/>
+        </wire>
+        <wire>
+            <from id="switch@440:230" number="0"/>
+            <to id="FA@430:340" number="1"/>
+        </wire>
+        <wire>
+            <from id="switch@580:280" number="0"/>
+            <to id="FA@590:340" number="2"/>
         </wire>
     </wires>
 </logicsim>

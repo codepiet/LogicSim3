@@ -77,6 +77,14 @@ public class Circuit implements CircuitChangedListener {
 		return false;
 	}
 
+	public boolean isPartAtCoordinates(int x, int y) {
+		for (Gate g : gates) {
+			if (g.getX() == x && g.getY() == y)
+				return true;
+		}
+		return false;
+	}
+
 	public CircuitPart findPartAt(int x, int y) {
 		for (Gate g : gates) {
 			CircuitPart cp = g.findPartAt(x, y);

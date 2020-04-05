@@ -12,7 +12,7 @@
         <gate type="switch4" x="20" y="90"/>
         <gate type="switch" x="420" y="330"/>
         <gate type="clock" x="20" y="140"/>
-        <gate type="binin" x="170" y="150"/>
+        <gate type="binin" x="150" y="120"/>
         <gate type="counter" x="250" y="150"/>
         <gate type="srl" x="30" y="250"/>
         <gate type="srff" x="100" y="250"/>
@@ -23,8 +23,8 @@
         <gate type="tff" x="500" y="250"/>
         <gate type="led" x="510" y="330"/>
         <gate type="bindisp" x="100" y="330"/>
-        <gate type="sevenseg" x="180" y="330"/>
-        <gate type="sevendrv" x="260" y="330"/>
+        <gate type="sevenseg" x="280" y="330"/>
+        <gate type="sevendrv" x="180" y="330"/>
         <gate type="label" x="350" y="160">
             <properties>
                 <property key="text">TEST DES TextLabels</property>
@@ -59,5 +59,34 @@
             </properties>
         </gate>
     </gates>
-    <wires/>
+    <wires>
+        <wire>
+            <from id="sevendrv@180:330" number="0"/>
+            <to id="sevenseg@280:330" number="0"/>
+        </wire>
+        <wire>
+            <from id="sevendrv@180:330" number="1"/>
+            <to id="sevenseg@280:330" number="1"/>
+        </wire>
+        <wire>
+            <from id="sevendrv@180:330" number="2"/>
+            <to id="sevenseg@280:330" number="2"/>
+        </wire>
+        <wire>
+            <from id="sevendrv@180:330" number="3"/>
+            <to id="sevenseg@280:330" number="3"/>
+        </wire>
+        <wire>
+            <from id="sevendrv@180:330" number="4"/>
+            <to id="sevenseg@280:330" number="4"/>
+        </wire>
+        <wire>
+            <from id="sevendrv@180:330" number="5"/>
+            <to id="sevenseg@280:330" number="5"/>
+        </wire>
+        <wire>
+            <from id="sevendrv@180:330" number="6"/>
+            <to id="sevenseg@280:330" number="6"/>
+        </wire>
+    </wires>
 </logicsim>

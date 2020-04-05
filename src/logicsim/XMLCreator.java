@@ -105,6 +105,10 @@ public class XMLCreator {
 		node.setAttribute("x", String.valueOf(g.getX()));
 		node.setAttribute("y", String.valueOf(g.getY()));
 
+		if (g.rotate90 != 0) {
+			node.setAttribute("rotate", String.valueOf(g.rotate90 * 90));
+		}
+
 		if (g.supportsVariableInputs() && g.getNumInputs() != 2)
 			node.setAttribute("inputs", String.valueOf(g.getNumInputs()));
 
