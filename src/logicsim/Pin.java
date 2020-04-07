@@ -144,13 +144,12 @@ public class Pin extends CircuitPart {
 				g2.drawOval(x + offset + 2 - ovalSize, y - 4 - ovalSize / 2, ovalSize + 1, ovalSize + 1);
 		} else if (levelType == HIGH) {
 			if (ioType == OUTPUT)
-				throw new RuntimeException("OUTPUT cannot be set HIGH");
+				throw new RuntimeException("OUTPUT may not be set HIGH");
 			WidgetHelper.drawStringCentered(g2, "1", x, y);
-			g2.drawString("1", x - 4, y + 4);
 		} else if (levelType == LOW) {
 			if (ioType == OUTPUT)
-				throw new RuntimeException("OUTPUT cannot be set LOW");
-			g2.drawString("0", x - 4, y + 4);
+				throw new RuntimeException("OUTPUT may not be set LOW");
+			WidgetHelper.drawStringCentered(g2, "0", x, y);
 		} else {
 			// normal
 			g2.setStroke(new BasicStroke(1));

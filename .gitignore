@@ -1,6 +1,7 @@
 build/
 dist/
 bin/
+icons/
 .settings/
 .DS_Store
 *.synctex.gz

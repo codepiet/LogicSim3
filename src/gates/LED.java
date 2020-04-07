@@ -78,4 +78,8 @@ public class LED extends Gate {
 		return true;
 	}
 
+	@Override
+	protected void drawFrame(Graphics2D g2) {
+	}
+
 }

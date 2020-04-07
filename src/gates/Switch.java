@@ -237,4 +237,7 @@ public class Switch extends Gate {
 		return true;
 	}
 
+	@Override
+	protected void drawFrame(Graphics2D g2) {
+	}
 }

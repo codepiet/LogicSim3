@@ -83,7 +83,7 @@ public class XMLLoader {
 						int inputNumber = Integer.parseInt(inode.string("number"));
 
 						String label = inode.optString("label");
-						gate.getInputs().get(inputNumber).label = label;
+						gate.getPin(inputNumber).label = label;
 
 						String inpType = inode.optString("type");
 						if (inpType != null) {
@@ -95,12 +95,12 @@ public class XMLLoader {
 							} else if ("inv".equals(inpType)) {
 								inputType = Pin.INVERTED;
 							}
-							gate.getInputs().get(inputNumber).levelType = inputType;
+							gate.getPin(inputNumber).levelType = inputType;
 						}
 					} else {
 						int outputNumber = Integer.parseInt(inode.string("number"));
 						String label = inode.optString("label");
-						gate.getOutputs().get(outputNumber).label = label;
+						gate.getPin(outputNumber).label = label;
 					}
 				}
 				node = doc.optChild("properties");
