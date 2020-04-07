@@ -1,7 +1,6 @@
 package gates;
 
-import logicsim.Connector;
-import logicsim.Gate;
+import logicsim.Pin;
 
 /**
  * NAND Gate for LogicSim
@@ -10,26 +9,13 @@ import logicsim.Gate;
  * @author Peter Gabriel
  * @version 2.0
  */
-public class NAND extends Gate {
+public class NAND extends AND {
 	static final long serialVersionUID = -8148143070926953439L;
 
 	public NAND() {
-		super("basic");
-		label = "&";
+		super();
 		type = "nand";
-		setNumInputs(2);
-		setNumOutputs(1);
-		getOutput(0).setLevelType(Connector.INVERTED);
-		variableInputCountSupported = true;
-		reset();
-	}
-
-	public void simulate() {
-		boolean b = true;
-		for (int i = 0; i < getNumInputs(); i++) {
-			b = b && getInputLevel(i);
-		}
-		setOutputLevel(0, b);
+		getPin(0).setLevelType(Pin.INVERTED);
 	}
 
 }

@@ -16,36 +16,24 @@ import javax.swing.JOptionPane;
 
 public class App {
 
-	LSFrame lsframe;
-	static ArrayList<Category> cats = new ArrayList<Category>();
-	public static String CIRCUIT_FILE_SUFFIX = "lsc";
-	public static String MODULE_FILE_SUFFIX = "lsm";
-	public static String GRAPHICS_FORMAT = "png";
-
+	public static final String APP_TITLE = "LogicSim";
+	public static final String CIRCUIT_FILE_SUFFIX = "lsc";
+	public static final String MODULE_FILE_SUFFIX = "lsm";
+	public static final String GRAPHICS_FORMAT = "png";
 	public static boolean Running_From_Jar = false;
-	private static App instance;
 
-	/** Construct the application */
-	private App() {
-		new I18N();
+	LSFrame lsframe;
 
+	static ArrayList<Category> cats = new ArrayList<Category>();
+
+	public App() {
 		String protocol = this.getClass().getResource("").getProtocol();
-		if (Objects.equals(protocol, "jar")) {
+		if (Objects.equals(protocol, "jar"))
 			Running_From_Jar = true;
-		}
-
+		new I18N();
 		initializeGateCategories();
 
-		lsframe = new LSFrame();
-		// ((BasicInternalFrameUI) lsframe.getUI()).setNorthPane(null);
-
-		// Image si = new
-		// ImageIcon(App.class.getResource("images/splash.jpg")).getImage();
-		// Splash splash = new Splash(frame, si);
-		// splash.setVisible(true);
-
-		lsframe.validate();
-		// Center the window
+		// center the window and adjust dimensions
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension frameSize = new Dimension(1024, 768);
 		if (frameSize.height > screenSize.height) {
@@ -54,6 +42,7 @@ public class App {
 		if (frameSize.width > screenSize.width) {
 			frameSize.width = screenSize.width;
 		}
+		lsframe = new LSFrame(APP_TITLE);
 		lsframe.setSize(frameSize);
 		lsframe.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
 		lsframe.setVisible(true);
@@ -85,13 +74,6 @@ public class App {
 		cats.add(cat);
 
 		cats.add(new Category("basic"));
-
-		cat = new Category("gatemodifiers");
-		cat.addGate(new Gate("inputinvert", Connector.INVERTED));
-		cat.addGate(new Gate("inputhigh", Connector.HIGH));
-		cat.addGate(new Gate("inputlow", Connector.LOW));
-		cat.addGate(new Gate("inputnormal", Connector.NORMAL));
-		cats.add(cat);
 		cats.add(new Category("input"));
 		cats.add(new Category("output"));
 		cats.add(new Category("flipflop"));
@@ -208,16 +190,11 @@ public class App {
 		return null;
 	}
 
-	private static App getInstance() {
-		if (instance == null) {
-			instance = new App();
-		}
-		return instance;
-	}
-
-	/** Main method */
+	/**
+	 * Main method
+	 */
 	public static void main(String[] args) {
-		App.getInstance();
+		new App();
 	}
 
 }

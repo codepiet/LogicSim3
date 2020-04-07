@@ -23,7 +23,7 @@ public class Wire extends CircuitPart implements Cloneable {
 	/**
 	 * connector from which this wire is originating
 	 */
-	public Connector fromConn;
+	public Pin fromConn;
 
 	/**
 	 * data structure to hold the wire points
@@ -35,7 +35,7 @@ public class Wire extends CircuitPart implements Cloneable {
 	/**
 	 * connector to which this wire is targeting
 	 */
-	public Connector toConn;
+	public Pin toConn;
 
 	/**
 	 * constructor specifying the gates and connector numbers
@@ -43,7 +43,7 @@ public class Wire extends CircuitPart implements Cloneable {
 	 * @param g
 	 * @param fromOutput
 	 */
-	public Wire(Connector fromConn, Connector toConn) {
+	public Wire(Pin fromConn, Pin toConn) {
 		this(0, 0);
 		this.fromConn = fromConn;
 		this.toConn = toConn;
@@ -72,7 +72,7 @@ public class Wire extends CircuitPart implements Cloneable {
 		return clone;
 	}
 
-	public void connect(Connector conn) {
+	public void connect(Pin conn) {
 		if (conn.isInput()) {
 			if (toConn != null)
 				throw new RuntimeException("wire is already connected - " + toConn.getId());
@@ -440,7 +440,7 @@ public class Wire extends CircuitPart implements Cloneable {
 	 * 
 	 * @param connector
 	 */
-	public void disconnect(Connector connector) {
+	public void disconnect(Pin connector) {
 		if (connector == fromConn) {
 			toConn.wires.remove(this);
 		} else if (connector == toConn) {

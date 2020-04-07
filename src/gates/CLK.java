@@ -9,7 +9,7 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
-import logicsim.Connector;
+import logicsim.Pin;
 import logicsim.Gate;
 import logicsim.I18N;
 import logicsim.LSMouseEvent;
@@ -53,7 +53,7 @@ public class CLK extends Gate {
 		type = "clock";
 		width = 80;
 		height = 70;
-		setNumOutputs(1);
+		createOutputs(1);
 		loadProperties();
 	}
 
@@ -66,7 +66,7 @@ public class CLK extends Gate {
 	@Override
 	public void mousePressedUI(LSMouseEvent e) {
 		super.mousePressedUI(e);
-				
+
 		int dx = e.getX() - getX();
 		int dy = e.getY() - getY();
 
@@ -75,7 +75,7 @@ public class CLK extends Gate {
 		if (manual.contains(dx, dy) && currentMode != RUNNING) {
 			currentMode = PULSE;
 			lastTime = 0;
-			setOutputLevel(0, true);
+			getPin(0).setLevel(true);
 		} else if (auto.contains(dx, dy)) {
 			currentMode = 1 - currentMode;
 		}
@@ -91,27 +91,27 @@ public class CLK extends Gate {
 			osz = new boolean[oszi.width + 1];
 		}
 
+		Pin cout = getPin(0);
+		boolean out = cout.getLevel();
 		if (currentMode == RUNNING) {
 			if (lastTime == 0)
 				lastTime = new Date().getTime();
-
-			if (!getOutputLevel(0) && new Date().getTime() - lastTime > lowTime) {
-				setOutputLevel(0, !getOutputLevel(0));
+			if (!out && new Date().getTime() - lastTime > lowTime) {
+				cout.setLevel(true);
 				lastTime = new Date().getTime();
-			}
-			if (getOutputLevel(0) && new Date().getTime() - lastTime > highTime) {
-				setOutputLevel(0, !getOutputLevel(0));
+			} else if (out && new Date().getTime() - lastTime > highTime) {
+				cout.setLevel(false);
 				lastTime = new Date().getTime();
 			}
 		} else if (currentMode == PULSE) {
 			if (lastTime == 0)
 				lastTime = new Date().getTime();
-			if (getOutputLevel(0) && new Date().getTime() - lastTime > highTime) {
-				setOutputLevel(0, !getOutputLevel(0));
+			if (out && new Date().getTime() - lastTime > highTime) {
+				cout.setLevel(false);
 				currentMode = PAUSE;
 			}
 		}
-		osz[pos] = getOutputLevel(0);
+		osz[pos] = cout.getLevel();
 	}
 
 	@Override
@@ -121,16 +121,17 @@ public class CLK extends Gate {
 		int y = getY();
 
 		g2.setPaint(Color.black);
-		g2.setFont(Connector.smallFont);
+		g2.setFont(Pin.smallFont);
 		String s = "CLK";
 		int sw = g2.getFontMetrics().stringWidth(s);
 		g2.drawString(s, x + getWidth() / 2 - sw / 2, y + 18);
 
 		g2.setStroke(new BasicStroke(1));
-		WidgetHelper.drawPushSwitch(g2, x + manual.x, y + manual.y, manual.width, currentMode == PULSE ? Color.red : Color.LIGHT_GRAY, "1");
+		WidgetHelper.drawPushSwitch(g2, x + manual.x, y + manual.y, manual.width,
+				currentMode == PULSE ? Color.red : Color.LIGHT_GRAY, "1");
 		Rectangle r = new Rectangle(auto.x + getX(), auto.y + getY(), auto.width, auto.height);
-		WidgetHelper.drawSwitchHorizontal(g2, r, currentMode == RUNNING, Color.RED, Color.LIGHT_GRAY);		
-		
+		WidgetHelper.drawSwitchHorizontal(g2, r, currentMode == RUNNING, Color.RED, Color.LIGHT_GRAY);
+
 //		if (currentMode == PAUSE) {
 //			g2.setPaint(Color.blue);
 //			g2.fillRect(x + auto.x, y + auto.y, 6, auto.height);

@@ -2,7 +2,7 @@ package gates;
 
 import java.awt.Graphics2D;
 
-import logicsim.Connector;
+import logicsim.Pin;
 import logicsim.Gate;
 import logicsim.Wire;
 
@@ -23,32 +23,32 @@ public class SRLatch extends Gate {
 	public SRLatch() {
 		super("flipflop");
 		type = "srl";
-		setNumInputs(2);
-		setNumOutputs(2);
+		createInputs(2);
+		createOutputs(2);
 
-		getInput(0).label = "S";
-		getInput(1).label = "R";
+		getPin(0).label = "S";
+		getPin(1).label = "R";
 
-		getOutput(0).label = "Q";
-		getOutput(1).label = "/Q";
+		getPin(2).label = "Q";
+		getPin(3).label = "/Q";
 
-		getInput(0).moveBy(0, 10);
-		getInput(1).moveBy(0, -10);
-		getOutput(0).moveBy(0, 10);
-		getOutput(1).moveBy(0, -10);
+		getPin(0).moveBy(0, 10);
+		getPin(1).moveBy(0, -10);
+		getPin(2).moveBy(0, 10);
+		getPin(3).moveBy(0, -10);
 
 		reset();
 
 		// build gate
 		// https://www.elektronik-kompendium.de/sites/dig/0209302.htm
 
-		Wire nor1_nor2a = new Wire(nor1.getOutput(0), nor2.getInput(0));
-		nor1.getOutput(0).addWire(nor1_nor2a);
-		nor2.getInput(0).addWire(nor1_nor2a);
+		Wire nor1_nor2a = new Wire(nor1.getPin(0), nor2.getPin(1));
+		nor1.getPin(0).addWire(nor1_nor2a);
+		nor2.getPin(1).addWire(nor1_nor2a);
 
-		Wire nor2_nor1b = new Wire(nor2.getOutput(0), nor1.getInput(1));
-		nor2.getOutput(0).addWire(nor2_nor1b);
-		nor1.getInput(1).addWire(nor2_nor1b);
+		Wire nor2_nor1b = new Wire(nor2.getPin(0), nor1.getPin(2));
+		nor2.getPin(0).addWire(nor2_nor1b);
+		nor1.getPin(2).addWire(nor2_nor1b);
 
 		simulate();
 	}
@@ -56,26 +56,26 @@ public class SRLatch extends Gate {
 	@Override
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
-		drawLabel(g2, "SRL", Connector.smallFont);
+		drawLabel(g2, "SRL", Pin.smallFont);
 	}
 
 	@Override
 	public void simulate() {
 		super.simulate();
 
-		nor1.getInput(0).setLevel(getInputLevel(0));
-		nor2.getInput(1).setLevel(getInputLevel(1));
+		nor1.getPin(1).setLevel(getPin(0).getLevel());
+		nor2.getPin(2).setLevel(getPin(1).getLevel());
 
 		nor1.simulate();
 		nor2.simulate();
 
-		setOutputLevel(0, !nor1.getOutputLevel(0));
-		setOutputLevel(1, !nor2.getOutputLevel(0));
+		getPin(2).setLevel(!nor1.getPin(0).getLevel());
+		getPin(3).setLevel(!nor2.getPin(0).getLevel());
 	}
 
 	@Override
 	public void reset() {
-		setOutputLevel(0, !nor1.getOutputLevel(0));
-		setOutputLevel(1, !nor2.getOutputLevel(0));
+		getPin(2).setLevel(!nor1.getPin(0).getLevel());
+		getPin(3).setLevel(!nor2.getPin(0).getLevel());
 	}
 }

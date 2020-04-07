@@ -31,9 +31,6 @@ public class TextLabel extends Gate {
 		type = "label";
 		width = 60;
 		height = 20;
-		setNumInputs(0);
-		setNumOutputs(0);
-		drawFrame = false;
 		loadProperties();
 	}
 

@@ -23,8 +23,8 @@ public class MODIN extends Gate {
 		label = "INPUTS";
 		height = 170;
 		backgroundColor = Color.LIGHT_GRAY;
-		setNumInputs(16);
-		setNumOutputs(16);
+		createInputs(16);
+		createOutputs(16);
 	}
 
 	@Override
@@ -37,10 +37,9 @@ public class MODIN extends Gate {
 	@Override
 	public void simulate() {
 		super.simulate();
-
-		for (int i = 0; i < getNumInputs(); i++) {
-			setOutputLevel(i, getInputLevel(i));
-		}
+		int ni = getNumInputs();
+		for (int i = 0; i < ni; i++)
+			getPin(i + ni).setLevel(getPin(i).getLevel());
 	}
 
 }

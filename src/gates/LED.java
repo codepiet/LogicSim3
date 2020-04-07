@@ -31,9 +31,7 @@ public class LED extends Gate {
 		type = "led";
 		width = 40;
 		height = 40;
-		setNumInputs(1);
-		setNumOutputs(0);
-		drawFrame = false;
+		createInputs(1);
 		variableInputCountSupported = false;
 		loadProperties();
 		reset();
@@ -57,7 +55,7 @@ public class LED extends Gate {
 
 		int y1 = ovalCenterY - ovalRadius;
 
-		if (getInputLevel(0)) {
+		if (getPin(0).getLevel()) {
 			c = color;
 		}
 		g.setPaint(c);

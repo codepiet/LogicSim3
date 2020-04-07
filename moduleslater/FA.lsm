@@ -32,25 +32,25 @@
             <point node="false" number="1" x="240" y="190"/>
         </wire>
         <wire>
-            <from id="modout@470:100" number="0"/>
+            <from id="modout@470:100" number="16"/>
             <to id="led@560:90" number="0"/>
         </wire>
         <wire>
-            <from id="modout@470:100" number="1"/>
+            <from id="modout@470:100" number="17"/>
             <to id="led@560:130" number="0"/>
             <point node="false" number="0" x="550" y="120"/>
             <point node="false" number="1" x="550" y="150"/>
         </wire>
         <wire>
-            <from id="HA@320:100" number="0"/>
+            <from id="HA@320:100" number="2"/>
             <to id="modout@470:100" number="0"/>
         </wire>
         <wire>
-            <from id="HA@320:100" number="1"/>
+            <from id="HA@320:100" number="3"/>
             <to id="or@390:140" number="0"/>
         </wire>
         <wire>
-            <from id="HA@250:140" number="0"/>
+            <from id="HA@250:140" number="2"/>
             <to id="HA@320:100" number="1"/>
         </wire>
         <wire>

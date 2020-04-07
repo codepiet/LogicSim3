@@ -3,7 +3,7 @@ package gates;
 import java.awt.Graphics2D;
 
 import logicsim.Gate;
-import logicsim.Connector;
+import logicsim.Pin;
 
 /**
  * D-Flipflop with Set and Reset
@@ -23,32 +23,32 @@ public class DSRFlipFlop extends Gate {
 	public DSRFlipFlop() {
 		super("flipflop");
 		type = "dsrff";
-		setNumInputs(4);
-		setNumOutputs(2);
+		createInputs(4);
+		createOutputs(2);
 		out0 = false;
 		out1 = true;
 
-		getInput(0).label = "D";
-		getInput(1).label = "S";
-		getInput(2).label = "R";
-		getInput(3).label = Connector.POS_EDGE_TRIG;
+		getPin(0).label = "D";
+		getPin(1).label = "S";
+		getPin(2).label = "R";
+		getPin(3).label = Pin.POS_EDGE_TRIG;
 
-		getOutput(0).label = "Q";
-		getOutput(1).label = "/Q";
-		getOutput(1).setLevelType(Connector.INVERTED);
+		getPin(4).label = "Q";
+		getPin(5).label = "/Q";
+		getPin(5).setLevelType(Pin.INVERTED);
 
-		getOutput(0).moveBy(0, 10);
-		getOutput(1).moveBy(0, -10);
+		getPin(4).moveBy(0, 10);
+		getPin(5).moveBy(0, -10);
 
 		reset();
 	}
 
 	@Override
 	public void simulate() {
-		boolean d = getInputLevel(0);
-		boolean s = getInputLevel(1);
-		boolean r = getInputLevel(2);
-		boolean clk = getInputLevel(3);
+		boolean d = getPin(0).getLevel();
+		boolean s = getPin(1).getLevel();
+		boolean r = getPin(2).getLevel();
+		boolean clk = getPin(3).getLevel();
 
 		boolean sthHasHappened = false;
 		// rising edge
@@ -70,8 +70,8 @@ public class DSRFlipFlop extends Gate {
 			sthHasHappened = true;
 		}
 		if (sthHasHappened) {
-			setOutputLevel(0, out0);
-			setOutputLevel(1, !out1);
+			getPin(4).setLevel(out0);
+			getPin(5).setLevel(!out1);
 		}
 		lastClk = clk;
 	}
@@ -79,7 +79,7 @@ public class DSRFlipFlop extends Gate {
 	@Override
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
-		drawLabel(g2, "DSR", Connector.smallFont);
+		drawLabel(g2, "DSR", Pin.smallFont);
 	}
 
 	@Override

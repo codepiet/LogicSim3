@@ -41,8 +41,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	// Gatter, das im Simulationsmodus zuletzt angeklickt wurde
 	private CircuitPart lastClicked = null;
 
-	private boolean paintGrid = true;
-
 	private Dimension panelSize = new Dimension(1280, 1024);
 	public JScrollPane scrollpane;
 
@@ -122,10 +120,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		}
 	}
 
-	public void setPaintGrid(boolean onoff) {
-		paintGrid = onoff;
-	}
-
 	public void draw(Graphics2D g2) {
 		// Log.getInstance().print("Drawing panel");
 		for (CircuitPart gate : circuit.gates)
@@ -188,14 +182,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			}
 			return;
 		}
-		if (keyCode == KeyEvent.VK_GREATER) {
-			scaleBy(0.2f);
-			return;
-		}
-		if (keyCode == KeyEvent.VK_LESS) {
-			scaleBy(-0.2f);
-			return;
-		}
 		if (keyCode == KeyEvent.VK_A) {
 			scaleAndMoveToAll();
 			return;
@@ -226,20 +212,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 	private void scaleAndMoveToAll() {
 		repaint();
-	}
-
-	private void scaleBy(double scale) {
-		zoom((int) getTransformer().screenToWorldX(getWidth() / 2),
-				(int) getTransformer().screenToWorldY(getHeight() / 2), scale);
-		repaint();
-	}
-
-	private void scaleTo(double scale) {
-		double diff = scaleX - scale;
-		if (diff > 0)
-			scaleBy(-diff);
-		else
-			scaleBy(diff);
 	}
 
 	private void notifyChangeListener() {
@@ -281,8 +253,10 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	}
 
 	private MouseEvent convertToWorld(MouseEvent e) {
-		int x = (int) Math.round(getTransformer().screenToWorldX(e.getX()));
-		int y = (int) Math.round(getTransformer().screenToWorldY(e.getY()));
+		int x = (int) (getTransformer().screenToWorldX(e.getX()));
+		int y = (int) (getTransformer().screenToWorldY(e.getY()));
+		//int x = (int) Math.round(getTransformer().screenToWorldX(e.getX()));
+		//int y = (int) Math.round(getTransformer().screenToWorldY(e.getY()));
 
 		MouseEvent ec = new MouseEvent((Component) e.getSource(), e.getID(), e.getWhen(), e.getModifiersEx(), x, y,
 				e.getClickCount(), e.isPopupTrigger(), e.getButton());
@@ -326,7 +300,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 			g2.transform(at);
-			if (paintGrid && scaleX > 0.7f) {
+			if (LSProperties.getInstance().getPropertyBoolean(LSProperties.PAINTGRID, true) && scaleX > 0.7f) {
 				int startX = CircuitPart.round((int) Math.round(getTransformer().screenToWorldX(0)));
 				int startY = CircuitPart.round((int) Math.round(getTransformer().screenToWorldY(0)));
 				int endX = (int) getTransformer().screenToWorldX(w + 9);
@@ -459,8 +433,8 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			CircuitPart[] activeParts = new CircuitPart[] { currentPart };
 			int lsAction = currentAction;
 
-			if (cp instanceof Connector) {
-				Connector conn = ((Connector) cp);
+			if (cp instanceof Pin) {
+				Pin conn = ((Pin) cp);
 				// if we are drawing a wire then this is the endpoint
 				if (conn.isInput() && activeParts.length == 1 && activeParts[0] instanceof Wire) {
 					Wire activeWire = (Wire) activeParts[0];
@@ -483,11 +457,11 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				// of course we cannot edit a Connector, but we can
 				// 1. set an input to inverted or high or low or revert to normal type
 				if (conn.isInput()) {
-					if (lsAction == Connector.HIGH || lsAction == Connector.LOW || lsAction == Connector.INVERTED
-							|| lsAction == Connector.NORMAL) {
+					if (lsAction == Pin.HIGH || lsAction == Pin.LOW || lsAction == Pin.INVERTED
+							|| lsAction == Pin.NORMAL) {
 						// 1. if we clicked on an input modificator
 						conn.setLevelType(lsAction);
-						notifyChangeListener("MSG_INPUT_CHANGED_TO" + " " + Connector.actionToString(lsAction));
+						notifyChangeListener("MSG_INPUT_CHANGED_TO" + " " + Pin.actionToString(lsAction));
 						repaint();
 						return;
 					}
@@ -528,6 +502,50 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			repaint();
 		}
 
+	}
+
+	/**
+	 * more zoom
+	 */
+	public void zoomPlus() {
+		zoomBy((int) getTransformer().screenToWorldX(getWidth() / 2),
+				(int) getTransformer().screenToWorldY(getHeight() / 2), 1f);
+	}
+
+	/**
+	 * set zoom to 100 percent
+	 */
+	public void zoom100() {
+		zoomTo((int) getTransformer().screenToWorldX(getWidth() / 2),
+				(int) getTransformer().screenToWorldY(getHeight() / 2), 1f);
+	}
+
+	/**
+	 * less zoom
+	 */
+	public void zoomMinus() {
+		zoomBy((int) getTransformer().screenToWorldX(getWidth() / 2),
+				(int) getTransformer().screenToWorldY(getHeight() / 2), -1f);
+	}
+
+	/**
+	 * rotate a gate if selected
+	 */
+	public void rotatePart() {
+		if (currentPart instanceof Gate) {
+			((Gate) currentPart).rotate();
+			repaint();
+		}
+	}
+
+	/**
+	 * mirror a part if selected
+	 */
+	public void mirrorPart() {
+		if (currentPart instanceof Gate) {
+			((Gate) currentPart).mirror();
+			repaint();
+		}
 	}
 
 }

@@ -41,11 +41,11 @@
         </wire>
         <wire>
             <from id="switch@40:20" number="0"/>
-            <to id="and@170:40" number="0"/>
+            <to id="and@170:40" number="1"/>
         </wire>
         <wire>
             <from id="switch@40:60" number="0"/>
-            <to id="and@170:40" number="1"/>
+            <to id="and@170:40" number="2"/>
         </wire>
         <wire>
             <from id="and@170:160" number="0"/>
@@ -53,31 +53,39 @@
         </wire>
         <wire>
             <from id="switch@40:160" number="0"/>
-            <to id="and@170:160" number="1"/>
-        </wire>
-        <wire>
-            <from id="switch@40:120" number="0"/>
-            <to id="and@170:160" number="0"/>
-        </wire>
-        <wire>
-            <from id="switch@40:200" number="0"/>
             <to id="and@170:160" number="2"/>
         </wire>
         <wire>
+            <from id="switch@40:120" number="0"/>
+            <to id="and@170:160" number="1"/>
+            <point node="false" number="0" x="80" y="170"/>
+        </wire>
+        <wire>
+            <from id="switch@40:200" number="0"/>
+            <to id="and@170:160" number="3"/>
+            <point node="false" number="0" x="80" y="210"/>
+        </wire>
+        <wire>
             <from id="switch@40:260" number="0"/>
-            <to id="and@170:320" number="0"/>
+            <to id="and@170:320" number="1"/>
+            <point node="false" number="0" x="100" y="290"/>
+            <point node="false" number="1" x="100" y="330"/>
         </wire>
         <wire>
             <from id="switch@40:300" number="0"/>
-            <to id="and@170:320" number="1"/>
+            <to id="and@170:320" number="2"/>
+            <point node="false" number="0" x="80" y="340"/>
         </wire>
         <wire>
             <from id="switch@40:340" number="0"/>
-            <to id="and@170:320" number="2"/>
+            <to id="and@170:320" number="3"/>
+            <point node="false" number="0" x="80" y="360"/>
         </wire>
         <wire>
             <from id="switch@40:380" number="0"/>
-            <to id="and@170:320" number="3"/>
+            <to id="and@170:320" number="4"/>
+            <point node="false" number="0" x="100" y="410"/>
+            <point node="false" number="1" x="100" y="370"/>
         </wire>
         <wire>
             <from id="and@170:320" number="0"/>
@@ -89,23 +97,31 @@
         </wire>
         <wire>
             <from id="switch@40:520" number="0"/>
-            <to id="and@170:520" number="2"/>
-        </wire>
-        <wire>
-            <from id="switch@40:480" number="0"/>
-            <to id="and@170:520" number="1"/>
-        </wire>
-        <wire>
-            <from id="switch@40:440" number="0"/>
-            <to id="and@170:520" number="0"/>
-        </wire>
-        <wire>
-            <from id="switch@40:560" number="0"/>
             <to id="and@170:520" number="3"/>
         </wire>
         <wire>
-            <from id="switch@40:600" number="0"/>
+            <from id="switch@40:480" number="0"/>
+            <to id="and@170:520" number="2"/>
+            <point node="false" number="0" x="90" y="510"/>
+            <point node="false" number="1" x="90" y="540"/>
+        </wire>
+        <wire>
+            <from id="switch@40:440" number="0"/>
+            <to id="and@170:520" number="1"/>
+            <point node="false" number="0" x="110" y="470"/>
+            <point node="false" number="1" x="110" y="530"/>
+        </wire>
+        <wire>
+            <from id="switch@40:560" number="0"/>
             <to id="and@170:520" number="4"/>
+            <point node="false" number="0" x="90" y="590"/>
+            <point node="false" number="1" x="90" y="560"/>
+        </wire>
+        <wire>
+            <from id="switch@40:600" number="0"/>
+            <to id="and@170:520" number="5"/>
+            <point node="false" number="0" x="110" y="630"/>
+            <point node="false" number="1" x="110" y="570"/>
         </wire>
     </wires>
 </logicsim>

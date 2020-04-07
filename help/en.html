@@ -1,0 +1,50 @@
+<html>
+<head>
+<title>LogicSim Manual</title>
+</head>
+
+<body bgcolor=#ffffff>
+<h2>LogicSim Manual</h2>
+
+<p>Select circuits from the list on the left side and place them on the work panel.</p>
+<p>To connect click on an output of a circuit (right side) and draw the wire to an input of a circuit.
+Hold down shift while clicking somewhere on a wire to connect a new wire to this point.</p>
+<p>Circuits and Wires can be activated by clicking on them and then deleted with the DEL key.</p>
+<p>You can change settings on some circuts (clock, MonoFlop, LCD, TextLabel) by selecting "Properties" in their
+context-menus.
+<br><br>
+
+<p>It is possible to change the number of inputs for some circuits (AND, OR, XOR, etc) with combo box
+below the circuits list. These circuits act as they were connected like this:</p>
+<img src="images/and4input.gif">
+<br clear=all>
+
+<b>circuit inputs</b>
+<img src="images/input.gif" align=right valign=top>
+<p>With the "input inverter" you can invert the level of a wire at the input of a circuit.
+To place the inverter, select it from the list and click on a circuit input.</p>
+<p>An input can be set to a defined level by using "input high" and "input low", without having to connect
+a wire to it.</p>
+<p>To reset an input to normal behaviour, use "normal input" on it.
+</p>
+<br clear=all>
+<br>
+
+
+<h4>Module Creation</h4>
+<p>A module contains a complete LogicSim circuit system that can be used as a single circuit element.</p>
+<p>Select "Create Module" from the "Module" menu. Enter the module description in
+the appearing dialog. "Module Name" is the filename under wich the module is saved later, "Module Label" is
+the label on the module symbol.</p>
+<p>After pressing the "Use" button an "input" and an "output" circuit will appear. These represent the module in/outputs.
+Connect your circuit to them. You can connect Switches to the "INPUT" and LED's to the "OUTPUT" element to test the module.</p>
+<p>After saving the module using the save button, it will appear in the circuits list and can be used in
+a new circuit.</p>
+<p>Open "FullAdder.mod" from the "modules" directory for an example. This module is used in the "5 Bit Adder.lsim" circuit.</p>
+<br>
+<img src="images/ls1.gif"><br>5 Bit adder using five FullAdder Modules.<br><br>
+<img src="images/ls2.gif"><br>FullAdder Module
+</tr></table>
+
+</body>
+</html>

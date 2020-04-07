@@ -21,17 +21,9 @@ public class SevenSegment extends Gate {
 		super("output");
 		type = "sevenseg";
 		height = 80;
-		setNumInputs(7);
-		setNumOutputs(0);
-
-		getInput(0).label = "a";
-		getInput(1).label = "b";
-		getInput(2).label = "c";
-		getInput(3).label = "d";
-		getInput(4).label = "e";
-		getInput(5).label = "f";
-		getInput(6).label = "g";
-
+		createInputs(7);
+		for (int i = 0; i < 7; i++)
+			getPin(i).label = String.valueOf((char) (((int) 'a') + i));
 		reset();
 	}
 
@@ -42,7 +34,7 @@ public class SevenSegment extends Gate {
 		int yoffset = getY() + 11;
 		g.setStroke(new BasicStroke(1));
 		for (int i = 0; i < getNumInputs(); i++) {
-			g.setColor(getInputLevel(i) ? Color.red : new Color(0xE0, 0xE0, 0xE0));
+			g.setColor(getPin(i).getLevel() ? Color.red : new Color(0xE0, 0xE0, 0xE0));
 			switch (i) {
 			case 0:
 				drawHorizontalSegment(g, xoffset + 1, yoffset + 1);

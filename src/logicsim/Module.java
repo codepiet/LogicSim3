@@ -66,31 +66,32 @@ public class Module extends Gate {
 		for (CircuitPart g : lsFile.circuit.gates) {
 			if (g instanceof MODIN) {
 				moduleIn = (MODIN) g;
-				for (Connector c : moduleIn.getOutputs()) {
+				for (Pin c : moduleIn.getOutputs()) {
 					// add MODIN's input-connectors to module:
 					// check if MODIN's outputs are connected
 					if (c.isConnected()) {
-						Connector newIn = new Connector(getX(), getY() + 10 + c.number * 10, this, c.number);
-						newIn.ioType = Connector.INPUT;
-						newIn.levelType = Connector.NORMAL;
-						Connector in = moduleIn.getInput(c.number);
+						Pin newIn = new Pin(getX(), getY() + 10 + c.number * 10, this, c.number);
+						newIn.ioType = Pin.INPUT;
+						newIn.levelType = Pin.NORMAL;
+						Pin in = moduleIn.getPin(c.number);
 						newIn.label = in.label;
 						conns.add(newIn);
 					}
 				}
 			}
+		}
+		for (CircuitPart g : lsFile.circuit.gates) {
 			if (g instanceof MODOUT) {
 				moduleOut = (MODOUT) g;
 				// add MODOUT's output-connectors to module:
 				// check if MODOUT's inputs have a wire
-				for (Connector c : moduleOut.getInputs()) {
+				for (Pin c : moduleOut.getInputs()) {
 					if (c.isConnected()) {
-						Connector newOut = new Connector(getX() + getWidth(), getY() + 10 + c.number * 10, this,
-								c.number);
-						newOut.ioType = Connector.OUTPUT;
-						newOut.paintDirection = Connector.LEFT;
-						newOut.levelType = Connector.NORMAL;
-						Connector out = moduleOut.getOutput(c.number);
+						Pin newOut = new Pin(getX() + getWidth(), getY() + 10 + c.number * 10, this, c.number);
+						newOut.ioType = Pin.OUTPUT;
+						newOut.paintDirection = Pin.LEFT;
+						newOut.levelType = Pin.NORMAL;
+						Pin out = moduleOut.getPin(c.number);
 						newOut.label = out.label;
 						conns.add(newOut);
 					}
@@ -102,10 +103,10 @@ public class Module extends Gate {
 			int max = (numIn > numOut) ? numIn : numOut;
 			if (max > 5)
 				height = 10 * max * 10;
-			for (Connector c : getInputs()) {
+			for (Pin c : getInputs()) {
 				c.setY(getConnectorPosition(getY() + c.number, numIn, Gate.VERTICAL));
 			}
-			for (Connector c : getOutputs()) {
+			for (Pin c : getOutputs()) {
 				c.setY(getConnectorPosition(getY() + c.number, numOut, Gate.VERTICAL));
 			}
 		}
@@ -118,10 +119,10 @@ public class Module extends Gate {
 		if (embedded) {
 			// remove all wires which are connected to MODIN-Inputs
 			// and remove all wires which are connected to MODOUT-Outputs
-			for (Connector c : moduleIn.getInputs()) {
+			for (Pin c : moduleIn.getInputs()) {
 				c.deleteWires();
 			}
-			for (Connector c : moduleOut.getOutputs()) {
+			for (Pin c : moduleOut.getOutputs()) {
 				c.deleteWires();
 			}
 		}
@@ -131,16 +132,16 @@ public class Module extends Gate {
 	public void simulate() {
 		super.simulate();
 
-		for (Connector c : getInputs()) {
-			moduleIn.getInput(c.number).setLevel(c.getLevel());
+		for (Pin c : getInputs()) {
+			moduleIn.getPin(c.number).setLevel(c.getLevel());
 		}
 
 		if (lsFile.circuit != null) {
 			lsFile.circuit.simulate();
 		}
 
-		for (Connector c : getOutputs()) {
-			c.setLevel(moduleOut.getOutput(c.number).getLevel());
+		for (Pin c : getOutputs()) {
+			c.setLevel(moduleOut.getPin(c.number).getLevel());
 		}
 	}
 

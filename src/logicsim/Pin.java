@@ -9,7 +9,7 @@ import java.awt.Rectangle;
 import java.util.Iterator;
 import java.util.Vector;
 
-public class Connector extends CircuitPart {
+public class Pin extends CircuitPart {
 
 	public static final int INPUT = 1;
 	public static final int OUTPUT = 2;
@@ -45,7 +45,7 @@ public class Connector extends CircuitPart {
 	public Vector<Wire> wires = new Vector<Wire>();
 	public Gate gate;
 
-	public Connector(int x, int y, Gate gate, int number) {
+	public Pin(int x, int y, Gate gate, int number) {
 		super(x, y);
 		this.gate = gate;
 		this.number = number;
@@ -231,7 +231,11 @@ public class Connector extends CircuitPart {
 	}
 
 	public boolean isInput() {
-		return ioType == Connector.INPUT;
+		return ioType == Pin.INPUT;
+	}
+
+	public boolean isOutput() {
+		return ioType == Pin.OUTPUT;
 	}
 
 	@Override
@@ -279,14 +283,14 @@ public class Connector extends CircuitPart {
 	@Override
 	public String getId() {
 		String it = "I";
-		if (ioType == Connector.OUTPUT)
+		if (ioType == Pin.OUTPUT)
 			it = "O";
 		String lt = "N";
-		if (levelType == Connector.HIGH)
+		if (levelType == Pin.HIGH)
 			lt = "H";
-		else if (levelType == Connector.LOW)
+		else if (levelType == Pin.LOW)
 			lt = "L";
-		else if (levelType == Connector.INVERTED)
+		else if (levelType == Pin.INVERTED)
 			lt = "I";
 		return it + number + it + "-" + lt + "-" + (label == null ? "" : "\"" + label + "\"") + getX() + ":" + getY()
 				+ "@" + gate.getId();

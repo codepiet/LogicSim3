@@ -7,6 +7,7 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.ButtonGroup;
@@ -19,7 +20,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import logicsim.ColorFactory;
-import logicsim.Connector;
+import logicsim.Pin;
 import logicsim.Gate;
 import logicsim.I18N;
 import logicsim.LSMouseEvent;
@@ -61,13 +62,10 @@ public class Switch extends Gate {
 		type = "switch";
 		width = 40;
 		height = 40;
-		setNumInputs(0);
-		setNumOutputs(1);
-		setOutputLevel(0, false);
-		drawFrame = false;
-		getOutput(0).setX(getX() + width);
-		getOutput(0).setY(getY() + 30);
-
+		createOutputs(1);
+		getPin(0).setX(getX() + width);
+		getPin(0).setY(getY() + 30);
+		getPin(0).setLevel(false);
 		loadProperties();
 	}
 
@@ -83,12 +81,12 @@ public class Switch extends Gate {
 
 		if (clickType) {
 			// Click-Button, wird wieder deaktiviert, wenn Maustaste losgelassen wird
-			setOutputLevel(0, true);
+			getPin(0).setLevel(true);
 			mouseDown = true;
 			clickCountDown = 2;
 		} else {
 			// Toggle-Button
-			setOutputLevel(0, !getOutputLevel(0));
+			getPin(0).setLevel(!getPin(0).getLevel());
 		}
 	}
 
@@ -102,7 +100,7 @@ public class Switch extends Gate {
 			if (clickCountDown > 0)
 				clickCountDown--;
 			if (clickCountDown == 0 && !mouseDown)
-				setOutputLevel(0, false);
+				getPin(0).setLevel(false);
 		}
 	}
 
@@ -122,7 +120,7 @@ public class Switch extends Gate {
 		g.setPaint(Color.BLACK);
 		g.draw(rect);
 
-		int pos = getOutputLevel(0) ? 15 : 6;
+		int pos = getPin(0).getLevel() ? 15 : 6;
 
 //		Polygon poly = new Polygon();
 //		poly.addPoint(x + width - 12 - CONN_SIZE, y + 8);
@@ -145,21 +143,33 @@ public class Switch extends Gate {
 		g.fillPolygon(poly);
 		g.setPaint(Color.BLACK);
 		g.drawPolygon(poly);
+
+		Pin c = getPin(0);
+		if (c.paintDirection == Pin.DOWN) {
+			// draw line
+			g.setStroke(new BasicStroke(3));
+			Path2D path = new Path2D.Double();
+			path.moveTo(getX() + 3 + width - CONN_SIZE, getY() + 30);
+			path.lineTo(getX() + width, getY() + 30);
+			path.lineTo(getX() + width, getY() + CONN_SIZE);
+			g.draw(path);
+			g.setStroke(new BasicStroke(1));
+		}
 	}
 
 	@Override
 	public void rotate() {
 		super.rotate();
 		// correction
-		Connector c = getOutput(0);
-		if (c.paintDirection == Connector.RIGHT) {
+		Pin c = getPin(0);
+		if (c.paintDirection == Pin.RIGHT) {
 			c.setX(getX());
 			c.setY(getY() + 30);
-		} else if (c.paintDirection == Connector.LEFT) {
+		} else if (c.paintDirection == Pin.LEFT) {
 			c.setX(getX() + width);
 			c.setY(getY() + 30);
-		} else if (c.paintDirection == Connector.DOWN) {
-			c.setX(getX() + width / 2);
+		} else if (c.paintDirection == Pin.DOWN) {
+			c.setX(getX() + width);
 			c.setY(getY());
 		} else {
 			c.setX(getX() + width / 2);

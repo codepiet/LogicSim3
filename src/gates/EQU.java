@@ -16,20 +16,20 @@ public class EQU extends Gate {
 		super("basic");
 		label = "=";
 		type = "equ";
-		setNumInputs(2);
-		setNumOutputs(1);
-		setOutputLevel(0, true);
+		createOutputs(1);
+		createInputs(2);
+		getPin(0).setLevel(true);
 		variableInputCountSupported = true;
 	}
 
 	public void simulate() {
 		int n = 0;
-		for (int i = 0; i < getNumInputs(); i++) {
-			if (getInput(i).isConnected())
-				if (getInput(i).wires.get(0).getLevel())
+		for (int i = 1; i < 1 + getNumInputs(); i++) {
+			if (getPin(i).isConnected())
+				if (getPin(i).getLevel())
 					n++;
 		}
 		// if n is even set true
-		setOutputLevel(0, (n % 2 == 0));
+		getPin(0).setLevel(n % 2 == 0);
 	}
 }

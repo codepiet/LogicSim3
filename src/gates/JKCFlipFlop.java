@@ -1,6 +1,6 @@
 package gates;
 
-import logicsim.Connector;
+import logicsim.Pin;
 import logicsim.Gate;
 
 /**
@@ -24,28 +24,28 @@ public class JKCFlipFlop extends Gate {
 		super("flipflop");
 		type = "jkcff";
 		label = "JKC";
-		setNumInputs(3);
-		setNumOutputs(2);
-		
-		getInput(0).label = "J";
-		getInput(1).label = Connector.POS_EDGE_TRIG;
-		getInput(2).label = "K";
+		createInputs(3);
+		createOutputs(2);
 
-		getOutput(0).label = "Q";
-		getOutput(1).label = "/Q";
+		getPin(0).label = "J";
+		getPin(1).label = Pin.POS_EDGE_TRIG;
+		getPin(2).label = "K";
 
-		getOutput(0).moveBy(0, 10);
-		getOutput(1).moveBy(0, -10);
+		getPin(3).label = "Q";
+		getPin(4).label = "/Q";
+
+		getPin(3).moveBy(0, 10);
+		getPin(4).moveBy(0, -10);
 
 		reset();
 	}
 
 	public void simulate() {
-		out0 = getOutputLevel(0);
-		out1 = getOutputLevel(1);
-		j = getInputLevel(0);
-		clk = getInputLevel(1);
-		k = getInputLevel(2);
+		j = getPin(0).getLevel();
+		clk = getPin(1).getLevel();
+		k = getPin(2).getLevel();
+		out0 = getPin(3).getLevel();
+		out1 = getPin(4).getLevel();
 
 		if (j && !lastClk && k && out0) {
 			out0 = true;
@@ -56,12 +56,8 @@ public class JKCFlipFlop extends Gate {
 		}
 		lastClk = clk;
 
-		setOutputLevel(0, out0);
-		setOutputLevel(0, out1);
-	}
-
-	public boolean isOutputPositive(int n) {
-		return (n == 0);
+		getPin(3).setLevel(out0);
+		getPin(4).setLevel(out1);
 	}
 
 	public void reset() {

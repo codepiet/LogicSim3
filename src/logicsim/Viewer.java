@@ -6,8 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.JPanel;
 
@@ -20,7 +18,7 @@ import javax.swing.JPanel;
  * coordinates.
  */
 public class Viewer extends JPanel {
-	
+
 	public static final double minZoom = 0.1f;
 	public static final double maxZoom = 5f;
 
@@ -229,7 +227,6 @@ public class Viewer extends JPanel {
 		repaint();
 	}
 
-
 	/**
 	 * Return the {@link Transformer} that offers coordinate transformations for
 	 * this Viewer
@@ -248,15 +245,23 @@ public class Viewer extends JPanel {
 		AffineTransform at = new AffineTransform();
 		at.scale(scaleX, scaleY);
 		at.translate(offsetX, offsetY);
-		
+
 		painter.paint(g2, at, getWidth(), getHeight());
 	}
 
 	protected void zoomTo(int x, int y, double newScale) {
 		scaleX = newScale;
 		scaleY = newScale;
+		repaint();
+
 	}
-	
+
+	protected void zoomBy(int x, int y, double deltaScale) {
+		scaleX += deltaScale;
+		scaleY += deltaScale;
+		repaint();
+	}
+
 	/**
 	 * Zoom about the specified point (in screen coordinates) by the given amount
 	 * 

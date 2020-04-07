@@ -16,8 +16,8 @@ public class Lang {
 	public static final String MNU_SETTINGS = "mnu.settings";
 	public static final String MNU_PAINTGRID = "mnu.paintgrid";
 	public static final String MNU_GATEDESIGN = "mnu.gatedesign";
-	public static final String MNU_GATEDESIGN_DIN = "mnu.gatedesign.din";
-	public static final String MNU_GATEDESIGN_ISO = "mnu.gatedesign.iso";
+	public static final String MNU_GATEDESIGN_IEC = "mnu.gatedesign.din";
+	public static final String MNU_GATEDESIGN_ANSI = "mnu.gatedesign.iso";
 	public static final String MNU_LANGUAGE = "mnu.language";
 	public static final String MNU_HELP = "mnu.help";
 	public static final String MNU_ABOUT = "mnu.about";
@@ -55,15 +55,24 @@ public class Lang {
 	public static final String ERR_SAVE = "error.save";
 	public static final String ERR_MODULENOTFOUND = "error.modulenotfound";
 
-	public static final String BTN_SIMULATE = "button.simulate";
-	public static final String BTN_RESET = "button.reset";
-	public static final String BTN_REMOVEPOINT = "button.removewirepoint";
-	public static final String BTN_OK = "button.ok";
-	public static final String BTN_CANCEL = "button.cancel";
-	public static final String BTN_SAVE = "button.save";
-	public static final String BTN_DONT_SAVE = "button.dontsave";
-	public static final String BTN_YES = "button.yes";
-	public static final String BTN_NO = "button.no";
+	public static final String BTN_SIMULATE = "btn.simulate";
+	public static final String BTN_RESET = "btn.reset";
+	public static final String BTN_REMOVEPOINT = "btn.removewirepoint";
+	public static final String BTN_OK = "btn.ok";
+	public static final String BTN_CANCEL = "btn.cancel";
+	public static final String BTN_SAVE = "btn.save";
+	public static final String BTN_DONT_SAVE = "btn.dontsave";
+	public static final String BTN_YES = "btn.yes";
+	public static final String BTN_NO = "btn.no";
+	public static final String BTN_ZOOM_PLUS = "btn.zoomp";
+	public static final String BTN_ZOOM_MINUS = "btn.zoomm";
+	public static final String BTN_ZOOM_100 = "btn.zoom1";
+	public static final String BTN_ROTATE = "btn.rotate";
+	public static final String BTN_MIRROR = "btn.mirror";
+	public static final String BTN_INPUT_NORM = "btn.inputnorm";
+	public static final String BTN_INPUT_INV = "btn.inputinv";
+	public static final String BTN_INPUT_HIGH = "btn.inputhigh";
+	public static final String BTN_INPUT_LOW = "btn.inputlow";
 
 	public static final String CAT_BASIC = "category.basic";
 	public static final String CAT_ITEMS = "category.items";

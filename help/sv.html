@@ -1,0 +1,58 @@
+<html>
+<head>
+<title>LogicSim snabbmanual</title>
+</head>
+
+<body bgcolor=#ffffff>
+<h2>LogicSim snabbmanual</h2>
+
+<p>Grindar väljs från listan på vänstra sidan och placeras på arbetsytan.</p>
+<p>Ledningar dras genom att klicka på utgången (på högra sidan) av en grind, sedan dras ledningen fram till ingången
+(vänstra sidan) av en annan grind där man klickar en gång till. Med hjälp av ESC-tangenten kan en kabeldragning 
+avbrytas. Med shift-klick på en redan dragen ledning kan en förgrening av denna ledning genereras.</p>
+<p>Grindar och ledningar kan aktiveras med en musklick och sen tas bort med DEL-tangenten.</p>
+<p>Vissa grindar (t.ex. Clock, Monoflop, LCD, TextLabel) har egenskaper som kan ändras via punkten "Properties" i
+grindens snabbmeny (höger musklick).</p>
+<br><br>
+
+<p>För enkla grindar (AND, OR, XOR, osv) kan man välja antalet ingångar i boxen under 
+komponentlistan. Detta görs innan man väljer grinden från komponentlistan, dvs det går inte att i efterhand 
+byta antalet ingångar. Grindar med fler än två ingångar beter sig i simuleringen som flera kaskadkopplade grindar:</p>
+<img src="images/and4input.gif">
+<br clear=all>
+
+
+<h4>Grindingångar</h4>
+<img src="images/input.gif" align=right valign=top>
+<p>Funktionen "input inverter" gör det möjligt att invertera ingången av en grind som redan finns placerad på
+arbetsytan. Först aktiveras funktionen genom att klicka på punkten i komponentlistan, sedan väljer man grindens ingång
+och klickar på ingångssymbolen.<br>
+Funktionerna "input high" och "input low" används på ett liknanden sätt för att definera signalen på oanvända 
+ingångar.<br>
+För att återgå till det normala beteende av en ingång används funktionen "normal input".</p>
+<br clear=all>
+<br>
+
+
+<h4>Bygga en modul</h4>
+<p>En modul är en koppling som kan användas som en grind med ingångar och utgångar
+i en annan koppling</p>
+<p>För att bygga en modul väljs punkten "Create Module" ur menyn "Module". I
+dialogrutan fylls i modulens beskrivning. "Module Name" blir modulens filnamn när den
+sparas. "Module Label" syns som text vid grinden i kopplingsschemat.</p>
+<p>Efter aktivering av rutan "Use" skapas två till block på arbetsytan, input- och output-grindar. Dessa block
+representerar modulens in- och utgångar. Mellan dessa block och kopplingen dras ledningar för
+in- och utgångssignaler till modulen.
+In- och utgångarna kan testas genom att koppla dit brytare och LEDar.</p>
+<p>Modulen sparas i underkatalogen "modules". Därefter finns modulen med längst ner i komponentlistan och kan användas i
+nya kopplingar.</p>
+<p>Ett exempel på moduler finns i komponenten "FullAdder" som finns som modulfil "FullAdder.mod" i 
+katalogen "modules". Modulfilen kan öppnas direkt i LogicSim. Modulen "FullAdder" används i
+exempelkopplingen "5 Bit Adder.lsim".</p>
+<br>
+<img src="images/ls1.gif"><br>5 bit adderare som innehåller fem "FullAdder" moduler.<br><br>
+<img src="images/ls2.gif"><br>Kopplingen i modulen "FullAdder".
+
+</body>
+</html>
+

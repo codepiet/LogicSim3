@@ -8,8 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.util.Arrays;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -38,9 +38,8 @@ public class Gate extends CircuitPart {
 
 	protected int actionid = 0;
 	protected Font bigFont = new Font(Font.SANS_SERIF, Font.PLAIN, 13);
-	protected Vector<Connector> conns = new Vector<Connector>();
+	protected Vector<Pin> conns = new Vector<Pin>();
 
-	protected boolean drawFrame = true;
 	protected int height = 60;
 
 	protected String label;
@@ -55,7 +54,23 @@ public class Gate extends CircuitPart {
 	protected Color backgroundColor = Color.white;
 
 	public String category;
+
+	/**
+	 * rotate in 90 degree steps clockwise (0-3)
+	 */
 	public int rotate90 = 0;
+
+	/**
+	 * mirroring of part.
+	 * 
+	 * 0 is normal. 1 is mirrored in x-axis. 2 is mirrored in y-axis. 3 means
+	 * mirroring in both axes
+	 */
+	public int mirror = 0;
+
+	protected double xc;
+
+	protected double yc;
 
 	public Gate() {
 		this(0, 0);
@@ -77,12 +92,12 @@ public class Gate extends CircuitPart {
 		this.actionid = actionid;
 	}
 
-	private boolean connectorExists(int ioType, int number) {
-		for (Connector c : conns) {
-			if (c.ioType == ioType && c.number == number)
-				return true;
-		}
-		return false;
+	public void addConnector(Pin conn) {
+		for (Pin c : conns)
+			if (c.number == conn.number)
+				throw new RuntimeException("Connector number " + c.number + " is already there in gate " + type);
+		// check if number is present
+		conns.add(conn);
 	}
 
 	/**
@@ -90,21 +105,26 @@ public class Gate extends CircuitPart {
 	 */
 	@Override
 	public void clear() {
-		for (Connector c : conns)
+		for (Pin c : conns)
 			if (c.isConnected())
 				c.deleteWires();
 	}
 
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
-
+		AffineTransform old = null;
+		xc = getX() + width / 2;
+		yc = getY() + height / 2;
+		if (rotate90 != 0) {
+			old = g2.getTransform();
+			g2.rotate(Math.toRadians(rotate90 * 90), xc, yc);
+		}
 		g2.setStroke(new BasicStroke(1));
-
 		// drawBounds(g2);
 		g2.setPaint(Color.black);
-
-		if (drawFrame) {
-			drawFrame(g2);
+		drawFrame(g2);
+		if (rotate90 != 0) {
+			g2.setTransform(old);
 		}
 		drawIO(g2);
 	}
@@ -121,12 +141,12 @@ public class Gate extends CircuitPart {
 	}
 
 	protected void drawIO(Graphics2D g2) {
-		for (Connector c : conns)
+		for (Pin c : conns)
 			c.draw(g2);
 	}
 
 	protected void drawWires(Graphics2D g2) {
-		for (Connector c : conns)
+		for (Pin c : conns)
 			c.drawWires(g2);
 	}
 
@@ -139,8 +159,8 @@ public class Gate extends CircuitPart {
 		}
 	}
 
-	public Connector findConnector(int atX, int atY) {
-		for (Connector c : conns) {
+	public Pin findConnector(int atX, int atY) {
+		for (Pin c : conns) {
 			if (c.isAt(atX, atY)) {
 				return c;
 			}
@@ -157,13 +177,13 @@ public class Gate extends CircuitPart {
 			return this;
 
 		// check connectors
-		Connector conn = findConnector(rx, ry);
+		Pin conn = findConnector(rx, ry);
 		if (conn != null)
 			return conn;
 
 		// check connected outgoing wires
-		for (Connector c : getOutputs()) {
-			if (c.isConnected()) {
+		for (Pin c : conns) {
+			if (!c.isInput() && c.isConnected()) {
 				for (Wire wire : c.wires) {
 					CircuitPart part = wire.findPartAt(x, y);
 					if (part != null)
@@ -177,13 +197,6 @@ public class Gate extends CircuitPart {
 	@Override
 	public Rectangle getBoundingBox() {
 		return new Rectangle(getX(), getY(), getWidth(), getHeight());
-	}
-
-	public int getConnectorNumber(Connector conn) {
-		for (Connector c : conns)
-			if (conn == c)
-				return c.number;
-		return -1;
 	}
 
 	protected int getConnectorPosition(int number, int total, int direction) {
@@ -247,57 +260,28 @@ public class Gate extends CircuitPart {
 		return 10 + number * 10;
 	}
 
-	public Vector<Connector> getConnectors() {
+	public Vector<Pin> getPins() {
 		return conns;
+	}
+
+	public Pin getPin(int number) {
+		for (Pin c : conns)
+			if (c.number == number)
+				return c;
+		return null;
 	}
 
 	public int getHeight() {
 		return height;
 	}
 
-	public Connector getInput(int num) {
-		for (Connector c : conns) {
-			if (c.isInput() && c.number == num)
-				return c;
-		}
-		throw new RuntimeException("no input with number " + num);
-	}
-
-	/**
-	 * gibt die Position des Eingangs n zurück
-	 */
-	public Point getInputPosition(int n) {
-		Connector conn = getInput(n);
-		return new Point(conn.getX(), conn.getY());
-	}
-
-	public Vector<Connector> getInputs() {
-		Vector<Connector> cs = new Vector<Connector>();
-		for (Connector c : conns) {
+	public Vector<Pin> getInputs() {
+		Vector<Pin> cs = new Vector<Pin>();
+		for (Pin c : conns) {
 			if (c.isInput())
 				cs.add(c);
 		}
 		return cs;
-	}
-
-	public boolean getInputLevel(int n) {
-		Connector c = getInput(n);
-		return c.getLevel();
-	}
-
-	public int[] getInputLevel() {
-		int[] inputStates = new int[getNumInputs()];
-		for (int i = 0; i < getNumInputs(); i++) {
-			inputStates[i] = getInputLevel(i) ? 1 : 0;
-		}
-		return inputStates;
-	}
-
-	public Wire getInputWire(int number) {
-		Connector c = getInput(number);
-		if (c.isConnected())
-			return c.wires.get(0);
-		return null;
 	}
 
 	public int getNumInputs() {
@@ -308,41 +292,22 @@ public class Gate extends CircuitPart {
 		return getOutputs().size();
 	}
 
-	public Connector getOutput(int num) {
-		for (Connector c : conns) {
-			if (!c.isInput() && c.number == num)
-				return c;
-		}
-		throw new RuntimeException("no output with number " + num);
-	}
-
 	/**
 	 * gibt die Position des Ausgangs n zurück
 	 */
-	public Point getOutputPosition(int n) {
-		Connector conn = getOutput(n);
+	@Deprecated
+	public Point getPinPosition(int n) {
+		Pin conn = getPin(n);
 		return new Point(conn.getX(), conn.getY());
 	}
 
-	public Vector<Connector> getOutputs() {
-		Vector<Connector> cs = new Vector<Connector>();
-		for (Connector c : conns) {
-			if (!c.isInput())
+	public Vector<Pin> getOutputs() {
+		Vector<Pin> cs = new Vector<Pin>();
+		for (Pin c : conns) {
+			if (c.isOutput())
 				cs.add(c);
 		}
 		return cs;
-	}
-
-	public boolean getOutputLevel(int n) {
-		return getOutput(n).getLevel();
-	}
-
-	public int[] getOutputLevel() {
-		int[] outputStates = new int[getNumOutputs()];
-		for (int i = 0; i < getNumOutputs(); i++) {
-			outputStates[i] = getOutputLevel(i) ? 1 : 0;
-		}
-		return outputStates;
 	}
 
 	public Properties getProperties() {
@@ -425,7 +390,7 @@ public class Gate extends CircuitPart {
 		if (dx == 0 && dy == 0)
 			return;
 		super.moveBy(dx, dy);
-		for (Connector conn : conns) {
+		for (Pin conn : conns) {
 			conn.moveBy(dx, dy);
 		}
 	}
@@ -451,53 +416,63 @@ public class Gate extends CircuitPart {
 	 */
 	@Override
 	public void reset() {
-		for (Connector c : conns)
+		for (Pin c : conns)
 			c.reset();
 	}
 
-	public void setInputWire(int i, Wire wire) {
-		Connector c = getInput(i);
-		c.addWire(wire);
-	}
-
-	public void setNumInputs(int total) {
-		// 1. check if there is an input with number present, if so do nothing
-		// 2. if not, create one
+	public void createPins(int ioType, int total) {
+		// get max number
+		int num = -1;
+		for (Pin c : conns)
+			if (c.number > num)
+				num = c.number;
+		// add new connectors - total times
 		for (int i = 0; i < total; i++) {
-			if (!connectorExists(Connector.INPUT, i)) {
-				Connector c = new Connector(getX(), getY() + getConnectorPosition(i, total, VERTICAL), this, i);
-				c.paintDirection = Connector.RIGHT;
-				c.ioType = Connector.INPUT;
-				conns.add(c);
-			} else {
-				// move connector
-				getInput(i).moveTo(getX(), getY() + getConnectorPosition(i, total, VERTICAL));
-			}
+			num++;
+			int pos = getX();
+			if (ioType == Pin.OUTPUT)
+				pos += width;
+			Pin c = new Pin(pos, getY() + getConnectorPosition(i, total, VERTICAL), this, num);
+			c.paintDirection = ioType == Pin.INPUT ? Pin.RIGHT : Pin.LEFT;
+			c.ioType = ioType;
+			conns.add(c);
 		}
 	}
 
-	public void setNumOutputs(int n) {
-		// 1. check if there is an input with number present, if so do nothing
-		// 2. if not, create one
-		for (int i = 0; i < n; i++) {
-			if (!connectorExists(Connector.OUTPUT, i)) {
-				Connector c = new Connector(getX() + getWidth(), getY() + getConnectorPosition(i, n, VERTICAL), this,
-						i);
-				c.paintDirection = Connector.LEFT;
-				c.ioType = Connector.OUTPUT;
-				conns.add(c);
-			}
+	public void createOutputs(int n) {
+		createPins(Pin.OUTPUT, n);
+	}
+
+	public void createInputs(int n) {
+		createPins(Pin.INPUT, n);
+	}
+
+	public void createDynamicInputs(int total) {
+		int numinputs = getInputs().size();
+		// get max number
+		int num = -1;
+		for (Pin c : conns)
+			if (c.number > num)
+				num = c.number;
+
+		// add new connectors - total times
+		for (int i = numinputs; i < total; i++) {
+			num++;
+			int pos = getX();
+			int ioType = Pin.INPUT;
+			Pin c = new Pin(pos, 0, this, num);
+			c.paintDirection = ioType == Pin.INPUT ? Pin.RIGHT : Pin.LEFT;
+			c.ioType = ioType;
+			conns.add(c);
 		}
-	}
 
-	public void setOutputLevel(int i, boolean b) {
-		getOutput(i).setLevel(b);
-	}
+		// reposition all inputs
+		num = 0;
+		for (Pin p : getInputs()) {
+			p.setY(getY() + getConnectorPosition(num, total, VERTICAL));
+			num++;
+		}
 
-	public void setOutputWire(int i, Wire wire) {
-		Connector c = getOutput(i);
-		if (!c.wires.contains(wire))
-			c.addWire(wire);
 	}
 
 	public void setProperties(Properties properties) {
@@ -521,7 +496,7 @@ public class Gate extends CircuitPart {
 	}
 
 	public void simulate() {
-		for (Connector c : getInputs()) {
+		for (Pin c : getInputs()) {
 			c.getLevel();
 		}
 	}
@@ -532,8 +507,8 @@ public class Gate extends CircuitPart {
 
 	@Override
 	public String toString() {
-		String s = getId() + " - I/O: " + Arrays.toString(getInputLevel()) + " / " + Arrays.toString(getOutputLevel());
-		for (Connector c : conns) {
+		String s = getId();
+		for (Pin c : conns) {
 			s += "\n" + indent(c.toString(), 3);
 		}
 		return s;
@@ -562,7 +537,7 @@ public class Gate extends CircuitPart {
 	}
 
 	public void deactivateWires() {
-		for (Connector conn : getOutputs()) {
+		for (Pin conn : getOutputs()) {
 			if (conn.isConnected()) {
 				for (Wire w : conn.wires)
 					w.deactivate();
@@ -577,7 +552,7 @@ public class Gate extends CircuitPart {
 
 	public Vector<Wire> getWiresFromThis() {
 		Vector<Wire> wires = new Vector<Wire>();
-		for (Connector conn : getOutputs()) {
+		for (Pin conn : getOutputs()) {
 			if (conn.isConnected()) {
 				for (Wire w : conn.wires)
 					wires.add(w);
@@ -592,21 +567,21 @@ public class Gate extends CircuitPart {
 			if (rotate90 > 3)
 				rotate90 = 0;
 
-			for (Connector c : conns) {
-				if (c.paintDirection == Connector.RIGHT) {
-					c.paintDirection = Connector.LEFT;
+			for (Pin c : conns) {
+				if (c.paintDirection == Pin.RIGHT) {
+					c.paintDirection = Pin.LEFT;
 					c.setY(2 * getY() + height - c.getY());
 					c.setX(getX() + width);
-				} else if (c.paintDirection == Connector.DOWN) {
-					c.paintDirection = Connector.UP;
+				} else if (c.paintDirection == Pin.DOWN) {
+					c.paintDirection = Pin.UP;
 					c.setY(getY() + height);
 					c.setX(2 * getX() + width - c.getX());
-				} else if (c.paintDirection == Connector.LEFT) {
-					c.paintDirection = Connector.RIGHT;
+				} else if (c.paintDirection == Pin.LEFT) {
+					c.paintDirection = Pin.RIGHT;
 					c.setX(getX());
 					c.setY(2 * getY() + height - c.getY());
 				} else {
-					c.paintDirection = Connector.DOWN;
+					c.paintDirection = Pin.DOWN;
 					c.setY(getY());
 					c.setX(2 * getX() + width - c.getX());
 				}
@@ -616,26 +591,33 @@ public class Gate extends CircuitPart {
 			if (rotate90 > 3)
 				rotate90 = 0;
 
-			for (Connector c : conns) {
-				if (c.paintDirection == Connector.RIGHT) {
-					c.paintDirection = Connector.DOWN;
+			for (Pin c : conns) {
+				if (c.paintDirection == Pin.RIGHT) {
+					c.paintDirection = Pin.DOWN;
 					c.setX(getX() + width - (c.getY() - getY()));
 					c.setY(getY());
-				} else if (c.paintDirection == Connector.DOWN) {
-					c.paintDirection = Connector.LEFT;
+				} else if (c.paintDirection == Pin.DOWN) {
+					c.paintDirection = Pin.LEFT;
 					c.setY(getY() + (c.getX() - getX()));
 					c.setX(getX() + width);
-				} else if (c.paintDirection == Connector.LEFT) {
-					c.paintDirection = Connector.UP;
+				} else if (c.paintDirection == Pin.LEFT) {
+					c.paintDirection = Pin.UP;
 					c.setX(getX() + width - (c.getY() - getY()));
 					c.setY(getY() + height);
 				} else {
-					c.paintDirection = Connector.RIGHT;
+					c.paintDirection = Pin.RIGHT;
 					c.setY(getY() + c.getX() - getX());
 					c.setX(getX());
 				}
 			}
 		}
+	}
+
+	/**
+	 * mirror the gate first in x-axis, then in y-axis, then both axes, then normal
+	 */
+	public void mirror() {
+
 	}
 
 }

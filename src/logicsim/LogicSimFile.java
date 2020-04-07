@@ -1,5 +1,6 @@
 package logicsim;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -18,6 +19,20 @@ public class LogicSimFile {
 		this(fileName);
 		this.info = info;
 		this.circuit.setGates(gates);
+	}
+
+	/**
+	 * extract the pure file name from an absolute path
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	public String extractFileName() {
+		File f = new File(fileName);
+		String name = f.getName();
+		// strip extension
+		name = name.substring(0, name.lastIndexOf('.'));
+		return name;
 	}
 
 	public Vector<Gate> getGates() {

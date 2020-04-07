@@ -1,0 +1,43 @@
+<html>
+<head>
+<meta name="author" content="Riccardo Bianchi - rbianchi@itisrn.it" >
+<title>Manuale LogicSim</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" >
+<style type="text/css">
+<!--
+.style1 {color: #FF0000}
+-->
+</style>
+</head>
+
+<body bgcolor="#ffffff">
+<h2>Manuale d'uso di LogicSim.</h2>
+
+<p>Selezionare la porta logica o il dispositivo dall'elenco presente nella parte sinistra della finestra e posizionarlo nell'area di lavoro. </p>
+<p>Per collegare tra loro i dispositivi cliccare con il mouse sull'uscita di un dispositivo (posta sulla destra) e l'ingresso di un altro (posto,ovviamente, sulla sinistra). Tenere premuto il tasto SHIFT e cliccare su un punto qualsiasi di un filo per collegare un nuovo filo in quel punto. </p>
+<p>Fili e dispositivi possono essere selezionati con un click del mouse e cancellati con il tasto CANC. </p>
+<p>I settaggi di alcuni dispositivi (clock, Monostabile, LCD, Etichetta di testo, Delay vari) possono essere cambiati selezionando la voce Propriet&agrave; dal men&ugrave; contestuale (visualizzabile cliccando con il  tasto destro del mouse sul dispositivo).</p>
+<p>Per alcuni dispositivi &egrave; possibile cambiare il numero di ingressi (AND, OR, XOR, etc) impostando il valore nella Combo Box <strong>Ingressi</strong> presente in fondo alla lista dei dispositivi. Circuiti a pi&ugrave; di due ingressi vengono considerati connessi in questo modo: </p>
+<h3><img src="images/and4inputiso.gif" alt="Esempio di implementazione di un AND a 4 ingressi" width="203" height="173" >  </h3>
+<h3><br clear="all" >
+  
+  <b>Ingresso dei dispositivi </b>
+  <img src="images/inputiso.gif" alt="Esempio di impostazione degli ingressi di una porta AND" width="198" height="89" align="right" valign="top" ></h3>
+<p>E' possibile intervenire sul tipo di ingressi di un dispositivo e sul livello logico presente su di essi.
+Con <strong>&quot;Ingresso NEGATO&quot;</strong> viene invertito il livello logico presente sul filo collegato all'ingresso del dispositivo. Per posizionare la negazione basta cliccare sulla voce <strong>Ingresso NEGATO </strong>  presente nella lista di sinistra e cliccare sull'ingresso del dispositivo che si intende negare.</p>
+<p>E' anche possibile bloccare un ingresso a livello logico ALTO o BASSO mediante le voci <strong>&quot;Ingresso ALTO&quot;</strong> e <strong>&quot;Ingresso BASSO&quot;</strong> senza collegare ad essi un filo con le stesse modalit&agrave; viste in precedenza per l'ingresso negato.. </p>
+<p>Per riportare l'ingresso al funzionamento normale basta ripetere l'operazione dopo avere selezionato <strong>&quot;Ingresso NORMALE&quot; </strong>dalla lista.</p>
+<h3> Creazione di Moduli.</h3>
+<p>Un Modulo contiene un circuito completo (sempre realizzato con LogicSim) che pu&ograve; essere usato come singolo elemento di un altro circuito. </p>
+<p>Dopo avere disegnato lo schema del circuito logico che comporr&agrave; il modulo, selezionare <strong>&quot;Crea Modulo&quot;</strong> dal men&ugrave; <strong>Modulo</strong>. Nella finestra che apparit&agrave; inserire la descrizione della funzione svolta dal circuito. Il testo inserito nella casella <strong>Nome Modulo</strong> sar&agrave; il nome del file in cui il modulo stesso sar&agrave; salvato successivamente, mentre quanto inserito nella casella <strong>&quot;Etichetta Modulo&quot;</strong> sar&agrave; il testo con cui il modulo verr&agrave; contrassegnato una volta inserito in un circuito. </p>
+<p>Dopo aver cliccato sul pulsante OK, appariranno un circuito &quot;INPUT&quot; e un circuito &quot;OUTPUT&quot; che rappresentano rispettivamente gli ingressi e le uscite con cui il modulo stesso si interfaccer&agrave; con i componenti del circuito in cui verr&agrave; inserito. Per testare il modulo sar&agrave; quindi sufficiente collegare degli Switch agli ingressi e dei led alla/alle uscite, come si pu&ograve; vedere in <a href="#fulladder">figura</a>. </p>
+<p>Una volta salvato il modulo apparir&agrave; nell'elenco dei dispositivi e potr&agrave; essere usato in un nuovo circuito. </p>
+<p>A titolo di esempio si pu&ograve; aprire il circuito &quot;FullAdder.mod&quot; dalla cartella &quot;modules&quot;. Questo modulo &egrave; usato nel circuito &quot;5 Bit Adder.lsim&quot; sotto riportato e distribuito insieme a LogicSim. </p>
+<p><br >
+  <img src="images/ls1ita.gif" alt="Sommatore a 5 bit realizzato con moduli Full Adder" width="420" height="276" ><br >
+  Sommatore a 5 bit realizzato con 5 moduli Full Adder.<br >
+  <br >
+  <a name="fulladder" id="fulladder"></a><img src="images/ls2iso.gif" alt="Modulo Full Adder" width="420" height="276" ><br >
+Modulo FullAdder.</p>
+</body>
+</html>

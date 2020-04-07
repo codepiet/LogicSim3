@@ -15,7 +15,7 @@ import javax.swing.JRadioButton;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import logicsim.Connector;
+import logicsim.Pin;
 import logicsim.Gate;
 import logicsim.I18N;
 import logicsim.LSMouseEvent;
@@ -47,7 +47,7 @@ public class BinIn extends Gate {
 		super("input");
 		type = "binin";
 		height = 90;
-		setNumOutputs(8);
+		createOutputs(8);
 		loadProperties();
 	}
 
@@ -64,7 +64,7 @@ public class BinIn extends Gate {
 		int dy = e.getY() - getY();
 		int value = 0;
 		for (int i = 0; i < 8; i++) {
-			if (getOutputs().get(i).getLevel())
+			if (getPin(i).getLevel())
 				value += (1 << i);
 		}
 
@@ -92,10 +92,7 @@ public class BinIn extends Gate {
 			value = value - 0xff - 1;
 
 		for (int i = 0; i < 8; i++)
-			if ((value & (1 << i)) != 0)
-				getOutputs().get(i).setLevel(true);
-			else
-				getOutputs().get(i).setLevel(false);
+			getPin(i).setLevel((value & (1 << i)) != 0);
 	}
 
 	@Override
@@ -153,7 +150,7 @@ public class BinIn extends Gate {
 		g.setFont(bigFont);
 		int sw = g.getFontMetrics().stringWidth(sval);
 		g.drawString(sval, x + getWidth() / 2 - sw / 2, y + height / 2 + 17);
-		g.setFont(Connector.smallFont);
+		g.setFont(Pin.smallFont);
 		String s = "INPUT";
 		sw = g.getFontMetrics().stringWidth(s);
 		g.drawString(s, x + getWidth() / 2 - sw / 2, y + 17);

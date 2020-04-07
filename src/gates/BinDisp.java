@@ -40,8 +40,7 @@ public class BinDisp extends Gate {
 		label = "HEX";
 		type = "bindisp";
 		height = 90;
-		setNumInputs(8);
-		setNumOutputs(0);
+		createInputs(8);
 		loadProperties();
 	}
 
@@ -56,7 +55,7 @@ public class BinDisp extends Gate {
 
 		int value = 0;
 		for (int i = 0; i < 8; i++) {
-			if (getInputLevel(i))
+			if (getPin(i).getLevel())
 				value += (1 << i);
 		}
 

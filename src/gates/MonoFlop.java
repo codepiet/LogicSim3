@@ -33,8 +33,8 @@ public class MonoFlop extends Gate {
 	public MonoFlop() {
 		super("flipflop");
 		type = "monoflop";
-		setNumInputs(1);
-		setNumOutputs(1);
+		createInputs(1);
+		createOutputs(1);
 		reset();
 		loadProperties();
 	}
@@ -63,15 +63,15 @@ public class MonoFlop extends Gate {
 
 	@Override
 	public void simulate() {
-		boolean in = getInputLevel(0);
+		boolean in = getPin(0).getLevel();
 		// detect rising edge
 		if (lastState == false && in) {
-			setOutputLevel(0, true);
+			getPin(1).setLevel(true);
 			startTime = new Date().getTime();
 		}
 
 		if (new Date().getTime() - startTime > highTime)
-			setOutputLevel(0, false);
+			getPin(1).setLevel(false);
 
 		lastState = in;
 	}

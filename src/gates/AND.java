@@ -1,7 +1,12 @@
 package gates;
 
-import logicsim.Connector;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
+
 import logicsim.Gate;
+import logicsim.LSProperties;
+import logicsim.Pin;
 
 /**
  * AND Gate for LogicSim
@@ -17,8 +22,8 @@ public class AND extends Gate {
 		super("basic");
 		label = "&";
 		type = "and";
-		setNumInputs(2);
-		setNumOutputs(1);
+		createOutputs(1);
+		createInputs(2);
 		variableInputCountSupported = true;
 		reset();
 	}
@@ -28,11 +33,34 @@ public class AND extends Gate {
 		super.simulate();
 
 		boolean b = true;
-		for (int i = 0; i < getNumInputs(); i++) {
-			b = b && getInputLevel(i);
+		for (Pin c : getInputs()) {
+			b = b && c.getLevel();
 		}
-		Connector output = getOutput(0);
-		output.setLevel(b);
+		getPin(0).setLevel(b);
+	}
+
+	@Override
+	protected void drawFrame(Graphics2D g2) {
+		String gateType = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN, LSProperties.GATEDESIGN_IEC);
+		if (gateType.equals(LSProperties.GATEDESIGN_IEC))
+			super.drawFrame(g2);
+		else
+			drawANSI(g2);
+	}
+
+	private void drawANSI(Graphics2D g2) {
+		Path2D p = new Path2D.Double();
+		p.moveTo(getX() + CONN_SIZE, getY() + CONN_SIZE);
+		p.lineTo(getX() + width - 4 * CONN_SIZE, getY() + CONN_SIZE);
+		double x1 = getX() + width + 1.4f;
+		p.curveTo(x1, getY() + CONN_SIZE, x1, getY() + height - CONN_SIZE, getX() + width - 4 * CONN_SIZE,
+				getY() + height - CONN_SIZE);
+		p.lineTo(getX() + CONN_SIZE, getY() + height - CONN_SIZE);
+		p.closePath();
+		g2.setPaint(Color.WHITE);
+		g2.fill(p);
+		g2.setPaint(Color.black);
+		g2.draw(p);
 	}
 
 }

@@ -1,5 +1,8 @@
 package gates;
 
+import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
+
 import logicsim.Gate;
 
 /**
@@ -14,8 +17,8 @@ public class TFlipFlop extends Gate {
 	public TFlipFlop() {
 		super("flipflop");
 		type = "tff";
-		setNumInputs(1);
-		setNumOutputs(2);
+		createInputs(1);
+		createOutputs(2);
 		reset();
 	}
 
@@ -52,11 +55,23 @@ public class TFlipFlop extends Gate {
 //	}
 
 	@Override
-	public void reset() {
-		setOutputLevel(1, true);
+	public void draw(Graphics2D g2) {
+		super.draw(g2);
+		Path2D p = new Path2D.Double();
+		int sp = 10;
+		p.moveTo(getX() + width - 2 * sp, getY() + height - 2 * sp);
+		p.lineTo(getX() + width - sp, getY() + height - 2 * sp);
+		p.lineTo(getX() + width - sp, getY() + height - sp);
+
+		p.moveTo(getX() + width - 2 * sp, getY() + sp);
+		p.lineTo(getX() + width - sp, getY() + sp);
+		p.lineTo(getX() + width - sp, getY() + 2 * sp);
+		g2.draw(p);
 	}
 
-	public boolean isOutputPositive(int n) {
-		return (n == 0);
+	@Override
+	public void reset() {
+		getPin(1).setLevel(true);
+		getPin(2).setLevel(true);
 	}
 }

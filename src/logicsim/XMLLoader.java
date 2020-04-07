@@ -54,7 +54,7 @@ public class XMLLoader {
 				}
 
 				if (optInputs != null)
-					gate.setNumInputs(Integer.parseInt(optInputs));
+					gate.createDynamicInputs(Integer.parseInt(optInputs));
 				gate.moveTo(x, y);
 				if (optRot != null) {
 					int rot = Integer.parseInt(optRot) / 90;
@@ -89,11 +89,11 @@ public class XMLLoader {
 						if (inpType != null) {
 							int inputType = 0;
 							if ("high".equals(inpType)) {
-								inputType = Connector.HIGH;
+								inputType = Pin.HIGH;
 							} else if ("low".equals(inpType)) {
-								inputType = Connector.LOW;
+								inputType = Pin.LOW;
 							} else if ("inv".equals(inpType)) {
-								inputType = Connector.INVERTED;
+								inputType = Pin.INVERTED;
 							}
 							gate.getInputs().get(inputNumber).levelType = inputType;
 						}
@@ -132,7 +132,7 @@ public class XMLLoader {
 				if (toGate == null)
 					throw new RuntimeException(I18N.getString(Lang.ERR_READ) + ": to gate is null");
 
-				Wire wire = new Wire(fromGate.getOutput(fromNumber), toGate.getInput(toNumber));
+				Wire wire = new Wire(fromGate.getPin(fromNumber), toGate.getPin(toNumber));
 				for (Xml pnode : wnode.children("point")) {
 					boolean b = Boolean.parseBoolean(pnode.string("node"));
 					int xp = Integer.parseInt(pnode.string("x"));
@@ -142,8 +142,8 @@ public class XMLLoader {
 				}
 				wire.active = false;
 				// connect wire to gates
-				fromGate.setOutputWire(fromNumber, wire);
-				toGate.setInputWire(toNumber, wire);
+				fromGate.getPin(fromNumber).addWire(wire);
+				toGate.getPin(toNumber).addWire(wire);
 			}
 		}
 		ls.setGates(gates);

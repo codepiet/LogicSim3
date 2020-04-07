@@ -57,15 +57,24 @@ error.save=Fehler beim Speichern
 error.modulenotfound=Konnte das Modul \n%s nicht finden\nBitte kopieren Sie das erforderliche Modul in das Verzeichnis modules.
 
 [BUTTONS]
-button.simulate=Simulieren
-button.reset=Reset
-button.removewirepoint=Punkt aus Kabel entfernen
-button.ok=OK
-button.cancel=Abbrechen
-button.save=Speichern
-button.dontsave=Nicht Speichern
-button.yes=Ja
-button.no=Nein
+btn.simulate=Simulieren
+btn.reset=Reset
+btn.removewirepoint=Punkt aus Kabel entfernen
+btn.ok=OK
+btn.cancel=Abbrechen
+btn.save=Speichern
+btn.dontsave=Nicht Speichern
+btn.yes=Ja
+btn.no=Nein
+btn.zoomp=Vergrößern
+btn.zoomm=Verkleinern
+btn.zoom1=Zoom auf 100%
+btn.rotate=Bauteil rotieren
+btn.mirror=Bauteil spiegeln 
+btn.inputnorm=Normaler Eingang
+btn.inputinv=Invertierter Eingang
+btn.inputhigh=High-Eingang
+btn.inputlow=Low-Eingang
 
 [CATEGORIES]
 category.basic=Grundgatter

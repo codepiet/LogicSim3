@@ -26,11 +26,10 @@ public class HTMLHelp extends javax.swing.JFrame implements java.awt.event.Actio
 	private javax.swing.JTextPane jTextPane1;
 
 	Toolkit toolkit = Toolkit.getDefaultToolkit();
-	String lang;
 
 	/** Creates new form HTMLHelp */
-	public HTMLHelp(String lang) {
-		this.lang = lang;
+	public HTMLHelp() {
+		String language = LSProperties.getInstance().getProperty("language", "de");
 		Dimension scrSize;
 		int width = 800, height = 600;
 
@@ -41,17 +40,16 @@ public class HTMLHelp extends javax.swing.JFrame implements java.awt.event.Actio
 		scrSize = toolkit.getScreenSize();
 		setLocation((scrSize.width / 2) - (width / 2), (scrSize.height / 2) - (height / 2));
 		setSize(width, height);
-		this.setTitle("LogicSim Help");
-		this.setVisible(true);
+		this.setTitle("LogicSim " + I18N.getString(Lang.MNU_HELP));
 
 		try {
 			String url = null;
-			File f = new File("doc");
+			File f = new File("help");
 			File[] files = f.listFiles();
-			url = new File("doc/english.html").getAbsolutePath();
+			url = new File("help/en.html").getAbsolutePath();
 			// Anleitung in der eingestellten Sprache finden
 			for (int i = 0; i < files.length; i++) {
-				if (files[i].getName().startsWith(lang) && files[i].getName().endsWith(".html")) {
+				if (files[i].getName().startsWith(language) && files[i].getName().endsWith(".html")) {
 					url = files[i].getAbsolutePath();
 				}
 			}
@@ -65,7 +63,7 @@ public class HTMLHelp extends javax.swing.JFrame implements java.awt.event.Actio
 			this.setVisible(false);
 			this.dispose();
 		}
-
+		this.setVisible(true);
 	}
 
 	protected void processMouseEvent(MouseEvent e) {

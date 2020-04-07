@@ -1,6 +1,6 @@
 <project name="LogicSim" basedir="." default="main">
 
-	<tstamp/>
+	<tstamp />
 
 	<property name="version" value="3.0b-${DSTAMP}" />
 	<property name="main-class" value="logicsim.App" />
@@ -8,10 +8,11 @@
 	<property name="release.dir" value="release" />
 	<property name="dist.dir" value="dist" />
 	<property name="src.dir" value="src" />
+	<property name="help.dir" value="help" />
 	<property name="build.dir" value="build" />
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="jar.dir" value="${build.dir}/jar" />
-	
+
 	<target name="clean">
 		<delete dir="${build.dir}" />
 		<delete dir="${dist.dir}" />
@@ -26,7 +27,7 @@
 	</target>
 
 	<target name="jar" depends="compile">
-		<move file="${classes.dir}/gates" tofile="${dist.dir}/gates"/>
+		<move file="${classes.dir}/gates" tofile="${dist.dir}/gates" />
 		<mkdir dir="${jar.dir}" />
 		<copy todir="${classes.dir}/logicsim/images">
 			<fileset dir="${src.dir}/logicsim/images" />
@@ -66,14 +67,16 @@
 		<copy todir="${dist.dir}/modules">
 			<fileset dir="modules" />
 		</copy>
+		<copy todir="${dist.dir}/help">
+			<fileset dir="help" />
+		</copy>
 		<copy todir="${dist.dir}/circuits">
 			<fileset dir="circuits" />
 		</copy>
 		<copy todir="${dist.dir}/languages">
 			<fileset dir="languages" />
 		</copy>
-		<zip destfile="${release.dir}/LogicSim-${version}.zip"
-		     basedir="${dist.dir}"/>
+		<zip destfile="${release.dir}/LogicSim-${version}.zip" basedir="${dist.dir}" />
 	</target>
 
 	<target name="main" depends="clean,run" />

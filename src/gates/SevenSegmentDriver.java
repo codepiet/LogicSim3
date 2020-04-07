@@ -22,26 +22,20 @@ public class SevenSegmentDriver extends Gate {
 		super("output");
 		type = "sevendrv";
 		height = 80;
-		setNumInputs(4);
-		setNumOutputs(7);
+		createInputs(4);
+		createOutputs(7);
 
-		getInput(0).label = "b1";
-		getInput(1).label = "b2";
-		getInput(2).label = "b4";
-		getInput(3).label = "b8";
-
-		getInput(0).setY(getY() + 10);
-		getInput(1).setY(getY() + 20);
-		getInput(2).setY(getY() + 30);
-		getInput(3).setY(getY() + 40);
-
-		getOutput(0).label = "a";
-		getOutput(1).label = "b";
-		getOutput(2).label = "c";
-		getOutput(3).label = "d";
-		getOutput(4).label = "e";
-		getOutput(5).label = "f";
-		getOutput(6).label = "g";
+		for (int i = 0; i < 4; i++) {
+			getPin(i).label = "I" + (i + 1);
+			getPin(i).setY(getY() + (i + 1) * 10);
+		}
+		getPin(4).label = "a";
+		getPin(5).label = "b";
+		getPin(6).label = "c";
+		getPin(7).label = "d";
+		getPin(8).label = "e";
+		getPin(9).label = "f";
+		getPin(10).label = "g";
 
 		reset();
 	}
@@ -60,10 +54,10 @@ public class SevenSegmentDriver extends Gate {
 	@Override
 	public void simulate() {
 		super.simulate();
-		int b1 = getInputLevel(0) ? 1 : 0;
-		int b2 = getInputLevel(1) ? 1 : 0;
-		int b4 = getInputLevel(2) ? 1 : 0;
-		int b8 = getInputLevel(3) ? 1 : 0;
+		int b1 = getPin(0).getLevel() ? 1 : 0;
+		int b2 = getPin(1).getLevel() ? 1 : 0;
+		int b4 = getPin(2).getLevel() ? 1 : 0;
+		int b8 = getPin(3).getLevel() ? 1 : 0;
 		int value = b1 + (b2 << 1) + (b4 << 2) + (b8 << 3);
 		switch (value) {
 		case 0: {
@@ -136,7 +130,7 @@ public class SevenSegmentDriver extends Gate {
 
 	private void setOutputs() {
 		for (int i = 0; i < 7; i++) {
-			setOutputLevel(i, (out[i] == 1));
+			getPin(i + 4).setLevel(out[i] == 1);
 		}
 	}
 

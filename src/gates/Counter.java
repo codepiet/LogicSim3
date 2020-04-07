@@ -15,7 +15,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import logicsim.Gate;
-import logicsim.Connector;
+import logicsim.Pin;
 import logicsim.I18N;
 import logicsim.Lang;
 
@@ -44,8 +44,8 @@ public class Counter extends Gate {
 		super("output");
 		type = "counter";
 		height = 90;
-		setNumInputs(1);
-		setNumOutputs(8);
+		createInputs(1);
+		createOutputs(8);
 		loadProperties();
 		reset();
 	}
@@ -64,7 +64,7 @@ public class Counter extends Gate {
 
 	@Override
 	public void simulate() {
-		if (!lastInputState && getInputLevel(0)) {
+		if (!lastInputState && getPin(0).getLevel()) {
 			value++;
 			if (value < 0)
 				value = 0xff + value + 1;
@@ -73,12 +73,12 @@ public class Counter extends Gate {
 
 			setOutputs();
 		}
-		lastInputState = getInputLevel(0);
+		lastInputState = getPin(0).getLevel();
 	}
 
 	private void setOutputs() {
 		for (int i = 0; i < 8; i++)
-			setOutputLevel(i, (value & (1 << i)) != 0);
+			getPin(i + 1).setLevel((value & (1 << i)) != 0);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class Counter extends Gate {
 		g.setFont(bigFont);
 		int sw = g.getFontMetrics().stringWidth(sval);
 		g.drawString(sval, x + getWidth() / 2 - sw / 2, y + height / 2 + 18);
-		g.setFont(Connector.smallFont);
+		g.setFont(Pin.smallFont);
 		String s = "CNT";
 		sw = g.getFontMetrics().stringWidth(s);
 		g.drawString(s, x + getWidth() / 2 - sw / 2, y + 12);

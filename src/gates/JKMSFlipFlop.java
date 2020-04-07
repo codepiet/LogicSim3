@@ -1,6 +1,10 @@
 package gates;
 
-import logicsim.Connector;
+import logicsim.Pin;
+
+import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
+
 import logicsim.Gate;
 
 /**
@@ -16,18 +20,18 @@ public class JKMSFlipFlop extends Gate {
 	public JKMSFlipFlop() {
 		super("flipflop");
 		type = "jkmsff";
-		setNumInputs(3);
-		setNumOutputs(2);
+		createInputs(3);
+		createOutputs(2);
 
-		getInput(0).label = "J";
-		getInput(1).label = Connector.POS_EDGE_TRIG;
-		getInput(2).label = "K";
+		getPin(0).label = "J";
+		getPin(1).label = Pin.POS_EDGE_TRIG;
+		getPin(2).label = "K";
 
-		getOutput(0).label = "Q";
-		getOutput(1).label = "/Q";
+		getPin(3).label = "Q";
+		getPin(4).label = "/Q";
 
-		getOutput(0).moveBy(0, 10);
-		getOutput(1).moveBy(0, -10);
+		getPin(3).moveBy(0, 10);
+		getPin(4).moveBy(0, -10);
 
 		reset();
 	}
@@ -66,5 +70,20 @@ public class JKMSFlipFlop extends Gate {
 //		// Ausgang 1 dieses Moduls auf Ausgang 1 des Gatters jk2 setzen
 //		outputGates.setElementAt(jk2, 1);
 //		outputNums.setElementAt(1, 1);
+	}
+
+	@Override
+	public void draw(Graphics2D g2) {
+		super.draw(g2);
+		Path2D p = new Path2D.Double();
+		int sp = 10;
+		p.moveTo(getX() + width - 2 * sp, getY() + height - 2 * sp);
+		p.lineTo(getX() + width - sp, getY() + height - 2 * sp);
+		p.lineTo(getX() + width - sp, getY() + height - sp);
+
+		p.moveTo(getX() + width - 2 * sp, getY() + sp);
+		p.lineTo(getX() + width - sp, getY() + sp);
+		p.lineTo(getX() + width - sp, getY() + 2 * sp);
+		g2.draw(p);
 	}
 }

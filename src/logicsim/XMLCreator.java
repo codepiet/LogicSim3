@@ -117,15 +117,15 @@ public class XMLCreator {
 		if (snode != null)
 			node.appendChild(snode);
 
-		for (Connector c : g.getInputs()) {
+		for (Pin c : g.getInputs()) {
 			if ((g instanceof MODIN && c.label != null)
-					|| (c.ioType == Connector.INPUT && c.levelType != Connector.NORMAL)) {
+					|| (c.ioType == Pin.INPUT && c.levelType != Pin.NORMAL)) {
 				node.appendChild(createInputNode(doc, c));
 			}
 		}
-		for (Connector c : g.getOutputs()) {
+		for (Pin c : g.getOutputs()) {
 			if ((g instanceof MODOUT && c.label != null)
-					|| (c.ioType == Connector.INPUT && c.levelType != Connector.NORMAL)) {
+					|| (c.ioType == Pin.INPUT && c.levelType != Pin.NORMAL)) {
 				node.appendChild(createOutputNode(doc, c));
 			}
 		}
@@ -148,7 +148,7 @@ public class XMLCreator {
 		return null;
 	}
 
-	private static Node createOutputNode(Document doc, Connector output) {
+	private static Node createOutputNode(Document doc, Pin output) {
 		Element node = doc.createElement("io");
 		node.setAttribute("iotype", "output");
 		node.setAttribute("number", String.valueOf(output.number));
@@ -158,18 +158,18 @@ public class XMLCreator {
 		return node;
 	}
 
-	private static Node createInputNode(Document doc, Connector input) {
+	private static Node createInputNode(Document doc, Pin input) {
 		Element node = doc.createElement("io");
 		node.setAttribute("iotype", "input");
 		node.setAttribute("number", String.valueOf(input.number));
 		int inputType = input.levelType;
-		if (inputType != Connector.NORMAL) {
+		if (inputType != Pin.NORMAL) {
 			String inpType = "";
-			if (inputType == Connector.HIGH)
+			if (inputType == Pin.HIGH)
 				inpType = "high";
-			else if (inputType == Connector.LOW)
+			else if (inputType == Pin.LOW)
 				inpType = "low";
-			else if (inputType == Connector.INVERTED)
+			else if (inputType == Pin.INVERTED)
 				inpType = "inv";
 			node.setAttribute("type", inpType);
 		}

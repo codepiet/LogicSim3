@@ -23,10 +23,10 @@ public class MODOUT extends Gate {
 		label = "OUTPUTS";
 		backgroundColor = Color.LIGHT_GRAY;
 		height = 170;
-		setNumInputs(16);
-		setNumOutputs(16);
+		createInputs(16);
+		createOutputs(16);
 	}
-	
+
 	@Override
 	protected void drawLabel(Graphics2D g2, String lbl, Font font) {
 		g2.setFont(bigFont);
@@ -37,10 +37,9 @@ public class MODOUT extends Gate {
 	@Override
 	public void simulate() {
 		super.simulate();
-
-		for (int i = 0; i < getNumInputs(); i++) {
-			setOutputLevel(i, getInputLevel(i));
-		}
+		int ni = getNumInputs();
+		for (int i = 0; i < ni; i++)
+			getPin(i + ni).setLevel(getPin(i).getLevel());
 	}
 
 }

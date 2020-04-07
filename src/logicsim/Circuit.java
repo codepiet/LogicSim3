@@ -38,7 +38,7 @@ public class Circuit implements CircuitChangedListener {
 	public Vector<Wire> getWires() {
 		Vector<Wire> wires = new Vector<Wire>();
 		for (Gate g : gates)
-			for (Connector conn : g.getOutputs())
+			for (Pin conn : g.getOutputs())
 				if (conn.isConnected())
 					for (Wire wire : conn.wires)
 						wires.add(wire);
@@ -123,7 +123,7 @@ public class Circuit implements CircuitChangedListener {
 			if (g.active)
 				parts.add(g);
 
-			for (Connector conn : g.getOutputs())
+			for (Pin conn : g.getOutputs())
 				if (conn.isConnected()) {
 					for (Wire wire : conn.wires)
 						if (wire.active)
@@ -156,7 +156,7 @@ public class Circuit implements CircuitChangedListener {
 		if (g.type.equals("modin") || g.type.equals("modout"))
 			return false;
 		// 1. delete wires
-		for (Connector c : g.getConnectors()) {
+		for (Pin c : g.getPins()) {
 			if (c.isConnected()) {
 				for (Wire w : c.wires) {
 					c.clear();

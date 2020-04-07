@@ -10,7 +10,12 @@
         <gate type="xor" x="410" y="10"/>
         <gate type="equ" x="490" y="10"/>
         <gate type="switch4" x="20" y="90"/>
-        <gate type="switch" x="420" y="320"/>
+        <gate type="switch" x="420" y="320">
+            <properties>
+                <property key="color">#66ffff</property>
+                <property key="type">toggle</property>
+            </properties>
+        </gate>
         <gate type="clock" x="20" y="140"/>
         <gate type="binin" x="150" y="120"/>
         <gate type="counter" x="250" y="150"/>
@@ -43,7 +48,7 @@
         <gate type="and" x="250" y="80"/>
         <gate type="switch" x="420" y="440">
             <properties>
-                <property key="color">#66ff66</property>
+                <property key="color">#00ffcc</property>
                 <property key="type">toggle</property>
             </properties>
         </gate>
@@ -60,61 +65,16 @@
         </gate>
         <gate type="switch" x="420" y="400">
             <properties>
-                <property key="color">#ffff66</property>
+                <property key="color">#660099</property>
                 <property key="type">toggle</property>
             </properties>
         </gate>
         <gate type="switch" x="420" y="360">
             <properties>
-                <property key="color">#ff0066</property>
+                <property key="color">#ccccff</property>
                 <property key="type">toggle</property>
             </properties>
         </gate>
     </gates>
-    <wires>
-        <wire>
-            <from id="switch@420:320" number="0"/>
-            <to id="led@510:330" number="0"/>
-        </wire>
-        <wire>
-            <from id="sevendrv@180:330" number="0"/>
-            <to id="sevenseg@280:330" number="0"/>
-        </wire>
-        <wire>
-            <from id="sevendrv@180:330" number="1"/>
-            <to id="sevenseg@280:330" number="1"/>
-        </wire>
-        <wire>
-            <from id="sevendrv@180:330" number="2"/>
-            <to id="sevenseg@280:330" number="2"/>
-        </wire>
-        <wire>
-            <from id="sevendrv@180:330" number="3"/>
-            <to id="sevenseg@280:330" number="3"/>
-        </wire>
-        <wire>
-            <from id="sevendrv@180:330" number="4"/>
-            <to id="sevenseg@280:330" number="4"/>
-        </wire>
-        <wire>
-            <from id="sevendrv@180:330" number="5"/>
-            <to id="sevenseg@280:330" number="5"/>
-        </wire>
-        <wire>
-            <from id="sevendrv@180:330" number="6"/>
-            <to id="sevenseg@280:330" number="6"/>
-        </wire>
-        <wire>
-            <from id="switch@420:440" number="0"/>
-            <to id="led@510:450" number="0"/>
-        </wire>
-        <wire>
-            <from id="switch@420:400" number="0"/>
-            <to id="led@510:410" number="0"/>
-        </wire>
-        <wire>
-            <from id="switch@420:360" number="0"/>
-            <to id="led@510:370" number="0"/>
-        </wire>
-    </wires>
+    <wires/>
 </logicsim>

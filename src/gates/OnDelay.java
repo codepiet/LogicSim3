@@ -1,12 +1,15 @@
 package gates;
 
 import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
 
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.Pin;
 
 /**
  * ON-Delay component for LogicSim
@@ -29,8 +32,8 @@ public class OnDelay extends Gate {
 	public OnDelay() {
 		super("input");
 		type = "ondelay";
-		setNumInputs(1);
-		setNumOutputs(1);
+		createInputs(1);
+		createOutputs(1);
 		loadProperties();
 	}
 
@@ -40,18 +43,21 @@ public class OnDelay extends Gate {
 	}
 
 	public void simulate() {
-		if (lastInputState == false && getInputWire(0) != null && getInputLevel(0)) { // positive flanke
+		Pin in = getPin(1);
+		Pin out = getPin(2);
+
+		if (lastInputState == false && in.isConnected() && in.getLevel()) { // positive flanke
 			startTime = new Date().getTime();
 		}
 
-		if (new Date().getTime() - startTime > delayTime && getInputWire(0) != null && getInputLevel(0))
-			setOutputLevel(0, true);
+		if (new Date().getTime() - startTime > delayTime && in.isConnected() && in.getLevel())
+			out.setLevel(true);
 
-		if (getInputWire(0) == null || getInputLevel(0) == false)
-			setOutputLevel(0, false);
+		if (in.isConnected() || !in.getLevel())
+			out.setLevel(false);
 
-		if (getInputWire(0) != null)
-			lastInputState = getInputLevel(0);
+		if (in.isConnected())
+			lastInputState = in.getLevel();
 	}
 
 	public boolean hasPropertiesUI() {
@@ -67,6 +73,23 @@ public class OnDelay extends Gate {
 			setPropertyInt(DELAY, delayTime);
 		}
 		return true;
+	}
+
+	@Override
+	protected void drawFrame(Graphics2D g2) {
+		super.drawFrame(g2);
+		int cX = width / 2 + getX();
+		int cY = height / 2 + getY();
+		int cd = 15;
+		g2.drawOval(cX - cd / 2, cY - cd / 2 + 5, cd, cd);
+		g2.drawLine(getX() + cd, getY() + cd, getX() + width - cd, getY() + cd);
+		g2.drawString("0", getX() + cd, getY() + cd + 12);
+		g2.drawString("1", getX() + width - cd - 6, getY() + cd + 12);
+		Path2D ptr = new Path2D.Double();
+		ptr.moveTo(cX, cY);
+		ptr.lineTo(cX, cY + 5);
+		ptr.lineTo(cX + 3, cY + 5);
+		g2.draw(ptr);
 	}
 
 }
