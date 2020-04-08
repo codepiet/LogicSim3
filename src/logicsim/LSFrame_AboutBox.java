@@ -77,7 +77,7 @@ public class LSFrame_AboutBox extends JWindow {
 			g2.drawString("Version " + version, 10, 240);
 			g2.drawString("Programmed 2020 by Peter Gabriel - http://sis.schule", 10, 260);
 			g2.drawString("Based on LogicSim 2.4 (2009) by Andreas Tetzl - http://tetzl.de", 10, 290);
-			g2.drawString("Artwork by Jens Borsdorf, http://jens.borsdorf.name", 10, 310);
+			g2.drawString("About Graphic by Jens Borsdorf, http://jens.borsdorf.name", 10, 310);
 			g2.drawString("LogicSim is free software-Released under the GPL-Download on Github", 10, 340);
 		}
 	}

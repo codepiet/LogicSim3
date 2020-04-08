@@ -70,7 +70,7 @@ public class Module extends Gate {
 					// add MODIN's input-connectors to module:
 					// check if MODIN's outputs are connected
 					if (c.isConnected()) {
-						Pin newIn = new Pin(getX(), getY() + 10 + c.number * 10, this, c.number);
+						Pin newIn = new Pin(getX(), getY() + 10 + (c.number - 16) * 10, this, c.number - 16);
 						newIn.ioType = Pin.INPUT;
 						newIn.levelType = Pin.NORMAL;
 						Pin in = moduleIn.getPin(c.number);
@@ -87,7 +87,7 @@ public class Module extends Gate {
 				// check if MODOUT's inputs have a wire
 				for (Pin c : moduleOut.getInputs()) {
 					if (c.isConnected()) {
-						Pin newOut = new Pin(getX() + getWidth(), getY() + 10 + c.number * 10, this, c.number);
+						Pin newOut = new Pin(getX() + getWidth(), getY() + 10 + c.number * 10, this, c.number+16);
 						newOut.ioType = Pin.OUTPUT;
 						newOut.paintDirection = Pin.LEFT;
 						newOut.levelType = Pin.NORMAL;
@@ -104,10 +104,10 @@ public class Module extends Gate {
 			if (max > 5)
 				height = 10 * max * 10;
 			for (Pin c : getInputs()) {
-				c.setY(getConnectorPosition(getY() + c.number, numIn, Gate.VERTICAL));
+				c.setY(getY() + getConnectorPosition(c.number, numIn, Gate.VERTICAL));
 			}
 			for (Pin c : getOutputs()) {
-				c.setY(getConnectorPosition(getY() + c.number, numOut, Gate.VERTICAL));
+				c.setY(getY() + getConnectorPosition(c.number-16, numOut, Gate.VERTICAL));
 			}
 		}
 

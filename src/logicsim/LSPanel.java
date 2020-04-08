@@ -255,8 +255,8 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	private MouseEvent convertToWorld(MouseEvent e) {
 		int x = (int) (getTransformer().screenToWorldX(e.getX()));
 		int y = (int) (getTransformer().screenToWorldY(e.getY()));
-		//int x = (int) Math.round(getTransformer().screenToWorldX(e.getX()));
-		//int y = (int) Math.round(getTransformer().screenToWorldY(e.getY()));
+		// int x = (int) Math.round(getTransformer().screenToWorldX(e.getX()));
+		// int y = (int) Math.round(getTransformer().screenToWorldY(e.getY()));
 
 		MouseEvent ec = new MouseEvent((Component) e.getSource(), e.getID(), e.getWhen(), e.getModifiersEx(), x, y,
 				e.getClickCount(), e.isPopupTrigger(), e.getButton());
@@ -365,6 +365,31 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			if (!Simulation.getInstance().isRunning()) {
 				if (currentPart != null) {
 					currentPart.mouseDragged(e);
+
+					// check if currentpart is a gate and if any output touches another part's input
+					// pin
+					if (currentPart instanceof Gate) {
+						Gate gate = (Gate) currentPart;
+						for (Pin pin : gate.getOutputs()) {
+							int x = pin.getX();
+							int y = pin.getY();
+							for (Gate g : circuit.getGates()) {
+								CircuitPart cp = g.findPartAt(x, y);
+								if (cp != null && cp instanceof Pin) {
+									Pin p = (Pin) cp;
+									if (p.isInput() && !p.isConnected()) {
+										System.out.println("found " + p);
+										//put new wire between pin and p
+										Wire w = new Wire(pin, p);
+										p.addWire(w);
+										pin.addWire(w);
+									}
+								}
+							}
+
+						}
+					}
+
 					repaint();
 				}
 			}

@@ -54,7 +54,7 @@ public class Simulation implements Runnable {
 			lspanel.repaint();
 
 			try {
-				Thread.sleep(100);
+				Thread.sleep(25);
 			} catch (Exception e) {
 			}
 		}

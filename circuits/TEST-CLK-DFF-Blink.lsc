@@ -5,8 +5,8 @@
         <gate type="dff" x="190" y="70"/>
         <gate type="clock" x="40" y="70">
             <properties>
-                <property key="hightime">200</property>
-                <property key="lowtime">200</property>
+                <property key="hightime">100</property>
+                <property key="lowtime">100</property>
             </properties>
         </gate>
         <gate type="led" x="310" y="70"/>
