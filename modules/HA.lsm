@@ -4,8 +4,14 @@
         <description>Halbaddierer</description>
     </info>
     <gates>
-        <gate type="modin" x="150" y="100"/>
-        <gate type="modout" x="650" y="100"/>
+        <gate type="modin" x="150" y="100">
+	<io iotype="input" number="0" label="a"/>
+	<io iotype="input" number="1" label="b"/>
+</gate>
+        <gate type="modout" x="650" y="100">
+	<io iotype="output" number="16" label="s"/>
+	<io iotype="output" number="17" label="c"/>
+</gate>
         <gate type="and" x="370" y="160"/>
         <gate type="xor" x="370" y="100"/>
     </gates>

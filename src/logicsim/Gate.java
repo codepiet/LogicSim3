@@ -21,24 +21,22 @@ import java.util.Vector;
  * @version 2.0
  */
 public class Gate extends CircuitPart {
+
+	static final long serialVersionUID = -6775454761569297690L;
+
 	protected static final int CONN_SIZE = 7;
 
 	public static final int HORIZONTAL = 0;
-
-	static final long serialVersionUID = -6775454761569297690L;
 	public static final int VERTICAL = 1;
 
-	protected static void drawRotate(Graphics2D g2, double x, double y, int angle, String text) {
-		g2.translate((float) x, (float) y);
-		g2.rotate(Math.toRadians(angle));
-		g2.drawString(text, 0, 0);
-		g2.rotate(-Math.toRadians(angle));
-		g2.translate(-(float) x, -(float) y);
-	}
+	public static final int NORMAL = 0;
+	public static final int XAXIS = 1;
+	public static final int YAXIS = 2;
+	public static final int BOTHAXES = 3;
 
 	protected int actionid = 0;
 	protected Font bigFont = new Font(Font.SANS_SERIF, Font.PLAIN, 13);
-	protected Vector<Pin> conns = new Vector<Pin>();
+	protected Vector<Pin> pins = new Vector<Pin>();
 
 	protected int height = 60;
 
@@ -56,7 +54,10 @@ public class Gate extends CircuitPart {
 	public String category;
 
 	/**
-	 * rotate in 90 degree steps clockwise (0-3)
+	 * rotate in 90 degree steps clockwise (0-3).
+	 * 
+	 * so 0 is normal orientation, 1 is 90 degrees clockwise, 2 is 180, 3 is 270
+	 * degrees clockwise
 	 */
 	public int rotate90 = 0;
 
@@ -93,11 +94,11 @@ public class Gate extends CircuitPart {
 	}
 
 	public void addConnector(Pin conn) {
-		for (Pin c : conns)
+		for (Pin c : pins)
 			if (c.number == conn.number)
 				throw new RuntimeException("Connector number " + c.number + " is already there in gate " + type);
 		// check if number is present
-		conns.add(conn);
+		pins.add(conn);
 	}
 
 	/**
@@ -105,7 +106,7 @@ public class Gate extends CircuitPart {
 	 */
 	@Override
 	public void clear() {
-		for (Pin c : conns)
+		for (Pin c : pins)
 			if (c.isConnected())
 				c.deleteWires();
 	}
@@ -141,12 +142,12 @@ public class Gate extends CircuitPart {
 	}
 
 	protected void drawIO(Graphics2D g2) {
-		for (Pin c : conns)
+		for (Pin c : pins)
 			c.draw(g2);
 	}
 
 	protected void drawWires(Graphics2D g2) {
-		for (Pin c : conns)
+		for (Pin c : pins)
 			c.drawWires(g2);
 	}
 
@@ -160,7 +161,7 @@ public class Gate extends CircuitPart {
 	}
 
 	public Pin findConnector(int atX, int atY) {
-		for (Pin c : conns) {
+		for (Pin c : pins) {
 			if (c.isAt(atX, atY)) {
 				return c;
 			}
@@ -182,7 +183,7 @@ public class Gate extends CircuitPart {
 			return conn;
 
 		// check connected outgoing wires
-		for (Pin c : conns) {
+		for (Pin c : pins) {
 			if (!c.isInput() && c.isConnected()) {
 				for (Wire wire : c.wires) {
 					CircuitPart part = wire.findPartAt(x, y);
@@ -261,11 +262,11 @@ public class Gate extends CircuitPart {
 	}
 
 	public Vector<Pin> getPins() {
-		return conns;
+		return pins;
 	}
 
 	public Pin getPin(int number) {
-		for (Pin c : conns)
+		for (Pin c : pins)
 			if (c.number == number)
 				return c;
 		return null;
@@ -277,7 +278,7 @@ public class Gate extends CircuitPart {
 
 	public Vector<Pin> getInputs() {
 		Vector<Pin> cs = new Vector<Pin>();
-		for (Pin c : conns) {
+		for (Pin c : pins) {
 			if (c.isInput())
 				cs.add(c);
 		}
@@ -303,7 +304,7 @@ public class Gate extends CircuitPart {
 
 	public Vector<Pin> getOutputs() {
 		Vector<Pin> cs = new Vector<Pin>();
-		for (Pin c : conns) {
+		for (Pin c : pins) {
 			if (c.isOutput())
 				cs.add(c);
 		}
@@ -390,7 +391,7 @@ public class Gate extends CircuitPart {
 		if (dx == 0 && dy == 0)
 			return;
 		super.moveBy(dx, dy);
-		for (Pin conn : conns) {
+		for (Pin conn : pins) {
 			conn.moveBy(dx, dy);
 		}
 	}
@@ -416,14 +417,14 @@ public class Gate extends CircuitPart {
 	 */
 	@Override
 	public void reset() {
-		for (Pin c : conns)
+		for (Pin c : pins)
 			c.reset();
 	}
 
 	public void createPins(int ioType, int total) {
 		// get max number
 		int num = -1;
-		for (Pin c : conns)
+		for (Pin c : pins)
 			if (c.number > num)
 				num = c.number;
 		// add new connectors - total times
@@ -435,7 +436,7 @@ public class Gate extends CircuitPart {
 			Pin c = new Pin(pos, getY() + getConnectorPosition(i, total, VERTICAL), this, num);
 			c.paintDirection = ioType == Pin.INPUT ? Pin.RIGHT : Pin.LEFT;
 			c.ioType = ioType;
-			conns.add(c);
+			pins.add(c);
 		}
 	}
 
@@ -451,7 +452,7 @@ public class Gate extends CircuitPart {
 		int numinputs = getInputs().size();
 		// get max number
 		int num = -1;
-		for (Pin c : conns)
+		for (Pin c : pins)
 			if (c.number > num)
 				num = c.number;
 
@@ -463,7 +464,7 @@ public class Gate extends CircuitPart {
 			Pin c = new Pin(pos, 0, this, num);
 			c.paintDirection = ioType == Pin.INPUT ? Pin.RIGHT : Pin.LEFT;
 			c.ioType = ioType;
-			conns.add(c);
+			pins.add(c);
 		}
 
 		// reposition all inputs
@@ -508,7 +509,7 @@ public class Gate extends CircuitPart {
 	@Override
 	public String toString() {
 		String s = getId();
-		for (Pin c : conns) {
+		for (Pin c : pins) {
 			s += "\n" + indent(c.toString(), 3);
 		}
 		return s;
@@ -567,7 +568,7 @@ public class Gate extends CircuitPart {
 			if (rotate90 > 3)
 				rotate90 = 0;
 
-			for (Pin c : conns) {
+			for (Pin c : pins) {
 				if (c.paintDirection == Pin.RIGHT) {
 					c.paintDirection = Pin.LEFT;
 					c.setY(2 * getY() + height - c.getY());
@@ -591,7 +592,7 @@ public class Gate extends CircuitPart {
 			if (rotate90 > 3)
 				rotate90 = 0;
 
-			for (Pin c : conns) {
+			for (Pin c : pins) {
 				if (c.paintDirection == Pin.RIGHT) {
 					c.paintDirection = Pin.DOWN;
 					c.setX(getX() + width - (c.getY() - getY()));
@@ -615,9 +616,39 @@ public class Gate extends CircuitPart {
 
 	/**
 	 * mirror the gate first in x-axis, then in y-axis, then both axes, then normal
+	 * so 0 is normal, 1 x, 2 y, 3 both
 	 */
 	public void mirror() {
+		mirror = (mirror + 1) % 4;
+		for (Pin p : pins) {
+			// now check the coordinates and if the current mirror-state is normal, x, y, or
+			// both
+			if (p.getX() == this.getX()) {
+				p.setX(p.getX() + width);
+				p.setDirection(Pin.LEFT);
+			} else if (p.getX() == this.getX() + width) {
+				p.setX(p.getX() - width);
+				p.setDirection(Pin.RIGHT);
+			}
+			if (mirror == NORMAL || mirror == YAXIS) {
+				if (p.getY() == this.getY()) {
+					p.setY(p.getY() + height);
+					p.setDirection(Pin.UP);
+				} else if (p.getY() == this.getY() + height) {
+					p.setY(p.getY() - height);
+					p.setDirection(Pin.DOWN);
+				}
+			}
+			System.out.println(p);
+		}
+	}
 
+	protected static void drawRotate(Graphics2D g2, double x, double y, int angle, String text) {
+		g2.translate((float) x, (float) y);
+		g2.rotate(Math.toRadians(angle));
+		g2.drawString(text, 0, 0);
+		g2.rotate(-Math.toRadians(angle));
+		g2.translate(-(float) x, -(float) y);
 	}
 
 }

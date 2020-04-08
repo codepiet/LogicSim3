@@ -40,7 +40,8 @@ public class XMLLoader {
 				String type = gnode.string("type").toLowerCase();
 				int x = Integer.parseInt(gnode.string("x"));
 				int y = Integer.parseInt(gnode.string("y"));
-				String optRot = gnode.optString("rotate");
+				String optRotate = gnode.optString("rotate");
+				String optMirror = gnode.optString("mirror");
 				String optInputs = gnode.optString("inputs");
 
 				Gate gate = null;
@@ -56,13 +57,25 @@ public class XMLLoader {
 				if (optInputs != null)
 					gate.createDynamicInputs(Integer.parseInt(optInputs));
 				gate.moveTo(x, y);
-				if (optRot != null) {
-					int rot = Integer.parseInt(optRot) / 90;
+				if (optRotate != null) {
+					int rot = Integer.parseInt(optRotate) / 90;
 					if (gate.height != gate.width) {
 						gate.rotate();
 					} else {
 						for (int i = 0; i < rot; i++)
 							gate.rotate();
+					}
+				}
+				if (optMirror != null) {
+					if ("x".equals(optMirror))
+						gate.mirror();
+					else if ("y".equals(optMirror)) {
+						gate.mirror();
+						gate.mirror();
+					} else if ("xy".equals(optMirror)) {
+						gate.mirror();
+						gate.mirror();
+						gate.mirror();
 					}
 				}
 
@@ -76,7 +89,7 @@ public class XMLLoader {
 					gate.loadProperties();
 				}
 
-				// output nodes (labels, numbers)
+				// in/output nodes (labels, numbers)
 				for (Xml inode : gnode.children("io")) {
 					String ioType = inode.string("iotype");
 					if ("input".equals(ioType)) {

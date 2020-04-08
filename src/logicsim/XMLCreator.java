@@ -108,6 +108,18 @@ public class XMLCreator {
 		if (g.rotate90 != 0) {
 			node.setAttribute("rotate", String.valueOf(g.rotate90 * 90));
 		}
+		if (g.mirror != 0) {
+			String val = null;
+			if (g.mirror == Gate.XAXIS)
+				val = "x";
+			else if (g.mirror == Gate.YAXIS)
+				val = "y";
+			else if (g.mirror == Gate.BOTHAXES)
+				val = "xy";
+			if (val != null) {
+				node.setAttribute("mirror", val);
+			}
+		}
 
 		if (g.supportsVariableInputs() && g.getNumInputs() != 2)
 			node.setAttribute("inputs", String.valueOf(g.getNumInputs()));
@@ -118,14 +130,12 @@ public class XMLCreator {
 			node.appendChild(snode);
 
 		for (Pin c : g.getInputs()) {
-			if ((g instanceof MODIN && c.label != null)
-					|| (c.ioType == Pin.INPUT && c.levelType != Pin.NORMAL)) {
+			if ((g instanceof MODIN && c.label != null) || (c.ioType == Pin.INPUT && c.levelType != Pin.NORMAL)) {
 				node.appendChild(createInputNode(doc, c));
 			}
 		}
 		for (Pin c : g.getOutputs()) {
-			if ((g instanceof MODOUT && c.label != null)
-					|| (c.ioType == Pin.INPUT && c.levelType != Pin.NORMAL)) {
+			if ((g instanceof MODOUT && c.label != null) || (c.ioType == Pin.INPUT && c.levelType != Pin.NORMAL)) {
 				node.appendChild(createOutputNode(doc, c));
 			}
 		}
