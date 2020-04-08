@@ -227,7 +227,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		mnuSettings.setText(I18N.getString(Lang.MNU_SETTINGS));
 
 		boolean sel = LSProperties.getInstance().getPropertyBoolean(LSProperties.PAINTGRID, true);
-		JCheckBoxMenuItem mSettingsPaintGrid = new JCheckBoxMenuItem();
+		final JCheckBoxMenuItem mSettingsPaintGrid = new JCheckBoxMenuItem();
 		mSettingsPaintGrid.setText(I18N.getString(Lang.MNU_PAINTGRID));
 		mSettingsPaintGrid.setSelected(sel);
 		mSettingsPaintGrid.addActionListener(new ActionListener() {
@@ -383,27 +383,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			}
 		});
 		btnBar.add(btnSave);
-		btnBar.add(getMenuGap());
-
-		JButton btnAddPoint = new JButton();
-		btnAddPoint.setToolTipText(I18N.getString(Lang.MSG_ADDPOINT));
-		btnAddPoint.setIcon(getIcon("addpoint"));
-		btnAddPoint.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lspanel.setAction(LSPanel.ACTION_ADDPOINT);
-			}
-		});
-		btnBar.add(btnAddPoint, null);
-
-		JButton btnDelPoint = new JButton();
-		btnDelPoint.setToolTipText(I18N.getString(Lang.BTN_REMOVEPOINT));
-		btnDelPoint.setIcon(getIcon("delpoint"));
-		btnDelPoint.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lspanel.setAction(LSPanel.ACTION_DELPOINT);
-			}
-		});
-		btnBar.add(btnDelPoint, null);
 
 		btnBar.add(getMenuGap());
 
@@ -528,6 +507,28 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnInputLow, null);
 
+		btnBar.add(getMenuGap());
+
+		JButton btnAddPoint = new JButton();
+		btnAddPoint.setToolTipText(I18N.getString(Lang.MSG_ADDPOINT));
+		btnAddPoint.setIcon(getIcon("addpoint"));
+		btnAddPoint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lspanel.setAction(LSPanel.ACTION_ADDPOINT);
+			}
+		});
+		btnBar.add(btnAddPoint, null);
+
+		JButton btnDelPoint = new JButton();
+		btnDelPoint.setToolTipText(I18N.getString(Lang.BTN_REMOVEPOINT));
+		btnDelPoint.setIcon(getIcon("delpoint"));
+		btnDelPoint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lspanel.setAction(LSPanel.ACTION_DELPOINT);
+			}
+		});
+		btnBar.add(btnDelPoint, null);
+		
 		add(btnBar, BorderLayout.NORTH);
 
 		// ------------------------------------------------------------------

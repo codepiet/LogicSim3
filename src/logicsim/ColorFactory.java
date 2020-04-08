@@ -1618,7 +1618,7 @@ public final class ColorFactory {
 		}
 
 		private static Map<String, Color> createNamedColors() {
-			Map<String, Color> colors = new HashMap<>(256);
+			Map<String, Color> colors = new HashMap<String, Color>(256);
 
 			colors.put("aliceblue", ALICEBLUE);
 			colors.put("antiquewhite", ANTIQUEWHITE);
