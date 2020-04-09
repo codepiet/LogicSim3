@@ -66,7 +66,7 @@ public class Lang {
 	public static final String BTN_NO = "btn.no";
 	public static final String BTN_ZOOM_PLUS = "btn.zoomp";
 	public static final String BTN_ZOOM_MINUS = "btn.zoomm";
-	public static final String BTN_ZOOM_100 = "btn.zoom1";
+	public static final String BTN_SELECT = "btn.select";
 	public static final String BTN_ROTATE = "btn.rotate";
 	public static final String BTN_MIRROR = "btn.mirror";
 	public static final String BTN_INPUT_NORM = "btn.inputnorm";

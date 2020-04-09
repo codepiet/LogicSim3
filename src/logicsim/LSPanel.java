@@ -19,6 +19,8 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -44,16 +46,24 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	private Dimension panelSize = new Dimension(1280, 1024);
 	public JScrollPane scrollpane;
 
-	final static Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 },
+	/**
+	 * used for track selection, is one endpoint of a rectangle
+	 */
+	private Rectangle2D selectRect;
+
+	final static Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10, new float[] { 9 },
 			0);
 
-	static final int NONE = 0;
+	static final int ACTION_NONE = 0;
 	static final int ACTION_GATE = 1;
 	static final int ACTION_CONNECT = 14;
 	static final int ACTION_DRAWWIRE = 15;
 	static final int ACTION_ADDPOINT = 16;
 	static final int ACTION_DELPOINT = 17;
 	static final int ACTION_MODULE = 18;
+	static final int ACTION_SELECT = 19;
+	static final int ACTION_SIMULATION = 20;
+
 	public static final Color gridColor = Color.black;
 
 	public LSPanel() {
@@ -322,6 +332,14 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			if (currentPart != null) {
 				currentPart.draw(g2);
 			}
+
+			if (currentAction == ACTION_SELECT) {
+				g2.setStroke(dashed);
+				g2.setColor(Color.blue);
+				if (selectRect != null)
+					g2.draw(selectRect);
+			}
+
 		}
 	}
 
@@ -330,9 +348,10 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	 */
 	private class MouseControl extends MouseInputAdapter
 			implements MouseListener, MouseMotionListener, MouseWheelListener {
+
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			zoom(e.getX(), e.getY(), e.getWheelRotation() * zoomingSpeed);
+			zoom(e.getX(), e.getY(), -e.getWheelRotation() * zoomingSpeed);
 		}
 
 		@Override
@@ -341,6 +360,13 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			int x = e.getPoint().x;
 			int y = e.getPoint().y;
 			LSPanel.this.requestFocusInWindow();
+
+			if (currentAction == ACTION_SELECT) {
+				currentAction = ACTION_NONE;
+				selectRect = null;
+				repaint();
+				return;
+			}
 
 			// Maustaste losgelassen
 			if (Simulation.getInstance().isRunning() && lastClicked != null) {
@@ -351,6 +377,16 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
+			if (currentAction == ACTION_SELECT) {
+				e = convertToWorld(e);
+				previousPoint.setLocation(e.getX(), e.getY());
+				// drag rectangle
+				selectRect.setFrameFromDiagonal(new Point2D.Double(selectRect.getX(), selectRect.getY()),
+						previousPoint);
+				repaint();
+				return;
+			}
+
 			if (currentPart == null) {
 				// drag world
 				int dx = e.getX() - previousPoint.x;
@@ -379,7 +415,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 									Pin p = (Pin) cp;
 									if (p.isInput() && !p.isConnected()) {
 										System.out.println("found " + p);
-										//put new wire between pin and p
+										// put new wire between pin and p
 										Wire w = new Wire(pin, p);
 										p.addWire(w);
 										pin.addWire(w);
@@ -400,6 +436,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			previousPoint.setLocation(e.getX(), e.getY());
 
 			e = convertToWorld(e);
+
 			// System.err.println("MOVED mouse");
 			int rx = CircuitPart.round(e.getX());
 			int ry = CircuitPart.round(e.getY());
@@ -429,6 +466,10 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		@Override
 		public void mousePressed(MouseEvent e) {
 			e = convertToWorld(e);
+			if (currentAction == ACTION_SELECT) {
+				selectRect = new Rectangle2D.Double(e.getX(), e.getY(), 0, 0);
+			}
+
 			CircuitPart cp = circuit.findPartAt(e.getX(), e.getY());
 			if (cp == null) {
 				// empty space has been clicked
@@ -534,14 +575,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	 */
 	public void zoomPlus() {
 		zoomBy((int) getTransformer().screenToWorldX(getWidth() / 2),
-				(int) getTransformer().screenToWorldY(getHeight() / 2), 1f);
-	}
-
-	/**
-	 * set zoom to 100 percent
-	 */
-	public void zoom100() {
-		zoomTo((int) getTransformer().screenToWorldX(getWidth() / 2),
 				(int) getTransformer().screenToWorldY(getHeight() / 2), 1f);
 	}
 

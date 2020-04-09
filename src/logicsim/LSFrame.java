@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -22,8 +21,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -39,7 +36,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -63,8 +59,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	LSPanel lspanel = new LSPanel();
 	JLabel sbText = new JLabel();
 	JLabel sbCoordinates = new JLabel();
-
-	JToggleButton btnSimulate = new JToggleButton();
 
 	DefaultListModel<Object> partListModel = new DefaultListModel<Object>();
 	JList<Object> lstParts = new JList<Object>(partListModel);
@@ -354,9 +348,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		// button bar
 		JToolBar btnBar = new JToolBar();
 
-		JButton btnNew = new JButton();
-		btnNew.setToolTipText(I18N.getString(Lang.MNU_NEW));
-		btnNew.setIcon(getIcon("new"));
+		LSButton btnNew = new LSButton("new", Lang.MNU_NEW);
 		btnNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionNew(e);
@@ -364,9 +356,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnNew, null);
 
-		JButton btnOpen = new JButton();
-		btnOpen.setToolTipText(I18N.getString(Lang.MNU_OPEN));
-		btnOpen.setIcon(getIcon("open"));
+		LSButton btnOpen = new LSButton("open", Lang.MNU_OPEN);
 		btnOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionOpen(e);
@@ -374,9 +364,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnOpen);
 
-		JButton btnSave = new JButton();
-		btnSave.setToolTipText(I18N.getString(Lang.MNU_SAVE));
-		btnSave.setIcon(getIcon("save"));
+		LSButton btnSave = new LSButton("save", Lang.MNU_SAVE);
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionSave(e);
@@ -386,13 +374,8 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		btnBar.add(getMenuGap());
 
-		// btnSimulate.setText(I18N.getString(Lang.BTN_SIMULATE));
-		btnSimulate.setBorderPainted(true);
-		btnSimulate.setToolTipText(I18N.getString(Lang.BTN_SIMULATE));
-		btnSimulate.setIcon(getIcon("play"));
-		btnSimulate.setSelectedIcon(getIcon("play"));
-		btnSimulate.setPressedIcon(getIcon("play"));
-		btnSimulate.setFocusPainted(false);
+		LSButton btnSimulate = new LSButton("play", Lang.BTN_SIMULATE);
+		btnSimulate.setToggleButton(true);
 		btnSimulate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionSimulate(e);
@@ -400,9 +383,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnSimulate, null);
 
-		JButton btnReset = new JButton();
-		btnReset.setToolTipText(I18N.getString(Lang.BTN_RESET));
-		btnReset.setIcon(getIcon("reset"));
+		LSButton btnReset = new LSButton("reset", Lang.BTN_RESET);
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				staticReset();
@@ -414,9 +395,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		btnBar.add(getMenuGap());
 
-		JButton btnZoomM = new JButton();
-		btnZoomM.setToolTipText(I18N.getString(Lang.BTN_ZOOM_MINUS));
-		btnZoomM.setIcon(getIcon("zoomm"));
+		LSButton btnZoomM = new LSButton("zoomm", Lang.BTN_ZOOM_MINUS);
 		btnZoomM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.zoomMinus();
@@ -424,9 +403,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnZoomM, null);
 
-		JButton btnZoomP = new JButton();
-		btnZoomP.setToolTipText(I18N.getString(Lang.BTN_ZOOM_PLUS));
-		btnZoomP.setIcon(getIcon("zoomp"));
+		LSButton btnZoomP = new LSButton("zoomp", Lang.BTN_ZOOM_PLUS);
 		btnZoomP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.zoomPlus();
@@ -434,20 +411,19 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnZoomP, null);
 
-//		JButton btnZoom100 = new JButton("100");
-//		btnZoom100.setToolTipText(I18N.getString(Lang.BTN_ZOOM_100));
-//		btnZoom100.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				lspanel.zoom100();
-//			}
-//		});
-//		btnBar.add(btnZoom100, null);
+		LSButton btnSelect = new LSButton("select", Lang.BTN_SELECT);
+		btnSelect.setToggleButton(true);
+		btnSelect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				((LSButton) e.getSource()).setBackground(Color.LIGHT_GRAY);
+				lspanel.setAction(LSPanel.ACTION_SELECT);
+			}
+		});
+		btnBar.add(btnSelect, null);
 
 		btnBar.add(getMenuGap());
 
-		JButton btnRotate = new JButton();
-		btnRotate.setToolTipText(I18N.getString(Lang.BTN_ROTATE));
-		btnRotate.setIcon(getIcon("rotate"));
+		LSButton btnRotate = new LSButton("rotate", Lang.BTN_ROTATE);
 		btnRotate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.rotatePart();
@@ -455,9 +431,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnRotate, null);
 
-		JButton btnMirror = new JButton();
-		btnMirror.setToolTipText(I18N.getString(Lang.BTN_MIRROR));
-		btnMirror.setIcon(getIcon("mirror"));
+		LSButton btnMirror = new LSButton("mirror", Lang.BTN_MIRROR);
 		btnMirror.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.mirrorPart();
@@ -467,9 +441,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		btnBar.add(getMenuGap());
 
-		JButton btnInputNorm = new JButton();
-		btnInputNorm.setToolTipText(I18N.getString(Lang.BTN_INPUT_NORM));
-		btnInputNorm.setIcon(getIcon("inputnorm"));
+		LSButton btnInputNorm = new LSButton("inputnorm", Lang.BTN_INPUT_NORM);
 		btnInputNorm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(Pin.NORMAL);
@@ -477,9 +449,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnInputNorm, null);
 
-		JButton btnInputInv = new JButton();
-		btnInputInv.setToolTipText(I18N.getString(Lang.BTN_INPUT_INV));
-		btnInputInv.setIcon(getIcon("inputinv"));
+		LSButton btnInputInv = new LSButton("inputinv", Lang.BTN_INPUT_INV);
 		btnInputInv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(Pin.INVERTED);
@@ -487,9 +457,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnInputInv, null);
 
-		JButton btnInputHigh = new JButton();
-		btnInputHigh.setToolTipText(I18N.getString(Lang.BTN_INPUT_HIGH));
-		btnInputHigh.setIcon(getIcon("inputhigh"));
+		LSButton btnInputHigh = new LSButton("inputhigh", Lang.BTN_INPUT_HIGH);
 		btnInputHigh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(Pin.HIGH);
@@ -497,9 +465,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnInputHigh, null);
 
-		JButton btnInputLow = new JButton();
-		btnInputLow.setToolTipText(I18N.getString(Lang.BTN_INPUT_LOW));
-		btnInputLow.setIcon(getIcon("inputlow"));
+		LSButton btnInputLow = new LSButton("inputlow", Lang.BTN_INPUT_LOW);
 		btnInputLow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(Pin.LOW);
@@ -509,9 +475,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		btnBar.add(getMenuGap());
 
-		JButton btnAddPoint = new JButton();
-		btnAddPoint.setToolTipText(I18N.getString(Lang.MSG_ADDPOINT));
-		btnAddPoint.setIcon(getIcon("addpoint"));
+		LSButton btnAddPoint = new LSButton("addpoint", Lang.MSG_ADDPOINT);
 		btnAddPoint.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(LSPanel.ACTION_ADDPOINT);
@@ -519,16 +483,14 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnAddPoint, null);
 
-		JButton btnDelPoint = new JButton();
-		btnDelPoint.setToolTipText(I18N.getString(Lang.BTN_REMOVEPOINT));
-		btnDelPoint.setIcon(getIcon("delpoint"));
+		LSButton btnDelPoint = new LSButton("delpoint", Lang.BTN_REMOVEPOINT);
 		btnDelPoint.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(LSPanel.ACTION_DELPOINT);
 			}
 		});
 		btnBar.add(btnDelPoint, null);
-		
+
 		add(btnBar, BorderLayout.NORTH);
 
 		// ------------------------------------------------------------------
@@ -561,15 +523,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	private Component getMenuGap() {
 		int is = LSProperties.getInstance().getPropertyInteger("iconsize", 48);
 		return Box.createHorizontalStrut(is / 2);
-	}
-
-	private ImageIcon getIcon(String imgname) {
-		String filename = "images/" + imgname + "48.png";
-		int is = LSProperties.getInstance().getPropertyInteger("iconsize", 48);
-		is = 36;
-		// return new ImageIcon(LSFrame.class.getResource(filename));
-		return new ImageIcon(new ImageIcon(LSFrame.class.getResource(filename)).getImage().getScaledInstance(is, is,
-				Image.SCALE_AREA_AVERAGING));
 	}
 
 	/**
@@ -632,11 +585,10 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	}
 
 	void actionSimulate(ActionEvent e) {
-		JToggleButton btn = (JToggleButton) e.getSource();
+		LSButton btn = (LSButton) e.getSource();
 		sim = Simulation.getInstance();
 		sim.setPanel(lspanel);
 		if (btn.isSelected()) {
-			btn.setOpaque(true);
 			btn.setBackground(Color.green);
 			if (!sim.isRunning()) {
 				lspanel.circuit.deactivateAll();
@@ -644,7 +596,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 				sim.start();
 			}
 		} else {
-			btn.setOpaque(false);
 			if (sim.isRunning())
 				sim.stop();
 		}
@@ -701,7 +652,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		// stop simulation and do reset
 		if (sim != null) {
 			sim.stop();
-			btnSimulate.setSelected(false);
+			// btnSimulate.setSelected(false);
 		}
 
 		try {

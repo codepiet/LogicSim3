@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 public class Viewer extends JPanel {
 
 	public static final double minZoom = 0.1f;
-	public static final double maxZoom = 5f;
+	public static final double maxZoom = 10f;
 
 	/**
 	 * Interface for all classes that may perform painting operations. Instances of

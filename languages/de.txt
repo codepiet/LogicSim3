@@ -75,6 +75,7 @@ btn.inputnorm=Normaler Eingang
 btn.inputinv=Invertierter Eingang
 btn.inputhigh=High-Eingang
 btn.inputlow=Low-Eingang
+btn.select=Auswahl
 
 [CATEGORIES]
 category.basic=Grundgatter
