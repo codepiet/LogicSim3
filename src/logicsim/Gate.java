@@ -22,36 +22,46 @@ import java.util.Vector;
  */
 public class Gate extends CircuitPart {
 
-	static final long serialVersionUID = -6775454761569297690L;
+	public static final int BOTHAXES = 3;
 
 	protected static final int CONN_SIZE = 7;
 
 	public static final int HORIZONTAL = 0;
-	public static final int VERTICAL = 1;
-
 	public static final int NORMAL = 0;
+
+	static final long serialVersionUID = -6775454761569297690L;
+	public static final int VERTICAL = 1;
 	public static final int XAXIS = 1;
 	public static final int YAXIS = 2;
-	public static final int BOTHAXES = 3;
 
+	protected static void drawRotate(Graphics2D g2, double x, double y, int angle, String text) {
+		g2.translate((float) x, (float) y);
+		g2.rotate(Math.toRadians(angle));
+		g2.drawString(text, 0, 0);
+		g2.rotate(-Math.toRadians(angle));
+		g2.translate(-(float) x, -(float) y);
+	}
 	protected int actionid = 0;
+	protected Color backgroundColor = Color.white;
+
 	protected Font bigFont = new Font(Font.SANS_SERIF, Font.PLAIN, 13);
-	protected Vector<Pin> pins = new Vector<Pin>();
+
+	public String category;
 
 	protected int height = 60;
 
 	protected String label;
 
+	/**
+	 * mirroring of part.
+	 * 
+	 * 0 is normal. 1 is mirrored in x-axis. 2 is mirrored in y-axis. 3 means
+	 * mirroring in both axes
+	 */
+	public int mirror = 0;
+	protected Vector<Pin> pins = new Vector<Pin>();
+
 	protected Properties properties = new Properties();
-
-	protected String type;
-
-	protected boolean variableInputCountSupported = false;
-	protected int width = 60;
-
-	protected Color backgroundColor = Color.white;
-
-	public String category;
 
 	/**
 	 * rotate in 90 degree steps clockwise (0-3).
@@ -61,13 +71,11 @@ public class Gate extends CircuitPart {
 	 */
 	public int rotate90 = 0;
 
-	/**
-	 * mirroring of part.
-	 * 
-	 * 0 is normal. 1 is mirrored in x-axis. 2 is mirrored in y-axis. 3 means
-	 * mirroring in both axes
-	 */
-	public int mirror = 0;
+	protected String type;
+
+	protected boolean variableInputCountSupported = false;
+
+	protected int width = 60;
 
 	protected double xc;
 
@@ -75,7 +83,7 @@ public class Gate extends CircuitPart {
 
 	public Gate() {
 		this(0, 0);
-		active = true;
+		selected = true;
 	}
 
 	public Gate(int x, int y) {
@@ -109,6 +117,70 @@ public class Gate extends CircuitPart {
 		for (Pin c : pins)
 			if (c.isConnected())
 				c.deleteWires();
+	}
+
+	public void createDynamicInputs(int total) {
+		int numinputs = getInputs().size();
+		// get max number
+		int num = -1;
+		for (Pin c : pins)
+			if (c.number > num)
+				num = c.number;
+
+		// add new connectors - total times
+		for (int i = numinputs; i < total; i++) {
+			num++;
+			int pos = getX();
+			int ioType = Pin.INPUT;
+			Pin c = new Pin(pos, 0, this, num);
+			c.paintDirection = ioType == Pin.INPUT ? Pin.RIGHT : Pin.LEFT;
+			c.ioType = ioType;
+			pins.add(c);
+		}
+
+		// reposition all inputs
+		num = 0;
+		for (Pin p : getInputs()) {
+			p.setY(getY() + getConnectorPosition(num, total, VERTICAL));
+			num++;
+		}
+
+	}
+
+	public void createInputs(int n) {
+		createPins(Pin.INPUT, n);
+	}
+
+	public void createOutputs(int n) {
+		createPins(Pin.OUTPUT, n);
+	}
+
+	public void createPins(int ioType, int total) {
+		// get max number
+		int num = -1;
+		for (Pin c : pins)
+			if (c.number > num)
+				num = c.number;
+		// add new connectors - total times
+		for (int i = 0; i < total; i++) {
+			num++;
+			int pos = getX();
+			if (ioType == Pin.OUTPUT)
+				pos += width;
+			Pin c = new Pin(pos, getY() + getConnectorPosition(i, total, VERTICAL), this, num);
+			c.paintDirection = ioType == Pin.INPUT ? Pin.RIGHT : Pin.LEFT;
+			c.ioType = ioType;
+			pins.add(c);
+		}
+	}
+
+	public void deactivateWires() {
+		for (Pin conn : getOutputs()) {
+			if (conn.isConnected()) {
+				for (Wire w : conn.wires)
+					w.deselect();
+			}
+		}
 	}
 
 	public void draw(Graphics2D g2) {
@@ -146,11 +218,6 @@ public class Gate extends CircuitPart {
 			c.draw(g2);
 	}
 
-	protected void drawWires(Graphics2D g2) {
-		for (Pin c : pins)
-			c.drawWires(g2);
-	}
-
 	protected void drawLabel(Graphics2D g2, String lbl, Font font) {
 		if (lbl != null) {
 			g2.setFont(font);
@@ -158,6 +225,11 @@ public class Gate extends CircuitPart {
 			g2.drawString(lbl, getX() + getWidth() / 2 - sw / 2,
 					getY() + getHeight() / 2 + (g2.getFont().getSize() / 2) - 2);
 		}
+	}
+
+	protected void drawWires(Graphics2D g2) {
+		for (Pin c : pins)
+			c.drawWires(g2);
 	}
 
 	public Pin findConnector(int atX, int atY) {
@@ -261,19 +333,13 @@ public class Gate extends CircuitPart {
 		return 10 + number * 10;
 	}
 
-	public Vector<Pin> getPins() {
-		return pins;
-	}
-
-	public Pin getPin(int number) {
-		for (Pin c : pins)
-			if (c.number == number)
-				return c;
-		return null;
-	}
-
 	public int getHeight() {
 		return height;
+	}
+
+	@Override
+	public String getId() {
+		return type + "@" + getX() + ":" + getY();
 	}
 
 	public Vector<Pin> getInputs() {
@@ -293,6 +359,22 @@ public class Gate extends CircuitPart {
 		return getOutputs().size();
 	}
 
+	public Vector<Pin> getOutputs() {
+		Vector<Pin> cs = new Vector<Pin>();
+		for (Pin c : pins) {
+			if (c.isOutput())
+				cs.add(c);
+		}
+		return cs;
+	}
+
+	public Pin getPin(int number) {
+		for (Pin c : pins)
+			if (c.number == number)
+				return c;
+		return null;
+	}
+
 	/**
 	 * gibt die Position des Ausgangs n zurück
 	 */
@@ -302,13 +384,8 @@ public class Gate extends CircuitPart {
 		return new Point(conn.getX(), conn.getY());
 	}
 
-	public Vector<Pin> getOutputs() {
-		Vector<Pin> cs = new Vector<Pin>();
-		for (Pin c : pins) {
-			if (c.isOutput())
-				cs.add(c);
-		}
-		return cs;
+	public Vector<Pin> getPins() {
+		return pins;
 	}
 
 	public Properties getProperties() {
@@ -332,6 +409,17 @@ public class Gate extends CircuitPart {
 
 	public int getWidth() {
 		return width;
+	}
+
+	public Vector<Wire> getWiresFromThis() {
+		Vector<Wire> wires = new Vector<Wire>();
+		for (Pin conn : getOutputs()) {
+			if (conn.isConnected()) {
+				for (Wire w : conn.wires)
+					wires.add(w);
+			}
+		}
+		return wires;
 	}
 
 	/**
@@ -368,6 +456,56 @@ public class Gate extends CircuitPart {
 	}
 
 	/**
+	 * mirror the gate first in x-axis, then in y-axis, then both axes, then normal
+	 * so 0 is normal, 1 x, 2 y, 3 both
+	 */
+	public void mirror() {
+		mirror = (mirror + 1) % 4;
+		for (Pin p : pins) {
+			// now check the coordinates and if the current mirror-state is normal, x, y, or
+			// both
+			if (p.getX() == this.getX()) {
+				p.setX(p.getX() + width);
+				p.setDirection(Pin.LEFT);
+			} else if (p.getX() == this.getX() + width) {
+				p.setX(p.getX() - width);
+				p.setDirection(Pin.RIGHT);
+			}
+			if (mirror == NORMAL || mirror == YAXIS) {
+				if (p.getY() == this.getY()) {
+					p.setY(p.getY() + height);
+					p.setDirection(Pin.UP);
+				} else if (p.getY() == this.getY() + height) {
+					p.setY(p.getY() - height);
+					p.setDirection(Pin.DOWN);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		super.mouseDragged(e);
+
+		int mx = e.getX();
+		int my = e.getY();
+		int dx = round(mx - mousePos.x);
+		int dy = round(my - mousePos.y);
+
+		if (dx != 0 || dy != 0) {
+			if (e.isShiftDown()) {
+				if (dx < dy)
+					dx = 0;
+				else
+					dy = 0;
+			}
+			mousePos.x = mousePos.x + dx;
+			mousePos.y = mousePos.y + dy;
+			moveBy(dx, dy);
+		}
+	}
+
+	/**
 	 * wird aufgerufen, wenn auf das Gatter geklickt wird
 	 */
 	@Override
@@ -376,14 +514,14 @@ public class Gate extends CircuitPart {
 		notifyMessage(I18N.getString(type, "title"));
 
 		if (Simulation.getInstance().isRunning())
-			mousePressedUI(e);
+			mousePressedSim(e);
 		else {
-			activate();
+			select();
 			notifyRepaint();
 		}
 	}
 
-	public void mousePressedUI(LSMouseEvent e) {
+	public void mousePressedSim(LSMouseEvent e) {
 	}
 
 	@Override
@@ -419,147 +557,6 @@ public class Gate extends CircuitPart {
 	public void reset() {
 		for (Pin c : pins)
 			c.reset();
-	}
-
-	public void createPins(int ioType, int total) {
-		// get max number
-		int num = -1;
-		for (Pin c : pins)
-			if (c.number > num)
-				num = c.number;
-		// add new connectors - total times
-		for (int i = 0; i < total; i++) {
-			num++;
-			int pos = getX();
-			if (ioType == Pin.OUTPUT)
-				pos += width;
-			Pin c = new Pin(pos, getY() + getConnectorPosition(i, total, VERTICAL), this, num);
-			c.paintDirection = ioType == Pin.INPUT ? Pin.RIGHT : Pin.LEFT;
-			c.ioType = ioType;
-			pins.add(c);
-		}
-	}
-
-	public void createOutputs(int n) {
-		createPins(Pin.OUTPUT, n);
-	}
-
-	public void createInputs(int n) {
-		createPins(Pin.INPUT, n);
-	}
-
-	public void createDynamicInputs(int total) {
-		int numinputs = getInputs().size();
-		// get max number
-		int num = -1;
-		for (Pin c : pins)
-			if (c.number > num)
-				num = c.number;
-
-		// add new connectors - total times
-		for (int i = numinputs; i < total; i++) {
-			num++;
-			int pos = getX();
-			int ioType = Pin.INPUT;
-			Pin c = new Pin(pos, 0, this, num);
-			c.paintDirection = ioType == Pin.INPUT ? Pin.RIGHT : Pin.LEFT;
-			c.ioType = ioType;
-			pins.add(c);
-		}
-
-		// reposition all inputs
-		num = 0;
-		for (Pin p : getInputs()) {
-			p.setY(getY() + getConnectorPosition(num, total, VERTICAL));
-			num++;
-		}
-
-	}
-
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-		loadProperties();
-	}
-
-	protected void setProperty(String key, String value) {
-		properties.setProperty(key, value);
-	}
-
-	protected void setPropertyInt(String key, int value) {
-		setProperty(key, String.valueOf(value));
-	}
-
-	/**
-	 * Über Context-Menü aufgerufen
-	 */
-	public boolean showPropertiesUI(Component frame) {
-		return false;
-	}
-
-	public void simulate() {
-		for (Pin c : getInputs()) {
-			c.getLevel();
-		}
-	}
-
-	public boolean supportsVariableInputs() {
-		return variableInputCountSupported;
-	}
-
-	@Override
-	public String toString() {
-		String s = getId();
-		for (Pin c : pins) {
-			s += "\n" + indent(c.toString(), 3);
-		}
-		return s;
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		super.mouseDragged(e);
-
-		int mx = e.getX();
-		int my = e.getY();
-		int dx = round(mx - mousePos.x);
-		int dy = round(my - mousePos.y);
-
-		if (dx != 0 || dy != 0) {
-			if (e.isShiftDown()) {
-				if (dx < dy)
-					dx = 0;
-				else
-					dy = 0;
-			}
-			mousePos.x = mousePos.x + dx;
-			mousePos.y = mousePos.y + dy;
-			moveBy(dx, dy);
-		}
-	}
-
-	public void deactivateWires() {
-		for (Pin conn : getOutputs()) {
-			if (conn.isConnected()) {
-				for (Wire w : conn.wires)
-					w.deactivate();
-			}
-		}
-	}
-
-	@Override
-	public String getId() {
-		return type + "@" + getX() + ":" + getY();
-	}
-
-	public Vector<Wire> getWiresFromThis() {
-		Vector<Wire> wires = new Vector<Wire>();
-		for (Pin conn : getOutputs()) {
-			if (conn.isConnected()) {
-				for (Wire w : conn.wires)
-					wires.add(w);
-			}
-		}
-		return wires;
 	}
 
 	public void rotate() {
@@ -614,41 +611,43 @@ public class Gate extends CircuitPart {
 		}
 	}
 
+	public void setProperties(Properties properties) {
+		this.properties = properties;
+		loadProperties();
+	}
+
+	protected void setProperty(String key, String value) {
+		properties.setProperty(key, value);
+	}
+
+	protected void setPropertyInt(String key, int value) {
+		setProperty(key, String.valueOf(value));
+	}
+
 	/**
-	 * mirror the gate first in x-axis, then in y-axis, then both axes, then normal
-	 * so 0 is normal, 1 x, 2 y, 3 both
+	 * Über Context-Menü aufgerufen
 	 */
-	public void mirror() {
-		mirror = (mirror + 1) % 4;
-		for (Pin p : pins) {
-			// now check the coordinates and if the current mirror-state is normal, x, y, or
-			// both
-			if (p.getX() == this.getX()) {
-				p.setX(p.getX() + width);
-				p.setDirection(Pin.LEFT);
-			} else if (p.getX() == this.getX() + width) {
-				p.setX(p.getX() - width);
-				p.setDirection(Pin.RIGHT);
-			}
-			if (mirror == NORMAL || mirror == YAXIS) {
-				if (p.getY() == this.getY()) {
-					p.setY(p.getY() + height);
-					p.setDirection(Pin.UP);
-				} else if (p.getY() == this.getY() + height) {
-					p.setY(p.getY() - height);
-					p.setDirection(Pin.DOWN);
-				}
-			}
-			System.out.println(p);
+	public boolean showPropertiesUI(Component frame) {
+		return false;
+	}
+
+	public void simulate() {
+		for (Pin c : getInputs()) {
+			c.getLevel();
 		}
 	}
 
-	protected static void drawRotate(Graphics2D g2, double x, double y, int angle, String text) {
-		g2.translate((float) x, (float) y);
-		g2.rotate(Math.toRadians(angle));
-		g2.drawString(text, 0, 0);
-		g2.rotate(-Math.toRadians(angle));
-		g2.translate(-(float) x, -(float) y);
+	public boolean supportsVariableInputs() {
+		return variableInputCountSupported;
+	}
+
+	@Override
+	public String toString() {
+		String s = getId();
+		for (Pin c : pins) {
+			s += "\n" + indent(c.toString(), 3);
+		}
+		return s;
 	}
 
 }

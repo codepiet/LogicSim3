@@ -76,8 +76,8 @@ public class Switch extends Gate {
 	}
 
 	@Override
-	public void mousePressedUI(LSMouseEvent e) {
-		super.mousePressedUI(e);
+	public void mousePressedSim(LSMouseEvent e) {
+		super.mousePressedSim(e);
 
 		if (clickType) {
 			// Click-Button, wird wieder deaktiviert, wenn Maustaste losgelassen wird

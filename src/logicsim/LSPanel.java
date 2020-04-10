@@ -19,289 +19,15 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 
-import javax.swing.JScrollPane;
 import javax.swing.event.MouseInputAdapter;
 
 public class LSPanel extends Viewer implements Printable, CircuitChangedListener {
-	private static final long serialVersionUID = -6414072156700139318L;
-	CircuitChangedListener changeListener;
-
-	public Circuit circuit = new Circuit();
-
-	// momentane Aktion
-	private int currentAction;
-	// das Objekt, das gerade editiert wird
-	private CircuitPart currentPart;
-
-	// Gatter, das im Simulationsmodus zuletzt angeklickt wurde
-	private CircuitPart lastClicked = null;
-
-	private Dimension panelSize = new Dimension(1280, 1024);
-	public JScrollPane scrollpane;
-
-	/**
-	 * used for track selection, is one endpoint of a rectangle
-	 */
-	private Rectangle2D selectRect;
-
-	final static Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10, new float[] { 9 },
-			0);
-
-	static final int ACTION_NONE = 0;
-	static final int ACTION_GATE = 1;
-	static final int ACTION_CONNECT = 14;
-	static final int ACTION_DRAWWIRE = 15;
-	static final int ACTION_ADDPOINT = 16;
-	static final int ACTION_DELPOINT = 17;
-	static final int ACTION_MODULE = 18;
-	static final int ACTION_SELECT = 19;
-	static final int ACTION_SIMULATION = 20;
-
-	public static final Color gridColor = Color.black;
-
-	public LSPanel() {
-		circuit.setChangeListener(this);
-		this.setSize(panelSize);
-		this.setPreferredSize(panelSize);
-		this.revalidate();
-		this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-
-		this.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				myKeyPressed(e);
-			}
-		});
-
-		setZoomingSpeed(0.02);
-		setPainter(new LogicSimPainterGraphics());
-
-		MouseControl mouseControl = new MouseControl();
-		addMouseListener(mouseControl);
-		addMouseMotionListener(mouseControl);
-		addMouseWheelListener(mouseControl);
-	}
-
-	public void clear() {
-		circuit.deactivateAll();
-		currentAction = 0;
-		currentPart = null;
-		circuit.clear();
-		repaint();
-	}
-
-	public void setAction(int actionNumber) {
-		switch (actionNumber) {
-		case ACTION_ADDPOINT:
-			notifyChangeListener(I18N.getString(Lang.STAT_ADDPOINT));
-			break;
-		case ACTION_DELPOINT:
-			notifyChangeListener(I18N.getString(Lang.STAT_REMOVEPOINT));
-			break;
-		}
-		currentAction = actionNumber;
-	}
-
-	public void setAction(CircuitPart g) {
-		currentAction = ACTION_GATE;
-		if (g != null) {
-			circuit.deactivateAll();
-			// place new gate
-			int posX = (int) -offsetX / 10 * 10 + 20;
-			int posY = (int) -offsetY / 10 * 10 + 20;
-			while (circuit.isPartAtCoordinates(posX, posY)) {
-				posX += 40;
-				posY += 40;
-			}
-			g.moveTo(posX, posY);
-			circuit.addGate((Gate) g);
-			g.activate();
-			lastClicked = g;
-
-			notifyChangeListener("MSG_ADD_NEW_GATE");
-			repaint();
-		}
-	}
-
-	public void draw(Graphics2D g2) {
-		// Log.getInstance().print("Drawing panel");
-		for (CircuitPart gate : circuit.gates)
-			gate.draw(g2);
-		for (CircuitPart gate : circuit.gates)
-			((Gate) gate).drawWires(g2);
-	}
-
-	/**
-	 * check for escape, delete and space key
-	 * 
-	 * @param e
-	 */
-	protected void myKeyPressed(KeyEvent e) {
-		int keyCode = e.getKeyCode();
-		// System.err.println("key pressed");
-
-		if (keyCode == KeyEvent.VK_ESCAPE) {
-			if (currentPart instanceof Gate) {
-				currentPart = null;
-				circuit.deactivateAll();
-			}
-			if (currentPart instanceof Wire) {
-				int pointsOfWire = ((Wire) currentPart).removeLastPoint();
-				if (pointsOfWire == 0) {
-					currentPart = null;
-					circuit.deactivateAll();
-				}
-			}
-			notifyChangeListener(I18N.getString(Lang.STAT_ABORTED));
-			repaint();
-			return;
-		}
-		if (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_LEFT
-				|| keyCode == KeyEvent.VK_RIGHT) {
-			if (currentPart == null)
-				return;
-			int dx = 0;
-			int dy = 0;
-			if (keyCode == KeyEvent.VK_UP)
-				dy -= 10;
-			else if (keyCode == KeyEvent.VK_DOWN)
-				dy += 10;
-			else if (keyCode == KeyEvent.VK_LEFT)
-				dx -= 10;
-			else
-				dx += 10;
-			currentPart.moveBy(dx, dy);
-			notifyChangeListener();
-			return;
-
-		}
-		if (keyCode == KeyEvent.VK_DELETE || keyCode == KeyEvent.VK_BACK_SPACE) {
-			if (circuit.removeActiveObjects()) {
-				currentPart = null;
-				currentAction = 0;
-				notifyChangeListener();
-				repaint();
-				return;
-			}
-			return;
-		}
-		if (keyCode == KeyEvent.VK_A) {
-			scaleAndMoveToAll();
-			return;
-		}
-		if (keyCode == KeyEvent.VK_H) {
-			zoomTo(30, 30, 1);
-			repaint();
-			return;
-		}
-
-		if (keyCode == KeyEvent.VK_R) {
-			if (currentPart instanceof Gate) {
-				((Gate) currentPart).rotate();
-				notifyChangeListener();
-				repaint();
-				return;
-			}
-			return;
-		}
-
-//		if (keyCode == KeyEvent.VK_SPACE) {
-//			setAction(currentAction);
-//			notifyChangeListener();
-//			repaint();
-//		}
-
-	}
-
-	private void scaleAndMoveToAll() {
-		repaint();
-	}
-
-	private void notifyChangeListener() {
-		if (changeListener != null) {
-			changeListener.changedCircuit();
-		}
-		repaint();
-	}
-
-	private void notifyChangeListener(String msg) {
-		if (changeListener != null) {
-			changeListener.changedStatusText(msg);
-		}
-	}
-
-	@Override
-	public int print(Graphics g, PageFormat pf, int pi) throws PrinterException {
-		if (pi >= 1) {
-			return Printable.NO_SUCH_PAGE;
-		}
-		draw((Graphics2D) g);
-		return Printable.PAGE_EXISTS;
-	}
-
-	public void doPrint() {
-		PrinterJob printJob = PrinterJob.getPrinterJob();
-		printJob.setPrintable(this);
-		if (printJob.printDialog()) {
-			try {
-				printJob.print();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
-
-	public void setChangeListener(CircuitChangedListener changeListener) {
-		this.changeListener = changeListener;
-	}
-
-	private MouseEvent convertToWorld(MouseEvent e) {
-		int x = (int) (getTransformer().screenToWorldX(e.getX()));
-		int y = (int) (getTransformer().screenToWorldY(e.getY()));
-		// int x = (int) Math.round(getTransformer().screenToWorldX(e.getX()));
-		// int y = (int) Math.round(getTransformer().screenToWorldY(e.getY()));
-
-		MouseEvent ec = new MouseEvent((Component) e.getSource(), e.getID(), e.getWhen(), e.getModifiersEx(), x, y,
-				e.getClickCount(), e.isPopupTrigger(), e.getButton());
-		return ec;
-	}
-
-	@Override
-	public void changedCircuit() {
-		if (changeListener != null)
-			changeListener.changedCircuit();
-		repaint();
-	}
-
-	@Override
-	public void changedStatusText(String text) {
-		// just transfer to parent
-		changeListener.changedStatusText(text);
-	}
-
-	@Override
-	public void changedCoordinates(String text) {
-	}
-
-	@Override
-	public void changedActivePart(CircuitPart activePart) {
-		circuit.deactivateAll();
-		currentPart = activePart;
-		currentPart.activate();
-	}
-
-	@Override
-	public void needsRepaint(CircuitPart circuitPart) {
-		repaint();
-	}
-
 	public class LogicSimPainterGraphics implements Painter {
 		@Override
 		public void paint(Graphics2D g2, AffineTransform at, int w, int h) {
@@ -329,9 +55,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 			draw(g2);
 
-			if (currentPart != null) {
-				currentPart.draw(g2);
-			}
+			// TODO redraw selected parts?
 
 			if (currentAction == ACTION_SELECT) {
 				g2.setStroke(dashed);
@@ -350,62 +74,41 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			implements MouseListener, MouseMotionListener, MouseWheelListener {
 
 		@Override
-		public void mouseWheelMoved(MouseWheelEvent e) {
-			zoom(e.getX(), e.getY(), -e.getWheelRotation() * zoomingSpeed);
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			e = convertToWorld(e);
-			int x = e.getPoint().x;
-			int y = e.getPoint().y;
-			LSPanel.this.requestFocusInWindow();
-
-			if (currentAction == ACTION_SELECT) {
-				currentAction = ACTION_NONE;
-				selectRect = null;
-				repaint();
-				return;
-			}
-
-			// Maustaste losgelassen
-			if (Simulation.getInstance().isRunning() && lastClicked != null) {
-				// Das Loslassen der Maustasten an Gatter melden
-				lastClicked.mouseReleased(x, y);
-			}
-		}
-
-		@Override
 		public void mouseDragged(MouseEvent e) {
 			if (currentAction == ACTION_SELECT) {
 				e = convertToWorld(e);
-				previousPoint.setLocation(e.getX(), e.getY());
-				// drag rectangle
-				selectRect.setFrameFromDiagonal(new Point2D.Double(selectRect.getX(), selectRect.getY()),
-						previousPoint);
+				// previousPoint is the start point of the selection box
+				Point currentMouse = new Point(e.getX(), e.getY());
+				if (currentMouse.x < previousPoint.x || currentMouse.y < previousPoint.y)
+					selectRect.setFrameFromDiagonal(currentMouse, previousPoint);
+				else
+					selectRect.setFrameFromDiagonal(previousPoint, currentMouse);
 				repaint();
 				return;
 			}
 
-			if (currentPart == null) {
+			CircuitPart[] parts = circuit.getSelected();
+			if (parts.length == 0) {
 				// drag world
 				int dx = e.getX() - previousPoint.x;
 				int dy = e.getY() - previousPoint.y;
 				translate(dx, dy);
 				previousPoint.setLocation(e.getX(), e.getY());
 				return;
-			}
+			} else {
+				// don't drag in simulation mode
+				if (Simulation.getInstance().isRunning())
+					return;
 
-			// drag part
-			e = convertToWorld(e);
-			if (!Simulation.getInstance().isRunning()) {
-				if (currentPart != null) {
-					currentPart.mouseDragged(e);
+				// drag parts
+				e = convertToWorld(e);
+				for (CircuitPart part : parts) {
+					part.mouseDragged(e);
 
 					// check if currentpart is a gate and if any output touches another part's input
 					// pin
-					if (currentPart instanceof Gate) {
-						Gate gate = (Gate) currentPart;
+					if (part instanceof Gate) {
+						Gate gate = (Gate) part;
 						for (Pin pin : gate.getOutputs()) {
 							int x = pin.getX();
 							int y = pin.getY();
@@ -414,7 +117,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 								if (cp != null && cp instanceof Pin) {
 									Pin p = (Pin) cp;
 									if (p.isInput() && !p.isConnected()) {
-										System.out.println("found " + p);
 										// put new wire between pin and p
 										Wire w = new Wire(pin, p);
 										p.addWire(w);
@@ -422,28 +124,25 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 									}
 								}
 							}
-
 						}
 					}
-
-					repaint();
 				}
+				notifyChangeListener();
 			}
 		}
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			previousPoint.setLocation(e.getX(), e.getY());
-
 			e = convertToWorld(e);
 
-			// System.err.println("MOVED mouse");
 			int rx = CircuitPart.round(e.getX());
 			int ry = CircuitPart.round(e.getY());
-			changeListener.changedCoordinates("(" + rx + "/" + ry + ")");
+			notifyZoomPos();
+			previousPoint.setLocation(rx, ry);
 
-			if (currentPart instanceof Wire) {
-				Wire wire = (Wire) currentPart;
+			CircuitPart[] parts = circuit.getSelected();
+			if (parts.length == 1 && parts[0] instanceof Wire) {
+				Wire wire = (Wire) parts[0];
 
 				if (wire.isNotFinished()) {
 					if (e.isShiftDown()) {
@@ -467,68 +166,57 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		public void mousePressed(MouseEvent e) {
 			e = convertToWorld(e);
 			if (currentAction == ACTION_SELECT) {
+				previousPoint.setLocation(e.getX(), e.getY());
 				selectRect = new Rectangle2D.Double(e.getX(), e.getY(), 0, 0);
 			}
 
+			CircuitPart[] parts = circuit.getSelected();
 			CircuitPart cp = circuit.findPartAt(e.getX(), e.getY());
 			if (cp == null) {
 				// empty space has been clicked
-				if (currentPart instanceof Gate && !circuit.gates.contains(currentPart)) {
-					// add a new gate
-					Gate gate = (Gate) currentPart;
-					int x = CircuitPart.round(e.getX());
-					int y = CircuitPart.round(e.getY());
-					gate.moveTo(x, y);
-					circuit.addGate(gate);
-					lastClicked = gate;
-				} else if (currentPart instanceof Wire && ((Wire) currentPart).isNotFinished()) {
+				if (parts.length == 1 && parts[0] instanceof Wire && ((Wire) parts[0]).isNotFinished()) {
 					// we are drawing a wire: add a new point and change nothing else
-					Wire wire = (Wire) currentPart;
+					Wire wire = (Wire) parts[0];
 					wire.addPoint(CircuitPart.round(e.getX()), CircuitPart.round(e.getY()));
 					Log.getInstance().print(wire);
 				} else {
 					// nothing happened
-					circuit.deactivateAll();
-					if (currentPart != null) {
-						currentPart = null;
-					}
+					circuit.deselectAll();
 				}
 				repaint();
 				return;
 			}
-			CircuitPart[] activeParts = new CircuitPart[] { currentPart };
-			int lsAction = currentAction;
 
+			// check if the part is a connector
 			if (cp instanceof Pin) {
-				Pin conn = ((Pin) cp);
+				Pin pin = ((Pin) cp);
 				// if we are drawing a wire then this is the endpoint
-				if (conn.isInput() && activeParts.length == 1 && activeParts[0] instanceof Wire) {
-					Wire activeWire = (Wire) activeParts[0];
+				if (pin.isInput() && parts.length == 1 && parts[0] instanceof Wire) {
+					Wire activeWire = (Wire) parts[0];
 					// check for existing wire, if there is one, delete!
-					if (conn.isConnected()) {
-						for (Wire w : conn.wires) {
+					if (pin.isConnected()) {
+						for (Wire w : pin.wires) {
 							w.clear();
 						}
 					}
-					activeWire.connect(conn);
+					activeWire.connect(pin);
 					activeWire.setTempPoint(null);
-					activeParts = new CircuitPart[] {};
 					activeWire.setChangeListener(circuit);
-					repaint();
-					// now we have a finished wire, the wire stays active, don't make further
-					// changes
+					notifyChangeListener();
+					// now we have a finished wire, the wire stays active
 					return;
 				}
 
-				// of course we cannot edit a Connector, but we can
+				// we cannot edit a Connector, but we can
 				// 1. set an input to inverted or high or low or revert to normal type
-				if (conn.isInput()) {
-					if (lsAction == Pin.HIGH || lsAction == Pin.LOW || lsAction == Pin.INVERTED
-							|| lsAction == Pin.NORMAL) {
+				if (pin.isInput()) {
+					if (currentAction == Pin.HIGH || currentAction == Pin.LOW || currentAction == Pin.INVERTED
+							|| currentAction == Pin.NORMAL) {
 						// 1. if we clicked on an input modificator
-						conn.setLevelType(lsAction);
-						notifyChangeListener("MSG_INPUT_CHANGED_TO" + " " + Pin.actionToString(lsAction));
-						repaint();
+						pin.setLevelType(currentAction);
+						notifyChangeListener("MSG_INPUT_CHANGED_TO" + " " + Pin.actionToString(currentAction));
+						currentAction = ACTION_NONE;
+						notifyChangeListener();
 						return;
 					}
 				} else {
@@ -536,74 +224,375 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					// 3. start a new wire
 					// output is clicked
 					Wire newWire = new Wire(null, null);
-					newWire.connect(conn);
+					newWire.connect(pin);
 					notifyChangeListener("MSG_NEW_WIRE_STARTED");
-					currentPart = newWire;
-					circuit.deactivateAll();
-					newWire.activate();
+					circuit.deselectAll();
+					newWire.select();
 					notifyChangeListener();
 					return;
 				}
 			}
 			if (cp instanceof Gate) {
-				circuit.deactivateAll();
-				currentPart = cp;
+				if (parts.length > 0) {
+					// check if we clicked a new gate
+					if (!cp.isSelected()) {
+						cp.select();
+						if (!e.isShiftDown()) {
+							circuit.deselectAll();
+						}
+						parts = circuit.getSelected();
+					}
+				}
 			}
 			if (cp instanceof Wire) {
-				circuit.deactivateAll();
-				currentPart = cp;
+				circuit.deselectAll();
+				cp.select();
 			}
 			if (cp instanceof WirePoint) {
-				circuit.deactivateAll();
-				currentPart = cp;
-				cp.activate();
-				repaint();
+				circuit.deselectAll();
+				cp.select();
 			}
 
-			if (lastClicked != null && lastClicked != cp)
-				lastClicked.deactivate();
-			lastClicked = cp;
-			cp.mousePressed(new LSMouseEvent(e, currentAction, activeParts));
-			currentAction = 0;
+			// if (lastClicked != null && lastClicked != cp)
+			// lastClicked.deselect();
+			// lastClicked = cp;
+			cp.mousePressed(new LSMouseEvent(e, currentAction, parts));
+			currentAction = ACTION_NONE;
 			repaint();
 		}
 
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			e = convertToWorld(e);
+			int x = e.getPoint().x;
+			int y = e.getPoint().y;
+			LSPanel.this.requestFocusInWindow();
+
+			if (currentAction == ACTION_SELECT) {
+				CircuitPart[] parts = circuit.findParts(selectRect);
+				notifyChangeListener(Lang.MSG_PARTSSELECTED + " " + parts.length);
+				currentAction = ACTION_NONE;
+				selectRect = null;
+				repaint();
+				return;
+			}
+			CircuitPart[] parts = circuit.getSelected();
+			for (CircuitPart part : parts) {
+				part.mouseReleased(x, y);
+			}
+		}
+
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			zoom(e.getX(), e.getY(), -e.getWheelRotation() * zoomingSpeed);
+			notifyZoomPos();
+		}
+	}
+
+	static final int ACTION_ADDPOINT = 16;
+
+	static final int ACTION_CONNECT = 14;
+
+	static final int ACTION_DELPOINT = 17;
+
+	static final int ACTION_DRAWWIRE = 15;
+
+	static final int ACTION_GATE = 1;
+
+	static final int ACTION_MODULE = 18;
+	static final int ACTION_NONE = 0;
+	static final int ACTION_SELECT = 19;
+	static final int ACTION_SIMULATION = 20;
+	final static Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10,
+			new float[] { 10 }, 0);
+	public static final Color gridColor = Color.black;
+	private static final long serialVersionUID = -6414072156700139318L;
+	CircuitChangedListener changeListener;
+	public Circuit circuit = new Circuit();
+
+	// momentane Aktion
+	private int currentAction;
+
+	private Dimension panelSize = new Dimension(1280, 1024);
+
+	/**
+	 * used for track selection, is one endpoint of a rectangle
+	 */
+	private Rectangle2D selectRect;
+
+	public LSPanel() {
+		circuit.setChangeListener(this);
+		this.setSize(panelSize);
+		this.setPreferredSize(panelSize);
+		this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
+		// setZoomingSpeed(0.02);
+		setPainter(new LogicSimPainterGraphics());
+
+		MouseControl mouseControl = new MouseControl();
+		addMouseListener(mouseControl);
+		addMouseMotionListener(mouseControl);
+		addMouseWheelListener(mouseControl);
+	}
+
+	@Override
+	public void changedCircuit() {
+		if (changeListener != null)
+			changeListener.changedCircuit();
+		repaint();
+	}
+
+	@Override
+	public void changedStatusText(String text) {
+		// just transfer to parent
+		changeListener.changedStatusText(text);
+	}
+
+	@Override
+	public void changedZoomPos() {
+	}
+
+	public void clear() {
+		circuit.deselectAll();
+		currentAction = 0;
+		circuit.clear();
+		repaint();
+	}
+
+	private MouseEvent convertToWorld(MouseEvent e) {
+		int x = (int) (getTransformer().screenToWorldX(e.getX()));
+		int y = (int) (getTransformer().screenToWorldY(e.getY()));
+		// int x = (int) Math.round(getTransformer().screenToWorldX(e.getX()));
+		// int y = (int) Math.round(getTransformer().screenToWorldY(e.getY()));
+
+		MouseEvent ec = new MouseEvent((Component) e.getSource(), e.getID(), e.getWhen(), e.getModifiersEx(), x, y,
+				e.getClickCount(), e.isPopupTrigger(), e.getButton());
+		return ec;
+	}
+
+	public void doPrint() {
+		PrinterJob printJob = PrinterJob.getPrinterJob();
+		printJob.setPrintable(this);
+		if (printJob.printDialog()) {
+			try {
+				printJob.print();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+
+	public void draw(Graphics2D g2) {
+		// Log.getInstance().print("Drawing panel");
+		for (CircuitPart gate : circuit.gates)
+			gate.draw(g2);
+		for (CircuitPart gate : circuit.gates)
+			((Gate) gate).drawWires(g2);
 	}
 
 	/**
-	 * more zoom
+	 * mirror a part if selected
 	 */
-	public void zoomPlus() {
-		zoomBy((int) getTransformer().screenToWorldX(getWidth() / 2),
-				(int) getTransformer().screenToWorldY(getHeight() / 2), 1f);
+	public void mirrorSelected() {
+		CircuitPart[] parts = circuit.getSelected();
+		for (CircuitPart part : parts) {
+			if (part instanceof Gate) {
+				((Gate) part).mirror();
+			}
+		}
+		repaint();
+	}
+
+	/**
+	 * check for escape, delete and space key
+	 * 
+	 * @param e
+	 */
+	protected void myKeyPressed(KeyEvent e) {
+		int keyCode = e.getKeyCode();
+		// System.err.println("key pressed");
+
+		CircuitPart[] parts = circuit.getSelected();
+		if (parts.length == 0)
+			return;
+
+		if (keyCode == KeyEvent.VK_ESCAPE) {
+			if (parts.length == 1 && parts[0] instanceof Wire) {
+				int pointsOfWire = ((Wire) parts[0]).removeLastPoint();
+				if (pointsOfWire == 0) {
+					circuit.deselectAll();
+					// TODO must the wire be deleted somewhere?
+				}
+			} else if (parts.length > 1) {
+				circuit.deselectAll();
+			}
+			repaint();
+			return;
+		}
+		if (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_LEFT
+				|| keyCode == KeyEvent.VK_RIGHT) {
+			int dx = 0;
+			int dy = 0;
+			if (keyCode == KeyEvent.VK_UP)
+				dy -= 10;
+			else if (keyCode == KeyEvent.VK_DOWN)
+				dy += 10;
+			else if (keyCode == KeyEvent.VK_LEFT)
+				dx -= 10;
+			else
+				dx += 10;
+			for (CircuitPart part : parts)
+				part.moveBy(dx, dy);
+			notifyChangeListener();
+			return;
+		}
+
+		if (keyCode == KeyEvent.VK_DELETE || keyCode == KeyEvent.VK_BACK_SPACE) {
+			if (circuit.remove(parts)) {
+				currentAction = ACTION_NONE;
+				notifyChangeListener(parts.length + Lang.MSG_PARTSDELETED);
+				notifyChangeListener();
+				repaint();
+				return;
+			}
+			return;
+		}
+		if (keyCode == KeyEvent.VK_S) {
+			setAction(ACTION_SELECT);
+			return;
+		}
+		if (keyCode == KeyEvent.VK_A) {
+			scaleAndMoveToAll();
+			return;
+		}
+		if (keyCode == KeyEvent.VK_M) {
+			mirrorSelected();
+		}
+
+		if (keyCode == KeyEvent.VK_R) {
+			rotateSelected();
+		}
+
+//		if (keyCode == KeyEvent.VK_SPACE) {
+//			setAction(currentAction);
+//			notifyChangeListener();
+//			repaint();
+//		}
+
+	}
+
+	@Override
+	public void needsRepaint(CircuitPart circuitPart) {
+		repaint();
+	}
+
+	private void notifyChangeListener() {
+		if (changeListener != null) {
+			changeListener.changedCircuit();
+		}
+		repaint();
+	}
+
+	private void notifyChangeListener(String msg) {
+		if (changeListener != null) {
+			changeListener.changedStatusText(msg);
+		}
+	}
+
+	private void notifyZoomPos() {
+		if (changeListener != null)
+			changeListener.changedZoomPos();
+	}
+
+	@Override
+	public int print(Graphics g, PageFormat pf, int pi) throws PrinterException {
+		if (pi >= 1) {
+			return Printable.NO_SUCH_PAGE;
+		}
+		draw((Graphics2D) g);
+		return Printable.PAGE_EXISTS;
+	}
+
+	/**
+	 * rotate a gate if selected
+	 */
+	public void rotateSelected() {
+		CircuitPart[] parts = circuit.getSelected();
+		for (CircuitPart part : parts) {
+			if (part instanceof Gate) {
+				((Gate) part).rotate();
+			}
+		}
+		notifyChangeListener();
+	}
+
+	private void scaleAndMoveToAll() {
+		repaint();
+	}
+
+	public void setAction(CircuitPart g) {
+		currentAction = ACTION_GATE;
+		if (g != null) {
+			circuit.deselectAll();
+			// place new gate
+			int posX = (int) -offsetX / 10 * 10 + 20;
+			int posY = (int) -offsetY / 10 * 10 + 20;
+			while (circuit.isPartAtCoordinates(posX, posY)) {
+				posX += 40;
+				posY += 40;
+			}
+			g.moveTo(posX, posY);
+			circuit.addGate((Gate) g);
+			g.select();
+
+			notifyChangeListener("MSG_ADD_NEW_GATE");
+			notifyChangeListener();
+			repaint();
+		}
+	}
+
+	public void setAction(int actionNumber) {
+		switch (actionNumber) {
+		case ACTION_ADDPOINT:
+			notifyChangeListener(I18N.getString(Lang.STAT_ADDPOINT));
+			break;
+		case ACTION_DELPOINT:
+			notifyChangeListener(I18N.getString(Lang.STAT_REMOVEPOINT));
+			break;
+		case Pin.HIGH:
+			notifyChangeListener(I18N.getString(Lang.STAT_INPUTHIGH));
+			break;
+		case Pin.LOW:
+			notifyChangeListener(I18N.getString(Lang.STAT_INPUTLOW));
+			break;
+		case Pin.NORMAL:
+			notifyChangeListener(I18N.getString(Lang.STAT_INPUTNORM));
+			break;
+		case Pin.INVERTED:
+			notifyChangeListener(I18N.getString(Lang.STAT_INPUTINV));
+			break;
+		}
+		currentAction = actionNumber;
+	}
+
+	public void setChangeListener(CircuitChangedListener changeListener) {
+		this.changeListener = changeListener;
 	}
 
 	/**
 	 * less zoom
 	 */
 	public void zoomMinus() {
-		zoomBy((int) getTransformer().screenToWorldX(getWidth() / 2),
-				(int) getTransformer().screenToWorldY(getHeight() / 2), -1f);
+		zoom((int) getTransformer().screenToWorldX(getWidth() / 2),
+				(int) getTransformer().screenToWorldY(getHeight() / 2), -0.5f);
 	}
 
 	/**
-	 * rotate a gate if selected
+	 * more zoom
 	 */
-	public void rotatePart() {
-		if (currentPart instanceof Gate) {
-			((Gate) currentPart).rotate();
-			repaint();
-		}
-	}
-
-	/**
-	 * mirror a part if selected
-	 */
-	public void mirrorPart() {
-		if (currentPart instanceof Gate) {
-			((Gate) currentPart).mirror();
-			repaint();
-		}
+	public void zoomPlus() {
+		zoom((int) getTransformer().screenToWorldX(getWidth() / 2),
+				(int) getTransformer().screenToWorldY(getHeight() / 2), 0.5f);
 	}
 
 }

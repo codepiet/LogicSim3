@@ -145,11 +145,11 @@ public class Pin extends CircuitPart {
 		} else if (levelType == HIGH) {
 			if (ioType == OUTPUT)
 				throw new RuntimeException("OUTPUT may not be set HIGH");
-			WidgetHelper.drawStringCentered(g2, "1", x, y);
+			WidgetHelper.drawStringCentered(g2, "1", x+1, y-2);
 		} else if (levelType == LOW) {
 			if (ioType == OUTPUT)
 				throw new RuntimeException("OUTPUT may not be set LOW");
-			WidgetHelper.drawStringCentered(g2, "0", x, y);
+			WidgetHelper.drawStringCentered(g2, "0", x+2, y-2);
 		} else {
 			// normal
 			g2.setStroke(new BasicStroke(1));
@@ -179,6 +179,8 @@ public class Pin extends CircuitPart {
 	public void addWire(Wire w) {
 		if (isInput() && isConnected() && w != wires.get(0))
 			throw new RuntimeException("input may only have one wire (" + gate.getId() + ", " + number + ")");
+		if (isInput() && levelType != NORMAL)
+			levelType = NORMAL;
 		wires.add(w);
 	}
 

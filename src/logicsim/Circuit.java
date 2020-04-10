@@ -1,6 +1,7 @@
 package logicsim;
 
 import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 import java.util.Vector;
 
 /**
@@ -59,9 +60,9 @@ public class Circuit implements CircuitChangedListener {
 	}
 
 	// Alle Gatter und zugehörige Wires deaktivieren
-	public void deactivateAll() {
+	public void deselectAll() {
 		for (Gate g : gates) {
-			g.deactivate();
+			g.deselect();
 			g.deactivateWires();
 		}
 		// for (Wire w : wires)
@@ -117,26 +118,26 @@ public class Circuit implements CircuitChangedListener {
 //		}
 	}
 
-	public Vector<CircuitPart> findActiveObjects() {
+	public CircuitPart[] getSelected() {
 		Vector<CircuitPart> parts = new Vector<CircuitPart>();
 		for (Gate g : gates) {
-			if (g.active)
+			if (g.selected)
 				parts.add(g);
 
-			for (Pin conn : g.getOutputs())
-				if (conn.isConnected()) {
-					for (Wire wire : conn.wires)
-						if (wire.active)
+			for (Pin p : g.getOutputs())
+				if (p.isConnected()) {
+					for (Wire wire : p.wires)
+						if (wire.selected)
 							parts.add(wire);
 				}
 		}
-		return parts;
+		return parts.toArray(new CircuitPart[parts.size()]);
 	}
 
-	public boolean removeActiveObjects() {
-		boolean found = false;
-		Vector<CircuitPart> parts = findActiveObjects();
-		found = parts.size() > 0;
+	public boolean remove(CircuitPart[] parts) {
+		if (parts.length == 0)
+			return false;
+
 		for (CircuitPart part : parts) {
 			if (part instanceof Gate) {
 				CircuitPart g = (CircuitPart) part;
@@ -147,7 +148,7 @@ public class Circuit implements CircuitChangedListener {
 				((Wire) part).disconnect(null);
 			}
 		}
-		return found;
+		return true;
 	}
 
 	public boolean removeGate(Gate g) {
@@ -198,15 +199,7 @@ public class Circuit implements CircuitChangedListener {
 	}
 
 	@Override
-	public void changedCoordinates(String text) {
-	}
-
-	@Override
-	public void changedActivePart(CircuitPart activePart) {
-		deactivateAll();
-		activePart.activate();
-		if (changeListener != null)
-			changeListener.changedActivePart(activePart);
+	public void changedZoomPos() {
 	}
 
 	@Override
@@ -235,6 +228,27 @@ public class Circuit implements CircuitChangedListener {
 			s += "\n" + g;
 		}
 		return s = "Circuit:" + CircuitPart.indent(s, 3);
+	}
+
+	public CircuitPart[] findParts(Rectangle2D selectRect) {
+		Vector<CircuitPart> parts = new Vector<CircuitPart>();
+		for (Gate gate : gates) {
+			if (selectRect.contains(gate.getBoundingBox())) {
+				parts.add(gate);
+				gate.select();
+			}
+			for (Pin p : gate.pins) {
+				if (p.isInput()) {
+					for (Wire w : p.wires) {
+						if (selectRect.contains(w.getBoundingBox())) {
+							w.select();
+							parts.add(w);
+						}
+					}
+				}
+			}
+		}
+		return parts.toArray(new CircuitPart[parts.size()]);
 	}
 
 }

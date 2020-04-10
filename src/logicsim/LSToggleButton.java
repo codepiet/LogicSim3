@@ -1,27 +1,21 @@
 package logicsim;
 
-import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import javax.swing.JToggleButton;
 
-public class LSButton extends JButton {
+public class LSToggleButton extends JToggleButton {
 
-	private static final long serialVersionUID = 4465562539140913810L;
+	private static final long serialVersionUID = 4992541122998327288L;
 
-	public LSButton(String iconName, String toolTip) {
+	public LSToggleButton(String iconName, String toolTip) {
 		this.setDoubleBuffered(true);
 		this.setIcon(getIcon(iconName));
 		this.setToolTipText(I18N.getString(toolTip));
 		// this.setBorderPainted(true);
 		// this.setBorder(BorderFactory.createLineBorder(Color.black));
 		// this.addMouseListener(this);
-	}
-
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
 	}
 
 	private ImageIcon getIcon(String imgname) {
@@ -32,4 +26,5 @@ public class LSButton extends JButton {
 		return new ImageIcon(new ImageIcon(getClass().getResource(filename)).getImage().getScaledInstance(is, is,
 				Image.SCALE_AREA_AVERAGING));
 	}
+
 }

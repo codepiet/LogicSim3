@@ -10,63 +10,61 @@ import java.awt.event.MouseEvent;
 public abstract class CircuitPart {
 	public static final int BOUNDING_SPACE = 6;
 
-	/**
-	 * if part is currently being edited
-	 */
-	protected boolean active = false;
-
-	private int x;
-	private int y;
-
-	protected Point mousePos;
-
-	private CircuitChangedListener changeListener = null;
-
-	public String getId() {
-		return getX() + ":" + getY();
+	protected static String indent(String string, int indentation) {
+		String s = "";
+		for (int i = 0; i < indentation; i++)
+			s += " ";
+		return s + string.replaceAll("\n", "\n" + s);
 	}
 
-	public int getX() {
+	public static int round(int num) {
+		int x = num;
+		int rest = x % 10;
+		if (rest < 5)
+			x = x / 10 * 10;
+		else
+			x = x / 10 * 10 + 10;
 		return x;
 	}
 
-	public void setX(int x) {
-		this.x = x;
-	}
+	private CircuitChangedListener changeListener = null;
 
-	public int getY() {
-		return y;
-	}
+	protected Point mousePos;
 
-	public void setY(int y) {
-		this.y = y;
-	}
+	/**
+	 * if part is currently being edited
+	 */
+	protected boolean selected = false;
 
-	public void clear() {
-	}
+	private int x;
 
-	public final void activate() {
-		active = true;
-	}
-
-	public final void deactivate() {
-		active = false;
-	}
+	private int y;
 
 	public CircuitPart(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	public abstract Rectangle getBoundingBox();
+	private void checkXY(int x2, int y2) {
+		if (x2 % 10 != 0)
+			throw new RuntimeException("only move by 10s! tried x=" + x2);
+		if (y2 % 10 != 0)
+			throw new RuntimeException("only move by 10s! tried y=" + y2);
+	}
 
-	public void mousePressed(LSMouseEvent e) {
-		// compute position in part relative to its origin
-		mousePos = new Point(e.getX(), e.getY());
+	public void clear() {
+	}
+
+	public final void deselect() {
+		selected = false;
+	}
+
+	public void draw(Graphics2D g2) {
+		drawActiveFrame(g2);
 	}
 
 	protected void drawActiveFrame(Graphics2D g2) {
-		if (active) {
+		if (selected) {
 			Rectangle rect = getBoundingBox();
 
 			int r = rect.x + rect.width;
@@ -100,22 +98,42 @@ public abstract class CircuitPart {
 		g2.fillOval(rect.x - co + rect.width, y - co + rect.height, cd, cd);
 	}
 
-	public void draw(Graphics2D g2) {
-		drawActiveFrame(g2);
+	public abstract Rectangle getBoundingBox();
+
+	public String getId() {
+		return getX() + ":" + getY();
 	}
 
-	public void moveTo(int x, int y) {
-		checkXY(x, y);
-
-		this.x = x;
-		this.y = y;
+	public int getX() {
+		return x;
 	}
 
-	private void checkXY(int x2, int y2) {
-		if (x2 % 10 != 0)
-			throw new RuntimeException("only move by 10s! tried x=" + x2);
-		if (y2 % 10 != 0)
-			throw new RuntimeException("only move by 10s! tried y=" + y2);
+	public int getY() {
+		return y;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	/**
+	 * if this part is dragged
+	 * 
+	 */
+	public void mouseDragged(MouseEvent e) {
+		if (mousePos == null) {
+			mousePos = new Point(e.getX(), e.getY());
+		}
+	}
+
+	public void mousePressed(LSMouseEvent e) {
+	}
+
+	/**
+	 * wird aufgerufen, wenn über dem Teil die Maus losgelassen wird
+	 */
+	public void mouseReleased(int mx, int my) {
+		mousePos = null;
 	}
 
 	public void moveBy(int dx, int dy) {
@@ -126,15 +144,16 @@ public abstract class CircuitPart {
 		y = y + dy;
 	}
 
-	protected static String indent(String string, int indentation) {
-		String s = "";
-		for (int i = 0; i < indentation; i++)
-			s += " ";
-		return s + string.replaceAll("\n", "\n" + s);
+	public void moveTo(int x, int y) {
+		checkXY(x, y);
+
+		this.x = x;
+		this.y = y;
 	}
 
-	public void setChangeListener(CircuitChangedListener changeListener) {
-		this.changeListener = changeListener;
+	protected void notifyAction(int action) {
+		if (changeListener != null)
+			changeListener.setAction(action);
 	}
 
 	protected void notifyChanged() {
@@ -147,51 +166,31 @@ public abstract class CircuitPart {
 			changeListener.changedStatusText(msg);
 	}
 
-	protected void notifyActive(CircuitPart activePart) {
-		if (changeListener != null)
-			changeListener.changedActivePart(activePart);
-	}
-
-	protected void notifyAction(int action) {
-		if (changeListener != null)
-			changeListener.setAction(action);
-	}
-
-	/**
-	 * if this part is dragged
-	 * 
-	 */
-	public void mouseDragged(MouseEvent e) {
-		if (mousePos == null)
-			mousePos = new Point(e.getX(), e.getY());
-	}
-
-	/**
-	 * wird aufgerufen, wenn über dem Teil die Maus losgelassen wird
-	 */
-	public void mouseReleased(int mx, int my) {
-		mousePos = null;
-	}
-
 	protected void notifyRepaint() {
 		if (changeListener != null)
 			changeListener.needsRepaint(this);
-	}
-
-	public static int round(int num) {
-		int x = num;
-		int rest = x % 10;
-		if (rest < 5)
-			x = x / 10 * 10;
-		else
-			x = x / 10 * 10 + 10;
-		return x;
 	}
 
 	/**
 	 * all Circuitparts can be resetted: maybe set back inputs or outputs and so on
 	 */
 	public void reset() {
+	}
+
+	public final void select() {
+		selected = true;
+	}
+
+	public void setChangeListener(CircuitChangedListener changeListener) {
+		this.changeListener = changeListener;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public void setY(int y) {
+		this.y = y;
 	}
 
 }

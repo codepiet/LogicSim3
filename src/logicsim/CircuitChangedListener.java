@@ -5,9 +5,7 @@ public interface CircuitChangedListener {
 
 	public void changedStatusText(String text);
 
-	public void changedCoordinates(String text);
-
-	public void changedActivePart(CircuitPart activePart);
+	public void changedZoomPos();
 
 	public void setAction(int action);
 

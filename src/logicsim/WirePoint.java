@@ -58,7 +58,7 @@ public class WirePoint extends CircuitPart {
 		// Auf Punkt eines Wires geklickt ?
 		if (!e.isShiftDown()) {
 			Log.getInstance().print("auf wirepunkt geklickt - ohne shift");
-			activate();
+			select();
 			return;
 		}
 

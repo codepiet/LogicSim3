@@ -32,7 +32,9 @@ public class Lang {
 	public static final String FILE_UNNAMED = "file.unnamed";
 
 	public static final String MSG_INPUTS = "msg.inputs";
-	public static final String MSG_DELETE = "msg.delete";
+	public static final String MSG_QUESTION_DELETE = "msg.questiondelete";
+	public static final String MSG_PARTSDELETED = "msg.partsdeleted";
+	public static final String MSG_PARTSSELECTED = "msg.partsselected";
 	public static final String MSG_LS_RESTART = "msg.lsrestart";
 	public static final String MSG_SAVECIRCUIT = "msg.savecircuit";
 	public static final String MSG_CONFIRMSAVE = "msg.confirmsave";
@@ -46,6 +48,10 @@ public class Lang {
 	public static final String STAT_SETINPUT = "status.setinput";
 	public static final String STAT_CONNECTED = "status.connected";
 	public static final String STAT_ABORTED = "status.aborted";
+	public static final String STAT_INPUTHIGH = "status.inputhigh";
+	public static final String STAT_INPUTLOW = "status.inputlow";
+	public static final String STAT_INPUTNORM = "status.inputnorm";
+	public static final String STAT_INPUTINV = "status.inputinv";
 
 	public static final String ERR_NOMODULE = "error.nomodule";
 	public static final String ERR_FILENOTFOUND = "error.filenotfound";

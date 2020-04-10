@@ -57,8 +57,8 @@ public class BinIn extends Gate {
 	}
 
 	@Override
-	public void mousePressedUI(LSMouseEvent e) {
-		super.mousePressedUI(e);
+	public void mousePressedSim(LSMouseEvent e) {
+		super.mousePressedSim(e);
 
 		int dx = e.getX() - getX();
 		int dy = e.getY() - getY();

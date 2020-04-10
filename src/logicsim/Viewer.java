@@ -249,16 +249,9 @@ public class Viewer extends JPanel {
 		painter.paint(g2, at, getWidth(), getHeight());
 	}
 
-	protected void zoomTo(int x, int y, double newScale) {
-		scaleX = newScale;
-		scaleY = newScale;
-		repaint();
-
-	}
-
-	protected void zoomBy(int x, int y, double deltaScale) {
-		scaleX += deltaScale;
-		scaleY += deltaScale;
+	protected void resetZoom() {
+		scaleX = 1f;
+		scaleY = 1f;
 		repaint();
 	}
 
@@ -270,7 +263,6 @@ public class Viewer extends JPanel {
 	 * @param amount The zooming amount
 	 */
 	protected void zoom(int x, int y, double amount) {
-
 		// check if scaleX and Y would be outside bounds
 		double testX = scaleX + amount * scaleX;
 		double testY = scaleY + amount * scaleY;

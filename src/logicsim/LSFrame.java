@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
@@ -374,8 +376,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		btnBar.add(getMenuGap());
 
-		LSButton btnSimulate = new LSButton("play", Lang.BTN_SIMULATE);
-		btnSimulate.setToggleButton(true);
+		LSToggleButton btnSimulate = new LSToggleButton("play", Lang.BTN_SIMULATE);
 		btnSimulate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionSimulate(e);
@@ -399,6 +400,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnZoomM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.zoomMinus();
+				changedZoomPos();
 			}
 		});
 		btnBar.add(btnZoomM, null);
@@ -407,15 +409,15 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnZoomP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.zoomPlus();
+				changedZoomPos();
 			}
 		});
 		btnBar.add(btnZoomP, null);
 
-		LSButton btnSelect = new LSButton("select", Lang.BTN_SELECT);
-		btnSelect.setToggleButton(true);
+		LSToggleButton btnSelect = new LSToggleButton("select", Lang.BTN_SELECT);
+		btnSelect.setBackground(Color.green);
 		btnSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				((LSButton) e.getSource()).setBackground(Color.LIGHT_GRAY);
 				lspanel.setAction(LSPanel.ACTION_SELECT);
 			}
 		});
@@ -426,7 +428,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		LSButton btnRotate = new LSButton("rotate", Lang.BTN_ROTATE);
 		btnRotate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lspanel.rotatePart();
+				lspanel.rotateSelected();
 			}
 		});
 		btnBar.add(btnRotate, null);
@@ -434,7 +436,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		LSButton btnMirror = new LSButton("mirror", Lang.BTN_MIRROR);
 		btnMirror.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lspanel.mirrorPart();
+				lspanel.mirrorSelected();
 			}
 		});
 		btnBar.add(btnMirror);
@@ -513,7 +515,27 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		fillGateList();
 		setAppTitle();
+
+		this.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				myKeyPressed(e);
+			}
+		});
+
 		lspanel.requestFocus();
+	}
+
+	/**
+	 * check for escape, delete and space key
+	 * 
+	 * @param e
+	 */
+	protected void myKeyPressed(KeyEvent e) {
+		int keyCode = e.getKeyCode();
+		// System.err.println("key pressed");
+
+		System.out.println(e);
 	}
 
 	private void setStatusText(String string) {
@@ -541,7 +563,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			}
 		} else if (source == menuItem_list_delmod) {
 			String fname = App.getModulePath() + partListModel.getElementAt(popupModule) + ".mod";
-			String s = I18N.getString(Lang.MSG_DELETE).replaceFirst("%s", fname);
+			String s = I18N.getString(Lang.MSG_QUESTION_DELETE).replaceFirst("%s", fname);
 			int r = JOptionPane.showConfirmDialog(this, s);
 			if (r == 0) {
 				File f = new File(fname);
@@ -585,13 +607,13 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	}
 
 	void actionSimulate(ActionEvent e) {
-		LSButton btn = (LSButton) e.getSource();
+		LSToggleButton btn = (LSToggleButton) e.getSource();
 		sim = Simulation.getInstance();
 		sim.setPanel(lspanel);
 		if (btn.isSelected()) {
 			btn.setBackground(Color.green);
 			if (!sim.isRunning()) {
-				lspanel.circuit.deactivateAll();
+				lspanel.circuit.deselectAll();
 				repaint();
 				sim.start();
 			}
@@ -799,7 +821,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		BufferedImage image = (BufferedImage) this.createImage(this.lspanel.getWidth(), this.lspanel.getHeight());
 		Graphics g = image.getGraphics();
-		lspanel.circuit.deactivateAll();
+		lspanel.circuit.deselectAll();
 		lspanel.paint(g);
 		try {
 			ImageIO.write(image, "png", new File(filename));
@@ -927,12 +949,9 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	}
 
 	@Override
-	public void changedCoordinates(String text) {
-		sbCoordinates.setText(text + "  ");
-	}
-
-	@Override
-	public void changedActivePart(CircuitPart activePart) {
+	public void changedZoomPos() {
+		sbCoordinates.setText("X: " + lspanel.previousPoint.x + ", Y: " + lspanel.previousPoint.y + "   Zoom: "
+				+ Math.round(lspanel.scaleX * 100) + "%");
 	}
 
 	@Override

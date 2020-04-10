@@ -48,8 +48,8 @@ public class Switch4 extends Gate {
 	}
 
 	@Override
-	public void mousePressedUI(LSMouseEvent e) {
-		super.mousePressedUI(e);
+	public void mousePressedSim(LSMouseEvent e) {
+		super.mousePressedSim(e);
 
 		int mx = e.getX();
 		int my = e.getY();

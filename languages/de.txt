@@ -14,7 +14,7 @@ mnu.settings=Einstellungen
 mnu.paintgrid=Gitter zeichnen
 mnu.gatedesign=Gatter Design
 mnu.gatedesign.din=IEC
-mnu.gatedesign.iso=US
+mnu.gatedesign.iso=ANSI
 mnu.language=Sprache
 mnu.help=Hilfe
 mnu.about=†Über LogicSim...
@@ -27,11 +27,13 @@ file.unnamed=Unbenannt
 [context menu]
 mnu.removegate=Gatter löschen
 mnu.properties=Eigenschaften
-mnu.delete=Lšöschen
+mnu.delete=Löschen
 
 [messages]
 msg.inputs=Eingänge
-msg.delete=Wollen Sie die Datei %s wirklich lšschen?
+msg.questiondelete=Wollen Sie die Datei %s wirklich lšöschen?
+msg.partsdeleted=%s Teile gelöscht
+msg.partsselected=%s Teile ausgewählt
 msg.lsrestart=LogicSim muss neu gestartet werden.
 msg.savecircuit=Schaltung speichern
 msg.confirmsave=Änderungen an der Schaltung vor dem Schließen speichern?
@@ -46,6 +48,10 @@ status.saved=Datei %s gespeichert
 status.setinput=Auf Eingang klicken um Kabel dort anzuschließen
 status.connected=angeschlossen
 status.aborted=abgebrochen
+status.inputhigh=Klicke auf einen Eingangspin um den Eingang auf HIGH zu setzen
+status.inputlow=Klicke auf einen Eingangspin um den Eingang auf LOW zu setzen
+status.inputnorm=Klicke auf einen Eingangspin um den Eingang um Modifikationen zurückzusetzen
+status.inputinv=Klicke auf einen Eingangspin um den Eingang zu invertieren
 
 [error messages]
 error.nomodule=Die Schaltung ist kein Modul

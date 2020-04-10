@@ -27,7 +27,7 @@ public class TEST extends Gate {
 
 		for (int i = 0; i < 4; i++) {
 			getPin(i).label = "I" + (i + 1);
-			getPin(i).setDirection(0xa0 + i);
+			getPin(i).setDirection(Pin.RIGHT + i);
 		}
 		getPin(0).moveTo(getX(), getY() + offset);
 		getPin(1).moveTo(getX() + getWidth() - offset, getY());
@@ -37,7 +37,7 @@ public class TEST extends Gate {
 		for (int i = 0; i < 4; i++) {
 			getPin(i + 4).label = "O" + (i + 1);
 			getPin(i + 4).setLevelType(Pin.INVERTED);
-			getPin(i + 4).setDirection(0xa0 + i);
+			getPin(i + 4).setDirection(Pin.RIGHT + i);
 		}
 		getPin(4).moveTo(getX(), getY() + getHeight() - offset);
 		getPin(5).moveTo(getX() + offset, getY());

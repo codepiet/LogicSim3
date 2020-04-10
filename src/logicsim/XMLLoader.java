@@ -123,7 +123,7 @@ public class XMLLoader {
 					}
 					gate.loadProperties();
 				}
-				gate.active = false;
+				gate.selected = false;
 				gates.add(gate);
 			}
 		}
@@ -153,7 +153,7 @@ public class XMLLoader {
 					WirePoint wp = new WirePoint(xp, yp, b);
 					wire.points.add(wp);
 				}
-				wire.active = false;
+				wire.selected = false;
 				// connect wire to gates
 				fromGate.getPin(fromNumber).addWire(wire);
 				toGate.getPin(toNumber).addWire(wire);

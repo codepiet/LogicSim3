@@ -47,7 +47,7 @@ public class Wire extends CircuitPart implements Cloneable {
 		this(0, 0);
 		this.fromConn = fromConn;
 		this.toConn = toConn;
-		active = true;
+		selected = true;
 	}
 
 	public Wire(int x, int y) {
@@ -121,7 +121,7 @@ public class Wire extends CircuitPart implements Cloneable {
 			g2.setColor(Color.black);
 		}
 
-		if (active) {
+		if (selected) {
 			g2.setStroke(new BasicStroke(3));
 		} else {
 			g2.setStroke(new BasicStroke(2));
@@ -132,7 +132,7 @@ public class Wire extends CircuitPart implements Cloneable {
 		// draw points
 		if (points.size() > 0) {
 			for (WirePoint point : points) {
-				if (active || point.active || point.forceDraw) {
+				if (selected || point.active || point.forceDraw) {
 					point.draw(g2);
 				}
 			}
@@ -310,7 +310,7 @@ public class Wire extends CircuitPart implements Cloneable {
 			int p = isAt(mx, my);
 			if (p > -1) {
 				insertPointAfter(p, round(mx), round(my));
-				activate();
+				select();
 				notifyChanged();
 			}
 			notifyMessage("");
@@ -318,11 +318,11 @@ public class Wire extends CircuitPart implements Cloneable {
 		} else if (e.lsAction == LSPanel.ACTION_DELPOINT) {
 			Log.getInstance().print("DELPOINT on wire?");
 			if (removePointAt(e.getX(), e.getY())) {
-				activate();
+				select();
 				notifyChanged();
 			}
 		} else {
-			activate();
+			select();
 			// call listener of fromGate
 			fromConn.notifyRepaint();
 		}
