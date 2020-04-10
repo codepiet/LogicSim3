@@ -9,8 +9,6 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
@@ -344,7 +342,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		splitPane.add(pnlGateList, JSplitPane.LEFT);
 		splitPane.add(lspanel, JSplitPane.RIGHT);
 
-		add(splitPane, BorderLayout.CENTER);
+		getContentPane().add(splitPane, BorderLayout.CENTER);
 
 		// ------------------------------------------------------------------
 		// button bar
@@ -401,6 +399,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			public void actionPerformed(ActionEvent e) {
 				lspanel.zoomMinus();
 				changedZoomPos();
+				lspanel.requestFocusInWindow();
 			}
 		});
 		btnBar.add(btnZoomM, null);
@@ -410,6 +409,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			public void actionPerformed(ActionEvent e) {
 				lspanel.zoomPlus();
 				changedZoomPos();
+				lspanel.requestFocusInWindow();
 			}
 		});
 		btnBar.add(btnZoomP, null);
@@ -419,6 +419,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(LSPanel.ACTION_SELECT);
+				lspanel.requestFocusInWindow();
 			}
 		});
 		btnBar.add(btnSelect, null);
@@ -429,6 +430,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnRotate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.rotateSelected();
+				lspanel.requestFocusInWindow();
 			}
 		});
 		btnBar.add(btnRotate, null);
@@ -437,6 +439,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnMirror.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.mirrorSelected();
+				lspanel.requestFocusInWindow();
 			}
 		});
 		btnBar.add(btnMirror);
@@ -447,6 +450,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnInputNorm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(Pin.NORMAL);
+				lspanel.requestFocusInWindow();
 			}
 		});
 		btnBar.add(btnInputNorm, null);
@@ -455,6 +459,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnInputInv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(Pin.INVERTED);
+				lspanel.requestFocusInWindow();
 			}
 		});
 		btnBar.add(btnInputInv, null);
@@ -463,6 +468,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnInputHigh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(Pin.HIGH);
+				lspanel.requestFocusInWindow();
 			}
 		});
 		btnBar.add(btnInputHigh, null);
@@ -471,6 +477,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnInputLow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(Pin.LOW);
+				lspanel.requestFocusInWindow();
 			}
 		});
 		btnBar.add(btnInputLow, null);
@@ -481,6 +488,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnAddPoint.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(LSPanel.ACTION_ADDPOINT);
+				lspanel.requestFocusInWindow();
 			}
 		});
 		btnBar.add(btnAddPoint, null);
@@ -489,6 +497,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnDelPoint.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(LSPanel.ACTION_DELPOINT);
+				lspanel.requestFocusInWindow();
 			}
 		});
 		btnBar.add(btnDelPoint, null);
@@ -497,7 +506,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		// ------------------------------------------------------------------
 		// Create the popup menu.
-
 		popup = new JPopupMenu();
 		menuItem_remove = new JMenuItem(I18N.getString(Lang.MNU_REMOVEGATE));
 		menuItem_remove.addActionListener(this);
@@ -516,26 +524,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		fillGateList();
 		setAppTitle();
 
-		this.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				myKeyPressed(e);
-			}
-		});
-
-		lspanel.requestFocus();
-	}
-
-	/**
-	 * check for escape, delete and space key
-	 * 
-	 * @param e
-	 */
-	protected void myKeyPressed(KeyEvent e) {
-		int keyCode = e.getKeyCode();
-		// System.err.println("key pressed");
-
-		System.out.println(e);
+		lspanel.requestFocusInWindow();
 	}
 
 	private void setStatusText(String string) {
@@ -869,7 +858,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			Module m = (Module) gate;
 			lspanel.setAction(m);
 			setStatusText(m.lsFile.getDescription());
-			lspanel.requestFocus();
+			lspanel.requestFocusInWindow();
 		} else {
 			// gate is normal Gate-Object
 			if (gate.supportsVariableInputs())
@@ -883,7 +872,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			} else {
 				setStatusText(I18N.getString(gate.type, "title"));
 			}
-			lspanel.requestFocus();
+			lspanel.requestFocusInWindow();
 		}
 
 		// TODO - this removes the selection from the list

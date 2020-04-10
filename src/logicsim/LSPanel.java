@@ -333,6 +333,13 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		addMouseListener(mouseControl);
 		addMouseMotionListener(mouseControl);
 		addMouseWheelListener(mouseControl);
+
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				myKeyPressed(e);
+			}
+		});
 	}
 
 	@Override
@@ -410,7 +417,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	 */
 	protected void myKeyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
-		// System.err.println("key pressed");
 
 		CircuitPart[] parts = circuit.getSelected();
 		if (parts.length == 0)
