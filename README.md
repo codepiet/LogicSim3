@@ -1,9 +1,7 @@
 # LogicSim3
 
 LogicSim is a simulation tool for digital circuits.
-It has been programmed until 2009 by Andreas Tetzl.
-
-The LogicSim2 project seems to be abandoned. Its homepage is http://www.tetzl.de/java_logic_simulator_de.html.
+It has been programmed until 2009 by Andreas Tetzl until version 2.4 and this version is hosted on http://www.tetzl.de/java_logic_simulator_de.html.
 In 2020 LogicSim has been reprogrammed by Peter Gabriel (pngabriel@gmail.com) to enhance the program and get rid of old techniques (e.g. applets).
 
 The code is nearly entirely new - a object hierarchy has been designed to make the program more expandable.
