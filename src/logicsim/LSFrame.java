@@ -414,8 +414,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnZoomP, null);
 
-		LSToggleButton btnSelect = new LSToggleButton("select", Lang.BTN_SELECT);
-		btnSelect.setBackground(Color.green);
+		LSButton btnSelect = new LSButton("select", Lang.BTN_SELECT);
 		btnSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(LSPanel.ACTION_SELECT);
@@ -600,7 +599,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		sim = Simulation.getInstance();
 		sim.setPanel(lspanel);
 		if (btn.isSelected()) {
-			btn.setBackground(Color.green);
 			if (!sim.isRunning()) {
 				lspanel.circuit.deselectAll();
 				repaint();

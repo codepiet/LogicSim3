@@ -1,5 +1,7 @@
 package logicsim;
 
+import java.util.Arrays;
+
 import javax.swing.JOptionPane;
 
 public class Dialogs {
@@ -25,7 +27,6 @@ public class Dialogs {
 
 	public static int confirmDiscardDialog() {
 		Object[] options1 = { I18N.getString(Lang.BTN_YES), I18N.getString(Lang.BTN_NO) };
-
 		int result = JOptionPane.showOptionDialog(null, I18N.getString(Lang.MSG_CONFIRMDISCARD), "LogicSim",
 				JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options1, options1[1]);
 
