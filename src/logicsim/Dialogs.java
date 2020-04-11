@@ -1,7 +1,5 @@
 package logicsim;
 
-import java.util.Arrays;
-
 import javax.swing.JOptionPane;
 
 public class Dialogs {
