@@ -22,7 +22,7 @@ public class XMLLoader {
 		Xml doc = new Xml(fileName, rootString);
 		String version = doc.string("version");
 		if (!formatVersion.equals(version))
-			throw new RuntimeException(I18N.getString(Lang.ERR_READ) + ": version does not match");
+			throw new RuntimeException(I18N.tr(Lang.ERRORREAD) + ": version does not match");
 		Xml node = doc.optChild("info");
 		if (node != null) {
 			for (Xml n : node.children("item")) {
@@ -141,9 +141,9 @@ public class XMLLoader {
 				Gate fromGate = findGateById(gates, fromGateId);
 				Gate toGate = findGateById(gates, toGateId);
 				if (fromGate == null)
-					throw new RuntimeException(I18N.getString(Lang.ERR_READ) + ": from gate is null");
+					throw new RuntimeException(I18N.tr(Lang.ERRORREAD) + ": from gate is null");
 				if (toGate == null)
-					throw new RuntimeException(I18N.getString(Lang.ERR_READ) + ": to gate is null");
+					throw new RuntimeException(I18N.tr(Lang.ERRORREAD) + ": to gate is null");
 
 				Wire wire = new Wire(fromGate.getPin(fromNumber), toGate.getPin(toNumber));
 				for (Xml pnode : wnode.children("point")) {
@@ -176,7 +176,7 @@ public class XMLLoader {
 		Xml doc = new Xml(fileName, ROOT_STRING);
 		String version = doc.string("version");
 		if (!formatVersion.equals(version))
-			throw new RuntimeException(I18N.getString(Lang.ERR_READ) + ": version does not match");
+			throw new RuntimeException(I18N.tr(Lang.ERRORREAD) + ": version does not match");
 
 		Xml node = doc.optChild("gates");
 		if (node != null) {

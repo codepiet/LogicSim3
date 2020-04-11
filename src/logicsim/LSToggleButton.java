@@ -9,10 +9,10 @@ public class LSToggleButton extends JToggleButton {
 
 	private static final long serialVersionUID = 4992541122998327288L;
 
-	public LSToggleButton(String iconName, String toolTip) {
+	public LSToggleButton(String iconName, Lang toolTip) {
 		this.setDoubleBuffered(true);
 		this.setIcon(getIcon(iconName));
-		this.setToolTipText(I18N.getString(toolTip));
+		this.setToolTipText(I18N.tr(toolTip));
 		// this.setBorderPainted(true);
 		// this.setBorder(BorderFactory.createLineBorder(Color.black));
 		// this.addMouseListener(this);

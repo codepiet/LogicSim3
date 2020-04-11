@@ -270,7 +270,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 			if (currentAction == ACTION_SELECT) {
 				CircuitPart[] parts = circuit.findParts(selectRect);
-				notifyChangeListener(Lang.MSG_PARTSSELECTED + " " + parts.length);
+				notifyChangeListener(Lang.PARTSSELECTED + " " + parts.length);
 				currentAction = ACTION_NONE;
 				selectRect = null;
 				repaint();
@@ -456,7 +456,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		if (keyCode == KeyEvent.VK_DELETE || keyCode == KeyEvent.VK_BACK_SPACE) {
 			if (circuit.remove(parts)) {
 				currentAction = ACTION_NONE;
-				notifyChangeListener(parts.length + Lang.MSG_PARTSDELETED);
+				notifyChangeListener(I18N.tr(Lang.PARTSDELETED, String.valueOf(parts.length)));
 				notifyChangeListener();
 				repaint();
 				return;
@@ -560,22 +560,22 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	public void setAction(int actionNumber) {
 		switch (actionNumber) {
 		case ACTION_ADDPOINT:
-			notifyChangeListener(I18N.getString(Lang.STAT_ADDPOINT));
+			notifyChangeListener(I18N.tr(Lang.ADDPOINT));
 			break;
 		case ACTION_DELPOINT:
-			notifyChangeListener(I18N.getString(Lang.STAT_REMOVEPOINT));
+			notifyChangeListener(I18N.tr(Lang.REMOVEPOINT));
 			break;
 		case Pin.HIGH:
-			notifyChangeListener(I18N.getString(Lang.STAT_INPUTHIGH));
+			notifyChangeListener(I18N.tr(Lang.INPUTHIGH));
 			break;
 		case Pin.LOW:
-			notifyChangeListener(I18N.getString(Lang.STAT_INPUTLOW));
+			notifyChangeListener(I18N.tr(Lang.INPUTLOW));
 			break;
 		case Pin.NORMAL:
-			notifyChangeListener(I18N.getString(Lang.STAT_INPUTNORM));
+			notifyChangeListener(I18N.tr(Lang.INPUTNORM));
 			break;
 		case Pin.INVERTED:
-			notifyChangeListener(I18N.getString(Lang.STAT_INPUTINV));
+			notifyChangeListener(I18N.tr(Lang.INPUTINV));
 			break;
 		}
 		currentAction = actionNumber;
@@ -588,7 +588,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	/**
 	 * less zoom
 	 */
-	public void zoomMinus() {
+	public void zoomOut() {
 		zoom((int) getTransformer().screenToWorldX(getWidth() / 2),
 				(int) getTransformer().screenToWorldY(getHeight() / 2), -0.5f);
 	}
@@ -596,7 +596,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	/**
 	 * more zoom
 	 */
-	public void zoomPlus() {
+	public void zoomIn() {
 		zoom((int) getTransformer().screenToWorldX(getWidth() / 2),
 				(int) getTransformer().screenToWorldY(getHeight() / 2), 0.5f);
 	}

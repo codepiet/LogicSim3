@@ -28,16 +28,7 @@ public class I18N {
 		if (prop != null)
 			return;
 
-		String lang = "en";
-		try {
-			Properties userProperties = new Properties();
-			userProperties.load(new FileInputStream("logicsim.cfg"));
-			if (userProperties.containsKey("language"))
-				lang = userProperties.getProperty("language");
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
+		String lang = LSProperties.getInstance().getProperty(LSProperties.LANGUAGE, "en");
 		prop = new Properties();
 		try {
 			prop.load(new FileInputStream("languages/" + lang + ".txt"));
@@ -55,7 +46,16 @@ public class I18N {
 		}
 	}
 
-	public static String getString(String key) {
+	public static String tr(Lang langkey) {
+		if (prop == null)
+			return "- I18N not initialized -";
+		String key = langkey.toString();
+		key = key.toLowerCase();
+		key = key.replace("_", ".");
+		return tr(key);
+	}
+
+	public static String tr(String key) {
 		if (prop == null)
 			return "- I18N not initialized -";
 		if (prop.containsKey(key)) {
@@ -68,7 +68,7 @@ public class I18N {
 	}
 
 	public static String getString(String id, String key) {
-		return getString("gate." + id + "." + key);
+		return tr("gate." + id + "." + key);
 	}
 
 	public static boolean hasString(String key) {
@@ -78,6 +78,11 @@ public class I18N {
 
 	public static boolean hasString(String id, String key) {
 		return hasString("gate." + id + "." + key);
+	}
+
+	public static String tr(Lang key, String value) {
+		String s = tr(key);
+		return String.format(s, value);
 	}
 
 }

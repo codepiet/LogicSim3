@@ -15,7 +15,7 @@ public class FileInfoDialog {
 		JPanel panel = new JPanel();
 
 		JLabel lblDescription = new JLabel();
-		lblDescription.setText(I18N.getString(Lang.FILE_DESCRIPTION));
+		lblDescription.setText(I18N.tr(Lang.DESCRIPTION));
 		lblDescription.setBounds(new Rectangle(15, 56, 100, 23));
 
 		JTextArea txtDescription = new JTextArea(lsFile.getDescription());
@@ -27,13 +27,13 @@ public class FileInfoDialog {
 
 		JOptionPane pane = new JOptionPane(panel);
 		pane.setMessageType(JOptionPane.QUESTION_MESSAGE);
-		String[] options = new String[] { I18N.getString(Lang.BTN_OK), I18N.getString(Lang.BTN_CANCEL) };
+		String[] options = new String[] { I18N.tr(Lang.OK), I18N.tr(Lang.CANCEL) };
 		pane.setOptions(options);
-		JDialog dlg = pane.createDialog(frame, I18N.getString(Lang.FILE_PROPERTIES));
+		JDialog dlg = pane.createDialog(frame, I18N.tr(Lang.PROPERTIES));
 		dlg.setResizable(true);
 		dlg.setSize(500, 250);
 		dlg.setVisible(true);
-		if (I18N.getString(Lang.BTN_OK) == (String) pane.getValue()) {
+		if (I18N.tr(Lang.OK) == (String) pane.getValue()) {
 			lsFile.setDescription(txtDescription.getText());
 			return true;
 		}

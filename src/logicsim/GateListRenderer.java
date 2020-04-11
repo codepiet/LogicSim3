@@ -36,7 +36,7 @@ public class GateListRenderer extends JLabel implements ListCellRenderer<Object>
 			setHorizontalAlignment(SwingConstants.LEFT);
 			return this;
 		} else {
-			setText((String) value);
+			setText(I18N.tr("cat." + (String) value));
 			setBackground(Color.LIGHT_GRAY);
 			setForeground(Color.WHITE);
 			setHorizontalAlignment(SwingConstants.CENTER);

@@ -40,7 +40,7 @@ public class HTMLHelp extends javax.swing.JFrame implements java.awt.event.Actio
 		scrSize = toolkit.getScreenSize();
 		setLocation((scrSize.width / 2) - (width / 2), (scrSize.height / 2) - (height / 2));
 		setSize(width, height);
-		this.setTitle("LogicSim " + I18N.getString(Lang.MNU_HELP));
+		this.setTitle("LogicSim " + I18N.tr(Lang.HELP));
 
 		try {
 			String url = null;

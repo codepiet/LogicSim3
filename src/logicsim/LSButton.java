@@ -10,10 +10,10 @@ public class LSButton extends JButton {
 
 	private static final long serialVersionUID = 4465562539140913810L;
 
-	public LSButton(String iconName, String toolTip) {
+	public LSButton(String iconName, Lang toolTip) {
 		this.setDoubleBuffered(true);
 		this.setIcon(getIcon(iconName));
-		this.setToolTipText(I18N.getString(toolTip));
+		this.setToolTipText(I18N.tr(toolTip));
 		// this.setBorderPainted(true);
 		// this.setBorder(BorderFactory.createLineBorder(Color.black));
 		// this.addMouseListener(this);

@@ -216,12 +216,12 @@ public class Switch extends Gate {
 
 		JOptionPane pane = new JOptionPane(jPanel1);
 		pane.setMessageType(JOptionPane.QUESTION_MESSAGE);
-		pane.setOptions(new String[] { I18N.getString(Lang.BTN_OK), I18N.getString(Lang.BTN_CANCEL) });
+		pane.setOptions(new String[] { I18N.tr(Lang.OK), I18N.tr(Lang.CANCEL) });
 		JDialog dlg = pane.createDialog(frame, I18N.getString(type, "ui.title"));
 		dlg.setResizable(true);
 		dlg.setSize(290, 180);
 		dlg.setVisible(true);
-		if (I18N.getString(Lang.BTN_OK).equals((String) pane.getValue())) {
+		if (I18N.tr(Lang.OK).equals((String) pane.getValue())) {
 			if (jRadioButton1.isSelected()) {
 				clickType = false;
 			} else if (jRadioButton2.isSelected()) {

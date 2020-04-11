@@ -44,14 +44,14 @@ public class Module extends Gate {
 		String filename = App.getModulePath() + type + "." + App.MODULE_FILE_SUFFIX;
 		File f = new File(filename);
 		if (!f.exists()) {
-			String s = I18N.getString(Lang.ERR_MODULENOTFOUND).replaceFirst("%s", type);
+			String s = I18N.tr(Lang.MODULENOTFOUND).replaceFirst("%s", type);
 			JOptionPane.showMessageDialog(null, s);
 			return;
 		}
 		try {
 			lsFile = XMLLoader.loadXmlFile(filename);
 		} catch (RuntimeException x) {
-			JOptionPane.showMessageDialog(null, I18N.getString(Lang.ERR_READ) + ": " + x.getMessage());
+			JOptionPane.showMessageDialog(null, I18N.tr(Lang.ERRORREAD) + ": " + x.getMessage());
 			return;
 		}
 
@@ -73,7 +73,7 @@ public class Module extends Gate {
 						Pin newIn = new Pin(getX(), getY() + 10 + (c.number - 16) * 10, this, c.number - 16);
 						newIn.ioType = Pin.INPUT;
 						newIn.levelType = Pin.NORMAL;
-						Pin in = moduleIn.getPin(c.number-16);
+						Pin in = moduleIn.getPin(c.number - 16);
 						newIn.label = in.label;
 						pins.add(newIn);
 					}
@@ -87,11 +87,11 @@ public class Module extends Gate {
 				// check if MODOUT's inputs have a wire
 				for (Pin c : moduleOut.getInputs()) {
 					if (c.isConnected()) {
-						Pin newOut = new Pin(getX() + getWidth(), getY() + 10 + c.number * 10, this, c.number+16);
+						Pin newOut = new Pin(getX() + getWidth(), getY() + 10 + c.number * 10, this, c.number + 16);
 						newOut.ioType = Pin.OUTPUT;
 						newOut.paintDirection = Pin.LEFT;
 						newOut.levelType = Pin.NORMAL;
-						Pin out = moduleOut.getPin(c.number+16);
+						Pin out = moduleOut.getPin(c.number + 16);
 						newOut.label = out.label;
 						pins.add(newOut);
 					}
@@ -107,12 +107,12 @@ public class Module extends Gate {
 				c.setY(getY() + getConnectorPosition(c.number, numIn, Gate.VERTICAL));
 			}
 			for (Pin c : getOutputs()) {
-				c.setY(getY() + getConnectorPosition(c.number-16, numOut, Gate.VERTICAL));
+				c.setY(getY() + getConnectorPosition(c.number - 16, numOut, Gate.VERTICAL));
 			}
 		}
 
 		if (moduleIn == null || moduleOut == null) {
-			JOptionPane.showMessageDialog(null, I18N.getString(Lang.ERR_NOMODULE));
+			JOptionPane.showMessageDialog(null, I18N.tr(Lang.NOMODULE));
 			throw new RuntimeException("no module - does not contain both moduleio components: " + type);
 		}
 
@@ -158,7 +158,7 @@ public class Module extends Gate {
 	@Override
 	public boolean showPropertiesUI(Component frame) {
 		if (moduleIn != null) {
-			String content = I18N.getString(Lang.FILE_DESCRIPTION) + ":\n";
+			String content = I18N.tr(Lang.DESCRIPTION) + ":\n";
 			content += lsFile.getDescription();
 			JOptionPane.showMessageDialog(frame, content);
 		}
