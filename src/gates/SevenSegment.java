@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 import logicsim.Gate;
+import logicsim.I18N;
 
 /**
  * Seven Segment Display for LogicSim
@@ -82,15 +83,19 @@ public class SevenSegment extends Gate {
 		path.lineTo(x - 2, y + 2);
 		g2.fill(path);
 	}
-@Override
+
+	@Override
 	public void loadLanguage() {
-//	gate.sevenseg.title=7-Segment-display
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "7-Segment-display");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION,
+				"Display with 7 segments (leds) to output numbers from 0-9 and from a-f");
 
-//			gate.sevenseg.title=7-Segment-Anzeige
+		I18N.addGate("de", type, I18N.TITLE, "7-Segment-Anzeige");
+		I18N.addGate("de", type, I18N.DESCRIPTION,
+				"7 Segment Anzeige zur Darstellung von Ziffern und den Buchstaben a-f");
 
-//es=Display 7 seg.
-	
-		//	GATE_SEVENSEGMENT=Afficheur 7 segments
-	
+		I18N.addGate("es", type, I18N.TITLE, "Display 7 seg.");
+
+		I18N.addGate("fr", type, I18N.TITLE, "Afficheur 7 segments");
 	}
 }

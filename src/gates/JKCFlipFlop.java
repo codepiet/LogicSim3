@@ -3,6 +3,7 @@ package gates;
 
 import logicsim.Pin;
 import logicsim.Gate;
+import logicsim.I18N;
 
 /**
  * JK-Flipflop for LogicSim - rising edge driven
@@ -73,16 +74,11 @@ public class JKCFlipFlop extends Gate {
 
 	@Override
 	public void loadLanguage() {
-		// gate.jkcff.description=edge triggered JK-Flipflop
-		// gate.jkcff.title=JK-FlipFlop
-
-	//	gate.jkcff.description=positiv flankengesteuertes JK-Flipflop 
-	//			gate.jkcff.title=JK-Flipflop
-
-		
-//	jkff=FlipFlop JK
-		
-		//fr 		GATE_JKFF=Bascule JK (Front montant)
-
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "JK flipfop");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "positive edge triggered JK Flipflop");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "positiv flankengesteuertes JK-Flipflop");
+		I18N.addGate("es", type, I18N.TITLE, "FlipFlop JK");
+		I18N.addGate("fr", type, I18N.TITLE, "Bascule JK");
+		I18N.addGate("fr", type, I18N.DESCRIPTION, "Bascule JK (Front montant)");
 	}
 }

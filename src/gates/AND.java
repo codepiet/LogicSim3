@@ -70,8 +70,7 @@ public class AND extends Gate {
 		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "AND Gate (variable Inputcount)");
 		I18N.addGate("de", type, I18N.DESCRIPTION, "AND Gatter mit einstellbarer Eingangsanzahl");
 		I18N.addGate("es", type, I18N.TITLE, "AND (Y)");
-//		GATE_AND=Et (AND)
-
+		I18N.addGate("fr", type, I18N.TITLE, "Et (AND)");
 	}
 
 }

@@ -84,12 +84,6 @@ public class LED extends Gate {
 
 	@Override
 	public void loadLanguage() {
-		// gate.led.description=LED
-		// gate.led.title=LED
-
-//	gate.led.description=LED zur Darstellung von Ausgängen
-//			gate.led.title=LED
-
-		// led=LED
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "LED");
 	}
 }

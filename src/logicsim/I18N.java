@@ -126,8 +126,8 @@ public class I18N {
 		}
 		// get all languages from folder
 		List<String> langs = I18N.getLanguages();
-		//langs = new ArrayList<String>();
-		//langs.add("fr");
+		// langs = new ArrayList<String>();
+		// langs.add("fr");
 		for (String lang : langs) {
 			System.out.println(lang);
 			System.out.println("-------------------------");
@@ -150,8 +150,8 @@ public class I18N {
 	}
 
 	public static void addGate(String langGate, String type, String key, String value) {
-		if (!langGate.equals(langGate) && !langGate.equals(ALL))
+		if (!langGate.equals(lang) && !langGate.equals(ALL))
 			return;
-		prop.setProperty(type + "." + key, value);
+		prop.setProperty("gate." + type + "." + key, value);
 	}
 }

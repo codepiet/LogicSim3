@@ -1,5 +1,6 @@
 package gates;
 
+import logicsim.I18N;
 import logicsim.Pin;
 
 /**
@@ -20,18 +21,10 @@ public class NOR extends OR {
 
 	@Override
 	public void loadLanguage() {
-
-//	gate.nor.description=NOR Gate
-//			gate.nor.title=NOR
-
-//		gate.nor.description=NOR Gatter mit einstellbarer Eingangsanzahl
-
-		
-//	nor=NOR (NO-O)
-		
-		
-//		GATE_NOR=Non Ou (NOR)
-
-		
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "NOR");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "NOR Gate (variable Inputcount)");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "NOR Gatter mit einstellbarer Eingangsanzahl");
+		I18N.addGate("es", type, I18N.TITLE, "NOR (NO-O)");
+		I18N.addGate("fr", type, I18N.TITLE, "Non Ou (NOR)");
 	}
 }

@@ -1,5 +1,6 @@
 package gates;
 
+import logicsim.I18N;
 import logicsim.Pin;
 
 /**
@@ -20,17 +21,10 @@ public class NAND extends AND {
 
 	@Override
 	public void loadLanguage() {
-
-//		gate.nand.description=NAND Gate
-//				gate.nand.title=NAND
-
-//		gate.nand.description=NAND Gatter mit einstellbarer Eingangsanzahl
-
-//		nand=NAND (NO-Y)
-
-		
-//		GATE_NAND=Non Et (NAND)
-
-		
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "NAND");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "NAND Gate (variable Inputcount)");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "NAND Gatter mit einstellbarer Eingangsanzahl");
+		I18N.addGate("es", type, I18N.TITLE, "NAND (NO-Y)");
+		I18N.addGate("fr", type, I18N.TITLE, "Non Et (NAND)");
 	}
 }

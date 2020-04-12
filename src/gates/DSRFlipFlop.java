@@ -3,6 +3,7 @@ package gates;
 import java.awt.Graphics2D;
 
 import logicsim.Gate;
+import logicsim.I18N;
 import logicsim.Pin;
 
 /**
@@ -93,10 +94,10 @@ public class DSRFlipFlop extends Gate {
 
 	@Override
 	public void loadLanguage() {
-		//gate.dsrff.description=DSR-Flipflop 
-		//gate.dsrff.title=D-Flipflop with set and reset inputs
-		
-//fr GATE_DRFF=D FlipFlop & Reset
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "DSR flipfop");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "D Flipflop with set and reset");
+		I18N.addGate("es", type, I18N.TITLE, "FlipFlop DSR");
+		I18N.addGate("fr", type, I18N.TITLE, "Bascule DSR");
 
 	}
 }

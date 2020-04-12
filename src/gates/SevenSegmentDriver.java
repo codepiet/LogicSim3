@@ -3,6 +3,7 @@ package gates;
 import java.awt.Graphics2D;
 
 import logicsim.Gate;
+import logicsim.I18N;
 
 /**
  * Segment Segment Driver for LogicSim
@@ -141,9 +142,8 @@ public class SevenSegmentDriver extends Gate {
 
 	@Override
 	public void loadLanguage() {
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "7-Segment-driver");
 
-//		gate.sevendrv.title=7-Segment Driver
-//		gate.sevendrv.title=7-Segment-Treiber
-
+		I18N.addGate("de", type, I18N.TITLE, "7-Segment-Treiber");
 	}
 }

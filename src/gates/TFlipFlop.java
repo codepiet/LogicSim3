@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 import logicsim.Gate;
+import logicsim.I18N;
 
 /**
  * T-FlipFlop for LogicSim
@@ -74,13 +75,11 @@ public class TFlipFlop extends Gate {
 		getPin(1).setLevel(true);
 		getPin(2).setLevel(true);
 	}
+
 	@Override
 	public void loadLanguage() {
-//		gate.tff.title=T FlipFlop
-
-//				tff=FlipFlop T
-		
-		//	fr	GATE_TFF=Bascule T
-
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "T FlipFlop");
+		I18N.addGate("es", type, I18N.TITLE, "FlipFlop T");
+		I18N.addGate("fr", type, I18N.TITLE, "Bascule T");
 	}
 }

@@ -193,12 +193,15 @@ public class CLK extends Gate {
 		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Clock with configurable low and high time");
 		I18N.addGate(I18N.ALL, type, ENTERHIGH, "Time High-Level (ms)");
 		I18N.addGate(I18N.ALL, type, ENTERLOW, "Time Low-Level (ms)");
+
 		I18N.addGate("de", type, I18N.TITLE, "Taktgeber");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "Taktgeber (Clock) mit einstellbaren LOW- und HIGH-Zeiten");
 		I18N.addGate("de", type, ENTERHIGH, "Dauer High-Pegel (ms)");
 		I18N.addGate("de", type, ENTERLOW, "Dauer Low-Pegel (ms)");
-		I18N.addGate("es", type, I18N.TITLE, "Reloj");
-		//GATE_CLOCK=Horloge
 
+		I18N.addGate("es", type, I18N.TITLE, "Reloj");
+
+		I18N.addGate("fr", type, I18N.TITLE, "Horloge");
 		I18N.addGate("fr", type, ENTERHIGH, "Durée du palier haut (ms)");
 		I18N.addGate("fr", type, ENTERLOW, "Durée du palier bas (ms)");
 	}

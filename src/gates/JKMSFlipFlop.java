@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 import logicsim.Gate;
+import logicsim.I18N;
 
 /**
  * JKMS-Flipflop for LogicSim
@@ -89,12 +90,8 @@ public class JKMSFlipFlop extends Gate {
 
 	@Override
 	public void loadLanguage() {
-		//gate.jkmsff.title=JKMS FlipFlop
-
-		
-//jkmsff=FlipFlop JKMS
-		
-		//fr 		GATE_JKMSFF=Bascule JKMS
-
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "JKMS flipfop");
+		I18N.addGate("es", type, I18N.TITLE, "FlipFlop JKMS");
+		I18N.addGate("fr", type, I18N.TITLE, "Bascule JKMS");
 	}
 }

@@ -134,6 +134,8 @@ public class BinDisp extends Gate {
 		I18N.addGate(I18N.ALL, type, DISPLAY_TYPE_DEC, "Decimal (00..255)");
 		I18N.addGate(I18N.ALL, type, DISPLAY_TYPE_HEX, "Hexadecimal (00..FF)");
 		I18N.addGate(I18N.ALL, type, UI_TYPE, "Type");
+		
+		I18N.addGate("de", type, I18N.TITLE, "Binärdisplay");
 		I18N.addGate("de", type, I18N.DESCRIPTION, "Binärdisplay (Hex und Binär)");
 	}
 }

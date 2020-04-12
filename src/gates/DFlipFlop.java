@@ -74,8 +74,6 @@ public class DFlipFlop extends Gate {
 		I18N.addGate(I18N.ALL, type, I18N.TITLE, "D flipfop");
 		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "D Flipflop");
 		I18N.addGate("es", type, I18N.TITLE, "FlipFlop D");
-
-//				GATE_DFF=Bascule D
-
+		I18N.addGate("fr", type, I18N.TITLE, "Bascule D");
 	}
 }

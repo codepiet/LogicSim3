@@ -95,15 +95,10 @@ public class MonoFlop extends Gate {
 
 	@Override
 	public void loadLanguage() {
-
-//	gate.monoflop.title=Monoflop
-//			gate.monoflop.ui.entermessagehigh=Time High-Level (ms)
-
-		// de gate.monoflop.ui.entermessagehigh=Dauer High-Pegel (ms)
-
-//es=Monoestable
-
-		// fr=Monostable
-
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Monoflop");
+		I18N.addGate(I18N.ALL, type, HT, "Time High-Level (ms)");
+		I18N.addGate("de", type, HT, "Dauer High-Pegel (ms)");
+		I18N.addGate("es", type, I18N.TITLE, "Monoestable");
+		I18N.addGate("fr", type, I18N.TITLE, "Monostable");
 	}
 }

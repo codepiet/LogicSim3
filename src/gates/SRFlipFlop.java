@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import logicsim.Gate;
+import logicsim.I18N;
 import logicsim.Pin;
 
 /**
@@ -79,14 +80,8 @@ public class SRFlipFlop extends Gate {
 	}
 	@Override
 	public void loadLanguage() {
-		
-//		gate.rsff.title=RS-FlipFlop
-//		gate.srff.title=SR-FlipFlop
-
-		
-		//rsff=FlipFlop RS
-		
-		//fr GATE_RSFF=Bascule RS
-
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "SR-FlipFlop");
+		I18N.addGate("es", type, I18N.TITLE, "FlipFlop RS");
+		I18N.addGate("fr", type, I18N.TITLE, "Bascule RS");
 	}
 }

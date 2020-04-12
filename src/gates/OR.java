@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 import logicsim.Gate;
+import logicsim.I18N;
 import logicsim.LSProperties;
 
 /**
@@ -70,16 +71,10 @@ public class OR extends Gate {
 
 	@Override
 	public void loadLanguage() {
-//	gate.or.description=OR Gate
-//			gate.or.title=OR
-
-//		gate.or.description=OR Gatter mit einstellbarer Eingangsanzahl
-
-		
-//	or=OR (O)
-		
-//		GATE_OR=OU (OR)
-
-		
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "OR");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "OR Gate");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "OR Gatter (einstellbare Eingangsanzahl)");
+		I18N.addGate("es", type, I18N.TITLE, "OR (O)");
+		I18N.addGate("fr", type, I18N.TITLE, "Ou (OR)");
 	}
 }

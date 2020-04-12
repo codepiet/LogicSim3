@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 
 import logicsim.Pin;
 import logicsim.Gate;
+import logicsim.I18N;
 import logicsim.LSMouseEvent;
 import logicsim.WidgetHelper;
 
@@ -106,8 +107,10 @@ public class Switch4 extends Gate {
 
 	@Override
 	public void loadLanguage() {
-//		gate.switch4.title=DIP-Switch (4-fold)
-//				gate.switch4.title=DIP-Schalter (4-fach)
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "DIP-Switch (4-fold)");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "4 Toggle Switches in one package");
 
+		I18N.addGate("de", type, I18N.TITLE, "DIP-Schalter (4-fach)");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "4 Umschalter in einer Einheit - ähnlich DIP Schalter");
 	}
 }

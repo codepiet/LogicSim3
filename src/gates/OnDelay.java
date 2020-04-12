@@ -22,7 +22,6 @@ public class OnDelay extends Gate {
 	static final long serialVersionUID = -2350098633141393951L;
 
 	static final String DELAY = "delay";
-
 	static final String DELAY_DEFAULT = "500";
 
 	transient long startTime;
@@ -94,18 +93,18 @@ public class OnDelay extends Gate {
 
 	@Override
 	public void loadLanguage() {
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "On Delay");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Delays the signal when turning to HIGH");
+		I18N.addGate(I18N.ALL, type, DELAY, "Time of delay (ms)");
 
-//				gate.ondelay.title=On Delay
-//				gate.ondelay.ui.time=Time of delay (ms)
+		I18N.addGate("de", type, I18N.TITLE, "Einschaltverzögerung");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "Verzögert das High-Signal");
+		I18N.addGate("de", type, DELAY, "Verzögerungszeit (ms)");
 
-//		gate.ondelay.title=Einschaltverzögerung
-//		gate.ondelay.ui.time=Verzögerungszeit (ms)
+		I18N.addGate("es", type, I18N.TITLE, "Retardo de 0 a 1");
+		I18N.addGate("es", type, DELAY, "Introduce tiempo de retardo (ms)");
 
-//	ondelay=Retardo de 0 a 1
-
-		// ondelay.help=Introduce tiempo de retardo (ms)
-
-		// GATE_TURNOFFDELAY_TIME=Décalage (ms)
-		//fr=Temporisation travail
+		I18N.addGate("fr", type, I18N.TITLE, "Temporisation travail");
+		I18N.addGate("fr", type, DELAY, "Décalage (ms)");
 	}
 }

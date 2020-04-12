@@ -43,10 +43,11 @@ public class Switch extends Gate {
 	static final long serialVersionUID = 2459367526586913840L;
 
 	private static final String SWITCH_TYPE = "type";
+	private static final String TOGGLE = "toggle";
+	private static final String MOMENTARY = "momentary";
+	private static final String DEFAULT_SWITCH_TYPE = TOGGLE;
 	private static final String COLOR = "color";
-
 	private static final String DEFAULT_COLOR = "#0000ff";
-	private static final String DEFAULT_SWITCH_TYPE = "toggle";
 
 	/**
 	 * type of switch: true=Click, false=Toggle
@@ -73,7 +74,7 @@ public class Switch extends Gate {
 	@Override
 	protected void loadProperties() {
 		color = ColorFactory.web(getPropertyWithDefault(COLOR, DEFAULT_COLOR));
-		clickType = getPropertyWithDefault(SWITCH_TYPE, DEFAULT_SWITCH_TYPE).equals("toggle") ? false : true;
+		clickType = getPropertyWithDefault(SWITCH_TYPE, DEFAULT_SWITCH_TYPE).equals(TOGGLE) ? false : true;
 	}
 
 	@Override
@@ -228,7 +229,7 @@ public class Switch extends Gate {
 			} else if (jRadioButton2.isSelected()) {
 				clickType = true;
 			}
-			setProperty(SWITCH_TYPE, clickType ? "momentary" : "toggle");
+			setProperty(SWITCH_TYPE, clickType ? "momentary" : TOGGLE);
 		}
 
 		Color newColor = JColorChooser.showDialog(null, I18N.getString(type, "ui.title"), color);
@@ -244,30 +245,26 @@ public class Switch extends Gate {
 
 	@Override
 	public void loadLanguage() {
-//		gate.switch.description=Switch
-//				gate.switch.title=Switch
-//				gate.switch.ui.click=momentary switch
-//				gate.switch.ui.grouptitle=Schalter-Typ
-//				gate.switch.ui.toggle=toggle switch
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Switch");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Toggle or Momentary Switch");
+		I18N.addGate(I18N.ALL, type, SWITCH_TYPE, "type");
+		I18N.addGate(I18N.ALL, type, MOMENTARY, "momentary switch");
+		I18N.addGate(I18N.ALL, type, TOGGLE, "toggle switch");
 
-//		gate.switch.description=Switch
-//				gate.switch.title=Switch
-//				gate.switch.ui.click=Taster
-//				gate.switch.ui.grouptitle=Schalter-Typ
-//				gate.switch.ui.toggle=Umschalter
+		I18N.addGate("de", type, I18N.TITLE, "Schalter");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "Schalter (Taster oder Umschalter)");
+		I18N.addGate("de", type, SWITCH_TYPE, "Typ");
+		I18N.addGate("de", type, MOMENTARY, "Taster");
+		I18N.addGate("de", type, TOGGLE, "Umschalter");
 
-//		switch=Pulsador
-//		switch.type=Tipo de pulsador
-//		switch.toggle=Con enclavamiento
-//		switch.click=Moment�neo
-		
-		
-		//fr
-		
-//		GATE_SWITCH=Bouton
-//				GATE_SWITCH_TYPE=Type de bouton
-//				GATE_SWITCH_TOGGLE=Interrupteur
-//				GATE_SWITCH_CLICK=Bouton poussoir
+		I18N.addGate("es", type, I18N.TITLE, "Pulsador");
+		I18N.addGate("es", type, SWITCH_TYPE, "Tipo de pulsador");
+		I18N.addGate("es", type, MOMENTARY, "Momentáneo");
+		I18N.addGate("es", type, TOGGLE, "Con enclavamiento");
 
+		I18N.addGate("fr", type, I18N.TITLE, "Bouton");
+		I18N.addGate("fr", type, SWITCH_TYPE, "Type de bouton");
+		I18N.addGate("fr", type, MOMENTARY, "Bouton poussoir");
+		I18N.addGate("fr", type, TOGGLE, "Interrupteur");
 	}
 }

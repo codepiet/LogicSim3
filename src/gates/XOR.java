@@ -4,6 +4,7 @@ package gates;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
+import logicsim.I18N;
 import logicsim.Pin;
 
 /**
@@ -57,14 +58,10 @@ public class XOR extends OR {
 
 	@Override
 	public void loadLanguage() {
-		// gate.xor.description=XOR Gate
-		// gate.xor.title=XOR
-
-//		gate.xor.description=XOR Gatter (Antivalenz) mit einstellbarer Eingangsanzahl
-
-		// xor=XOR (O exclusiva)
-		
-		//		GATE_XOR=Ou exclusif (XOR)
-
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "XOR");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "XOR Gate");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "XOR Gatter (Antivalenz, einstellbare Eingangsanzahl)");
+		I18N.addGate("es", type, I18N.TITLE, "XOR (O exclusiva)");
+		I18N.addGate("fr", type, I18N.TITLE, "Ou exclusif (XOR)");
 	}
 }

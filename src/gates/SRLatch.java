@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 
 import logicsim.Pin;
 import logicsim.Gate;
+import logicsim.I18N;
 import logicsim.Wire;
 
 /**
@@ -78,9 +79,9 @@ public class SRLatch extends Gate {
 		getPin(2).setLevel(!nor1.getPin(0).getLevel());
 		getPin(3).setLevel(!nor2.getPin(0).getLevel());
 	}
-	
+
 	@Override
 	public void loadLanguage() {
-//		gate.srl.title=SR-Latch
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "SR-Latch");
 	}
 }

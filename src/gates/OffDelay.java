@@ -93,19 +93,18 @@ public class OffDelay extends Gate {
 
 	@Override
 	public void loadLanguage() {
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Off Delay");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Delays the signal when turning to LOW");
+		I18N.addGate(I18N.ALL, type, DELAY, "Time of delay (ms)");
 
-//	gate.offdelay.title=Off Delay
-//			gate.offdelay.ui.time=Time of delay (ms)
+		I18N.addGate("de", type, I18N.TITLE, "Ausschaltverzögerung");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "Verzögert das Low-Signal");
+		I18N.addGate("de", type, DELAY, "Verzögerungszeit (ms)");
 
-//	gate.offdelay.title=Ausschaltverzögerung
-//			gate.offdelay.ui.time=Verzögerungszeit (ms)
+		I18N.addGate("es", type, I18N.TITLE, "Retardo de 1 a 0");
+		I18N.addGate("es", type, DELAY, "Introduce tiempo de retardo (ms)");
 
-//	offdelay=Retardo de 1 a 0
-
-//			offdelay.help=Introduce tiempo de retardo (ms)}}
-
-		// fr=Décalage (ms)
-		// fr =Temporisation repos
-
+		I18N.addGate("fr", type, I18N.TITLE, "Temporisation repos");
+		I18N.addGate("fr", type, DELAY, "Décalage (ms)");
 	}
 }

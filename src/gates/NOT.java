@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 import logicsim.Gate;
+import logicsim.I18N;
 import logicsim.LSProperties;
 import logicsim.Pin;
 
@@ -64,16 +65,10 @@ public class NOT extends Gate {
 
 	@Override
 	public void loadLanguage() {
-//		gate.not.description=NOT Gate (Inverter)
-//				gate.not.title=NOT
-
-//		gate.not.description=NOT Gatter (Inverter/Negator)
-
-		
-		// not=NOT (Inversor)
-		
-		
-//		GATE_NOT=Non (NOT)
-
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "NOT");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "NOT Gate (Inverter)");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "NOT Gatter (Inverter/Negator)");
+		I18N.addGate("es", type, I18N.TITLE, "NOT (Inversor)");
+		I18N.addGate("fr", type, I18N.TITLE, "Non (NOT)");
 	}
 }

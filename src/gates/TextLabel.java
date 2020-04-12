@@ -90,18 +90,19 @@ public class TextLabel extends Gate {
 
 	@Override
 	public void loadLanguage() {
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Textfield");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION,
+				"Textfield just for displaying text on the drawing surface - for documentation purposes");
+		I18N.addGate(I18N.ALL, type, TEXT, "input Text");
 
-//		gate.label.title=Textfield
-//				gate.label.ui.text=input Text
+		I18N.addGate("de", type, I18N.TITLE, "Textfeld");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "Textfeld für Dokumentationszwecke oder Hilfetexte");
+		I18N.addGate("de", type, TEXT, "Text eingeben");
 
-//		gate.label.title=Textfeld
-//				gate.label.ui.text=Text eingeben
+		I18N.addGate("es", type, I18N.TITLE, "Etiqueta de texto");
 
-//textlabel=Etiqueta de texto
-
-		// FR
-//		label=Étiquette
-//				labelentry=Entrer le texte
+		I18N.addGate("fr", type, I18N.TITLE, "Étiquette");
+		I18N.addGate("fr", type, TEXT, "Entrer le texte");
 
 	}
 }

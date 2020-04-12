@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 
 import logicsim.Pin;
 import logicsim.Gate;
+import logicsim.I18N;
 
 /**
  * Test Gate for LogicSim
@@ -62,5 +63,10 @@ public class TEST extends Gate {
 	public void reset() {
 		for (int i = 0; i < getNumInputs(); i++)
 			getPin(i + 4).setLevel(getPin(i).getLevel());
+	}
+
+	@Override
+	public void loadLanguage() {
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Test");
 	}
 }

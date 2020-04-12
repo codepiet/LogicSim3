@@ -1,6 +1,7 @@
 package gates;
 
 import logicsim.Gate;
+import logicsim.I18N;
 
 /**
  * Equivalence Gate for LogicSim
@@ -35,14 +36,10 @@ public class EQU extends Gate {
 
 	@Override
 	public void loadLanguage() {
-		//gate.equ.description=Äquivalenz Gatter mit einstellbarer Eingangsanzahl
-
-		// gate.equ.description=Equivalence Gate
-		// gate.equ.title=EQUIV
-
-		// equiv=XNOR (=)
-		
-		//fr 		GATE_EQUIVALENCE=<-> (NXOR)
-
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "EQUIV");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Equivalence Gate");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "Äquivalenz Gatter (einstellbare Eingangsanzahl)");
+		I18N.addGate("es", type, I18N.TITLE, "XNOR (=)");
+		I18N.addGate("fr", type, I18N.TITLE, "<-> (NXOR)");
 	}
 }
