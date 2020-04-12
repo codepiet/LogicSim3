@@ -1,4 +1,3 @@
-[menu]
 file=Fichier
 new=Nouveau
 open=Ouvrir...
@@ -22,17 +21,15 @@ help=Aide
 about=à propos de LogicSim
 
 removegate=Effacer le composant
-deletemodule=Effacer le module
 
 inputs=Entrée
-MESSAGE_DELETE=Voulez vous vraiment effacer le fichier %s ?
 lsrestart=LogicSim doit etre redémarré.
 name=Nom
 description=Description
-question.confirmnew=Le circuit a été modifie.\nVoulez vous vraiment perdre ce circuit?
+question.confirmdiscard=Le circuit a été modifie.\nVoulez vous vraiment perdre ce circuit?
 addpoint=Ajouter un point de connexion
 inputnorm=Entrée normale
-inputinv=Entrée invers�e
+inputinv=Entrée inversée
 inputhigh=Entrée au niveau haut
 inputlow=Entrée au niveau bas
 inputnorm.help=Sélectionnez l'entrée pour effacer la configuration actuelle
@@ -42,18 +39,16 @@ inputlow.help=Sélectionnez l'entrée pour la mettre au niveau bas
 addpoint.help=Sélectionnez un fil pour rajouter un point
 removepoint=Sélectionnez un point de connexion pour le supprimer
 saved=Le schéma %s a été enregistré
-setinput=Sélectionnez l'entrée pour raccorder la connexion
 connected=Connecté
 aborted=Abandonné
-
 nomodule=Ce schéma n'est pas un module
 filenotfound=Donnée non trouvée
 readerror=Erreur de lecture
 saveerror=Erreur pendant la sauvegarde
 modulenotfound=Le module \n%s n'a pas été trouvé.\nCopiez le module dans le répertoire approprié.
-
 simulate=Simuler
 reset=RAZ
-removewirepoint=Supprimer un point de connexion
-use=Valider
+removepoint=Supprimer un point de connexion
 cancel=Annuler
+no=Non
+yes=Oui

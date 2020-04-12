@@ -1,4 +1,3 @@
-[menu]
 file=Fichero
 new=Nuevo
 open=Abrir
@@ -11,55 +10,44 @@ module=Modulo
 modulecreate=Crear Modulo
 properties=Propiedades
 settings=Preferencias
-parintgrid=Visibilidad Rejilla activar/desactivar
+paintgrid=Visibilidad Rejilla activar/desactivar
 gatedesign=Tipo de s�mbolo en puertas
 gatedesign.iec=IEC
 gatedesign.ansi=ANSI
 language=Lenguaje
-
+yes=sí
+no=no
 help=Ayuda
 about=Acerca de LogicSim
-
 removegate=Borrar Componente
 delete=Borrar
-
 inputs=Entradas
 question.delete= Realmente desea borrar\n%s?
 lsrestart=Necesita reiniciar LogicSim.
 saved=Guardar circuito en un fichero
-
-MESSAGE_ENTER_TIME_HIGH=Introduzca tiempo (msg) para el nivel ALTO
-MESSAGE_ENTER_TIME_LOW=Introduzca tiempo (msg) para el nivel BAJO
 name=nombre
 description=comentario
-question.confirm=El circuito se ha modificado.\nRealmente desea descartar los cambios?
+question.confirmdiscard=El circuito se ha modificado.\nRealmente desea descartar los cambios?
 addpoint=A�ade punto de conexi�n
-
-inputnorm.help=pulsa en la entrada para eliminar sus ajustes
-inputinv.help=pulsa en la entrada para invertirla
-inputhigh.help=pulsa en la entrada para colocarla a nivel alto
-inputlow.help=pulsa en la entrada para colocarla a nivel bajo
-addpoint=pulsa en el cable para colocar conexi�n
+addpoint.help=pulsa en el cable para colocar conexi�n
 removepoint=pulsa en la conexi�n para eliminarla
 saved=Circuito guardado como %s
-STATUS_SETINPUT=Pulsa en la entrada para conectarla
 connected=conectado
 aborted=abortado
-
 nomodule=el circuito no es un M�dulo
 filenotfound=Fichero no encontrado
-errorread=Error leyendo el fichero (�Creado con otra versi�n de LogicSim?)
-filecorrupted=Fichero en mal estado (�Creado con otra versi�n de LogicSim?)
-Errorsave=Error guardando el fichero
+readerror=Error leyendo el fichero (�Creado con otra versi�n de LogicSim?)
+saveerror=Error guardando el fichero
 modulenotfound=No puedo encontrar el M�dulo\n%s\npor favor copia el M�dulo correcto en el directorio de M�dulos
-
 simulate=simular
 reset=reset
-removewire=eliminar punto de conexi�n
-use=Usa
+removepoint=eliminar punto de conexi�n
 cancel=Cancelar
 inputnorm=Entrada normal
 inputinv=Entrada invertida
 inputhigh=Entrada a 1
 inputlow=Entrada a 0
-
+inputnorm.help=pulsa en la entrada para eliminar sus ajustes
+inputinv.help=pulsa en la entrada para invertirla
+inputhigh.help=pulsa en la entrada para colocarla a nivel alto
+inputlow.help=pulsa en la entrada para colocarla a nivel bajo
