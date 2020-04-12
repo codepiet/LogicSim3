@@ -92,4 +92,20 @@ public class OnDelay extends Gate {
 		g2.draw(ptr);
 	}
 
+	@Override
+	public void loadLanguage() {
+
+//				gate.ondelay.title=On Delay
+//				gate.ondelay.ui.time=Time of delay (ms)
+
+//		gate.ondelay.title=Einschaltverzögerung
+//		gate.ondelay.ui.time=Verzögerungszeit (ms)
+
+//	ondelay=Retardo de 0 a 1
+
+		// ondelay.help=Introduce tiempo de retardo (ms)
+
+		// GATE_TURNOFFDELAY_TIME=Décalage (ms)
+		//fr=Temporisation travail
+	}
 }

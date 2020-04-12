@@ -78,4 +78,9 @@ public class SRLatch extends Gate {
 		getPin(2).setLevel(!nor1.getPin(0).getLevel());
 		getPin(3).setLevel(!nor2.getPin(0).getLevel());
 	}
+	
+	@Override
+	public void loadLanguage() {
+//		gate.srl.title=SR-Latch
+	}
 }

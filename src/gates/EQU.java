@@ -32,4 +32,17 @@ public class EQU extends Gate {
 		// if n is even set true
 		getPin(0).setLevel(n % 2 == 0);
 	}
+
+	@Override
+	public void loadLanguage() {
+		//gate.equ.description=Äquivalenz Gatter mit einstellbarer Eingangsanzahl
+
+		// gate.equ.description=Equivalence Gate
+		// gate.equ.title=EQUIV
+
+		// equiv=XNOR (=)
+		
+		//fr 		GATE_EQUIVALENCE=<-> (NXOR)
+
+	}
 }

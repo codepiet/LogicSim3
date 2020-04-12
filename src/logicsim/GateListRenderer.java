@@ -18,6 +18,7 @@ public class GateListRenderer extends JLabel implements ListCellRenderer<Object>
 		setFont(list.getFont());
 		setOpaque(true);
 		if (value instanceof Gate) {
+			Gate gate = (Gate) value;
 			if (isSelected) {
 				setBackground(new Color(0xaa, 0xaa, 0xFF));
 				setForeground(Color.white);
@@ -26,10 +27,10 @@ public class GateListRenderer extends JLabel implements ListCellRenderer<Object>
 				setBackground(list.getBackground());
 			}
 			if (value instanceof Module) {
-				setText(((Gate) value).type);
+				setText(gate.type);
 			} else {
-				String s = ((Gate) value).type;
-				if (!s.contains("test"))
+				String s = gate.type;
+				if (I18N.hasString("gate." + s + ".title"))
 					s = I18N.getString(s, "title");
 				setText(s);
 			}

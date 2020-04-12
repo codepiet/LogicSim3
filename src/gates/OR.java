@@ -68,4 +68,18 @@ public class OR extends Gate {
 		g2.draw(p);
 	}
 
+	@Override
+	public void loadLanguage() {
+//	gate.or.description=OR Gate
+//			gate.or.title=OR
+
+//		gate.or.description=OR Gatter mit einstellbarer Eingangsanzahl
+
+		
+//	or=OR (O)
+		
+//		GATE_OR=OU (OR)
+
+		
+	}
 }

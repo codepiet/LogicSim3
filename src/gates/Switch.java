@@ -1,3 +1,4 @@
+
 package gates;
 
 import java.awt.BasicStroke;
@@ -239,5 +240,34 @@ public class Switch extends Gate {
 
 	@Override
 	protected void drawFrame(Graphics2D g2) {
+	}
+
+	@Override
+	public void loadLanguage() {
+//		gate.switch.description=Switch
+//				gate.switch.title=Switch
+//				gate.switch.ui.click=momentary switch
+//				gate.switch.ui.grouptitle=Schalter-Typ
+//				gate.switch.ui.toggle=toggle switch
+
+//		gate.switch.description=Switch
+//				gate.switch.title=Switch
+//				gate.switch.ui.click=Taster
+//				gate.switch.ui.grouptitle=Schalter-Typ
+//				gate.switch.ui.toggle=Umschalter
+
+//		switch=Pulsador
+//		switch.type=Tipo de pulsador
+//		switch.toggle=Con enclavamiento
+//		switch.click=Moment�neo
+		
+		
+		//fr
+		
+//		GATE_SWITCH=Bouton
+//				GATE_SWITCH_TYPE=Type de bouton
+//				GATE_SWITCH_TOGGLE=Interrupteur
+//				GATE_SWITCH_CLICK=Bouton poussoir
+
 	}
 }

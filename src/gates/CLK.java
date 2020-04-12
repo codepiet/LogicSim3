@@ -26,6 +26,9 @@ import logicsim.WidgetHelper;
 public class CLK extends Gate {
 	static final long serialVersionUID = 3971572931629721831L;
 
+	private static final String ENTERLOW = "enterlow";
+	private static final String ENTERHIGH = "enterhigh";
+
 	static final int PAUSE = 0;
 	static final int RUNNING = 1;
 	static final int PULSE = 2;
@@ -184,4 +187,19 @@ public class CLK extends Gate {
 		return true;
 	}
 
+	@Override
+	public void loadLanguage() {
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Clock");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Clock with configurable low and high time");
+		I18N.addGate(I18N.ALL, type, ENTERHIGH, "Time High-Level (ms)");
+		I18N.addGate(I18N.ALL, type, ENTERLOW, "Time Low-Level (ms)");
+		I18N.addGate("de", type, I18N.TITLE, "Taktgeber");
+		I18N.addGate("de", type, ENTERHIGH, "Dauer High-Pegel (ms)");
+		I18N.addGate("de", type, ENTERLOW, "Dauer Low-Pegel (ms)");
+		I18N.addGate("es", type, I18N.TITLE, "Reloj");
+		//GATE_CLOCK=Horloge
+
+		I18N.addGate("fr", type, ENTERHIGH, "Durée du palier haut (ms)");
+		I18N.addGate("fr", type, ENTERLOW, "Durée du palier bas (ms)");
+	}
 }

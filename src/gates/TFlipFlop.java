@@ -74,4 +74,13 @@ public class TFlipFlop extends Gate {
 		getPin(1).setLevel(true);
 		getPin(2).setLevel(true);
 	}
+	@Override
+	public void loadLanguage() {
+//		gate.tff.title=T FlipFlop
+
+//				tff=FlipFlop T
+		
+		//	fr	GATE_TFF=Bascule T
+
+	}
 }

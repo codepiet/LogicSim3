@@ -7,11 +7,9 @@ saveas=Guardar como
 export=Exportar
 print=Imprimir
 exit=Salir
-
 module=Modulo
 modulecreate=Crear Modulo
 properties=Propiedades
-
 settings=Preferencias
 parintgrid=Visibilidad Rejilla activar/desactivar
 gatedesign=Tipo de s�mbolo en puertas
@@ -35,7 +33,6 @@ MESSAGE_ENTER_TIME_LOW=Introduzca tiempo (msg) para el nivel BAJO
 name=nombre
 description=comentario
 question.confirm=El circuito se ha modificado.\nRealmente desea descartar los cambios?
-
 addpoint=A�ade punto de conexi�n
 
 inputnorm.help=pulsa en la entrada para eliminar sus ajustes
@@ -61,42 +58,8 @@ reset=reset
 removewire=eliminar punto de conexi�n
 use=Usa
 cancel=Cancelar
-
-switch=Pulsador
-switch.type=Tipo de pulsador
-switch.toggle=Con enclavamiento
-switch.click=Moment�neo
-led=LED
-and=AND (Y)
-nand=NAND (NO-Y)
-or=OR (O)
-nor=NOR (NO-O)
-not=NOT (Inversor)
-xor=XOR (O exclusiva)
-equiv=XNOR (=)
 inputnorm=Entrada normal
 inputinv=Entrada invertida
 inputhigh=Entrada a 1
 inputlow=Entrada a 0
-rsff=FlipFlop RS
-dff=FlipFlop D
-dsrff=D FlipFlop & Reset
-jkff=FlipFlop JK
-jkmsff=FlipFlop JKMS
-tff=FlipFlop T
-clk=Reloj
-monoflop=Monoestable
-ondelay=Retardo de 0 a 1
-offdelay=Retardo de 1 a 0
-binin=Entrada binaria
-lcd=LCD
-sevenseg=Display 7 seg.
-textlabel=Etiqueta de texto
 
-binin.type=Tipo de Visualizador
-hex=Hexadecimal (00..FF)
-dec=Decimal (00..99)
-
-
-ondelay.help=Introduce tiempo de retardo (ms)
-offdelay.help=Introduce tiempo de retardo (ms)

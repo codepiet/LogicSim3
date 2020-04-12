@@ -100,23 +100,23 @@ public class SevenSegmentDriver extends Gate {
 			out = new int[] { 1, 1, 1, 1, 0, 1, 1 };
 			break;
 		}
-		case 10: {
+		case 0xa: {
 			out = new int[] { 1, 1, 1, 0, 1, 1, 1 };
 			break;
 		}
-		case 11: {
+		case 0xb: {
 			out = new int[] { 0, 0, 1, 1, 1, 1, 1 };
 			break;
 		}
-		case 12: {
+		case 0xc: {
 			out = new int[] { 1, 0, 0, 1, 1, 1, 0 };
 			break;
 		}
-		case 13: {
+		case 0xd: {
 			out = new int[] { 0, 1, 1, 1, 1, 0, 1 };
 			break;
 		}
-		case 14: {
+		case 0xe: {
 			out = new int[] { 1, 0, 0, 1, 1, 1, 1 };
 			break;
 		}
@@ -137,5 +137,13 @@ public class SevenSegmentDriver extends Gate {
 	@Override
 	public void reset() {
 		simulate();
+	}
+
+	@Override
+	public void loadLanguage() {
+
+//		gate.sevendrv.title=7-Segment Driver
+//		gate.sevendrv.title=7-Segment-Treiber
+
 	}
 }

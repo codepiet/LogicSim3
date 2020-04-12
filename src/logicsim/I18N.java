@@ -25,6 +25,11 @@ import javax.swing.JOptionPane;
  */
 public class I18N {
 
+	public static final String TITLE = "title";
+	public static final String DESCRIPTION = "description";
+	public static final String ALL = "ALL";
+
+	public static String lang = "en";
 	public static Properties prop = null;
 
 	/** Creates a new instance of I18N */
@@ -32,7 +37,7 @@ public class I18N {
 		if (prop != null)
 			return;
 
-		String lang = LSProperties.getInstance().getProperty(LSProperties.LANGUAGE, "en");
+		lang = LSProperties.getInstance().getProperty(LSProperties.LANGUAGE, "en");
 		prop = load(lang);
 		if (prop.size() == 0 && !"en".equals(lang)) {
 			prop = load("en");
@@ -142,6 +147,11 @@ public class I18N {
 				}
 			}
 		}
+	}
 
+	public static void addGate(String langGate, String type, String key, String value) {
+		if (!langGate.equals(langGate) && !langGate.equals(ALL))
+			return;
+		prop.setProperty(type + "." + key, value);
 	}
 }

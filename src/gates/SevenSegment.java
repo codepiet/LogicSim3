@@ -82,5 +82,15 @@ public class SevenSegment extends Gate {
 		path.lineTo(x - 2, y + 2);
 		g2.fill(path);
 	}
+@Override
+	public void loadLanguage() {
+//	gate.sevenseg.title=7-Segment-display
 
+//			gate.sevenseg.title=7-Segment-Anzeige
+
+//es=Display 7 seg.
+	
+		//	GATE_SEVENSEGMENT=Afficheur 7 segments
+	
+	}
 }

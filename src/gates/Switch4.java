@@ -103,4 +103,11 @@ public class Switch4 extends Gate {
 			}
 		}
 	}
+
+	@Override
+	public void loadLanguage() {
+//		gate.switch4.title=DIP-Switch (4-fold)
+//				gate.switch4.title=DIP-Schalter (4-fach)
+
+	}
 }

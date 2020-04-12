@@ -18,4 +18,19 @@ public class NAND extends AND {
 		getPin(0).setLevelType(Pin.INVERTED);
 	}
 
+	@Override
+	public void loadLanguage() {
+
+//		gate.nand.description=NAND Gate
+//				gate.nand.title=NAND
+
+//		gate.nand.description=NAND Gatter mit einstellbarer Eingangsanzahl
+
+//		nand=NAND (NO-Y)
+
+		
+//		GATE_NAND=Non Et (NAND)
+
+		
+	}
 }

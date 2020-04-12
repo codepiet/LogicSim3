@@ -82,4 +82,14 @@ public class LED extends Gate {
 	protected void drawFrame(Graphics2D g2) {
 	}
 
+	@Override
+	public void loadLanguage() {
+		// gate.led.description=LED
+		// gate.led.title=LED
+
+//	gate.led.description=LED zur Darstellung von Ausgängen
+//			gate.led.title=LED
+
+		// led=LED
+	}
 }

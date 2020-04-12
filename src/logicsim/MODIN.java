@@ -41,5 +41,16 @@ public class MODIN extends Gate {
 		for (int i = 0; i < ni; i++)
 			getPin(i + ni).setLevel(getPin(i).getLevel());
 	}
+	
+	@Override
+		public void loadLanguage() {
+//		gate.modin.description=Inputs
+//				gate.modin.title=Moduleinputs
+		
+		//gate.modin.description=Eingänge für das spätere Modul
+		//		gate.modin.title=Moduleingänge
+
+		
+		}
 
 }

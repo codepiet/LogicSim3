@@ -77,4 +77,16 @@ public class SRFlipFlop extends Gate {
 		getPin(3).setLevel(out0);
 		getPin(4).setLevel(out0);
 	}
+	@Override
+	public void loadLanguage() {
+		
+//		gate.rsff.title=RS-FlipFlop
+//		gate.srff.title=SR-FlipFlop
+
+		
+		//rsff=FlipFlop RS
+		
+		//fr GATE_RSFF=Bascule RS
+
+	}
 }

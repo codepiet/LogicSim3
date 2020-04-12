@@ -61,4 +61,19 @@ public class NOT extends Gate {
 		g2.setStroke(new BasicStroke(2));
 		g2.drawLine(getX() + CONN_SIZE, (int) yc, (int) xc - 1, (int) yc);
 	}
+
+	@Override
+	public void loadLanguage() {
+//		gate.not.description=NOT Gate (Inverter)
+//				gate.not.title=NOT
+
+//		gate.not.description=NOT Gatter (Inverter/Negator)
+
+		
+		// not=NOT (Inversor)
+		
+		
+//		GATE_NOT=Non (NOT)
+
+	}
 }

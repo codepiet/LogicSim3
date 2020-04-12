@@ -1,3 +1,4 @@
+
 package gates;
 
 import java.awt.Graphics2D;
@@ -52,5 +53,18 @@ public class XOR extends OR {
 		p.curveTo(xl2 + 10, yb - 10, xl2 + 10, yu + 10, xl2, yu);
 
 		g2.draw(p);
+	}
+
+	@Override
+	public void loadLanguage() {
+		// gate.xor.description=XOR Gate
+		// gate.xor.title=XOR
+
+//		gate.xor.description=XOR Gatter (Antivalenz) mit einstellbarer Eingangsanzahl
+
+		// xor=XOR (O exclusiva)
+		
+		//		GATE_XOR=Ou exclusif (XOR)
+
 	}
 }

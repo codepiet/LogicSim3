@@ -83,6 +83,7 @@ public class App {
 			classes = GateLoaderHelper.getClasses();
 			for (Class<?> c : classes) {
 				Gate gate = (Gate) c.getDeclaredConstructor().newInstance();
+				gate.loadLanguage();
 				addToCategory(gate);
 			}
 		} catch (ClassNotFoundException e) {

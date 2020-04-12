@@ -32,6 +32,7 @@ public class BinDisp extends Gate {
 	private static final String DISPLAY_TYPE_HEX = "hex";
 	private static final String DISPLAY_TYPE_DEC = "dec";
 	private static final String DISPLAY_TYPE_DEFAULT = "hex";
+	private static final String UI_TYPE = "ui.type";
 
 	String displayType;
 
@@ -126,4 +127,13 @@ public class BinDisp extends Gate {
 		return false;
 	}
 
+	@Override
+	public void loadLanguage() {
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Binary Display");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Binary Display (output in hex or binary)");
+		I18N.addGate(I18N.ALL, type, DISPLAY_TYPE_DEC, "Decimal (00..255)");
+		I18N.addGate(I18N.ALL, type, DISPLAY_TYPE_HEX, "Hexadecimal (00..FF)");
+		I18N.addGate(I18N.ALL, type, UI_TYPE, "Type");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "Binärdisplay (Hex und Binär)");
+	}
 }

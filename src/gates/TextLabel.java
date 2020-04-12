@@ -87,4 +87,21 @@ public class TextLabel extends Gate {
 		}
 		return true;
 	}
+
+	@Override
+	public void loadLanguage() {
+
+//		gate.label.title=Textfield
+//				gate.label.ui.text=input Text
+
+//		gate.label.title=Textfeld
+//				gate.label.ui.text=Text eingeben
+
+//textlabel=Etiqueta de texto
+
+		// FR
+//		label=Étiquette
+//				labelentry=Entrer le texte
+
+	}
 }

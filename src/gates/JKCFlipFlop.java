@@ -1,3 +1,4 @@
+
 package gates;
 
 import logicsim.Pin;
@@ -68,5 +69,20 @@ public class JKCFlipFlop extends Gate {
 		out1 = true;
 		clk = false;
 		lastClk = false;
+	}
+
+	@Override
+	public void loadLanguage() {
+		// gate.jkcff.description=edge triggered JK-Flipflop
+		// gate.jkcff.title=JK-FlipFlop
+
+	//	gate.jkcff.description=positiv flankengesteuertes JK-Flipflop 
+	//			gate.jkcff.title=JK-Flipflop
+
+		
+//	jkff=FlipFlop JK
+		
+		//fr 		GATE_JKFF=Bascule JK (Front montant)
+
 	}
 }

@@ -3,6 +3,7 @@ package gates;
 import java.awt.Graphics2D;
 
 import logicsim.Gate;
+import logicsim.I18N;
 import logicsim.Pin;
 
 /**
@@ -66,5 +67,15 @@ public class DFlipFlop extends Gate {
 		super.reset();
 		out0 = false;
 		lastClock = false;
+	}
+
+	@Override
+	public void loadLanguage() {
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "D flipfop");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "D Flipflop");
+		I18N.addGate("es", type, I18N.TITLE, "FlipFlop D");
+
+//				GATE_DFF=Bascule D
+
 	}
 }

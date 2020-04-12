@@ -18,4 +18,20 @@ public class NOR extends OR {
 		getPin(0).setLevelType(Pin.INVERTED);
 	}
 
+	@Override
+	public void loadLanguage() {
+
+//	gate.nor.description=NOR Gate
+//			gate.nor.title=NOR
+
+//		gate.nor.description=NOR Gatter mit einstellbarer Eingangsanzahl
+
+		
+//	nor=NOR (NO-O)
+		
+		
+//		GATE_NOR=Non Ou (NOR)
+
+		
+	}
 }

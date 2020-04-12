@@ -86,4 +86,15 @@ public class JKMSFlipFlop extends Gate {
 		p.lineTo(getX() + width - sp, getY() + 2 * sp);
 		g2.draw(p);
 	}
+
+	@Override
+	public void loadLanguage() {
+		//gate.jkmsff.title=JKMS FlipFlop
+
+		
+//jkmsff=FlipFlop JKMS
+		
+		//fr 		GATE_JKMSFF=Bascule JKMS
+
+	}
 }

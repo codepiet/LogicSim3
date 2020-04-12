@@ -90,4 +90,13 @@ public class DSRFlipFlop extends Gate {
 		lastClk = false;
 		clk = false;
 	}
+
+	@Override
+	public void loadLanguage() {
+		//gate.dsrff.description=DSR-Flipflop 
+		//gate.dsrff.title=D-Flipflop with set and reset inputs
+		
+//fr GATE_DRFF=D FlipFlop & Reset
+
+	}
 }

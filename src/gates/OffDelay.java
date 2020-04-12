@@ -91,4 +91,21 @@ public class OffDelay extends Gate {
 		g2.draw(ptr);
 	}
 
+	@Override
+	public void loadLanguage() {
+
+//	gate.offdelay.title=Off Delay
+//			gate.offdelay.ui.time=Time of delay (ms)
+
+//	gate.offdelay.title=Ausschaltverzögerung
+//			gate.offdelay.ui.time=Verzögerungszeit (ms)
+
+//	offdelay=Retardo de 1 a 0
+
+//			offdelay.help=Introduce tiempo de retardo (ms)}}
+
+		// fr=Décalage (ms)
+		// fr =Temporisation repos
+
+	}
 }

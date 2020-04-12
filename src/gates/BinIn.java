@@ -36,6 +36,8 @@ public class BinIn extends Gate {
 	private static final String DISPLAY_TYPE_DEC = "dec";
 	private static final String DISPLAY_TYPE_DEFAULT = "hex";
 
+	private static final String UI_TYPE = "type";
+
 	String displayType;
 
 	Rectangle rect1 = new Rectangle(12, 32, 15, 15);
@@ -210,4 +212,20 @@ public class BinIn extends Gate {
 		return false;
 	}
 
+	@Override
+	public void loadLanguage() {
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Binary Input");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Binary Input (input hex or binary)");
+		I18N.addGate(I18N.ALL, type, DISPLAY_TYPE_DEC, "Decimal (00..255)");
+		I18N.addGate(I18N.ALL, type, DISPLAY_TYPE_HEX, "Hexadecimal (00..FF)");
+		I18N.addGate(I18N.ALL, type, UI_TYPE, "Type");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "Binäreingabe (Hex und Binär)");
+		I18N.addGate("es", type, I18N.TITLE, "Entrada binaria");
+		I18N.addGate("es", type, UI_TYPE, "Tipo de Visualizador");
+		I18N.addGate("fr", type, I18N.TITLE, "roue codeuse");
+		I18N.addGate("fr", type, UI_TYPE, "Type d'affichage");
+		I18N.addGate("fr", type, DISPLAY_TYPE_DEC, "Décimal (00..99)");
+		I18N.addGate("fr", type, DISPLAY_TYPE_HEX, "Hexadécimal (00..FF)");
+
+	}
 }

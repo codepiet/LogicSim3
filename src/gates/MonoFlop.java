@@ -93,4 +93,17 @@ public class MonoFlop extends Gate {
 		return true;
 	}
 
+	@Override
+	public void loadLanguage() {
+
+//	gate.monoflop.title=Monoflop
+//			gate.monoflop.ui.entermessagehigh=Time High-Level (ms)
+
+		// de gate.monoflop.ui.entermessagehigh=Dauer High-Pegel (ms)
+
+//es=Monoestable
+
+		// fr=Monostable
+
+	}
 }

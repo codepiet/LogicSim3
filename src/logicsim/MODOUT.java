@@ -42,4 +42,13 @@ public class MODOUT extends Gate {
 			getPin(i + ni).setLevel(getPin(i).getLevel());
 	}
 
+	@Override
+	public void loadLanguage() {
+//		gate.modout.description=Outputs
+//		gate.modout.title=Moduleoutputs
+
+//		gate.modout.description=Ausgänge für das spätere Modul
+//		gate.modout.title=Modulausgänge
+	}
+
 }

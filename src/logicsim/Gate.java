@@ -41,6 +41,7 @@ public class Gate extends CircuitPart {
 		g2.rotate(-Math.toRadians(angle));
 		g2.translate(-(float) x, -(float) y);
 	}
+
 	protected int actionid = 0;
 	protected Color backgroundColor = Color.white;
 
@@ -481,6 +482,9 @@ public class Gate extends CircuitPart {
 				}
 			}
 		}
+	}
+
+	public void loadLanguage() {
 	}
 
 	@Override

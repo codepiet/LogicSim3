@@ -162,4 +162,14 @@ public class Counter extends Gate {
 		return false;
 	}
 
+	@Override
+	public void loadLanguage() {
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Counter");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Counter counts positive edges");
+		I18N.addGate(I18N.ALL, type, DISPLAY_TYPE, "Type");
+		I18N.addGate(I18N.ALL, type, DISPLAY_TYPE_DEC, "Decimal (00..255)");
+		I18N.addGate(I18N.ALL, type, DISPLAY_TYPE_HEX, "Hexadecimal (00..FF)");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "Zählmodul (positive Flanke)");
+	}
+
 }
