@@ -21,7 +21,7 @@ public class SRFlipFlop extends Gate {
 	boolean out0 = false;
 
 	public SRFlipFlop() {
-		super("flipflop");
+		super("flipflops");
 		type = "srff";
 		createInputs(3);
 		createOutputs(2);

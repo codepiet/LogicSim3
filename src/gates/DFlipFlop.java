@@ -18,7 +18,7 @@ public class DFlipFlop extends Gate {
 	boolean lastClock = false;
 
 	public DFlipFlop() {
-		super("flipflop");
+		super("flipflops");
 		type = "dff";
 		createInputs(2);
 		createOutputs(2);

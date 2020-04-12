@@ -10,7 +10,11 @@
 
 package logicsim;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.JOptionPane;
@@ -29,30 +33,38 @@ public class I18N {
 			return;
 
 		String lang = LSProperties.getInstance().getProperty(LSProperties.LANGUAGE, "en");
-		prop = new Properties();
-		try {
-			prop.load(new FileInputStream("languages/" + lang + ".txt"));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			try {
-				// Default: Englische Sprachdatei laden
-				prop.load(new FileInputStream("languages/en.txt"));
-			} catch (Exception ex2) {
+		prop = load(lang);
+		if (prop.size() == 0 && !"en".equals(lang)) {
+			prop = load("en");
+			if (prop == null) {
 				JOptionPane.showMessageDialog(null,
 						"Language file languages/en.txt not found.\nPlease run the program from its directory.");
 				System.exit(5);
 			}
-
 		}
+	}
+
+	public static Properties load(String lang) {
+		Properties properties = new Properties();
+		try {
+			properties.load(new FileInputStream("languages/" + lang + ".txt"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return properties;
+	}
+
+	public static String langToStr(Lang l) {
+		String key = l.toString();
+		key = key.toLowerCase();
+		key = key.replace("_", ".");
+		return key;
 	}
 
 	public static String tr(Lang langkey) {
 		if (prop == null)
 			return "- I18N not initialized -";
-		String key = langkey.toString();
-		key = key.toLowerCase();
-		key = key.replace("_", ".");
-		return tr(key);
+		return tr(langToStr(langkey));
 	}
 
 	public static String tr(String key) {
@@ -85,4 +97,51 @@ public class I18N {
 		return String.format(s, value);
 	}
 
+	public static List<String> getLanguages() {
+		File dir = new File("languages/");
+		String[] files = dir.list();
+		java.util.Arrays.sort(files);
+		List<String> langs = new ArrayList<String>();
+		for (int i = 0; i < files.length; i++) {
+			if (files[i].endsWith(".txt")) {
+				String name = files[i].substring(0, files[i].length() - 4);
+				langs.add(name);
+			}
+		}
+		return langs;
+	}
+
+	public static void main(String[] args) {
+		List<Lang> langList = new ArrayList<Lang>(EnumSet.allOf(Lang.class));
+
+		List<String> list = new ArrayList<String>();
+		for (Lang l : langList) {
+			String key = langToStr(l);
+			list.add(key);
+		}
+		// get all languages from folder
+		List<String> langs = I18N.getLanguages();
+		langs = new ArrayList<String>();
+		langs.add("es");
+		for (String lang : langs) {
+			System.out.println(lang);
+			System.out.println("-------------------------");
+			Properties ps = load(lang);
+			for (String key : list) {
+				if (!ps.containsKey(key)) {
+					System.err.println(key + " is missing in langfile");
+				}
+			}
+			for (Object obj : ps.keySet()) {
+				String key = (String) obj;
+				if (key.startsWith("gate."))
+					continue;
+				// check if the langfile key is in the list
+				if (!list.contains(key)) {
+					System.err.println("key '" + key + "' is not specified");
+				}
+			}
+		}
+
+	}
 }

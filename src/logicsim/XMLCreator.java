@@ -28,7 +28,7 @@ import org.w3c.dom.Node;
  */
 public class XMLCreator {
 
-	public static String createXML(LogicSimFile f) {
+	public static String createXML(LogicSimFile f) throws RuntimeException {
 		DocumentBuilderFactory xmlFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder xmlBuilder;
 		try {
@@ -89,7 +89,7 @@ public class XMLCreator {
 				f.changed = false;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return null;
 	}

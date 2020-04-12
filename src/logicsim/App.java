@@ -76,7 +76,7 @@ public class App {
 		cats.add(new Category("basic"));
 		cats.add(new Category("input"));
 		cats.add(new Category("output"));
-		cats.add(new Category("flipflop"));
+		cats.add(new Category("flipflops"));
 
 		List<Class<?>> classes;
 		try {

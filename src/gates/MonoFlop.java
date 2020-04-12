@@ -31,7 +31,7 @@ public class MonoFlop extends Gate {
 	int highTime;
 
 	public MonoFlop() {
-		super("flipflop");
+		super("flipflops");
 		type = "monoflop";
 		createInputs(1);
 		createOutputs(1);

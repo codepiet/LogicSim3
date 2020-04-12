@@ -21,7 +21,7 @@ public class SRLatch extends Gate {
 	// Circuit c = new Circuit();
 
 	public SRLatch() {
-		super("flipflop");
+		super("flipflops");
 		type = "srl";
 		createInputs(2);
 		createOutputs(2);

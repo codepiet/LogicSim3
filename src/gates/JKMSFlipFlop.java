@@ -18,7 +18,7 @@ public class JKMSFlipFlop extends Gate {
 	static final long serialVersionUID = 6562388223937836948L;
 
 	public JKMSFlipFlop() {
-		super("flipflop");
+		super("flipflops");
 		type = "jkmsff";
 		createInputs(3);
 		createOutputs(2);

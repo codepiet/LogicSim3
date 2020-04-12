@@ -35,13 +35,15 @@ public class GateListRenderer extends JLabel implements ListCellRenderer<Object>
 			}
 			setHorizontalAlignment(SwingConstants.LEFT);
 			return this;
-		} else {
-			setText(I18N.tr("cat." + (String) value));
+		} else if (value instanceof String) {
+			String s = (String) value;
+			setText(I18N.tr(s));
 			setBackground(Color.LIGHT_GRAY);
 			setForeground(Color.WHITE);
 			setHorizontalAlignment(SwingConstants.CENTER);
 			return this;
-		}
+		} else
+			throw new RuntimeException("unknown format of object in getcelllistrenderer");
 	}
 
 }

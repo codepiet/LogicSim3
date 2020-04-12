@@ -15,6 +15,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -479,7 +480,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnInputLow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(Pin.LOW);
-				setStatusText(I18N.tr(Lang.INPUTLOW_HIGH));
+				setStatusText(I18N.tr(Lang.INPUTLOW_HELP));
 				lspanel.requestFocusInWindow();
 			}
 		});
@@ -675,7 +676,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		} catch (RuntimeException x) {
 			System.err.println(x);
 			x.printStackTrace(System.err);
-			JOptionPane.showMessageDialog(this, I18N.tr(Lang.READ) + " " + x.getMessage());
+			JOptionPane.showMessageDialog(this, I18N.tr(Lang.READERROR) + " " + x.getMessage());
 		}
 		setAppTitle();
 		lspanel.clear();
@@ -726,7 +727,13 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			if (showSaveDialog() == false)
 				return;
 		lsFile.circuit = lspanel.circuit;
-		XMLCreator.createXML(lsFile);
+		try {
+			XMLCreator.createXML(lsFile);
+		} catch (RuntimeException err) {
+			System.err.println(err);
+			err.printStackTrace(System.err);
+			JOptionPane.showMessageDialog(this, I18N.tr(Lang.SAVEERROR) + " " + err.getMessage());
+		}
 
 		setAppTitle();
 		String s = I18N.tr(Lang.SAVED).replaceFirst("%s", lsFile.fileName);
@@ -907,24 +914,20 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	 * @param currentLanguage
 	 */
 	void createLanguageMenu(JMenu menu, String currentLanguage) {
-		File dir = new File("languages/");
-		String[] files = dir.list();
-		java.util.Arrays.sort(files);
-		for (int i = 0; i < files.length; i++) {
-			if (files[i].endsWith(".txt")) {
-				final String name = files[i].substring(0, files[i].length() - 4);
-				JMenuItem item = new JRadioButtonMenuItem(name);
-				if (name.equals(currentLanguage))
-					item.setSelected(true);
-				item.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						LSProperties.getInstance().setProperty(LSProperties.LANGUAGE, name);
-						JOptionPane.showMessageDialog(LSFrame.this, I18N.tr(Lang.LSRESTART));
-					}
-				});
-				buttongroup_language.add(item);
-				menu.add(item);
-			}
+		List<String> langs = I18N.getLanguages();
+		for (String lang : langs) {
+			JMenuItem item = new JRadioButtonMenuItem(lang);
+			if (lang.equals(currentLanguage))
+				item.setSelected(true);
+			item.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					LSProperties.getInstance().setProperty(LSProperties.LANGUAGE,
+							((JMenuItem) e.getSource()).getText());
+					JOptionPane.showMessageDialog(LSFrame.this, I18N.tr(Lang.LSRESTART));
+				}
+			});
+			buttongroup_language.add(item);
+			menu.add(item);
 		}
 	}
 

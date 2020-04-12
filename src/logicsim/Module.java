@@ -51,7 +51,7 @@ public class Module extends Gate {
 		try {
 			lsFile = XMLLoader.loadXmlFile(filename);
 		} catch (RuntimeException x) {
-			JOptionPane.showMessageDialog(null, I18N.tr(Lang.ERRORREAD) + ": " + x.getMessage());
+			JOptionPane.showMessageDialog(null, I18N.tr(Lang.READERROR) + ": " + x.getMessage());
 			return;
 		}
 

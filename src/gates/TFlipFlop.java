@@ -15,7 +15,7 @@ import logicsim.Gate;
 public class TFlipFlop extends Gate {
 
 	public TFlipFlop() {
-		super("flipflop");
+		super("flipflops");
 		type = "tff";
 		createInputs(1);
 		createOutputs(2);
