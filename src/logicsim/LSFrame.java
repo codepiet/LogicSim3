@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -72,6 +73,8 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 	Simulation sim;
 
+	JMenuBar mnuBar;
+
 	ButtonGroup buttongroup_language = new ButtonGroup();
 	JComboBox<String> jComboBox_numinput = null;
 
@@ -119,7 +122,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	private void createUI() {
 		setTitle("LogicSim");
 
-		JMenuBar mnuBar = new JMenuBar();
+		mnuBar = new JMenuBar();
 
 		JMenu mnuFile = new JMenu();
 		mnuFile.setText(I18N.tr(Lang.FILE));
@@ -237,7 +240,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		boolean autowire = LSProperties.getInstance().getPropertyBoolean(LSProperties.AUTOWIRE, true);
 		final JCheckBoxMenuItem mSettingsAutoWire = new JCheckBoxMenuItem();
 		mSettingsAutoWire.setText(I18N.tr(Lang.AUTOWIRE));
-		mSettingsAutoWire.setSelected(sel);
+		mSettingsAutoWire.setSelected(autowire);
 		mSettingsAutoWire.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -412,7 +415,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnZoomM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.zoomOut();
-				changedZoomPos();
 				lspanel.requestFocusInWindow();
 			}
 		});
@@ -422,7 +424,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnZoomP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.zoomIn();
-				changedZoomPos();
 				lspanel.requestFocusInWindow();
 			}
 		});
@@ -954,13 +955,23 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 	@Override
 	public void changedStatusText(String text) {
+		// hack: control buttons
+		if ("DESELECT_BUTTONS".contentEquals(text)) {
+			for (Component c : mnuBar.getComponents()) {
+				if (c instanceof LSToggleButton) {
+					LSToggleButton b = (LSToggleButton) c;
+					b.setSelected(false);
+				}
+			}
+			repaint();
+		}
 		setStatusText(text);
 	}
 
 	@Override
-	public void changedZoomPos() {
-		sbCoordinates.setText("X: " + lspanel.previousPoint.x + ", Y: " + lspanel.previousPoint.y + "   Zoom: "
-				+ Math.round(lspanel.scaleX * 100) + "%");
+	public void changedZoomPos(double zoom, Point pos) {
+		sbCoordinates.setText(
+				"X: " + pos.x / 10 * 10 + ", Y: " + pos.y / 10 * 10 + "   Zoom: " + Math.round(zoom * 100) + "%");
 	}
 
 	@Override

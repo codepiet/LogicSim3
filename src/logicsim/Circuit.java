@@ -1,5 +1,6 @@
 package logicsim;
 
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.Vector;
@@ -63,10 +64,14 @@ public class Circuit implements CircuitChangedListener {
 	public void deselectAll() {
 		for (Gate g : gates) {
 			g.deselect();
-			g.deactivateWires();
+			for (Pin p : g.pins) {
+				for (Wire w : p.wires) {
+					w.deselect();
+					for (WirePoint wp : w.points)
+						wp.deselect();
+				}
+			}
 		}
-		// for (Wire w : wires)
-		// w.deactivate();
 	}
 
 	public boolean isModule() {
@@ -126,9 +131,13 @@ public class Circuit implements CircuitChangedListener {
 
 			for (Pin p : g.getOutputs())
 				if (p.isConnected()) {
-					for (Wire wire : p.wires)
+					for (Wire wire : p.wires) {
 						if (wire.selected)
 							parts.add(wire);
+						for (WirePoint pt : wire.points)
+							if (pt.isSelected())
+								parts.add(pt);
+					}
 				}
 		}
 		return parts.toArray(new CircuitPart[parts.size()]);
@@ -199,7 +208,7 @@ public class Circuit implements CircuitChangedListener {
 	}
 
 	@Override
-	public void changedZoomPos() {
+	public void changedZoomPos(double zoom, Point pos) {
 	}
 
 	@Override

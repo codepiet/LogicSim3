@@ -212,7 +212,7 @@ public class XMLCreator {
 				point.setAttribute("number", String.valueOf(i));
 				point.setAttribute("x", String.valueOf(wp.getX()));
 				point.setAttribute("y", String.valueOf(wp.getY()));
-				point.setAttribute("node", String.valueOf(wp.active));
+				point.setAttribute("node", String.valueOf(wp.show));
 				n.appendChild(point);
 			}
 			return n;

@@ -55,6 +55,16 @@ public class Wire extends CircuitPart implements Cloneable {
 	}
 
 	public void addPoint(int x, int y) {
+		// check if the point is not present
+		if (fromConn.getX() == x && fromConn.getY() == y)
+			return;
+		int number = getNodeIndexAt(x, y);
+		if (number > -1) {
+			// delete every point from this node on
+			for (int i = points.size() - 1; i >= number; i--) {
+				points.remove(i);
+			}
+		}
 		points.add(new WirePoint(x, y, false));
 	}
 
@@ -122,9 +132,9 @@ public class Wire extends CircuitPart implements Cloneable {
 		}
 
 		if (selected) {
-			g2.setStroke(new BasicStroke(3));
+			g2.setStroke(new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		} else {
-			g2.setStroke(new BasicStroke(2));
+			g2.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		}
 
 		g2.draw(convertPointsToPath());
@@ -132,7 +142,7 @@ public class Wire extends CircuitPart implements Cloneable {
 		// draw points
 		if (points.size() > 0) {
 			for (WirePoint point : points) {
-				if (selected || point.active || point.forceDraw) {
+				if (selected || point.isSelected() || point.show) {
 					point.draw(g2);
 				}
 			}
@@ -211,7 +221,7 @@ public class Wire extends CircuitPart implements Cloneable {
 		if (points.size() == 0)
 			return -1;
 
-		for (int i = 1; i < points.size() - 1; i++) {
+		for (int i = 0; i < points.size(); i++) {
 			WirePoint p = points.get(i);
 			if (mx > p.getX() - 3 && mx < p.getX() + 3 && my > p.getY() - 3 && my < p.getY() + 3)
 				return i;
@@ -395,7 +405,7 @@ public class Wire extends CircuitPart implements Cloneable {
 
 	public void setNodeIsDrawn(int i) {
 		WirePoint p = points.get(i);
-		p.forceDraw = true;
+		p.show = true;
 	}
 
 	public void setPointAt(int n, int mx, int my) {

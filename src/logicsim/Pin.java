@@ -145,11 +145,11 @@ public class Pin extends CircuitPart {
 		} else if (levelType == HIGH) {
 			if (ioType == OUTPUT)
 				throw new RuntimeException("OUTPUT may not be set HIGH");
-			WidgetHelper.drawStringCentered(g2, "1", x+1, y-2);
+			WidgetHelper.drawStringCentered(g2, "1", x + 1, y - 2);
 		} else if (levelType == LOW) {
 			if (ioType == OUTPUT)
 				throw new RuntimeException("OUTPUT may not be set LOW");
-			WidgetHelper.drawStringCentered(g2, "0", x+2, y-2);
+			WidgetHelper.drawStringCentered(g2, "0", x + 2, y - 2);
 		} else {
 			// normal
 			g2.setStroke(new BasicStroke(1));
@@ -186,6 +186,9 @@ public class Pin extends CircuitPart {
 
 	public void delWire(Wire w) {
 		if (wires.contains(w)) {
+			if (!wires.remove(w))
+				throw new RuntimeException(
+						"wire " + w.getId() + " cannot be removed - is not connected to pin " + this.getId());
 			w.clear();
 			w = null;
 		}

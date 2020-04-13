@@ -10,6 +10,7 @@ delete=Löschen
 description=Beschreibung
 dontsave=Nicht Speichern
 readerror=Fehler beim Laden der Datei (falsche LogicSim-Version?)
+editwire=Kabel bearbeiten: ESC zum Löschen des letzten Punkts, DEL zum Löschen des Kabels, Klick auf Pin zum Beenden
 exit=Exit
 export=Export
 file=Datei

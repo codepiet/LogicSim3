@@ -175,15 +175,6 @@ public class Gate extends CircuitPart {
 		}
 	}
 
-	public void deactivateWires() {
-		for (Pin conn : getOutputs()) {
-			if (conn.isConnected()) {
-				for (Wire w : conn.wires)
-					w.deselect();
-			}
-		}
-	}
-
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
 		AffineTransform old = null;
@@ -515,7 +506,7 @@ public class Gate extends CircuitPart {
 	@Override
 	public final void mousePressed(LSMouseEvent e) {
 		super.mousePressed(e);
-		notifyMessage(I18N.getString(type, "title"));
+		notifyMessage(I18N.getString(type, I18N.TITLE));
 
 		if (Simulation.getInstance().isRunning())
 			mousePressedSim(e);

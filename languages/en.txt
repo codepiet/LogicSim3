@@ -9,6 +9,7 @@ connected=connected
 delete=Delete
 description=Description
 dontsave=Don't Save
+editwire=edit wire: ESC to delete last wirepoint, DEL to delete wire, click onto pin to connect
 readerror=error reading file (wrong LogicSim-version?)
 exit=Exit
 export=Export

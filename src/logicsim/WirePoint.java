@@ -16,9 +16,7 @@ public class WirePoint extends CircuitPart {
 
 	public static final int POINT_SIZE = 7;
 
-	protected boolean active = false;
-
-	protected boolean forceDraw = false;
+	protected boolean show = false;
 
 	public WirePoint(int x, int y) {
 		super(x, y);
@@ -26,12 +24,12 @@ public class WirePoint extends CircuitPart {
 
 	public WirePoint(int x, int y, boolean draw) {
 		this(x, y);
-		this.forceDraw = draw;
+		this.show = draw;
 	}
 
 	@Override
 	public String toString() {
-		return "(" + getX() + "," + getY() + "-" + (active ? "w" : "f") + ")";
+		return "(" + getX() + "," + getY() + "-" + (show ? "w" : "f") + ")";
 	}
 
 	@Override
@@ -55,21 +53,16 @@ public class WirePoint extends CircuitPart {
 	@Override
 	public void mousePressed(LSMouseEvent e) {
 		super.mousePressed(e);
+		notifyMessage("WIREPOINT_CLICKED");
 		// Auf Punkt eines Wires geklickt ?
 		if (!e.isShiftDown()) {
-			Log.getInstance().print("auf wirepunkt geklickt - ohne shift");
 			select();
-			return;
-		}
-
-		// mit SHIFT auf Punkt eines Wires geklickt ?
-		if (e.isShiftDown()) {
-			Log.getInstance().print("auf wirepunkt geklickt - mit shift");
-			forceDraw = true;
+		} else {
+			select();
 			// Wire newWire = ((Wire) currentPart).clone();
 			// newWire.activate();
-			return;
 		}
+		notifyRepaint();
 	}
 
 	@Override

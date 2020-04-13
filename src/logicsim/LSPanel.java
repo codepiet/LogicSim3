@@ -24,6 +24,7 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.util.Arrays;
 
 import javax.swing.event.MouseInputAdapter;
 
@@ -75,8 +76,9 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
+			e = convertToWorld(e);
 			if (currentAction == ACTION_SELECT) {
-				e = convertToWorld(e);
+				notifyZoomPos(scaleX, new Point(e.getX(), e.getY()));
 				// previousPoint is the start point of the selection box
 				Point currentMouse = new Point(e.getX(), e.getY());
 				if (currentMouse.x < previousPoint.x || currentMouse.y < previousPoint.y)
@@ -93,7 +95,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				int dx = e.getX() - previousPoint.x;
 				int dy = e.getY() - previousPoint.y;
 				translate(dx, dy);
-				previousPoint.setLocation(e.getX(), e.getY());
 				return;
 			} else {
 				// don't drag in simulation mode
@@ -101,7 +102,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					return;
 
 				// drag parts
-				e = convertToWorld(e);
+				notifyZoomPos(scaleX, new Point(e.getX(), e.getY()));
 				for (CircuitPart part : parts) {
 					part.mouseDragged(e);
 
@@ -141,14 +142,19 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			}
 		}
 
+		private void setPoint(int x, int y) {
+			previousPoint.setLocation(x, y);
+			// System.out.println(previousPoint);
+		}
+
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			e = convertToWorld(e);
 
 			int rx = CircuitPart.round(e.getX());
 			int ry = CircuitPart.round(e.getY());
-			notifyZoomPos();
-			previousPoint.setLocation(rx, ry);
+			setPoint(rx, ry);
+			notifyZoomPos(scaleX, new Point(rx, ry));
 
 			CircuitPart[] parts = circuit.getSelected();
 			if (parts.length == 1 && parts[0] instanceof Wire) {
@@ -175,24 +181,41 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		@Override
 		public void mousePressed(MouseEvent e) {
 			e = convertToWorld(e);
+			setPoint(e.getX(), e.getY());
 			if (currentAction == ACTION_SELECT) {
-				previousPoint.setLocation(e.getX(), e.getY());
 				selectRect = new Rectangle2D.Double(e.getX(), e.getY(), 0, 0);
 			}
 
 			CircuitPart[] parts = circuit.getSelected();
 			CircuitPart cp = circuit.findPartAt(e.getX(), e.getY());
+			boolean wireNotFinished = (parts.length == 1 && parts[0] instanceof Wire
+					&& ((Wire) parts[0]).isNotFinished());
+			if (wireNotFinished) {
+				// we are drawing a wire: add a new point and change nothing else
+				Wire wire = (Wire) parts[0];
+				if (cp == null)
+					// empty space clicked
+					wire.addPoint(CircuitPart.round(e.getX()), CircuitPart.round(e.getY()));
+				else if (cp instanceof Pin) {
+					Pin pin = ((Pin) cp);
+					// check for existing wire, if there is one, delete!
+					if (pin.isConnected()) {
+						for (Wire w : pin.wires) {
+							w.clear();
+						}
+					}
+					wire.connect(pin);
+					wire.setTempPoint(null);
+					wire.setChangeListener(circuit);
+					notifyChangeListener();
+					// now we have a finished wire, the wire stays active
+				}
+				repaint();
+				return;
+			}
 			if (cp == null) {
 				// empty space has been clicked
-				if (parts.length == 1 && parts[0] instanceof Wire && ((Wire) parts[0]).isNotFinished()) {
-					// we are drawing a wire: add a new point and change nothing else
-					Wire wire = (Wire) parts[0];
-					wire.addPoint(CircuitPart.round(e.getX()), CircuitPart.round(e.getY()));
-					Log.getInstance().print(wire);
-				} else {
-					// nothing happened
-					circuit.deselectAll();
-				}
+				circuit.deselectAll();
 				repaint();
 				return;
 			}
@@ -200,22 +223,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			// check if the part is a connector
 			if (cp instanceof Pin) {
 				Pin pin = ((Pin) cp);
-				// if we are drawing a wire then this is the endpoint
-				if (pin.isInput() && parts.length == 1 && parts[0] instanceof Wire) {
-					Wire activeWire = (Wire) parts[0];
-					// check for existing wire, if there is one, delete!
-					if (pin.isConnected()) {
-						for (Wire w : pin.wires) {
-							w.clear();
-						}
-					}
-					activeWire.connect(pin);
-					activeWire.setTempPoint(null);
-					activeWire.setChangeListener(circuit);
-					notifyChangeListener();
-					// now we have a finished wire, the wire stays active
-					return;
-				}
 
 				// we cannot edit a Connector, but we can
 				// 1. set an input to inverted or high or low or revert to normal type
@@ -235,7 +242,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					// output is clicked
 					Wire newWire = new Wire(null, null);
 					newWire.connect(pin);
-					notifyChangeListener("MSG_NEW_WIRE_STARTED");
+					notifyChangeListener(I18N.tr(Lang.EDITWIRE));
 					circuit.deselectAll();
 					newWire.select();
 					notifyChangeListener();
@@ -253,16 +260,14 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 						parts = circuit.getSelected();
 					}
 				}
-			}
-			if (cp instanceof Wire) {
+			} else if (cp instanceof Wire) {
+				circuit.deselectAll();
+				cp.select();
+			} else if (cp instanceof WirePoint) {
 				circuit.deselectAll();
 				cp.select();
 			}
-			if (cp instanceof WirePoint) {
-				circuit.deselectAll();
-				cp.select();
-			}
-
+			
 			// if (lastClicked != null && lastClicked != cp)
 			// lastClicked.deselect();
 			// lastClicked = cp;
@@ -295,7 +300,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			zoom(e.getX(), e.getY(), -e.getWheelRotation() * zoomingSpeed);
-			notifyZoomPos();
+			notifyZoomPos(scaleX, new Point(e.getX(), e.getY()));
 		}
 	}
 
@@ -366,7 +371,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	}
 
 	@Override
-	public void changedZoomPos() {
+	public void changedZoomPos(double zoom, Point pos) {
 	}
 
 	public void clear() {
@@ -434,8 +439,11 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 		if (keyCode == KeyEvent.VK_ESCAPE) {
 			if (parts.length == 1 && parts[0] instanceof Wire) {
-				int pointsOfWire = ((Wire) parts[0]).removeLastPoint();
+				Wire w = (Wire) parts[0];
+				int pointsOfWire = w.removeLastPoint();
 				if (pointsOfWire == 0) {
+					w = null;
+					parts = null;
 					circuit.deselectAll();
 					// TODO must the wire be deleted somewhere?
 				}
@@ -515,9 +523,9 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		}
 	}
 
-	private void notifyZoomPos() {
+	private void notifyZoomPos(double zoom, Point mousePos) {
 		if (changeListener != null)
-			changeListener.changedZoomPos();
+			changeListener.changedZoomPos(zoom, mousePos);
 	}
 
 	@Override
@@ -599,16 +607,20 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	 * less zoom
 	 */
 	public void zoomOut() {
-		zoom((int) getTransformer().screenToWorldX(getWidth() / 2),
-				(int) getTransformer().screenToWorldY(getHeight() / 2), -0.5f);
+		int x = (int) getTransformer().screenToWorldX(getWidth() / 2);
+		int y = (int) getTransformer().screenToWorldY(getHeight() / 2);
+		zoom(x, y, -0.5f);
+		notifyZoomPos(scaleX, new Point(x, y));
 	}
 
 	/**
 	 * more zoom
 	 */
 	public void zoomIn() {
-		zoom((int) getTransformer().screenToWorldX(getWidth() / 2),
-				(int) getTransformer().screenToWorldY(getHeight() / 2), 0.5f);
+		int x = (int) getTransformer().screenToWorldX(getWidth() / 2);
+		int y = (int) getTransformer().screenToWorldY(getHeight() / 2);
+		zoom(x, y, 0.5f);
+		notifyZoomPos(scaleX, new Point(x, y));
 	}
 
 }
