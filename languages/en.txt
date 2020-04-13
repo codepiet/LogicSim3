@@ -2,6 +2,7 @@ aborted=aborted
 about=About LogicSim
 addpoint.help=click on wire to add point
 addpoint=Add Point to Wire
+autowire=Autowiring
 basic=Basic Gates
 cancel=Cancel
 connected=connected

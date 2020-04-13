@@ -2,6 +2,7 @@ aborted=abgebrochen
 about=†Über LogicSim
 addpoint.help=Klicke auf ein Kabel um einen Punkt hinzuzufügen
 addpoint=Punkt zu Kabel hinzufügen
+autowire=Autom. Verkabelung
 basic=Grundgatter
 cancel=Abbruch
 connected=verbunden

@@ -234,6 +234,19 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		mnuSettings.add(mSettingsPaintGrid);
 
+		boolean autowire = LSProperties.getInstance().getPropertyBoolean(LSProperties.AUTOWIRE, true);
+		final JCheckBoxMenuItem mSettingsAutoWire = new JCheckBoxMenuItem();
+		mSettingsAutoWire.setText(I18N.tr(Lang.AUTOWIRE));
+		mSettingsAutoWire.setSelected(sel);
+		mSettingsAutoWire.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LSProperties.getInstance().setPropertyBoolean(LSProperties.AUTOWIRE, mSettingsAutoWire.isSelected());
+				lspanel.repaint();
+			}
+		});
+		mnuSettings.add(mSettingsAutoWire);
+
 		JMenu mGatedesign = new JMenu(I18N.tr(Lang.GATEDESIGN));
 		String gatedesign = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN,
 				LSProperties.GATEDESIGN_IEC);

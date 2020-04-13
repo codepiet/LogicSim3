@@ -105,22 +105,32 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				for (CircuitPart part : parts) {
 					part.mouseDragged(e);
 
-					// check if currentpart is a gate and if any output touches another part's input
-					// pin
-					if (part instanceof Gate) {
-						Gate gate = (Gate) part;
-						for (Pin pin : gate.getOutputs()) {
-							int x = pin.getX();
-							int y = pin.getY();
-							for (Gate g : circuit.getGates()) {
-								CircuitPart cp = g.findPartAt(x, y);
-								if (cp != null && cp instanceof Pin) {
-									Pin p = (Pin) cp;
-									if (p.isInput() && !p.isConnected()) {
-										// put new wire between pin and p
-										Wire w = new Wire(pin, p);
-										p.addWire(w);
-										pin.addWire(w);
+					if (LSProperties.getInstance().getPropertyBoolean(LSProperties.AUTOWIRE, true)) {
+						// check if currentpart is a gate and if any output touches another part's input
+						// pin
+						if (part instanceof Gate) {
+							Gate gate = (Gate) part;
+							for (Pin pin : gate.pins) {
+								// autowire unconnected pins only
+								if (pin.isConnected())
+									continue;
+								int x = pin.getX();
+								int y = pin.getY();
+								for (Gate g : circuit.getGates()) {
+									CircuitPart cp = g.findPartAt(x, y);
+									if (cp instanceof Pin) {
+										Pin p = (Pin) cp;
+										if (pin.isInput() == p.isOutput() && !p.isConnected()) {
+											// put new wire between pin and p
+											Wire w = null;
+											if (pin.isOutput())
+												w = new Wire(pin, p);
+											else
+												w = new Wire(p, pin);
+											p.addWire(w);
+											pin.addWire(w);
+											w.deselect();
+										}
 									}
 								}
 							}

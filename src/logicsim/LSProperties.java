@@ -15,6 +15,8 @@ public class LSProperties {
 
 	public static final String GATEDESIGN_IEC = "iec";
 
+	public static final String AUTOWIRE = "autowire";
+
 	private static LSProperties instance = null;
 
 	private Properties properties = new Properties();
