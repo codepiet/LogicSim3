@@ -58,6 +58,10 @@ public class TextLabel extends Gate {
 	}
 
 	@Override
+	protected void drawFrame(Graphics2D g2) {
+	}
+
+	@Override
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
 		g2.setFont(bigFont);

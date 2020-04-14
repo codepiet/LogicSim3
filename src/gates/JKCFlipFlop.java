@@ -25,7 +25,7 @@ public class JKCFlipFlop extends Gate {
 	public JKCFlipFlop() {
 		super("flipflops");
 		type = "jkcff";
-		label = "JKC";
+		label = "JK";
 		createInputs(3);
 		createOutputs(2);
 

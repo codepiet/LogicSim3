@@ -9,6 +9,7 @@ import javax.swing.JColorChooser;
 import logicsim.ColorFactory;
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.Lang;
 
 /**
  * LED for LogicSim
@@ -71,7 +72,8 @@ public class LED extends Gate {
 
 	@Override
 	public boolean showPropertiesUI(Component frame) {
-		Color newColor = JColorChooser.showDialog(null, I18N.getString(type, "ui.title"), color);
+		Color newColor = JColorChooser.showDialog(null,
+				I18N.getString(type, I18N.TITLE) + " " + I18N.tr(Lang.SETTINGS), color);
 		if (newColor != null)
 			color = newColor;
 		setProperty(COLOR, "#" + Integer.toHexString(color.getRGB()).substring(2));

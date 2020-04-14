@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import logicsim.Pin;
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.Lang;
 
 /**
  * Off-Delay component for LogicSim
@@ -64,9 +65,8 @@ public class OffDelay extends Gate {
 	}
 
 	public boolean showPropertiesUI(Component frame) {
-		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, "ui.time"),
-				I18N.getString(type, "ui.title"), JOptionPane.QUESTION_MESSAGE, null, null,
-				Integer.toString((int) delayTime));
+		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, DELAY), I18N.tr(Lang.SETTINGS),
+				JOptionPane.QUESTION_MESSAGE, null, null, Integer.toString((int) delayTime));
 		if (h != null && h.length() > 0) {
 			delayTime = Integer.parseInt(h);
 			setPropertyInt(DELAY, delayTime);

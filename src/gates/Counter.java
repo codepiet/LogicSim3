@@ -105,10 +105,10 @@ public class Counter extends Gate {
 		g.setFont(Pin.smallFont);
 		String s = "CNT";
 		sw = g.getFontMetrics().stringWidth(s);
-		g.drawString(s, x + getWidth() / 2 - sw / 2, y + 12);
+		g.drawString(s, x + getWidth() / 2 - sw / 2, y + 16);
 		s = displayType.toUpperCase();
 		sw = g.getFontMetrics().stringWidth(s);
-		g.drawString(s, x + getWidth() / 2 - sw / 2, y + 24);
+		g.drawString(s, x + getWidth() / 2 - sw / 2, y + 27);
 	}
 
 	public boolean hasPropertiesUI() {
@@ -134,9 +134,9 @@ public class Counter extends Gate {
 		BorderLayout borderLayout1 = new BorderLayout();
 
 		titledBorder1 = new TitledBorder(new EtchedBorder(EtchedBorder.RAISED, Color.white, new Color(142, 142, 142)),
-				I18N.getString(type, "ui.displaytype"));
-		jRadioButton1.setText(I18N.getString(type, "ui.hex"));
-		jRadioButton2.setText(I18N.getString(type, "ui.dec"));
+				I18N.getString(type, DISPLAY_TYPE));
+		jRadioButton1.setText(I18N.getString(type, DISPLAY_TYPE_HEX));
+		jRadioButton2.setText(I18N.getString(type, DISPLAY_TYPE_DEC));
 		jPanel1.setBorder(titledBorder1);
 		jPanel1.setBounds(new Rectangle(11, 11, 171, 150));
 		jPanel1.setLayout(borderLayout1);
@@ -146,7 +146,7 @@ public class Counter extends Gate {
 		JOptionPane pane = new JOptionPane(jPanel1);
 		pane.setMessageType(JOptionPane.QUESTION_MESSAGE);
 		pane.setOptions(new String[] { I18N.tr(Lang.OK), I18N.tr(Lang.CANCEL) });
-		JDialog dlg = pane.createDialog(frame, I18N.getString(type, "ui.title"));
+		JDialog dlg = pane.createDialog(frame, I18N.tr(Lang.SETTINGS));
 		dlg.setResizable(true);
 		dlg.setSize(290, 180);
 		dlg.setVisible(true);

@@ -99,9 +99,9 @@ public class BinDisp extends Gate {
 		BorderLayout borderLayout1 = new BorderLayout();
 
 		titledBorder1 = new TitledBorder(new EtchedBorder(EtchedBorder.RAISED, Color.white, new Color(142, 142, 142)),
-				I18N.getString(type, "ui.displaytype"));
-		jRadioButton1.setText(I18N.getString(type, "ui.hex"));
-		jRadioButton2.setText(I18N.getString(type, "ui.dec"));
+				I18N.getString(type, UI_TYPE));
+		jRadioButton1.setText(I18N.getString(type, DISPLAY_TYPE_HEX));
+		jRadioButton2.setText(I18N.getString(type, DISPLAY_TYPE_DEC));
 		jPanel1.setBorder(titledBorder1);
 		jPanel1.setBounds(new Rectangle(11, 11, 171, 150));
 		jPanel1.setLayout(borderLayout1);

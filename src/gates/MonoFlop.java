@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.Lang;
 
 /**
  * MonoFlop for LogicSim
@@ -83,8 +84,8 @@ public class MonoFlop extends Gate {
 
 	@Override
 	public boolean showPropertiesUI(Component frame) {
-		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, "ui.entermessagehigh"),
-				I18N.getString(type, "ui.title"), JOptionPane.QUESTION_MESSAGE, null, null,
+		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, HT),
+				I18N.tr(Lang.SETTINGS), JOptionPane.QUESTION_MESSAGE, null, null,
 				Integer.toString((int) highTime));
 		if (h != null && h.length() > 0) {
 			highTime = Integer.parseInt(h);

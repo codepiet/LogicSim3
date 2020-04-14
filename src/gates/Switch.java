@@ -207,9 +207,9 @@ public class Switch extends Gate {
 		// Border border1 = new EtchedBorder(EtchedBorder.RAISED, Color.white, new
 		// Color(142, 142, 142));
 		titledBorder1 = new TitledBorder(new EtchedBorder(EtchedBorder.RAISED, Color.white, new Color(142, 142, 142)),
-				I18N.getString(type, "ui.grouptitle"));
-		jRadioButton1.setText(I18N.getString(type, "ui.toggle"));
-		jRadioButton2.setText(I18N.getString(type, "ui.click"));
+				I18N.getString(type, SWITCH_TYPE));
+		jRadioButton1.setText(I18N.getString(type, TOGGLE));
+		jRadioButton2.setText(I18N.getString(type, MOMENTARY));
 		jPanel1.setBorder(titledBorder1);
 		jPanel1.setBounds(new Rectangle(11, 11, 171, 150));
 		jPanel1.setLayout(borderLayout1);
@@ -219,7 +219,7 @@ public class Switch extends Gate {
 		JOptionPane pane = new JOptionPane(jPanel1);
 		pane.setMessageType(JOptionPane.QUESTION_MESSAGE);
 		pane.setOptions(new String[] { I18N.tr(Lang.OK), I18N.tr(Lang.CANCEL) });
-		JDialog dlg = pane.createDialog(frame, I18N.getString(type, "ui.title"));
+		JDialog dlg = pane.createDialog(frame, I18N.tr(Lang.SETTINGS));
 		dlg.setResizable(true);
 		dlg.setSize(290, 180);
 		dlg.setVisible(true);
@@ -229,10 +229,10 @@ public class Switch extends Gate {
 			} else if (jRadioButton2.isSelected()) {
 				clickType = true;
 			}
-			setProperty(SWITCH_TYPE, clickType ? "momentary" : TOGGLE);
+			setProperty(SWITCH_TYPE, clickType ? MOMENTARY : TOGGLE);
 		}
 
-		Color newColor = JColorChooser.showDialog(null, I18N.getString(type, "ui.title"), color);
+		Color newColor = JColorChooser.showDialog(null, I18N.tr(Lang.SETTINGS), color);
 		if (newColor != null)
 			color = newColor;
 		setProperty(COLOR, "#" + Integer.toHexString(color.getRGB()).substring(2));

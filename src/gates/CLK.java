@@ -13,6 +13,7 @@ import logicsim.Pin;
 import logicsim.Gate;
 import logicsim.I18N;
 import logicsim.LSMouseEvent;
+import logicsim.Lang;
 import logicsim.Log;
 import logicsim.WidgetHelper;
 
@@ -170,16 +171,14 @@ public class CLK extends Gate {
 	}
 
 	public boolean showPropertiesUI(Component frame) {
-		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, "ui.entermessagehigh"),
-				I18N.getString(type, "ui.title"), JOptionPane.QUESTION_MESSAGE, null, null,
-				Integer.toString((int) highTime));
+		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, ENTERHIGH), I18N.tr(Lang.SETTINGS),
+				JOptionPane.QUESTION_MESSAGE, null, null, Integer.toString((int) highTime));
 		if (h != null && h.length() > 0) {
 			highTime = Integer.parseInt(h);
 			setPropertyInt(HT, highTime);
 		}
-		h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, "ui.entermessagelow"),
-				I18N.getString(type, "ui.title"), JOptionPane.QUESTION_MESSAGE, null, null,
-				Integer.toString((int) lowTime));
+		h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, ENTERLOW), I18N.tr(Lang.SETTINGS),
+				JOptionPane.QUESTION_MESSAGE, null, null, Integer.toString((int) lowTime));
 		if (h != null && h.length() > 0) {
 			lowTime = Integer.parseInt(h);
 			setPropertyInt(LT, lowTime);
