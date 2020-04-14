@@ -24,7 +24,6 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.util.Arrays;
 
 import javax.swing.event.MouseInputAdapter;
 
@@ -481,20 +480,9 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			}
 			return;
 		}
-		if (keyCode == KeyEvent.VK_S) {
-			setAction(ACTION_SELECT);
-			return;
-		}
 		if (keyCode == KeyEvent.VK_A) {
 			scaleAndMoveToAll();
 			return;
-		}
-		if (keyCode == KeyEvent.VK_M) {
-			mirrorSelected();
-		}
-
-		if (keyCode == KeyEvent.VK_R) {
-			rotateSelected();
 		}
 
 //		if (keyCode == KeyEvent.VK_SPACE) {

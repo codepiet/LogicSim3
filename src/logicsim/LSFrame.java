@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
@@ -39,6 +40,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -124,81 +126,38 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		mnuBar = new JMenuBar();
 
-		JMenu mnuFile = new JMenu();
-		mnuFile.setText(I18N.tr(Lang.FILE));
+		JMenu mnuFile = new JMenu(I18N.tr(Lang.FILE));
 
-		JMenuItem mFileExit = new JMenuItem();
-		mFileExit.setText(I18N.tr(Lang.EXIT));
-		mFileExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(88, InputEvent.CTRL_DOWN_MASK, false));
-		mFileExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (showDiscardDialog(I18N.tr(Lang.EXIT)) == false)
-					return;
-				System.exit(0);
-			}
-		});
-
-		JMenuItem mFileCreateMode = new JMenuItem(I18N.tr(Lang.MODULECREATE));
-		mFileCreateMode.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				actionCreateModule(e);
-			}
-		});
-
-		JMenuItem mFileProperties = new JMenuItem(I18N.tr(Lang.PROPERTIES));
-		mFileProperties.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (FileInfoDialog.showFileInfo(LSFrame.this, lsFile)) {
-					setAppTitle();
-				}
-			}
-		});
-
-		JMenuItem mFileExportImage = new JMenuItem(I18N.tr(Lang.EXPORT));
-		mFileExportImage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				exportImage();
-			}
-		});
-
-		JMenuItem mFilePrint = new JMenuItem();
-		mFilePrint.setText(I18N.tr(Lang.PRINT));
-		mFilePrint.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lspanel.doPrint();
-			}
-		});
-
-		JMenuItem mFileNew = new JMenuItem();
-		mFileNew.setText(I18N.tr(Lang.NEW));
-		mFileNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(78, InputEvent.CTRL_DOWN_MASK, false));
+		JMenuItem mFileNew = new JMenuItem(I18N.tr(Lang.NEW));
+		mFileNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK, false));
 		mFileNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionNew(e);
 			}
 		});
+		mnuFile.add(mFileNew);
 
-		JMenuItem mFileOpen = new JMenuItem();
-		mFileOpen.setText(I18N.tr(Lang.OPEN));
-		mFileOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(79, InputEvent.CTRL_DOWN_MASK, false));
+		JMenuItem mFileOpen = new JMenuItem(I18N.tr(Lang.OPEN) + "...");
+		mFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK, false));
 		mFileOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionOpen(e);
 			}
 		});
+		mnuFile.add(mFileOpen);
 
-		JMenuItem mFileSave = new JMenuItem();
-		mFileSave.setText(I18N.tr(Lang.SAVE));
-		mFileSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(87, InputEvent.CTRL_DOWN_MASK, false));
+		mnuFile.addSeparator();
+
+		JMenuItem mFileSave = new JMenuItem(I18N.tr(Lang.SAVE));
+		mFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK, false));
 		mFileSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionSave(e);
 			}
 		});
+		mnuFile.add(mFileSave);
 
-		JMenuItem mFileSaveAs = new JMenuItem();
-		mFileSaveAs.setText(I18N.tr(Lang.SAVEAS));
-		mFileSaveAs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(83, InputEvent.CTRL_DOWN_MASK, false));
+		JMenuItem mFileSaveAs = new JMenuItem(I18N.tr(Lang.SAVEAS) + "...");
 		mFileSaveAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (showSaveDialog() == false)
@@ -206,27 +165,131 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 				actionSave(e);
 			}
 		});
+		mnuFile.add(mFileSaveAs);
+
+		mnuFile.addSeparator();
+
+		JMenuItem mFileCreateMode = new JMenuItem(I18N.tr(Lang.MODULECREATE) + "...");
+		mFileCreateMode.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionCreateModule(e);
+			}
+		});
+		mnuFile.add(mFileCreateMode);
+
+		JMenuItem mFileProperties = new JMenuItem(I18N.tr(Lang.PROPERTIES) + "...");
+		mFileProperties.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (FileInfoDialog.showFileInfo(LSFrame.this, lsFile)) {
+					setAppTitle();
+				}
+			}
+		});
+		mnuFile.add(mFileProperties);
+
+		mnuFile.addSeparator();
+
+		JMenuItem mFileExportImage = new JMenuItem(I18N.tr(Lang.EXPORT) + "...");
+		mFileExportImage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				exportImage();
+			}
+		});
+		mnuFile.add(mFileExportImage);
+
+		JMenuItem mFilePrint = new JMenuItem(I18N.tr(Lang.PRINT) + "...");
+		mFilePrint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lspanel.doPrint();
+			}
+		});
+		mnuFile.add(mFilePrint);
+
+		mnuFile.addSeparator();
+
+		JMenuItem mFileExit = new JMenuItem(I18N.tr(Lang.EXIT));
+		mFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK, false));
+		mFileExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (showDiscardDialog(I18N.tr(Lang.EXIT)) == false)
+					return;
+				System.exit(0);
+			}
+		});
+		mnuFile.add(mFileExit);
 
 		mnuBar.add(mnuFile);
 
-		mnuFile.add(mFileNew);
-		mnuFile.add(mFileCreateMode);
-		mnuFile.add(mFileProperties);
-		mnuFile.add(mFileOpen);
-		mnuFile.add(mFileSave);
-		mnuFile.add(mFileSaveAs);
-		mnuFile.add(mFileExportImage);
-		mnuFile.add(mFilePrint);
-		mnuFile.add(mFileExit);
+		// ------------------------------------------------------------------
+		// EDIT
+		JMenu mnuEdit = new JMenu(I18N.tr(Lang.EDIT));
 
+		JMenuItem mEdit = new JMenuItem(I18N.tr(Lang.NEWWIRE));
+		mEdit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK, false));
+		mEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		mEdit.setEnabled(false);
+		mnuEdit.add(mEdit);
+
+		mnuEdit.addSeparator();
+
+		mEdit = new JMenuItem(I18N.tr(Lang.INPUTHIGH));
+		mEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		mnuEdit.add(mEdit);
+
+		mEdit = new JMenuItem(I18N.tr(Lang.INPUTLOW));
+		mEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		mnuEdit.add(mEdit);
+
+		mEdit = new JMenuItem(I18N.tr(Lang.INPUTINV));
+		mEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		mnuEdit.add(mEdit);
+
+		mEdit = new JMenuItem(I18N.tr(Lang.INPUTNORM));
+		mEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		mnuEdit.add(mEdit);
+
+		mnuEdit.addSeparator();
+
+		mEdit = new JMenuItem(I18N.tr(Lang.ROTATE));
+		mEdit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK, false));
+		mEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lspanel.rotateSelected();
+			}
+		});
+		mnuEdit.add(mEdit);
+
+		mEdit = new JMenuItem(I18N.tr(Lang.MIRROR));
+		mEdit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK, false));
+		mEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lspanel.mirrorSelected();
+			}
+		});
+		mnuEdit.add(mEdit);
+
+		mnuBar.add(mnuEdit);
 		// ------------------------------------------------------------------
 		// SETTINGS
-		JMenu mnuSettings = new JMenu();
-		mnuSettings.setText(I18N.tr(Lang.SETTINGS));
+		JMenu mnuSettings = new JMenu(I18N.tr(Lang.SETTINGS));
 
 		boolean sel = LSProperties.getInstance().getPropertyBoolean(LSProperties.PAINTGRID, true);
-		final JCheckBoxMenuItem mSettingsPaintGrid = new JCheckBoxMenuItem();
-		mSettingsPaintGrid.setText(I18N.tr(Lang.PAINTGRID));
+		final JCheckBoxMenuItem mSettingsPaintGrid = new JCheckBoxMenuItem(I18N.tr(Lang.PAINTGRID));
 		mSettingsPaintGrid.setSelected(sel);
 		mSettingsPaintGrid.addActionListener(new ActionListener() {
 			@Override
@@ -238,8 +301,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		mnuSettings.add(mSettingsPaintGrid);
 
 		boolean autowire = LSProperties.getInstance().getPropertyBoolean(LSProperties.AUTOWIRE, true);
-		final JCheckBoxMenuItem mSettingsAutoWire = new JCheckBoxMenuItem();
-		mSettingsAutoWire.setText(I18N.tr(Lang.AUTOWIRE));
+		final JCheckBoxMenuItem mSettingsAutoWire = new JCheckBoxMenuItem(I18N.tr(Lang.AUTOWIRE));
 		mSettingsAutoWire.setSelected(autowire);
 		mSettingsAutoWire.addActionListener(new ActionListener() {
 			@Override
@@ -278,8 +340,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		mnuSettings.add(mGatedesign);
 
-		JMenu mnuLanguage = new JMenu();
-		mnuLanguage.setText(I18N.tr(Lang.LANGUAGE));
+		JMenu mnuLanguage = new JMenu(I18N.tr(Lang.LANGUAGE));
 		String currentLanguage = LSProperties.getInstance().getProperty(LSProperties.LANGUAGE, "de");
 		createLanguageMenu(mnuLanguage, currentLanguage);
 		mnuSettings.add(mnuLanguage);
@@ -288,19 +349,16 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		// ------------------------------------------------------------------
 		// HELP
-		JMenu mnuHelp = new JMenu();
-		mnuHelp.setText(I18N.tr(Lang.HELP));
+		JMenu mnuHelp = new JMenu(I18N.tr(Lang.HELP));
 
-		JMenuItem mHelp = new JMenuItem();
-		mHelp.setText(I18N.tr(Lang.HELP));
+		JMenuItem mHelp = new JMenuItem(I18N.tr(Lang.HELP) + "...");
 		mHelp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new HTMLHelp();
 			}
 		});
 
-		JMenuItem mHelpAbout = new JMenuItem();
-		mHelpAbout.setText(I18N.tr(Lang.ABOUT));
+		JMenuItem mHelpAbout = new JMenuItem(I18N.tr(Lang.ABOUT) + "...");
 		mHelpAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new LSFrame_AboutBox(LSFrame.this);
