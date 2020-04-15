@@ -217,6 +217,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				// empty space has been clicked
 				circuit.deselectAll();
 				repaint();
+				fireStatusText("");
 				return;
 			}
 
@@ -286,7 +287,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 			if (currentAction == ACTION_SELECT) {
 				CircuitPart[] parts = circuit.findParts(selectRect);
-				fireStatusText(Lang.PARTSSELECTED + " " + parts.length);
+				fireStatusText(String.format(I18N.tr(Lang.PARTSSELECTED), String.valueOf(parts.length)));
 				currentAction = ACTION_NONE;
 				selectRect = null;
 				repaint();
@@ -618,6 +619,15 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		int y = (int) getTransformer().screenToWorldY(getHeight() / 2);
 		zoom(x, y, 0.5f);
 		notifyZoomPos(scaleX, new Point(x, y));
+	}
+
+	public void gateSettings() {
+		CircuitPart[] parts = circuit.getSelected();
+		if (parts.length == 1 && parts[0] instanceof Gate) {
+			Gate g = (Gate) parts[0];
+			g.showPropertiesUI(this);
+			fireCircuitChanged();
+		}
 	}
 
 }

@@ -345,6 +345,16 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		createLanguageMenu(mnuLanguage, currentLanguage);
 		mnuSettings.add(mnuLanguage);
 
+		mnuSettings.addSeparator();
+
+		JMenuItem mGate = new JMenuItem(I18N.tr(Lang.GATESETTINGS) + "...");
+		mGate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lspanel.gateSettings();
+			}
+		});
+		mnuSettings.add(mGate);
+
 		mnuBar.add(mnuSettings);
 
 		// ------------------------------------------------------------------
@@ -809,8 +819,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		}
 
 		setAppTitle();
-		String s = I18N.tr(Lang.SAVED).replaceFirst("%s", lsFile.fileName);
-		setStatusText(s);
+		setStatusText(String.format(I18N.tr(Lang.SAVED), lsFile.fileName));
 		lsFile.changed = false;
 		fillGateList();
 	}
@@ -941,7 +950,10 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		if (gate instanceof Module) {
 			Module m = (Module) gate;
 			lspanel.setAction(m);
-			setStatusText(m.lsFile.getDescription());
+			if (m.lsFile.getDescription() != null)
+				setStatusText(m.lsFile.getDescription());
+			else
+				setStatusText(m.type);
 			lspanel.requestFocusInWindow();
 		} else {
 			// gate is normal Gate-Object

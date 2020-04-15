@@ -20,6 +20,7 @@ flipflops=Flipflops
 gatedesign.ansi=ANSI
 gatedesign.iec=IEC
 gatedesign=Gate Design
+gatesettings=Gate Settings
 help=Help
 input=Input
 inputhigh.help=click on input to set it to high level
