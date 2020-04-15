@@ -73,8 +73,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	int popupGateIdx;
 	int popupModule;
 
-	Simulation sim;
-
 	JMenuBar mnuBar;
 
 	ButtonGroup buttongroup_language = new ButtonGroup();
@@ -470,9 +468,8 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		LSButton btnReset = new LSButton("reset", Lang.RESET);
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				staticReset();
-				if (sim != null)
-					sim.reset();
+				lspanel.circuit.reset();
+				lspanel.repaint();
 			}
 		});
 		btnBar.add(btnReset, null);
@@ -685,27 +682,16 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 	void actionSimulate(ActionEvent e) {
 		LSToggleButton btn = (LSToggleButton) e.getSource();
-		sim = Simulation.getInstance();
-		sim.setPanel(lspanel);
+
 		if (btn.isSelected()) {
-			if (!sim.isRunning()) {
+			if (!Simulation.getInstance().isRunning()) {
 				lspanel.circuit.deselectAll();
 				repaint();
-				sim.start();
+				Simulation.getInstance().start();
 			}
 		} else {
-			if (sim.isRunning())
-				sim.stop();
-		}
-	}
-
-	void staticReset() {
-		if (sim != null && !sim.isRunning()) {
-			for (int i = 0; i < lspanel.circuit.gates.size(); i++) {
-				Gate g = (Gate) lspanel.circuit.gates.get(i);
-				g.reset();
-			}
-			lspanel.repaint();
+			if (Simulation.getInstance().isRunning())
+				Simulation.getInstance().stop();
 		}
 	}
 
@@ -736,6 +722,9 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	 * @param e
 	 */
 	void actionOpen(ActionEvent e) {
+		if (Simulation.getInstance().isRunning())
+			Simulation.getInstance().stop();
+
 		if (showDiscardDialog(I18N.tr(Lang.OPEN)) == false)
 			return;
 
@@ -746,12 +735,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			lsFile.fileName = chooser.getSelectedFile().getAbsolutePath();
 		} else
 			return;
-
-		// stop simulation and do reset
-		if (sim != null) {
-			sim.stop();
-			// btnSimulate.setSelected(false);
-		}
 
 		try {
 			lsFile = XMLLoader.loadXmlFile(lsFile.fileName);
@@ -764,7 +747,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		lspanel.clear();
 		lspanel.circuit.setGates(lsFile.getGates());
 		lspanel.circuit.setWires(lsFile.getWires());
-		staticReset();
+		lspanel.circuit.reset();
 	}
 
 	/**

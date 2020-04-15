@@ -280,4 +280,9 @@ public class Circuit implements LSRepaintListener {
 		return parts.toArray(new CircuitPart[parts.size()]);
 	}
 
+	public void reset() {
+		for (Gate g : gates)
+			g.reset();
+	}
+
 }
