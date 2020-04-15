@@ -195,7 +195,7 @@ public class CLK extends Gate implements Runnable {
 	@Override
 	public void run() {
 		running = true;
-		int ms = 2000 / oszi.width;
+		int ms = 10 * highTime / oszi.width;
 		Date temp = new Date();
 		long lastMS = new Date().getTime();
 		lastTime = new Date().getTime();

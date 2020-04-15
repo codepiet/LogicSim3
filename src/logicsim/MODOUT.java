@@ -35,20 +35,19 @@ public class MODOUT extends Gate {
 	}
 
 	@Override
-	public void simulate() {
-		super.simulate();
-		int ni = getNumInputs();
-		for (int i = 0; i < ni; i++)
-			getPin(i + ni).setLevel(getPin(i).getLevel());
+	public void changedLevel(LSLevelEvent e) {
+		Pin p = (Pin) e.source;
+		int target = p.number + getNumInputs();
+		LSLevelEvent evt = new LSLevelEvent(this, p.getLevel());
+		getPin(target).changedLevel(evt);
 	}
 
 	@Override
 	public void loadLanguage() {
-//		gate.modout.description=Outputs
-//		gate.modout.title=Moduleoutputs
-
-//		gate.modout.description=Ausgänge für das spätere Modul
-//		gate.modout.title=Modulausgänge
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Outputs");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Output Gate for Modules");
+		I18N.addGate("de", type, I18N.TITLE, "Modulausgänge");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "Ausgangsgatter für Module");
 	}
 
 }

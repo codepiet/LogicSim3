@@ -35,22 +35,20 @@ public class MODIN extends Gate {
 	}
 
 	@Override
-	public void simulate() {
-		super.simulate();
-		int ni = getNumInputs();
-		for (int i = 0; i < ni; i++)
-			getPin(i + ni).setLevel(getPin(i).getLevel());
+	public void changedLevel(LSLevelEvent e) {
+		Pin p = (Pin) e.source;
+		//forward event to the appropriate output
+		int target = p.number + getNumInputs();
+		LSLevelEvent evt = new LSLevelEvent(this, p.getLevel());
+		getPin(target).changedLevel(evt);
 	}
-	
-	@Override
-		public void loadLanguage() {
-//		gate.modin.description=Inputs
-//				gate.modin.title=Moduleinputs
-		
-		//gate.modin.description=Eingänge für das spätere Modul
-		//		gate.modin.title=Moduleingänge
 
-		
-		}
+	@Override
+	public void loadLanguage() {
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Inputs");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Input Gate for Modules");
+		I18N.addGate("de", type, I18N.TITLE, "Moduleingänge");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "Eingangsgatter für Module");
+	}
 
 }

@@ -5,10 +5,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-import logicsim.Pin;
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.LSMouseEvent;
+import logicsim.Pin;
 import logicsim.WidgetHelper;
 
 /**
@@ -56,7 +57,7 @@ public class Switch4 extends Gate {
 		int my = e.getY();
 		for (int i = 0; i < areaRect.length; i++) {
 			if (areaRect[i].contains(mx, my)) {
-				getPin(i).setLevel(!getPin(i).getLevel());
+				getPin(i).changedLevel(new LSLevelEvent(this, !getPin(i).getLevel()));
 				break;
 			}
 		}

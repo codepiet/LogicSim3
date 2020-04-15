@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import logicsim.Pin;
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 
 /**
  * Test Gate for LogicSim
@@ -54,15 +55,9 @@ public class TEST extends Gate {
 	}
 
 	@Override
-	public void simulate() {
-		for (int i = 0; i < getNumInputs(); i++)
-			getPin(i + 4).setLevel(getPin(i).getLevel());
-	}
-
-	@Override
-	public void reset() {
-		for (int i = 0; i < getNumInputs(); i++)
-			getPin(i + 4).setLevel(getPin(i).getLevel());
+	public void changedLevel(LSLevelEvent e) {
+		Pin p = (Pin) e.source;
+		getPin(p.number + 4).changedLevel(new LSLevelEvent(this, e.level));
 	}
 
 	@Override
