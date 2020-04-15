@@ -22,7 +22,7 @@ import java.util.Vector;
  */
 public class Gate extends CircuitPart {
 
-	public static final int BOTHAXES = 3;
+	public static final int BOTH_AXES = 3;
 
 	protected static final int CONN_SIZE = 7;
 
@@ -197,7 +197,7 @@ public class Gate extends CircuitPart {
 	protected void drawFrame(Graphics2D g2) {
 		Rectangle2D border = new Rectangle2D.Double(getX() + CONN_SIZE - 1, getY() + CONN_SIZE - 1,
 				(width + 2) - 2 * CONN_SIZE, (height + 2) - 2 * CONN_SIZE);
-		g2.setPaint(backgroundColor);
+		g2.setPaint(busted ? Color.red : backgroundColor);
 		g2.fill(border);
 		g2.setPaint(Color.black);
 		g2.setStroke(new BasicStroke(1));
@@ -643,6 +643,26 @@ public class Gate extends CircuitPart {
 			s += "\n" + indent(c.toString(), 3);
 		}
 		return s;
+	}
+
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		// source has to be a Pin
+		if (!(e.source instanceof Pin))
+			throw new RuntimeException(
+					"gates communicate with pins only! source is " + e.source.getId() + ", target is " + getId());
+		Pin p = (Pin) e.source;
+		if (p.isOutput() && e.level == HIGH) {
+			// if the level change comes from an output, this will crash the part
+			busted = true;
+		}
+	}
+
+	/**
+	 * gates can implement this method to let something happen when pressing the
+	 * action key (SPACE?)
+	 */
+	public void interact() {
 	}
 
 }

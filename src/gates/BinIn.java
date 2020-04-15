@@ -59,17 +59,35 @@ public class BinIn extends Gate {
 	}
 
 	@Override
-	public void mousePressedSim(LSMouseEvent e) {
-		super.mousePressedSim(e);
+	public void interact() {
+		int value = getValue();
+		value++;
+		if (value > 0xff)
+			value = 0;
+		setValue(value);
+	}
 
-		int dx = e.getX() - getX();
-		int dy = e.getY() - getY();
+	private int getValue() {
 		int value = 0;
 		for (int i = 0; i < 8; i++) {
 			if (getPin(i).getLevel())
 				value += (1 << i);
 		}
+		return value;
+	}
 
+	private void setValue(int value) {
+		for (int i = 0; i < 8; i++)
+			getPin(i).setLevel((value & (1 << i)) != 0);
+	}
+
+	@Override
+	public void mousePressedSim(LSMouseEvent e) {
+		super.mousePressedSim(e);
+
+		int dx = e.getX() - getX();
+		int dy = e.getY() - getY();
+		int value = getValue();
 		boolean dHex = DISPLAY_TYPE_HEX.equals(displayType);
 
 		if (rect1.contains(dx, dy)) {
@@ -93,8 +111,7 @@ public class BinIn extends Gate {
 		if (value > 0xff)
 			value = value - 0xff - 1;
 
-		for (int i = 0; i < 8; i++)
-			getPin(i).setLevel((value & (1 << i)) != 0);
+		setValue(value);
 	}
 
 	@Override

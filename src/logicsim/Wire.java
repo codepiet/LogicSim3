@@ -21,9 +21,9 @@ public class Wire extends CircuitPart implements Cloneable {
 	static final long serialVersionUID = -7554728800898882892L;
 
 	/**
-	 * connector from which this wire is originating
+	 * Pin/Wire/WirePoint from which this wire is originating
 	 */
-	public Pin fromConn;
+	public CircuitPart from;
 
 	/**
 	 * data structure to hold the wire points
@@ -35,7 +35,9 @@ public class Wire extends CircuitPart implements Cloneable {
 	/**
 	 * connector to which this wire is targeting
 	 */
-	public Pin toConn;
+	public CircuitPart to;
+
+	private boolean level;
 
 	/**
 	 * constructor specifying the gates and connector numbers
@@ -45,8 +47,8 @@ public class Wire extends CircuitPart implements Cloneable {
 	 */
 	public Wire(Pin fromConn, Pin toConn) {
 		this(0, 0);
-		this.fromConn = fromConn;
-		this.toConn = toConn;
+		this.from = fromConn;
+		this.to = toConn;
 		selected = true;
 	}
 
@@ -56,7 +58,7 @@ public class Wire extends CircuitPart implements Cloneable {
 
 	public void addPoint(int x, int y) {
 		// check if the point is not present
-		if (fromConn.getX() == x && fromConn.getY() == y)
+		if (from.getX() == x && from.getY() == y)
 			return;
 		int number = getNodeIndexAt(x, y);
 		if (number > -1) {
@@ -82,20 +84,6 @@ public class Wire extends CircuitPart implements Cloneable {
 		return clone;
 	}
 
-	public void connect(Pin conn) {
-		if (conn.isInput()) {
-			if (toConn != null)
-				throw new RuntimeException("wire is already connected - " + toConn.getId());
-			toConn = conn;
-			toConn.addWire(this);
-		} else {
-			if (fromConn != null)
-				throw new RuntimeException("wire is already connected - " + fromConn.getId());
-			fromConn = conn;
-			fromConn.addWire(this);
-		}
-	}
-
 	private Path2D convertPointsToPath() {
 		Path2D path = new Path2D.Float();
 		WirePoint first = getPointFrom();
@@ -106,8 +94,8 @@ public class Wire extends CircuitPart implements Cloneable {
 			path.lineTo(point.getX(), point.getY());
 		}
 
-		if (toConn != null) {
-			path.lineTo(toConn.getX(), toConn.getY());
+		if (to != null) {
+			path.lineTo(to.getX(), to.getY());
 		} else if (tempPoint != null) {
 			path.lineTo(tempPoint.x, tempPoint.y);
 		}
@@ -116,8 +104,8 @@ public class Wire extends CircuitPart implements Cloneable {
 
 	@Override
 	public void clear() {
-		fromConn = null;
-		toConn = null;
+		from = null;
+		to = null;
 		tempPoint = null;
 		points.clear();
 	}
@@ -148,7 +136,7 @@ public class Wire extends CircuitPart implements Cloneable {
 			}
 		}
 
-		if (toConn == null && tempPoint != null) {
+		if (to == null && tempPoint != null) {
 			// add a small red circle
 			g2.setPaint(Color.red);
 			g2.drawOval(tempPoint.x - 1, tempPoint.y - 1, 3, 3);
@@ -180,7 +168,7 @@ public class Wire extends CircuitPart implements Cloneable {
 		Vector<WirePoint> ps = new Vector<WirePoint>();
 		ps.add(getPointFrom());
 		ps.addAll(points);
-		if (toConn != null)
+		if (to != null)
 			ps.add(getPointTo());
 		return ps;
 	}
@@ -193,21 +181,18 @@ public class Wire extends CircuitPart implements Cloneable {
 	}
 
 	WirePoint getLastPoint() {
-		if (toConn != null) {
-			return new WirePoint(toConn.getX(), toConn.getY(), false);
+		if (to != null) {
+			return new WirePoint(to.getX(), to.getY(), false);
 		} else if (points.size() > 0) {
 			return points.get(points.size() - 1);
-		} else if (fromConn != null) {
-			return new WirePoint(fromConn.getX(), fromConn.getY(), false);
+		} else if (from != null) {
+			return new WirePoint(from.getX(), from.getY(), false);
 		}
 		throw new RuntimeException("Wire is empty!");
 	}
 
 	public boolean getLevel() {
-		if (fromConn != null)
-			return fromConn.getLevel();
-		else
-			return false;
+		return level;
 	}
 
 	/**
@@ -240,11 +225,11 @@ public class Wire extends CircuitPart implements Cloneable {
 	}
 
 	WirePoint getPointFrom() {
-		return new WirePoint(fromConn.getX(), fromConn.getY(), false);
+		return new WirePoint(from.getX(), from.getY(), false);
 	}
 
 	private WirePoint getPointTo() {
-		return new WirePoint(toConn.getX(), toConn.getY(), false);
+		return new WirePoint(to.getX(), to.getY(), false);
 	}
 
 	public void insertPointAfter(int n, int mx, int my) {
@@ -280,7 +265,7 @@ public class Wire extends CircuitPart implements Cloneable {
 	}
 
 	public boolean isNotFinished() {
-		return toConn == null;
+		return to == null;
 	}
 
 	@Override
@@ -334,7 +319,7 @@ public class Wire extends CircuitPart implements Cloneable {
 		} else {
 			select();
 			// call listener of fromGate
-			fromConn.notifyRepaint();
+			from.notifyRepaint();
 		}
 //		// clicked CTRL on a Wire -> insert node
 //		if (e.isControlDown()) {
@@ -371,16 +356,16 @@ public class Wire extends CircuitPart implements Cloneable {
 	public int removeLastPoint() {
 		// wire is connected to gate, remove the connection and return number of
 		// remaining points
-		if (toConn != null) {
-			toConn.delWire(this);
-			toConn = null;
+		if (to != null) {
+			to.removeLevelListener(this);
+			to = null;
 			// points + first point
 			return points.size() + 1;
 		} else if (points.size() == 0) {
-			if (fromConn == null)
+			if (from == null)
 				throw new RuntimeException("wire is completely empty, may not be");
-			fromConn.delWire(this);
-			fromConn = null;
+			from.removeLevelListener(this);
+			from = null;
 			// wire can be released
 			return 0;
 		} else {
@@ -419,14 +404,14 @@ public class Wire extends CircuitPart implements Cloneable {
 	@Override
 	public String toString() {
 		String s = "";
-		s += (fromConn != null ? fromConn.getId() : "-");
+		s += (from != null ? from.getId() : "-");
 		s += " <- ";
 		for (int i = 0; i < points.size(); i++) {
 			WirePoint p = points.get(i);
 			s += p.toString();
 		}
 		s += " -> ";
-		s += (toConn != null ? toConn.getId() : "-");
+		s += (to != null ? to.getId() : "-");
 		return s;
 	}
 
@@ -443,7 +428,7 @@ public class Wire extends CircuitPart implements Cloneable {
 	}
 
 	/**
-	 * disconnect wire from connectors
+	 * disconnect wire from CircuitParts
 	 * 
 	 * if this method is called from a connector, the calling connector has to be
 	 * given as parameter and must remove the wire from itself.
@@ -451,15 +436,24 @@ public class Wire extends CircuitPart implements Cloneable {
 	 * @param connector
 	 */
 	public void disconnect(Pin connector) {
-		if (connector == fromConn) {
-			toConn.wires.remove(this);
-		} else if (connector == toConn) {
-			fromConn.wires.remove(this);
-		} else if (connector == null) {
-			toConn.wires.remove(this);
-			fromConn.wires.remove(this);
+		to.removeLevelListener(this);
+		from.removeLevelListener(this);
+		to = null;
+		from = null;
+	}
+
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		// a wire can get a level change from a pin or another wire
+		if (e.source instanceof Pin) {
+			if (level != e.level) {
+				level = e.level;
+				// forward to other listeners, event must not get back to the origin
+				// System.out.println("wire fires " + getId());
+				fireChangedLevel(e);
+				fireRepaint();
+			}
 		}
-		this.clear();
 	}
 
 }

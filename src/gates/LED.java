@@ -6,9 +6,11 @@ import java.awt.Graphics2D;
 
 import javax.swing.JColorChooser;
 
+import logicsim.App;
 import logicsim.ColorFactory;
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.Lang;
 
 /**
@@ -27,6 +29,8 @@ public class LED extends Gate {
 
 	private Color color = null;
 
+	private boolean level;
+
 	public LED() {
 		super("output");
 		type = "led";
@@ -36,6 +40,16 @@ public class LED extends Gate {
 		variableInputCountSupported = false;
 		loadProperties();
 		reset();
+	}
+
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		super.changedLevel(e);
+		if (level != e.level) {
+			App.time();
+			level = e.level;
+			fireRepaint();
+		}
 	}
 
 	@Override
@@ -72,8 +86,8 @@ public class LED extends Gate {
 
 	@Override
 	public boolean showPropertiesUI(Component frame) {
-		Color newColor = JColorChooser.showDialog(null,
-				I18N.getString(type, I18N.TITLE) + " " + I18N.tr(Lang.SETTINGS), color);
+		Color newColor = JColorChooser.showDialog(null, I18N.getString(type, I18N.TITLE) + " " + I18N.tr(Lang.SETTINGS),
+				color);
 		if (newColor != null)
 			color = newColor;
 		setProperty(COLOR, "#" + Integer.toHexString(color.getRGB()).substring(2));

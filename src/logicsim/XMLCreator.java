@@ -114,7 +114,7 @@ public class XMLCreator {
 				val = "x";
 			else if (g.mirror == Gate.YAXIS)
 				val = "y";
-			else if (g.mirror == Gate.BOTHAXES)
+			else if (g.mirror == Gate.BOTH_AXES)
 				val = "xy";
 			if (val != null) {
 				node.setAttribute("mirror", val);
@@ -192,17 +192,24 @@ public class XMLCreator {
 	private static Node createWireNode(Document doc, Wire w) {
 		if (w != null) {
 			Element n = doc.createElement("wire");
-			if (w.fromConn != null) {
+			if (w.from != null) {
 				Element g = doc.createElement("from");
-				g.setAttribute("id", w.fromConn.gate.getId());
-				g.setAttribute("number", String.valueOf(w.fromConn.number));
-				n.appendChild(g);
+				if (w.from instanceof Pin) {
+					Pin p = (Pin) w.from;
+					g.setAttribute("id", p.gate.getId());
+					g.setAttribute("number", String.valueOf(p.number));
+					n.appendChild(g);
+				}
 			}
 
-			if (w.toConn != null) {
+			if (w.to != null) {
 				Element g = doc.createElement("to");
-				g.setAttribute("id", w.toConn.gate.getId());
-				g.setAttribute("number", String.valueOf(w.toConn.number));
+				if (w.to instanceof Pin) {
+					Pin p = (Pin) w.to;
+					g.setAttribute("type", "gate");
+					g.setAttribute("id", p.gate.getId());
+					g.setAttribute("number", String.valueOf(p.number));
+				}
 				n.appendChild(g);
 			}
 

@@ -20,12 +20,14 @@ import javax.swing.JRadioButton;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import logicsim.App;
 import logicsim.ColorFactory;
-import logicsim.Pin;
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.LSMouseEvent;
 import logicsim.Lang;
+import logicsim.Pin;
 
 /**
  * Switch Component for LogicSim
@@ -50,12 +52,9 @@ public class Switch extends Gate {
 	private static final String DEFAULT_COLOR = "#0000ff";
 
 	/**
-	 * type of switch: true=Click, false=Toggle
+	 * type of switch: true=MOMENTARY, false=TOGGLE
 	 */
-	boolean clickType = false;
-
-	long clickCountDown = 0;
-	boolean mouseDown = false; // true solange der User die Maus �ber dem Gatter gedr�ckt h�lt
+	boolean switchTypeMomentary = false;
 
 	private Color color = null;
 
@@ -74,35 +73,34 @@ public class Switch extends Gate {
 	@Override
 	protected void loadProperties() {
 		color = ColorFactory.web(getPropertyWithDefault(COLOR, DEFAULT_COLOR));
-		clickType = getPropertyWithDefault(SWITCH_TYPE, DEFAULT_SWITCH_TYPE).equals(TOGGLE) ? false : true;
+		switchTypeMomentary = getPropertyWithDefault(SWITCH_TYPE, DEFAULT_SWITCH_TYPE).equals(TOGGLE) ? false : true;
+	}
+
+	@Override
+	public void interact() {
+		if (!switchTypeMomentary) {
+			mousePressedSim(null);
+		}
 	}
 
 	@Override
 	public void mousePressedSim(LSMouseEvent e) {
 		super.mousePressedSim(e);
 
-		if (clickType) {
-			// Click-Button, wird wieder deaktiviert, wenn Maustaste losgelassen wird
-			getPin(0).setLevel(true);
-			mouseDown = true;
-			clickCountDown = 2;
+		if (switchTypeMomentary) {
+			// momentary-Button, will be deactivated if mouseReleased is called
+			getPin(0).changedLevel(new LSLevelEvent(this, HIGH));
 		} else {
 			// Toggle-Button
-			getPin(0).setLevel(!getPin(0).getLevel());
+			getPin(0).changedLevel(new LSLevelEvent(this, !getPin(0).getLevel()));
 		}
 	}
 
 	@Override
 	public void mouseReleased(int mx, int my) {
-		mouseDown = false;
-	}
-
-	public void simulate() {
-		if (clickType) {
-			if (clickCountDown > 0)
-				clickCountDown--;
-			if (clickCountDown == 0 && !mouseDown)
-				getPin(0).setLevel(false);
+		if (switchTypeMomentary) {
+			// momentary-Button, will deactivated if mouseReleased is called
+			getPin(0).changedLevel(new LSLevelEvent(this, LOW));
 		}
 	}
 
@@ -123,14 +121,6 @@ public class Switch extends Gate {
 		g.draw(rect);
 
 		int pos = getPin(0).getLevel() ? 15 : 6;
-
-//		Polygon poly = new Polygon();
-//		poly.addPoint(x + width - 12 - CONN_SIZE, y + 8);
-//		poly.addPoint(x + pos + 3, y + 8);
-//		poly.addPoint(x + pos, y + 12);
-//		poly.addPoint(x + pos, y + 28);
-//		poly.addPoint(x + pos + 3, y + 32);
-//		poly.addPoint(x + width - 12 - CONN_SIZE, y + 32);
 
 		Polygon poly = new Polygon();
 		// begin in the lower left corner and go counterclockwise
@@ -195,7 +185,7 @@ public class Switch extends Gate {
 		group.add(jRadioButton1);
 		group.add(jRadioButton2);
 
-		if (clickType)
+		if (switchTypeMomentary)
 			jRadioButton2.setSelected(true);
 		else
 			jRadioButton1.setSelected(true);
@@ -225,11 +215,11 @@ public class Switch extends Gate {
 		dlg.setVisible(true);
 		if (I18N.tr(Lang.OK).equals((String) pane.getValue())) {
 			if (jRadioButton1.isSelected()) {
-				clickType = false;
+				switchTypeMomentary = false;
 			} else if (jRadioButton2.isSelected()) {
-				clickType = true;
+				switchTypeMomentary = true;
 			}
-			setProperty(SWITCH_TYPE, clickType ? MOMENTARY : TOGGLE);
+			setProperty(SWITCH_TYPE, switchTypeMomentary ? MOMENTARY : TOGGLE);
 		}
 
 		Color newColor = JColorChooser.showDialog(null, I18N.tr(Lang.SETTINGS), color);

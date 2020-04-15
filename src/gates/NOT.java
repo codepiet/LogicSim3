@@ -7,6 +7,7 @@ import java.awt.geom.Path2D;
 
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.LSProperties;
 import logicsim.Pin;
 
@@ -27,10 +28,23 @@ public class NOT extends Gate {
 		createInputs(1);
 		createOutputs(1);
 		getPin(1).setLevelType(Pin.INVERTED);
+		simulate();
 	}
 
+	@Override
 	public void simulate() {
-		getPin(1).setLevel(getPin(0).getLevel());
+		super.simulate();
+		// boolean oldLevel = getPin(1).getInternalLevel();
+		// call pin directly
+		getPin(1).changedLevel(new LSLevelEvent(this, getPin(0).getLevel()));
+	}
+
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		super.changedLevel(e);
+		if (busted)
+			return;
+		simulate();
 	}
 
 	@Override

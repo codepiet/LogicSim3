@@ -127,6 +127,8 @@ public class XMLLoader {
 				gates.add(gate);
 			}
 		}
+
+		Vector<Wire> wires = new Vector<Wire>();
 		node = doc.optChild("wires");
 		if (node != null) {
 			for (Xml wnode : node.children("wire")) {
@@ -145,7 +147,9 @@ public class XMLLoader {
 				if (toGate == null)
 					throw new RuntimeException(I18N.tr(Lang.READERROR) + ": to gate is null");
 
-				Wire wire = new Wire(fromGate.getPin(fromNumber), toGate.getPin(toNumber));
+				Pin from = fromGate.getPin(fromNumber);
+				Pin to = toGate.getPin(toNumber);
+				Wire wire = new Wire(from, to);
 				for (Xml pnode : wnode.children("point")) {
 					boolean b = Boolean.parseBoolean(pnode.string("node"));
 					int xp = Integer.parseInt(pnode.string("x"));
@@ -155,11 +159,13 @@ public class XMLLoader {
 				}
 				wire.selected = false;
 				// connect wire to gates
-				fromGate.getPin(fromNumber).addWire(wire);
-				toGate.getPin(toNumber).addWire(wire);
+				wires.add(wire);
+				from.connect(wire);
+				to.connect(wire);
 			}
 		}
 		ls.setGates(gates);
+		ls.setWires(wires);
 		return ls;
 	}
 

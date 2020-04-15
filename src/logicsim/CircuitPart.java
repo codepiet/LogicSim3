@@ -6,9 +6,15 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collection;
 
-public abstract class CircuitPart {
+public abstract class CircuitPart implements LSLevelListener {
 	public static final int BOUNDING_SPACE = 6;
+	public static final boolean HIGH = true;
+	public static final boolean LOW = false;
+	private Collection<LSLevelListener> listeners;
+	private LSRepaintListener repListener;
 
 	protected static String indent(String string, int indentation) {
 		String s = "";
@@ -16,6 +22,8 @@ public abstract class CircuitPart {
 			s += " ";
 		return s + string.replaceAll("\n", "\n" + s);
 	}
+
+	protected boolean busted = false;
 
 	public static int round(int num) {
 		int x = num;
@@ -43,6 +51,7 @@ public abstract class CircuitPart {
 	public CircuitPart(int x, int y) {
 		this.x = x;
 		this.y = y;
+		this.listeners = new ArrayList<LSLevelListener>();
 	}
 
 	private void checkXY(int x2, int y2) {
@@ -50,6 +59,21 @@ public abstract class CircuitPart {
 			throw new RuntimeException("only move by 10s! tried x=" + x2);
 		if (y2 % 10 != 0)
 			throw new RuntimeException("only move by 10s! tried y=" + y2);
+	}
+
+	public void addLevelListener(LSLevelListener l) {
+		if (listeners != null && !listeners.contains(l)) {
+			listeners.add(l);
+		}
+	}
+
+	public void setRepaintListener(LSRepaintListener l) {
+		repListener = l;
+	}
+
+	public void removeLevelListener(LSLevelListener l) {
+		if (listeners != null)
+			listeners.remove(l);
 	}
 
 	public void clear() {
@@ -175,14 +199,11 @@ public abstract class CircuitPart {
 	 * all Circuitparts can be resetted: maybe set back inputs or outputs and so on
 	 */
 	public void reset() {
+		busted = false;
 	}
 
 	public final void select() {
 		selected = true;
-	}
-
-	public void setChangeListener(CircuitChangedListener changeListener) {
-		this.changeListener = changeListener;
 	}
 
 	public void setX(int x) {
@@ -191,6 +212,35 @@ public abstract class CircuitPart {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+	}
+	
+	public void connect(CircuitPart part) {		
+	}
+
+	protected void fireChangedLevel(LSLevelEvent e) {
+		Log.getInstance().print("fireChangedLevel from " + getId() + ": " + e);
+		// the event can have a different source (not itself)
+		// if so, just forward the event to the others except to the origin
+		if (e.source != this) {
+			LSLevelEvent evt = new LSLevelEvent(this, e.level);
+			for (LSLevelListener l : listeners) {
+				if (e.source != l)
+					l.changedLevel(evt);
+			}
+		} else {
+			for (LSLevelListener l : listeners) {
+				l.changedLevel(e);
+			}
+		}
+	}
+
+	protected void fireRepaint() {
+		if (repListener != null)
+			repListener.needsRepaint(this);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.awt.geom.Path2D;
 
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.LSProperties;
 import logicsim.Pin;
 
@@ -32,12 +33,24 @@ public class AND extends Gate {
 	@Override
 	public void simulate() {
 		super.simulate();
-
-		boolean b = true;
+		boolean oldLevel = getPin(0).getInternalLevel();
+		boolean newLevel = true;
 		for (Pin c : getInputs()) {
-			b = b && c.getLevel();
+			newLevel = newLevel && c.getLevel();
+			if (!newLevel)
+				break;
 		}
-		getPin(0).setLevel(b);
+		// call pin directly
+		if (newLevel != oldLevel)
+			getPin(0).changedLevel(new LSLevelEvent(this, newLevel));
+	}
+
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		super.changedLevel(e);
+		if (busted)
+			return;
+		simulate();
 	}
 
 	@Override

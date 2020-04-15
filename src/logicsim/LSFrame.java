@@ -753,6 +753,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		setAppTitle();
 		lspanel.clear();
 		lspanel.circuit.setGates(lsFile.getGates());
+		lspanel.circuit.setWires(lsFile.getWires());
 		staticReset();
 	}
 

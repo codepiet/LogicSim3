@@ -27,7 +27,7 @@ import java.awt.print.PrinterJob;
 
 import javax.swing.event.MouseInputAdapter;
 
-public class LSPanel extends Viewer implements Printable, CircuitChangedListener {
+public class LSPanel extends Viewer implements Printable, CircuitChangedListener, LSRepaintListener {
 	public class LogicSimPainterGraphics implements Painter {
 		@Override
 		public void paint(Graphics2D g2, AffineTransform at, int w, int h) {
@@ -127,9 +127,10 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 												w = new Wire(pin, p);
 											else
 												w = new Wire(p, pin);
-											p.addWire(w);
-											pin.addWire(w);
 											w.deselect();
+											p.connect(w);
+											pin.connect(w);
+											circuit.addWire(w);
 										}
 									}
 								}
@@ -137,13 +138,12 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 						}
 					}
 				}
-				notifyChangeListener();
+				fireCircuitChanged();
 			}
 		}
 
 		private void setPoint(int x, int y) {
 			previousPoint.setLocation(x, y);
-			// System.out.println(previousPoint);
 		}
 
 		@Override
@@ -203,10 +203,11 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 							w.clear();
 						}
 					}
-					wire.connect(pin);
+					wire.addLevelListener(pin);
+					pin.addLevelListener(wire);
 					wire.setTempPoint(null);
-					wire.setChangeListener(circuit);
-					notifyChangeListener();
+					wire.setRepaintListener(circuit);
+					fireCircuitChanged();
 					// now we have a finished wire, the wire stays active
 				}
 				repaint();
@@ -230,9 +231,8 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 							|| currentAction == Pin.NORMAL) {
 						// 1. if we clicked on an input modificator
 						pin.setLevelType(currentAction);
-						notifyChangeListener("MSG_INPUT_CHANGED_TO" + " " + Pin.actionToString(currentAction));
 						currentAction = ACTION_NONE;
-						notifyChangeListener();
+						fireCircuitChanged();
 						return;
 					}
 				} else {
@@ -240,11 +240,12 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					// 3. start a new wire
 					// output is clicked
 					Wire newWire = new Wire(null, null);
-					newWire.connect(pin);
-					notifyChangeListener(I18N.tr(Lang.EDITWIRE));
+					newWire.addLevelListener(pin);
+					pin.addLevelListener(newWire);
+					fireStatusText(I18N.tr(Lang.EDITWIRE));
 					circuit.deselectAll();
 					newWire.select();
-					notifyChangeListener();
+					fireCircuitChanged();
 					return;
 				}
 			}
@@ -266,7 +267,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				circuit.deselectAll();
 				cp.select();
 			}
-			
+
 			// if (lastClicked != null && lastClicked != cp)
 			// lastClicked.deselect();
 			// lastClicked = cp;
@@ -284,7 +285,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 			if (currentAction == ACTION_SELECT) {
 				CircuitPart[] parts = circuit.findParts(selectRect);
-				notifyChangeListener(Lang.PARTSSELECTED + " " + parts.length);
+				fireStatusText(Lang.PARTSSELECTED + " " + parts.length);
 				currentAction = ACTION_NONE;
 				selectRect = null;
 				repaint();
@@ -335,7 +336,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	private Rectangle2D selectRect;
 
 	public LSPanel() {
-		circuit.setChangeListener(this);
+		circuit.setRepaintListener(this);
 		this.setSize(panelSize);
 		this.setPreferredSize(panelSize);
 		this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -405,10 +406,12 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 	public void draw(Graphics2D g2) {
 		// Log.getInstance().print("Drawing panel");
-		for (CircuitPart gate : circuit.gates)
+		for (CircuitPart gate : circuit.gates) {
 			gate.draw(g2);
-		for (CircuitPart gate : circuit.gates)
-			((Gate) gate).drawWires(g2);
+		}
+		for (CircuitPart wire : circuit.wires) {
+			wire.draw(g2);
+		}
 	}
 
 	/**
@@ -466,15 +469,15 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				dx += 10;
 			for (CircuitPart part : parts)
 				part.moveBy(dx, dy);
-			notifyChangeListener();
+			fireCircuitChanged();
 			return;
 		}
 
 		if (keyCode == KeyEvent.VK_DELETE || keyCode == KeyEvent.VK_BACK_SPACE) {
 			if (circuit.remove(parts)) {
 				currentAction = ACTION_NONE;
-				notifyChangeListener(I18N.tr(Lang.PARTSDELETED, String.valueOf(parts.length)));
-				notifyChangeListener();
+				fireStatusText(I18N.tr(Lang.PARTSDELETED, String.valueOf(parts.length)));
+				fireCircuitChanged();
 				repaint();
 				return;
 			}
@@ -485,11 +488,16 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			return;
 		}
 
-//		if (keyCode == KeyEvent.VK_SPACE) {
-//			setAction(currentAction);
-//			notifyChangeListener();
-//			repaint();
-//		}
+		if (keyCode == KeyEvent.VK_SPACE) {
+			CircuitPart[] selected = circuit.getSelected();
+			if (selected.length != 1)
+				return;
+			if (selected[0] instanceof Gate) {
+				Gate g = (Gate) selected[0];
+				g.interact();
+			}
+			repaint();
+		}
 
 	}
 
@@ -498,14 +506,14 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		repaint();
 	}
 
-	private void notifyChangeListener() {
+	private void fireCircuitChanged() {
 		if (changeListener != null) {
 			changeListener.changedCircuit();
 		}
 		repaint();
 	}
 
-	private void notifyChangeListener(String msg) {
+	private void fireStatusText(String msg) {
 		if (changeListener != null) {
 			changeListener.changedStatusText(msg);
 		}
@@ -535,7 +543,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				((Gate) part).rotate();
 			}
 		}
-		notifyChangeListener();
+		fireCircuitChanged();
 	}
 
 	private void scaleAndMoveToAll() {
@@ -557,8 +565,8 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			circuit.addGate((Gate) g);
 			g.select();
 
-			notifyChangeListener("MSG_ADD_NEW_GATE");
-			notifyChangeListener();
+			fireStatusText("MSG_ADD_NEW_GATE");
+			fireCircuitChanged();
 			repaint();
 		}
 	}
@@ -566,22 +574,22 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	public void setAction(int actionNumber) {
 		switch (actionNumber) {
 		case ACTION_ADDPOINT:
-			notifyChangeListener(I18N.tr(Lang.ADDPOINT));
+			fireStatusText(I18N.tr(Lang.ADDPOINT));
 			break;
 		case ACTION_DELPOINT:
-			notifyChangeListener(I18N.tr(Lang.REMOVEPOINT));
+			fireStatusText(I18N.tr(Lang.REMOVEPOINT));
 			break;
 		case Pin.HIGH:
-			notifyChangeListener(I18N.tr(Lang.INPUTHIGH));
+			fireStatusText(I18N.tr(Lang.INPUTHIGH));
 			break;
 		case Pin.LOW:
-			notifyChangeListener(I18N.tr(Lang.INPUTLOW));
+			fireStatusText(I18N.tr(Lang.INPUTLOW));
 			break;
 		case Pin.NORMAL:
-			notifyChangeListener(I18N.tr(Lang.INPUTNORM));
+			fireStatusText(I18N.tr(Lang.INPUTNORM));
 			break;
 		case Pin.INVERTED:
-			notifyChangeListener(I18N.tr(Lang.INPUTINV));
+			fireStatusText(I18N.tr(Lang.INPUTINV));
 			break;
 		}
 		currentAction = actionNumber;

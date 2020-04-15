@@ -43,6 +43,10 @@ public class LogicSimFile {
 		circuit.setGates(gates);
 	}
 
+	public void setWires(Vector<Wire> wires) {
+		circuit.setWires(wires);
+	}
+
 	public Vector<Wire> getWires() {
 		return circuit.getWires();
 	}

@@ -306,4 +306,48 @@ public class Pin extends CircuitPart {
 		level = false;
 	}
 
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		// source has to be a Gate or a Wire
+		if (e.source instanceof Gate) {
+			if (isOutput()) {
+				if (level != e.level) {
+					level = e.level;
+					// propagate this to the outside
+					fireChangedLevel(new LSLevelEvent(this, getLevel()));
+				}
+			}
+		} else if (e.source instanceof Wire) {
+			// signal is from outside, propagate this to gate
+			// call gate directly
+			if (level != e.level) {
+				level = e.level;
+				gate.changedLevel(new LSLevelEvent(this, getLevel()));
+				// and call all other wires which are connected to the pin
+				gate.fireChangedLevel(e);
+			}
+		} else
+			throw new RuntimeException("pins communicate with gates or wires only! source is " + e.source.getId()
+					+ ", target is " + getId());
+	}
+
+	public boolean getInternalLevel() {
+		return level;
+	}
+
+	@Override
+	public void connect(CircuitPart part) {
+		// pins connect to wires only
+		if (!(part instanceof Wire))
+			throw new RuntimeException("part is not a wire! cannot connect to pin");
+		Wire wire = (Wire) part;
+		wire.addLevelListener(this);
+		this.addLevelListener(wire);
+		if (isInput()) {
+			changedLevel(new LSLevelEvent(wire, wire.getLevel()));
+		} else {
+			fireChangedLevel(new LSLevelEvent(this, getLevel()));
+		}
+	}
+
 }
