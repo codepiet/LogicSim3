@@ -1,7 +1,11 @@
 package gates;
 
+import javax.swing.event.ListSelectionEvent;
+
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
+import logicsim.Pin;
 
 /**
  * Equivalence Gate for LogicSim
@@ -25,12 +29,21 @@ public class EQU extends Gate {
 
 	public void simulate() {
 		int n = 0;
-		for (int i = 1; i < 1 + getNumInputs(); i++) {
-			if (getPin(i).getLevel())
+		for (Pin p : getInputs()) {
+			if (p.getLevel())
 				n++;
 		}
-		// if n is even set true
-		getPin(0).setLevel(n % 2 == 0);
+		// if n is even, set true
+		LSLevelEvent evt = new LSLevelEvent(this, n % 2 == 0);
+		getPin(0).changedLevel(evt);
+	}
+
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		super.changedLevel(e);
+		if (busted)
+			return;
+		simulate();
 	}
 
 	@Override

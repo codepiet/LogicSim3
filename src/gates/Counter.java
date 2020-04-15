@@ -15,9 +15,10 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import logicsim.Gate;
-import logicsim.Pin;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.Lang;
+import logicsim.Pin;
 
 /**
  * Counter Component (rising edge driven)
@@ -62,23 +63,26 @@ public class Counter extends Gate {
 		setOutputs();
 	}
 
+	/**
+	 * check for rising edge
+	 */
 	@Override
-	public void simulate() {
-		if (!lastInputState && getPin(0).getLevel()) {
+	public void changedLevel(LSLevelEvent e) {
+		if (e.source.equals(getPin(0)) && e.level == HIGH) {
+			// rising edge detection
 			value++;
-			if (value < 0)
-				value = 0xff + value + 1;
 			if (value > 0xff)
-				value = value - 0xff - 1;
-
+				value = 0;
 			setOutputs();
 		}
-		lastInputState = getPin(0).getLevel();
 	}
 
 	private void setOutputs() {
-		for (int i = 0; i < 8; i++)
-			getPin(i + 1).setLevel((value & (1 << i)) != 0);
+		for (int i = 0; i < 8; i++) {
+			boolean b = ((value & (1 << i)) != 0);
+			LSLevelEvent evt = new LSLevelEvent(this, b);
+			getPin(i + 1).changedLevel(evt);
+		}
 	}
 
 	@Override

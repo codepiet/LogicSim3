@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.Pin;
 
 /**
@@ -30,7 +31,16 @@ public class XOR extends OR {
 			if (p.getLevel())
 				n++;
 		// ungerade ??
-		getPin(0).setLevel(n % 2 > 0);
+		boolean b = n % 2 > 0;
+		getPin(0).changedLevel(new LSLevelEvent(this, b));
+	}
+
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		super.changedLevel(e);
+		if (busted)
+			return;
+		simulate();
 	}
 
 	@Override

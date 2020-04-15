@@ -35,11 +35,10 @@ public class OR extends Gate {
 		boolean oldLevel = getPin(0).getInternalLevel();
 		boolean newLevel = false;
 		for (Pin c : getInputs()) {
-			newLevel = newLevel && c.getLevel();
+			newLevel = newLevel || c.getLevel();
 			if (newLevel)
 				break;
 		}
-		// call pin directly
 		if (newLevel != oldLevel)
 			getPin(0).changedLevel(new LSLevelEvent(this, newLevel));
 	}

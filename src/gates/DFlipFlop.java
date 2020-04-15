@@ -16,9 +16,6 @@ import logicsim.Pin;
  */
 public class DFlipFlop extends Gate {
 
-	boolean out0 = false;
-	boolean lastClock = false;
-
 	public DFlipFlop() {
 		super("flipflops");
 		type = "dff";
@@ -52,19 +49,12 @@ public class DFlipFlop extends Gate {
 	@Override
 	public void changedLevel(LSLevelEvent e) {
 		if (e.source.equals(getPin(1)) && e.level == HIGH) {
-			// rising edge happened
+			// rising edge detection
 			boolean d = getPin(0).getLevel();
 			LSLevelEvent evt = new LSLevelEvent(this, d);
 			getPin(2).changedLevel(evt);
 			getPin(3).changedLevel(evt);
 		}
-	}
-
-	@Override
-	public void reset() {
-		super.reset();
-		out0 = false;
-		lastClock = false;
 	}
 
 	@Override

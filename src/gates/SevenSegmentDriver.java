@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 
 /**
  * Segment Segment Driver for LogicSim
@@ -129,9 +130,16 @@ public class SevenSegmentDriver extends Gate {
 		setOutputs();
 	}
 
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		super.changedLevel(e);
+		simulate();
+	}
+
 	private void setOutputs() {
 		for (int i = 0; i < 7; i++) {
-			getPin(i + 4).setLevel(out[i] == 1);
+			LSLevelEvent evt = new LSLevelEvent(this, out[i] == 1);
+			getPin(i + 4).changedLevel(evt);
 		}
 	}
 

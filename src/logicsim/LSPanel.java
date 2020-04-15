@@ -111,24 +111,26 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 						if (part instanceof Gate) {
 							Gate gate = (Gate) part;
 							for (Pin pin : gate.pins) {
-								// TODO autowire unconnected pins only
-								int x = pin.getX();
-								int y = pin.getY();
-								for (Gate g : circuit.getGates()) {
-									CircuitPart cp = g.findPartAt(x, y);
-									if (cp instanceof Pin) {
-										Pin p = (Pin) cp;
-										if (pin.isInput() == p.isOutput()) {
-											// put new wire between pin and p
-											Wire w = null;
-											if (pin.isOutput())
-												w = new Wire(pin, p);
-											else
-												w = new Wire(p, pin);
-											w.deselect();
-											if (circuit.addWire(w)) {
-												p.connect(w);
-												pin.connect(w);
+								// autowire unconnected pins only
+								if (!pin.isConnected()) {
+									int x = pin.getX();
+									int y = pin.getY();
+									for (Gate g : circuit.getGates()) {
+										CircuitPart cp = g.findPartAt(x, y);
+										if (cp instanceof Pin) {
+											Pin p = (Pin) cp;
+											if (pin.isInput() == p.isOutput()) {
+												// put new wire between pin and p
+												Wire w = null;
+												if (pin.isOutput())
+													w = new Wire(pin, p);
+												else
+													w = new Wire(p, pin);
+												w.deselect();
+												if (circuit.addWire(w)) {
+													p.connect(w);
+													pin.connect(w);
+												}
 											}
 										}
 									}
