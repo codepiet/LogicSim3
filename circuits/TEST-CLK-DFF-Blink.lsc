@@ -14,11 +14,11 @@
     <wires>
         <wire>
             <from id="dff@190:70" number="2"/>
-            <to id="led@310:70" number="0"/>
+            <to id="led@310:70" number="0" type="gate"/>
         </wire>
         <wire>
             <from id="dff@190:70" number="3"/>
-            <to id="dff@190:70" number="0"/>
+            <to id="dff@190:70" number="0" type="gate"/>
             <point node="false" number="0" x="400" y="110"/>
             <point node="false" number="1" x="400" y="60"/>
             <point node="false" number="2" x="170" y="60"/>
@@ -26,7 +26,7 @@
         </wire>
         <wire>
             <from id="clock@40:70" number="0"/>
-            <to id="dff@190:70" number="1"/>
+            <to id="dff@190:70" number="1" type="gate"/>
         </wire>
     </wires>
 </logicsim>

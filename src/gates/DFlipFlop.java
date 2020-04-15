@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.Pin;
 
 /**
@@ -49,17 +50,14 @@ public class DFlipFlop extends Gate {
 	 * https://www.electronicsforu.com/resources/learn-electronics/flip-flop-rs-jk-t-d
 	 */
 	@Override
-	public void simulate() {
-		super.simulate();
-		boolean d = getPin(0).getLevel();
-		boolean clk = getPin(1).getLevel();
-		// rising edge
-		if (clk && !lastClock) {
-			out0 = d;
-			getPin(2).setLevel(out0);
-			getPin(3).setLevel(out0);
+	public void changedLevel(LSLevelEvent e) {
+		if (e.source.equals(getPin(1)) && e.level == HIGH) {
+			// rising edge happened
+			boolean d = getPin(0).getLevel();
+			LSLevelEvent evt = new LSLevelEvent(this, d);
+			getPin(2).changedLevel(evt);
+			getPin(3).changedLevel(evt);
 		}
-		lastClock = clk;
 	}
 
 	@Override

@@ -110,16 +110,6 @@ public class Gate extends CircuitPart {
 		pins.add(conn);
 	}
 
-	/**
-	 * disconnect all wires
-	 */
-	@Override
-	public void clear() {
-		for (Pin c : pins)
-			if (c.isConnected())
-				c.deleteWires();
-	}
-
 	public void createDynamicInputs(int total) {
 		int numinputs = getInputs().size();
 		// get max number
@@ -219,11 +209,6 @@ public class Gate extends CircuitPart {
 		}
 	}
 
-	protected void drawWires(Graphics2D g2) {
-		for (Pin c : pins)
-			c.drawWires(g2);
-	}
-
 	public Pin findConnector(int atX, int atY) {
 		for (Pin c : pins) {
 			if (c.isAt(atX, atY)) {
@@ -246,16 +231,6 @@ public class Gate extends CircuitPart {
 		if (conn != null)
 			return conn;
 
-		// check connected outgoing wires
-		for (Pin c : pins) {
-			if (!c.isInput() && c.isConnected()) {
-				for (Wire wire : c.wires) {
-					CircuitPart part = wire.findPartAt(x, y);
-					if (part != null)
-						return part;
-				}
-			}
-		}
 		return null;
 	}
 
@@ -401,17 +376,6 @@ public class Gate extends CircuitPart {
 
 	public int getWidth() {
 		return width;
-	}
-
-	public Vector<Wire> getWiresFromThis() {
-		Vector<Wire> wires = new Vector<Wire>();
-		for (Pin conn : getOutputs()) {
-			if (conn.isConnected()) {
-				for (Wire w : conn.wires)
-					wires.add(w);
-			}
-		}
-		return wires;
 	}
 
 	/**

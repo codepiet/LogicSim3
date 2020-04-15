@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Log {
 
-	SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+	SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
 
 	private static Log instance;
 

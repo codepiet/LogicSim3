@@ -62,9 +62,11 @@ public abstract class CircuitPart implements LSLevelListener {
 	}
 
 	public void addLevelListener(LSLevelListener l) {
-		if (listeners != null && !listeners.contains(l)) {
-			listeners.add(l);
-		}
+		if (listeners == null)
+			return;
+		if (listeners.contains(l))
+			return;
+		listeners.add(l);
 	}
 
 	public void setRepaintListener(LSRepaintListener l) {
@@ -217,12 +219,12 @@ public abstract class CircuitPart implements LSLevelListener {
 	@Override
 	public void changedLevel(LSLevelEvent e) {
 	}
-	
-	public void connect(CircuitPart part) {		
+
+	public void connect(CircuitPart part) {
 	}
 
 	protected void fireChangedLevel(LSLevelEvent e) {
-		Log.getInstance().print("fireChangedLevel from " + getId() + ": " + e);
+		// Log.getInstance().print("fireChangedLevel from " + getId() + ": " + e);
 		// the event can have a different source (not itself)
 		// if so, just forward the event to the others except to the origin
 		if (e.source != this) {
@@ -241,6 +243,10 @@ public abstract class CircuitPart implements LSLevelListener {
 	protected void fireRepaint() {
 		if (repListener != null)
 			repListener.needsRepaint(this);
+	}
+
+	public boolean isConnected() {
+		return listeners.size() > 0;
 	}
 
 }

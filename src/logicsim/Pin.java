@@ -6,8 +6,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
-import java.util.Iterator;
-import java.util.Vector;
 
 public class Pin extends CircuitPart {
 
@@ -42,7 +40,6 @@ public class Pin extends CircuitPart {
 	 */
 	int levelType = NORMAL;
 	public String label = null;
-	public Vector<Wire> wires = new Vector<Wire>();
 	public Gate gate;
 
 	public Pin(int x, int y, Gate gate, int number) {
@@ -59,10 +56,6 @@ public class Pin extends CircuitPart {
 	@Override
 	public void mousePressed(LSMouseEvent e) {
 		super.mousePressed(e);
-	}
-
-	public boolean isConnected() {
-		return wires.size() > 0;
 	}
 
 	/**
@@ -169,48 +162,13 @@ public class Pin extends CircuitPart {
 		}
 	}
 
-	public void drawWires(Graphics2D g2) {
-		// draw wire(s)
-		if (!isInput())
-			for (Wire wire : wires)
-				wire.draw(g2);
-	}
-
-	public void addWire(Wire w) {
-		if (isInput() && isConnected() && w != wires.get(0))
-			throw new RuntimeException("input may only have one wire (" + gate.getId() + ", " + number + ")");
-		if (isInput() && levelType != NORMAL)
-			levelType = NORMAL;
-		wires.add(w);
-	}
-
-	public void delWire(Wire w) {
-		if (wires.contains(w)) {
-			if (!wires.remove(w))
-				throw new RuntimeException(
-						"wire " + w.getId() + " cannot be removed - is not connected to pin " + this.getId());
-			w.clear();
-			w = null;
-		}
-	}
-
 	public void setLevelType(int levelType) {
-		// if we set a level type of type HIGH or LOW we have to remove the wire
+		// TODO if we set a level type of type HIGH or LOW we have to remove the wire
 		// completely
-		if ((levelType == HIGH || levelType == LOW) && isInput() && isConnected()) {
-			for (Wire wire : wires)
-				wire.clear();
-		}
 		this.levelType = levelType;
 	}
 
 	public boolean getLevel() {
-		if (ioType == INPUT && (levelType == HIGH || levelType == LOW) && isConnected())
-			throw new RuntimeException("input conflict: wire and LOW/HIGH input");
-		if (ioType == INPUT && isConnected()) {
-			Wire w = wires.get(0);
-			level = w.getLevel();
-		}
 		if (levelType == NORMAL)
 			return level;
 		if (levelType == INVERTED)
@@ -244,12 +202,7 @@ public class Pin extends CircuitPart {
 
 	@Override
 	public String toString() {
-		String s = getId() + " - " + (getLevel() ? "H" : "L");
-		if (isConnected()) {
-			for (Wire wire : wires)
-				s += "\n" + indent(wire.toString(), 3);
-		}
-		return s;
+		return getId() + " - " + (getLevel() ? "H" : "L");
 	}
 
 	public void setLevel(boolean b) {
@@ -267,21 +220,6 @@ public class Pin extends CircuitPart {
 			return "NORMAL";
 
 		return null;
-	}
-
-	/**
-	 * delete all wires and disconnect them.
-	 * 
-	 * because of a threatening ConcurrentModificationException, the wire may not
-	 * remove both connector. We have to call iter.remove() for that.
-	 */
-	public void deleteWires() {
-		for (Iterator<Wire> iterator = wires.iterator(); iterator.hasNext();) {
-			Wire wire = iterator.next();
-			wire.disconnect(this);
-			iterator.remove();
-		}
-		wires.clear();
 	}
 
 	@Override

@@ -34,9 +34,17 @@ public class Circuit implements LSRepaintListener {
 		gate.setRepaintListener(this);
 	}
 
-	public void addWire(Wire wire) {
+	public boolean addWire(Wire wire) {
+		// only add a wire if there is not a wire from<->to
+		for (Wire w : wires) {
+			if (w.to.equals(wire.to) && w.from.equals(w.from)) {
+				// don't add
+				return false;
+			}
+		}
 		wires.add(wire);
 		wire.setRepaintListener(this);
+		return true;
 	}
 
 	public Vector<Gate> getGates() {
@@ -138,21 +146,7 @@ public class Circuit implements LSRepaintListener {
 
 	public CircuitPart[] getSelected() {
 		Vector<CircuitPart> parts = new Vector<CircuitPart>();
-//		for (Gate g : gates) {
-//			if (g.selected)
-//				parts.add(g);
-//
-//			for (Pin p : g.getOutputs())
-//				if (p.isConnected()) {
-//					for (Wire wire : p.wires) {
-//						if (wire.selected)
-//							parts.add(wire);
-//						for (WirePoint pt : wire.points)
-//							if (pt.isSelected())
-//								parts.add(pt);
-//					}
-//				}
-//		}
+
 		for (Gate g : gates) {
 			if (g.selected)
 				parts.add(g);
@@ -173,12 +167,14 @@ public class Circuit implements LSRepaintListener {
 
 		for (CircuitPart part : parts) {
 			if (part instanceof Gate) {
-				CircuitPart g = (CircuitPart) part;
+				Gate g = (Gate) part;
 				// remove outgoing wires
 				g.clear();
 				gates.remove(g);
 			} else if (part instanceof Wire) {
-				((Wire) part).disconnect(null);
+				Wire w = (Wire) part;
+				w.disconnect(null);
+				wires.remove(w);
 			}
 		}
 		return true;
@@ -212,14 +208,6 @@ public class Circuit implements LSRepaintListener {
 				}
 			}
 		}
-//		for (Pin c : g.getPins()) {
-//			if (c.isConnected()) {
-//				for (Wire w : c.wires) {
-//					c.clear();
-//					c.delWire(w);
-//				}
-//			}
-//		}
 		return true;
 	}
 
@@ -282,15 +270,11 @@ public class Circuit implements LSRepaintListener {
 				parts.add(gate);
 				gate.select();
 			}
-			for (Pin p : gate.pins) {
-				if (p.isInput()) {
-					for (Wire w : p.wires) {
-						if (selectRect.contains(w.getBoundingBox())) {
-							w.select();
-							parts.add(w);
-						}
-					}
-				}
+		}
+		for (Wire w : wires) {
+			if (selectRect.contains(w.getBoundingBox())) {
+				w.select();
+				parts.add(w);
 			}
 		}
 		return parts.toArray(new CircuitPart[parts.size()]);

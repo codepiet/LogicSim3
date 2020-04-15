@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 
 import javax.swing.JColorChooser;
 
-import logicsim.App;
 import logicsim.ColorFactory;
 import logicsim.Gate;
 import logicsim.I18N;
@@ -46,7 +45,6 @@ public class LED extends Gate {
 	public void changedLevel(LSLevelEvent e) {
 		super.changedLevel(e);
 		if (level != e.level) {
-			App.time();
 			level = e.level;
 			fireRepaint();
 		}

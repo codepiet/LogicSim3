@@ -15,11 +15,12 @@ import javax.swing.JRadioButton;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import logicsim.Pin;
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.LSMouseEvent;
 import logicsim.Lang;
+import logicsim.Pin;
 
 /**
  * Binary Input Component for LogicSim
@@ -77,8 +78,10 @@ public class BinIn extends Gate {
 	}
 
 	private void setValue(int value) {
-		for (int i = 0; i < 8; i++)
-			getPin(i).setLevel((value & (1 << i)) != 0);
+		for (int i = 0; i < 8; i++) {
+			boolean b = (value & (1 << i)) != 0;
+			getPin(i).changedLevel(new LSLevelEvent(this, b));
+		}
 	}
 
 	@Override

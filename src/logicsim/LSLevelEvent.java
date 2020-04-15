@@ -1,7 +1,7 @@
 package logicsim;
 
 public class LSLevelEvent {
-	CircuitPart source;
+	public CircuitPart source;
 
 	public boolean level;
 

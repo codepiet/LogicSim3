@@ -26,9 +26,8 @@ public class EQU extends Gate {
 	public void simulate() {
 		int n = 0;
 		for (int i = 1; i < 1 + getNumInputs(); i++) {
-			if (getPin(i).isConnected())
-				if (getPin(i).getLevel())
-					n++;
+			if (getPin(i).getLevel())
+				n++;
 		}
 		// if n is even set true
 		getPin(0).setLevel(n % 2 == 0);

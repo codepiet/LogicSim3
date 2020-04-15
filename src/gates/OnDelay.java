@@ -46,18 +46,17 @@ public class OnDelay extends Gate {
 		Pin in = getPin(1);
 		Pin out = getPin(2);
 
-		if (lastInputState == false && in.isConnected() && in.getLevel()) { // positive flanke
+		if (lastInputState == false && in.getLevel()) { // positive flanke
 			startTime = new Date().getTime();
 		}
 
-		if (new Date().getTime() - startTime > delayTime && in.isConnected() && in.getLevel())
+		if (new Date().getTime() - startTime > delayTime && in.getLevel())
 			out.setLevel(true);
 
-		if (in.isConnected() || !in.getLevel())
+		if (!in.getLevel())
 			out.setLevel(false);
 
-		if (in.isConnected())
-			lastInputState = in.getLevel();
+		lastInputState = in.getLevel();
 	}
 
 	public boolean hasPropertiesUI() {

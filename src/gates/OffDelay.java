@@ -47,17 +47,16 @@ public class OffDelay extends Gate {
 	public void simulate() {
 		Pin in = getPin(1);
 		Pin out = getPin(2);
-		if (lastInputState == false && in.isConnected() && in.getLevel()) // positive flanke
+		if (lastInputState == false && in.getLevel()) // positive flanke
 			out.setLevel(true);
 
-		if (lastInputState == true && in.isConnected() && !in.getLevel()) // negative flanke
+		if (lastInputState == true && !in.getLevel()) // negative flanke
 			startTime = new Date().getTime();
 
-		if (new Date().getTime() - startTime > delayTime && in.isConnected() && !in.getLevel())
+		if (new Date().getTime() - startTime > delayTime && !in.getLevel())
 			out.setLevel(false);
 
-		if (in.isConnected())
-			lastInputState = in.getLevel();
+		lastInputState = in.getLevel();
 	}
 
 	public boolean hasPropertiesUI() {

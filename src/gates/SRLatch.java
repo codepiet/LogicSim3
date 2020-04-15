@@ -44,12 +44,12 @@ public class SRLatch extends Gate {
 		// https://www.elektronik-kompendium.de/sites/dig/0209302.htm
 
 		Wire nor1_nor2a = new Wire(nor1.getPin(0), nor2.getPin(1));
-		nor1.getPin(0).addWire(nor1_nor2a);
-		nor2.getPin(1).addWire(nor1_nor2a);
+		nor1.getPin(0).connect(nor1_nor2a);
+		nor2.getPin(1).connect(nor1_nor2a);
 
 		Wire nor2_nor1b = new Wire(nor2.getPin(0), nor1.getPin(2));
-		nor2.getPin(0).addWire(nor2_nor1b);
-		nor1.getPin(2).addWire(nor2_nor1b);
+		nor2.getPin(0).connect(nor2_nor1b);
+		nor1.getPin(2).connect(nor2_nor1b);
 
 		simulate();
 	}

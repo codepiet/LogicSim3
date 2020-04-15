@@ -117,14 +117,14 @@ public class Module extends Gate {
 		}
 
 		if (embedded) {
-			// remove all wires which are connected to MODIN-Inputs
+			// TODO remove all wires which are connected to MODIN-Inputs
 			// and remove all wires which are connected to MODOUT-Outputs
-			for (Pin c : moduleIn.getInputs()) {
-				c.deleteWires();
-			}
-			for (Pin c : moduleOut.getOutputs()) {
-				c.deleteWires();
-			}
+//			for (Pin c : moduleIn.getInputs()) {
+//				c.deleteWires();
+//			}
+//			for (Pin c : moduleOut.getOutputs()) {
+//				c.deleteWires();
+//			}
 		}
 	}
 

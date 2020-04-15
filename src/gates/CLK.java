@@ -9,12 +9,12 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
-import logicsim.Pin;
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.LSMouseEvent;
 import logicsim.Lang;
-import logicsim.Log;
+import logicsim.Pin;
 import logicsim.WidgetHelper;
 
 /**
@@ -24,7 +24,7 @@ import logicsim.WidgetHelper;
  * @author Peter Gabriel
  * @version 2.0
  */
-public class CLK extends Gate {
+public class CLK extends Gate implements Runnable {
 	static final long serialVersionUID = 3971572931629721831L;
 
 	private static final String ENTERLOW = "enterlow";
@@ -39,6 +39,9 @@ public class CLK extends Gate {
 
 	static final String HT_DEFAULT = "500";
 	static final String LT_DEFAULT = "500";
+
+	private Thread thread;
+	private boolean running = false;
 
 	Rectangle auto = new Rectangle(39, 44, 30, 15);
 	Rectangle manual = new Rectangle(11, 44, 15, 15);
@@ -68,54 +71,32 @@ public class CLK extends Gate {
 	}
 
 	@Override
+	public void interact() {
+		if (running) {
+			running = false;
+			currentMode = PAUSE;
+		} else {
+			currentMode = RUNNING;
+			startClock();
+		}
+	}
+
+	@Override
 	public void mousePressedSim(LSMouseEvent e) {
 		super.mousePressedSim(e);
 
 		int dx = e.getX() - getX();
 		int dy = e.getY() - getY();
 
-		Log.getInstance().print("p " + dx + "/" + dy);
-
 		if (manual.contains(dx, dy) && currentMode != RUNNING) {
 			currentMode = PULSE;
+			getPin(0).changedLevel(new LSLevelEvent(this, HIGH));
 			lastTime = 0;
-			getPin(0).setLevel(true);
+			if (!running)
+				startClock();
 		} else if (auto.contains(dx, dy)) {
-			currentMode = 1 - currentMode;
+			interact();
 		}
-	}
-
-	public void simulate() {
-		// advance oszilloscope's position
-		pos++;
-
-		// reset data array
-		if (pos > 59) {
-			pos = 0;
-			osz = new boolean[oszi.width + 1];
-		}
-
-		Pin cout = getPin(0);
-		boolean out = cout.getLevel();
-		if (currentMode == RUNNING) {
-			if (lastTime == 0)
-				lastTime = new Date().getTime();
-			if (!out && new Date().getTime() - lastTime > lowTime) {
-				cout.setLevel(true);
-				lastTime = new Date().getTime();
-			} else if (out && new Date().getTime() - lastTime > highTime) {
-				cout.setLevel(false);
-				lastTime = new Date().getTime();
-			}
-		} else if (currentMode == PULSE) {
-			if (lastTime == 0)
-				lastTime = new Date().getTime();
-			if (out && new Date().getTime() - lastTime > highTime) {
-				cout.setLevel(false);
-				currentMode = PAUSE;
-			}
-		}
-		osz[pos] = cout.getLevel();
 	}
 
 	@Override
@@ -204,4 +185,55 @@ public class CLK extends Gate {
 		I18N.addGate("fr", type, ENTERHIGH, "Durée du palier haut (ms)");
 		I18N.addGate("fr", type, ENTERLOW, "Durée du palier bas (ms)");
 	}
+
+	public void startClock() {
+		thread = new Thread(this);
+		thread.setPriority(Thread.MIN_PRIORITY);
+		thread.start();
+	}
+
+	@Override
+	public void run() {
+		running = true;
+		int ms = 2000 / oszi.width;
+		Date temp = new Date();
+		long lastMS = new Date().getTime();
+		lastTime = new Date().getTime();
+		while (running) {
+			// advance oszilloscope's position
+			if ((temp = new Date()).getTime() - lastMS > ms) {
+				pos++;
+				lastMS = temp.getTime();
+			}
+
+			// reset data array
+			if (pos > 59) {
+				pos = 0;
+				osz = new boolean[oszi.width + 1];
+			}
+
+			Pin cout = getPin(0);
+			boolean out = cout.getLevel();
+			if (currentMode == RUNNING) {
+				if (!out && new Date().getTime() - lastTime > lowTime) {
+					cout.changedLevel(new LSLevelEvent(this, HIGH));
+					lastTime = new Date().getTime();
+				} else if (out && new Date().getTime() - lastTime > highTime) {
+					cout.changedLevel(new LSLevelEvent(this, LOW));
+					lastTime = new Date().getTime();
+				}
+			} else if (currentMode == PULSE) {
+				if (out && new Date().getTime() - lastTime > highTime) {
+					cout.changedLevel(new LSLevelEvent(this, LOW));
+					currentMode = PAUSE;
+				}
+			}
+			try {
+				Thread.sleep(8);
+			} catch (InterruptedException e) {
+			}
+			osz[pos] = cout.getLevel();
+		}
+	}
+
 }

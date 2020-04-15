@@ -301,7 +301,6 @@ public class Wire extends CircuitPart implements Cloneable {
 		int my = e.getY();
 
 		if (e.lsAction == LSPanel.ACTION_ADDPOINT) {
-			Log.getInstance().print("adding point");
 			int p = isAt(mx, my);
 			if (p > -1) {
 				insertPointAfter(p, round(mx), round(my));
@@ -311,7 +310,6 @@ public class Wire extends CircuitPart implements Cloneable {
 			notifyMessage("");
 			notifyAction(0);
 		} else if (e.lsAction == LSPanel.ACTION_DELPOINT) {
-			Log.getInstance().print("DELPOINT on wire?");
 			if (removePointAt(e.getX(), e.getY())) {
 				select();
 				notifyChanged();

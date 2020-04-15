@@ -111,16 +111,14 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 						if (part instanceof Gate) {
 							Gate gate = (Gate) part;
 							for (Pin pin : gate.pins) {
-								// autowire unconnected pins only
-								if (pin.isConnected())
-									continue;
+								// TODO autowire unconnected pins only
 								int x = pin.getX();
 								int y = pin.getY();
 								for (Gate g : circuit.getGates()) {
 									CircuitPart cp = g.findPartAt(x, y);
 									if (cp instanceof Pin) {
 										Pin p = (Pin) cp;
-										if (pin.isInput() == p.isOutput() && !p.isConnected()) {
+										if (pin.isInput() == p.isOutput()) {
 											// put new wire between pin and p
 											Wire w = null;
 											if (pin.isOutput())
@@ -128,9 +126,10 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 											else
 												w = new Wire(p, pin);
 											w.deselect();
-											p.connect(w);
-											pin.connect(w);
-											circuit.addWire(w);
+											if (circuit.addWire(w)) {
+												p.connect(w);
+												pin.connect(w);
+											}
 										}
 									}
 								}
@@ -197,16 +196,15 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					wire.addPoint(CircuitPart.round(e.getX()), CircuitPart.round(e.getY()));
 				else if (cp instanceof Pin) {
 					Pin pin = ((Pin) cp);
+					wire.to = pin;
+					pin.connect(wire);
 					// check for existing wire, if there is one, delete!
-					if (pin.isConnected()) {
-						for (Wire w : pin.wires) {
-							w.clear();
-						}
-					}
-					wire.addLevelListener(pin);
-					pin.addLevelListener(wire);
+//					if (pin.isConnected()) {
+//						for (Wire w : pin.wires) {
+//							w.clear();
+//						}
+//					}
 					wire.setTempPoint(null);
-					wire.setRepaintListener(circuit);
 					fireCircuitChanged();
 					// now we have a finished wire, the wire stays active
 				}
@@ -239,9 +237,10 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					// is output
 					// 3. start a new wire
 					// output is clicked
-					Wire newWire = new Wire(null, null);
-					newWire.addLevelListener(pin);
-					pin.addLevelListener(newWire);
+					Wire newWire = new Wire(pin, null);
+					if (circuit.addWire(newWire)) {
+						pin.connect(newWire);
+					}
 					fireStatusText(I18N.tr(Lang.EDITWIRE));
 					circuit.deselectAll();
 					newWire.select();
