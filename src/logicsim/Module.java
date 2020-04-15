@@ -117,14 +117,45 @@ public class Module extends Gate {
 		}
 
 		if (embedded) {
-			// TODO remove all wires which are connected to MODIN-Inputs
+			// remove all wires which are connected to MODIN-Inputs
 			// and remove all wires which are connected to MODOUT-Outputs
-//			for (Pin c : moduleIn.getInputs()) {
-//				c.deleteWires();
-//			}
-//			for (Pin c : moduleOut.getOutputs()) {
-//				c.deleteWires();
-//			}
+			for (Pin p : moduleIn.getInputs()) {
+				p.disconnect();
+			}
+			for (Pin p : moduleOut.getOutputs()) {
+				p.disconnect();
+				p.addLevelListener(this);
+			}
+		}
+
+	}
+
+	/**
+	 * wird aufgerufen, wenn auf das Gatter geklickt wird
+	 */
+	@Override
+	public void mousePressed(LSMouseEvent e) {
+		notifyMessage(type);
+		if (!Simulation.getInstance().isRunning()) {
+			select();
+			notifyRepaint();
+		}
+	}
+
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		Pin p = (Pin) e.source;
+		int num = p.number;
+		if (p.isInput()) {
+			// source is one of the module's inputs
+			// forward to MODIN-output
+			moduleIn.getPin(num).changedLevel(new LSLevelEvent(new Wire(null, null), e.level));
+		} else {
+			// is output from MODOUT
+			// forward to module's output
+			int target = p.number;
+			LSLevelEvent evt = new LSLevelEvent(this, p.getLevel());
+			getPin(target).changedLevel(evt);
 		}
 	}
 
