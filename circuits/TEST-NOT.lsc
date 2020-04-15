@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<logicsim version="3">
+    <info/>
+    <gates>
+        <gate type="switch" x="20" y="20"/>
+        <gate type="not" x="80" y="20"/>
+        <gate type="not" x="150" y="110"/>
+        <gate type="not" x="220" y="20"/>
+        <gate type="not" x="290" y="110"/>
+        <gate type="not" x="360" y="20"/>
+        <gate type="not" x="430" y="110"/>
+        <gate type="led" x="500" y="30"/>
+    </gates>
+    <wires>
+        <wire>
+            <from id="switch@20:20" number="0"/>
+            <to id="not@80:20" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="not@80:20" number="1"/>
+            <to id="not@150:110" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="not@150:110" number="1"/>
+            <to id="not@220:20" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="not@220:20" number="1"/>
+            <to id="not@290:110" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="not@290:110" number="1"/>
+            <to id="not@360:20" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="not@360:20" number="1"/>
+            <to id="not@430:110" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="not@430:110" number="1"/>
+            <to id="led@500:30" number="0" type="gate"/>
+        </wire>
+    </wires>
+</logicsim>
