@@ -62,11 +62,11 @@ public abstract class CircuitPart implements LSLevelListener {
 	}
 
 	public void addLevelListener(LSLevelListener l) {
-		if (listeners == null)
+		if (getListeners() == null)
 			return;
-		if (listeners.contains(l))
+		if (getListeners().contains(l))
 			return;
-		listeners.add(l);
+		getListeners().add(l);
 	}
 
 	public void setRepaintListener(LSRepaintListener l) {
@@ -74,8 +74,8 @@ public abstract class CircuitPart implements LSLevelListener {
 	}
 
 	public void removeLevelListener(LSLevelListener l) {
-		if (listeners != null)
-			listeners.remove(l);
+		if (getListeners() != null)
+			getListeners().remove(l);
 	}
 
 	public void clear() {
@@ -229,12 +229,12 @@ public abstract class CircuitPart implements LSLevelListener {
 		// if so, just forward the event to the others except to the origin
 		if (e.source != this) {
 			LSLevelEvent evt = new LSLevelEvent(this, e.level);
-			for (LSLevelListener l : listeners) {
+			for (LSLevelListener l : getListeners()) {
 				if (e.source != l)
 					l.changedLevel(evt);
 			}
 		} else {
-			for (LSLevelListener l : listeners) {
+			for (LSLevelListener l : getListeners()) {
 				l.changedLevel(e);
 			}
 		}
@@ -246,7 +246,11 @@ public abstract class CircuitPart implements LSLevelListener {
 	}
 
 	public boolean isConnected() {
-		return listeners.size() > 0;
+		return getListeners().size() > 0;
+	}
+
+	public Collection<LSLevelListener> getListeners() {
+		return listeners;
 	}
 
 }

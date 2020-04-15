@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.util.Iterator;
 
 public class Pin extends CircuitPart {
 
@@ -285,6 +286,17 @@ public class Pin extends CircuitPart {
 			changedLevel(new LSLevelEvent(wire, wire.getLevel()));
 		} else {
 			fireChangedLevel(new LSLevelEvent(this, getLevel()));
+		}
+	}
+
+	public void disconnect() {
+		for (Iterator<LSLevelListener> iterator = getListeners().iterator(); iterator.hasNext();) {
+			if (iterator instanceof Wire) {
+				Wire w = (Wire) iterator;
+				w.disconnect(null);
+				removeLevelListener(w);
+				iterator.remove();
+			}
 		}
 	}
 

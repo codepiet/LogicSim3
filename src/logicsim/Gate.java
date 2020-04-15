@@ -468,7 +468,7 @@ public class Gate extends CircuitPart {
 	 * wird aufgerufen, wenn auf das Gatter geklickt wird
 	 */
 	@Override
-	public final void mousePressed(LSMouseEvent e) {
+	public void mousePressed(LSMouseEvent e) {
 		super.mousePressed(e);
 		notifyMessage(I18N.getString(type, I18N.TITLE));
 
@@ -591,9 +591,6 @@ public class Gate extends CircuitPart {
 	}
 
 	public void simulate() {
-		for (Pin c : getInputs()) {
-			c.getLevel();
-		}
 	}
 
 	public boolean supportsVariableInputs() {
