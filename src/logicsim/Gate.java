@@ -509,13 +509,14 @@ public class Gate extends CircuitPart {
 	}
 
 	/**
-	 * Reset Gate: default: alle Ausgaenge auf LOW manche Gates ueberschreiben diese
-	 * Funktion und setzen bestimmte Ausgaenge auf HIGH
+	 * Reset Gate: query all Inputs and generate Events for all outputs this should
+	 * happen in simulate, so call this
 	 */
 	@Override
 	public void reset() {
-		for (Pin c : pins)
-			c.reset();
+		busted = false;
+		simulate();
+		fireRepaint();
 	}
 
 	public void rotate() {

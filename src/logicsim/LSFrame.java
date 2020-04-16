@@ -848,6 +848,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	 */
 	void actionCreateModule(ActionEvent e) {
 		lsFile = new LogicSimFile(defaultModuleFileName());
+
 		if (!FileInfoDialog.showFileInfo(this, lsFile))
 			return;
 

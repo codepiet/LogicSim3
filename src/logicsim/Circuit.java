@@ -234,6 +234,7 @@ public class Circuit implements LSRepaintListener {
 	public void setGates(Vector<Gate> gates) {
 		for (Gate gate : gates) {
 			addGate(gate);
+			gate.setRepaintListener(this);
 		}
 		fireRepaint(null);
 	}

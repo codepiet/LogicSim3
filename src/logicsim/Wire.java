@@ -401,15 +401,13 @@ public class Wire extends CircuitPart implements Cloneable {
 
 	@Override
 	public String toString() {
-		String s = "";
-		s += (from != null ? from.getId() : "-");
-		s += " <- ";
-		for (int i = 0; i < points.size(); i++) {
-			WirePoint p = points.get(i);
-			s += p.toString();
-		}
-		s += " -> ";
-		s += (to != null ? to.getId() : "-");
+		String s = getId();
+//		if (getListeners().size() > 0) {
+//			s += "\n send updates to\n";
+//			for (LSLevelListener l : getListeners())
+//				s += indent(((CircuitPart) l).getId(), 3) + "\n";
+//		}
+//		s += "-----------------";
 		return s;
 	}
 
@@ -444,14 +442,27 @@ public class Wire extends CircuitPart implements Cloneable {
 	public void changedLevel(LSLevelEvent e) {
 		// a wire can get a level change from a pin or another wire
 		if (e.source instanceof Pin) {
-			if (level != e.level) {
+			if (level != e.level || e.force) {
 				level = e.level;
 				// forward to other listeners, event must not get back to the origin
-				// System.out.println("wire fires " + getId());
 				fireChangedLevel(e);
 				fireRepaint();
 			}
 		}
+	}
+
+	@Override
+	public String getId() {
+		String s = "";
+		s += (from != null ? from.getId() : "");
+		s += "<->";
+//		for (int i = 0; i < points.size(); i++) {
+//			WirePoint p = points.get(i);
+//			s += p.toString();
+//		}
+//		s += " -> ";
+		s += (to != null ? to.getId() : "-");
+		return s;
 	}
 
 }

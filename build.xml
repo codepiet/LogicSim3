@@ -2,7 +2,7 @@
 
 	<tstamp />
 
-	<property name="version" value="3.0-${DSTAMP}" />
+	<property name="version" value="3.1-${DSTAMP}" />
 	<property name="main-class" value="logicsim.App" />
 
 	<property name="release.dir" value="release" />

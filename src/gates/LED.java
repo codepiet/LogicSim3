@@ -28,8 +28,6 @@ public class LED extends Gate {
 
 	private Color color = null;
 
-	private boolean level;
-
 	public LED() {
 		super("output");
 		type = "led";
@@ -44,10 +42,7 @@ public class LED extends Gate {
 	@Override
 	public void changedLevel(LSLevelEvent e) {
 		super.changedLevel(e);
-		if (level != e.level) {
-			level = e.level;
-			fireRepaint();
-		}
+		fireRepaint();
 	}
 
 	@Override
@@ -61,16 +56,12 @@ public class LED extends Gate {
 		int x = getX();
 		int y = getY();
 
-		Color c = Color.LIGHT_GRAY;
-
 		int ovalCenterY = y + getHeight() / 2;
 		int ovalRadius = 14;
 
 		int y1 = ovalCenterY - ovalRadius;
 
-		if (getPin(0).getLevel()) {
-			c = color;
-		}
+		Color c = getPin(0).getLevel() ? color : Color.LIGHT_GRAY;
 		g.setPaint(c);
 		g.fillOval(x + CONN_SIZE - 1, y1, ovalRadius * 2, ovalRadius * 2);
 		g.setPaint(Color.BLACK);

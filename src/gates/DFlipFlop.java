@@ -51,7 +51,7 @@ public class DFlipFlop extends Gate {
 		if (e.source.equals(getPin(1)) && e.level == HIGH) {
 			// rising edge detection
 			boolean d = getPin(0).getLevel();
-			LSLevelEvent evt = new LSLevelEvent(this, d);
+			LSLevelEvent evt = new LSLevelEvent(this, d, true);
 			getPin(2).changedLevel(evt);
 			getPin(3).changedLevel(evt);
 		}

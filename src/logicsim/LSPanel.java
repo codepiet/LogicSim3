@@ -220,7 +220,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				fireStatusText("");
 				return;
 			}
-
 			// check if the part is a connector
 			if (cp instanceof Pin) {
 				Pin pin = ((Pin) cp);
@@ -327,7 +326,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	CircuitChangedListener changeListener;
 	public Circuit circuit = new Circuit();
 
-	// momentane Aktion
+	// current mode
 	private int currentAction;
 
 	private Dimension panelSize = new Dimension(1280, 1024);
@@ -338,10 +337,10 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	private Rectangle2D selectRect;
 
 	public LSPanel() {
-		circuit.setRepaintListener(this);
 		this.setSize(panelSize);
 		this.setPreferredSize(panelSize);
 		this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		circuit.setRepaintListener(this);
 
 		// setZoomingSpeed(0.02);
 		setPainter(new LogicSimPainterGraphics());

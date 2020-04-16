@@ -75,6 +75,7 @@
                 <property key="type">toggle</property>
             </properties>
         </gate>
+        <gate type="buffer" x="570" y="10"/>
     </gates>
     <wires/>
 </logicsim>

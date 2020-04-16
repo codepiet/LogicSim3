@@ -203,7 +203,14 @@ public class Pin extends CircuitPart {
 
 	@Override
 	public String toString() {
-		return getId() + " - " + (getLevel() ? "H" : "L");
+		String s = getId() + " - " + (getLevel() ? "HIGH" : "LOW");
+//		if (getListeners().size() > 0) {
+//			s += "\n send updates to\n";
+//			for (LSLevelListener l : getListeners())
+//				s += indent(((CircuitPart) l).getId(), 3) + "\n";
+//		}
+//		s += "-----------------";
+		return s;
 	}
 
 	public void setLevel(boolean b) {
@@ -240,30 +247,25 @@ public class Pin extends CircuitPart {
 	}
 
 	@Override
-	public void reset() {
-		super.reset();
-		level = false;
-	}
-
-	@Override
 	public void changedLevel(LSLevelEvent e) {
 		// source has to be a Gate or a Wire
 		if (e.source instanceof Gate) {
 			if (isOutput()) {
-				if (level != e.level) {
+				if (level != e.level || e.force) {
 					level = e.level;
 					// propagate this to the outside
-					fireChangedLevel(new LSLevelEvent(this, getLevel()));
+					fireChangedLevel(new LSLevelEvent(this, getLevel(), e.force));
 				}
 			}
 		} else if (e.source instanceof Wire) {
 			// signal is from outside, propagate this to gate
 			// call gate directly
-			if (level != e.level) {
+			if (level != e.level || e.force) {
 				level = e.level;
-				gate.changedLevel(new LSLevelEvent(this, getLevel()));
+				gate.changedLevel(new LSLevelEvent(this, getLevel(), e.force));
+
 				// and call all other wires which are connected to the pin
-				gate.fireChangedLevel(e);
+				fireChangedLevel(e);
 			}
 		} else
 			throw new RuntimeException("pins communicate with gates or wires only! source is " + e.source.getId()
@@ -283,9 +285,10 @@ public class Pin extends CircuitPart {
 		wire.addLevelListener(this);
 		this.addLevelListener(wire);
 		if (isInput()) {
-			changedLevel(new LSLevelEvent(wire, wire.getLevel()));
+			changedLevel(new LSLevelEvent(wire, wire.getLevel(), true));
 		} else {
-			fireChangedLevel(new LSLevelEvent(this, getLevel()));
+			LSLevelEvent evt = new LSLevelEvent(this, getLevel(), true);
+			fireChangedLevel(evt);
 		}
 	}
 

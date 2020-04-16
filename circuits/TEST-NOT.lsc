@@ -3,46 +3,46 @@
     <info/>
     <gates>
         <gate type="switch" x="30" y="20"/>
-        <gate type="not" x="80" y="110"/>
+        <gate type="not" x="80" y="140"/>
         <gate type="not" x="150" y="20"/>
-        <gate type="not" x="220" y="110"/>
+        <gate type="not" x="220" y="140"/>
         <gate type="not" x="290" y="20"/>
-        <gate type="not" x="360" y="110"/>
+        <gate type="not" x="360" y="140"/>
         <gate type="not" x="430" y="20"/>
         <gate type="led" x="570" y="30"/>
-        <gate type="not" x="500" y="110"/>
+        <gate type="not" x="500" y="140"/>
     </gates>
     <wires>
         <wire>
             <from id="switch@30:20" number="0"/>
-            <to id="not@80:110" number="0" type="gate"/>
+            <to id="not@80:140" number="0" type="gate"/>
         </wire>
         <wire>
-            <from id="not@80:110" number="1"/>
+            <from id="not@80:140" number="1"/>
             <to id="not@150:20" number="0" type="gate"/>
         </wire>
         <wire>
             <from id="not@150:20" number="1"/>
-            <to id="not@220:110" number="0" type="gate"/>
+            <to id="not@220:140" number="0" type="gate"/>
         </wire>
         <wire>
-            <from id="not@220:110" number="1"/>
+            <from id="not@220:140" number="1"/>
             <to id="not@290:20" number="0" type="gate"/>
         </wire>
         <wire>
             <from id="not@290:20" number="1"/>
-            <to id="not@360:110" number="0" type="gate"/>
+            <to id="not@360:140" number="0" type="gate"/>
         </wire>
         <wire>
-            <from id="not@360:110" number="1"/>
+            <from id="not@360:140" number="1"/>
             <to id="not@430:20" number="0" type="gate"/>
         </wire>
         <wire>
             <from id="not@430:20" number="1"/>
-            <to id="not@500:110" number="0" type="gate"/>
+            <to id="not@500:140" number="0" type="gate"/>
         </wire>
         <wire>
-            <from id="not@500:110" number="1"/>
+            <from id="not@500:140" number="1"/>
             <to id="led@570:30" number="0" type="gate"/>
         </wire>
     </wires>
