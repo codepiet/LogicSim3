@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<logicsim version="3">
+    <info/>
+    <gates>
+        <gate type="switch" x="20" y="10"/>
+        <gate type="buffer" x="110" y="10"/>
+        <gate type="buffer" x="220" y="10"/>
+        <gate type="buffer" x="330" y="10"/>
+        <gate type="led" x="430" y="20"/>
+    </gates>
+    <wires>
+        <wire>
+            <from id="buffer@330:10" number="1"/>
+            <to id="led@430:20" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="buffer@220:10" number="1"/>
+            <to id="buffer@330:10" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="buffer@110:10" number="1"/>
+            <to id="buffer@220:10" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="switch@20:10" number="0"/>
+            <to id="buffer@110:10" number="0" type="gate"/>
+        </wire>
+    </wires>
+</logicsim>
