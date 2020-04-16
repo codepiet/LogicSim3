@@ -45,8 +45,8 @@ public class OffDelay extends Gate {
 	}
 
 	public void simulate() {
-		Pin in = getPin(1);
-		Pin out = getPin(2);
+		Pin in = getPin(0);
+		Pin out = getPin(1);
 		if (lastInputState == false && in.getLevel()) // positive flanke
 			out.setLevel(true);
 
