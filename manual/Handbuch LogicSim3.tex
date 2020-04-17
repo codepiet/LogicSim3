@@ -74,6 +74,18 @@ Ein- und Ausgänge von Modulen können Beschriftungen tragen. Diese müssen derz
 \label{labels}
 
 \section{Erweiterung}
+
+\subsection{Verwendung mit Eclipse}
+Das Projekt wird derzeit mit Eclipse entwickelt, in der letzten Version. Als Java SDK kommt OpenJDK zum Einsatz.
+
+Da LogicSim zur Entwicklungszeit und zum Start aus Eclipse heraus unbedingt die Verzeichnisse \texttt{circuits} und \texttt{modules} benötigt, ist darauf zu achten, dass diese Ordner zugreifbar sind. Da diese im Eclipse-Projekt-Hauptordner liegen, funktioniert das so.
+
+In der JAR-Datei ist dies anders. Hier gibt es zusätzlich das Verzeichnis \texttt{gates} im Hauptordner, hier müssen die Klassen aus dem \texttt{gates}-Package enthalten sein. Der Vorteil liegt hier in einem einfachen Löschen und Hinzunehmen weiterer Gatter-Typen und Komponenten.
+
+Die Zusammenstellung der Distribution bzw. des LogicSim-ZIP-Archivs erfolgt via ant-build-Skript. Abbildung \ref{projectstructure} zeigt die Dateiansicht aus Eclipse heraus.
+
+\bild{projectstructure}{Struktur des Projekts in der Eclipse-Ansicht}
+
 \subsection{Übersetzung der Texte in andere Sprachen}
 Als Muster stehen die Dateien \texttt{de.txt} und \texttt{en.txt} zur Verfügung. Diese Dateien enthalten die neuen Sprachtexte, die von \lsN{} verwendet werden. Vorhandene, andere Sprachdateien sind zwar übersetzt, nur sind die Sprachtextbezeichner noch nicht auf \lsN{} umgestellt.
 
