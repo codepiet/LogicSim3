@@ -484,10 +484,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			}
 			return;
 		}
-		if (keyCode == KeyEvent.VK_A) {
-			scaleAndMoveToAll();
-			return;
-		}
 
 		if (keyCode == KeyEvent.VK_SPACE) {
 			CircuitPart[] selected = circuit.getSelected();
@@ -545,10 +541,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			}
 		}
 		fireCircuitChanged();
-	}
-
-	private void scaleAndMoveToAll() {
-		repaint();
 	}
 
 	public void setAction(CircuitPart g) {

@@ -23,7 +23,7 @@
         <gate type="srff" x="100" y="250"/>
         <gate type="dsrff" x="260" y="250"/>
         <gate type="dff" x="180" y="250"/>
-        <gate type="jkcff" x="340" y="250"/>
+        <gate type="jkff" x="340" y="250"/>
         <gate type="jkmsff" x="420" y="250"/>
         <gate type="tff" x="500" y="250"/>
         <gate type="led" x="510" y="330">

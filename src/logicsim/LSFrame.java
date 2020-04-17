@@ -79,7 +79,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	JComboBox<String> jComboBox_numinput = null;
 
 	public LSFrame(String title) {
-		super(title);
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 
 		lsFile = new LogicSimFile(defaultCircuitFileName());
@@ -222,7 +221,37 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		// EDIT
 		JMenu mnuEdit = new JMenu(I18N.tr(Lang.EDIT));
 
-		JMenuItem mEdit = new JMenuItem(I18N.tr(Lang.NEWWIRE));
+		JMenuItem mEdit = new JMenuItem(I18N.tr(Lang.SELECTALL));
+		mEdit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK, false));
+		mEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lspanel.circuit.selectAll();
+				lspanel.repaint();
+			}
+		});
+		mnuEdit.add(mEdit);
+
+		mEdit = new JMenuItem(I18N.tr(Lang.SELECT));
+		mEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lspanel.setAction(LSPanel.ACTION_SELECT);
+				lspanel.requestFocusInWindow();
+			}
+		});
+		mnuEdit.add(mEdit);
+
+		mEdit = new JMenuItem(I18N.tr(Lang.SELECTNONE));
+		mEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lspanel.circuit.deselectAll();
+				lspanel.repaint();
+			}
+		});
+		mnuEdit.add(mEdit);
+
+		mnuEdit.addSeparator();
+
+		mEdit = new JMenuItem(I18N.tr(Lang.NEWWIRE));
 		mEdit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK, false));
 		mEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

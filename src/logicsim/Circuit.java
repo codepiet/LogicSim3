@@ -68,6 +68,16 @@ public class Circuit implements LSRepaintListener {
 		this.repaintListener = listener;
 	}
 
+	public void selectAll() {
+		deselectAll();
+		for (Gate g : gates) {
+			g.select();
+		}
+		for (Wire w : wires) {
+			w.select();
+		}
+	}
+
 	// Alle Gatter und zugehörige Wires deaktivieren
 	public void deselectAll() {
 		for (Gate g : gates) {
@@ -78,16 +88,6 @@ public class Circuit implements LSRepaintListener {
 			for (WirePoint wp : w.points)
 				wp.deselect();
 		}
-//		for (Gate g : gates) {
-//			g.deselect();
-//			for (Pin p : g.pins) {
-//				for (Wire w : p.wires) {
-//					w.deselect();
-//					for (WirePoint wp : w.points)
-//						wp.deselect();
-//				}
-//			}
-//		}
 	}
 
 	public boolean isModule() {
