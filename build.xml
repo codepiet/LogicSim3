@@ -61,6 +61,7 @@
 				<file file="gpl.txt" />
 				<file file="icon.png" />
 				<file file="modules" />
+				<file file="logicsim.bat" />
 				<file file="README.md" />
 			</resources>
 		</copy>
