@@ -17,115 +17,156 @@
         <gate type="led" x="350" y="250"/>
         <gate type="led" x="350" y="280"/>
         <gate type="switch" x="80" y="170"/>
-        <gate type="clock" x="50" y="340">
+        <gate type="clock" x="40" y="460">
             <properties>
                 <property key="hightime">2000</property>
                 <property key="lowtime">2000</property>
             </properties>
         </gate>
+        <gate type="monoflop" x="220" y="420"/>
+        <gate type="led" x="350" y="430"/>
+        <gate type="jkff" x="220" y="340"/>
+        <gate type="switch" x="80" y="320"/>
+        <gate type="switch" x="80" y="360"/>
+        <gate type="led" x="350" y="360"/>
+        <gate type="led" x="350" y="330"/>
     </gates>
     <wires>
         <wire>
             <from id="srl@220:20" number="2"/>
-            <to id="led@350:10" number="0"/>
+            <to id="led@350:10" number="0" type="gate"/>
             <point node="false" number="0" x="330" y="40"/>
             <point node="false" number="1" x="330" y="30"/>
         </wire>
         <wire>
             <from id="srl@220:20" number="3"/>
-            <to id="led@350:40" number="0"/>
+            <to id="led@350:40" number="0" type="gate"/>
         </wire>
         <wire>
             <from id="switch@80:10" number="0"/>
-            <to id="srl@220:20" number="0"/>
+            <to id="srl@220:20" number="0" type="gate"/>
         </wire>
         <wire>
             <from id="switch@80:10" number="0"/>
-            <to id="dsrff@220:260" number="1"/>
+            <to id="dsrff@220:260" number="1" type="gate"/>
             <point node="false" number="0" x="170" y="40"/>
             <point node="false" number="1" x="170" y="280"/>
         </wire>
         <wire>
             <from id="switch@80:10" number="0"/>
-            <to id="srff@220:100" number="0"/>
+            <to id="srff@220:100" number="0" type="gate"/>
             <point node="false" number="0" x="170" y="40"/>
             <point node="false" number="1" x="170" y="110"/>
         </wire>
         <wire>
             <from id="switch@80:50" number="0"/>
-            <to id="srl@220:20" number="1"/>
+            <to id="srl@220:20" number="1" type="gate"/>
             <point node="false" number="0" x="150" y="80"/>
             <point node="false" number="1" x="150" y="60"/>
         </wire>
         <wire>
             <from id="switch@80:50" number="0"/>
-            <to id="srff@220:100" number="1"/>
+            <to id="srff@220:100" number="1" type="gate"/>
             <point node="false" number="0" x="150" y="80"/>
             <point node="false" number="1" x="150" y="130"/>
         </wire>
         <wire>
             <from id="switch@80:50" number="0"/>
-            <to id="dsrff@220:260" number="2"/>
+            <to id="dsrff@220:260" number="2" type="gate"/>
             <point node="false" number="0" x="150" y="80"/>
             <point node="false" number="1" x="150" y="300"/>
         </wire>
         <wire>
             <from id="srff@220:100" number="3"/>
-            <to id="led@350:90" number="0"/>
+            <to id="led@350:90" number="0" type="gate"/>
             <point node="false" number="0" x="330" y="120"/>
             <point node="false" number="1" x="330" y="110"/>
         </wire>
         <wire>
             <from id="srff@220:100" number="4"/>
-            <to id="led@350:120" number="0"/>
+            <to id="led@350:120" number="0" type="gate"/>
         </wire>
         <wire>
             <from id="dff@220:180" number="2"/>
-            <to id="led@350:170" number="0"/>
+            <to id="led@350:170" number="0" type="gate"/>
             <point node="false" number="0" x="330" y="200"/>
             <point node="false" number="1" x="330" y="190"/>
         </wire>
         <wire>
             <from id="dff@220:180" number="3"/>
-            <to id="led@350:200" number="0"/>
+            <to id="led@350:200" number="0" type="gate"/>
         </wire>
         <wire>
             <from id="dsrff@220:260" number="4"/>
-            <to id="led@350:250" number="0"/>
+            <to id="led@350:250" number="0" type="gate"/>
             <point node="false" number="0" x="330" y="280"/>
             <point node="false" number="1" x="330" y="270"/>
         </wire>
         <wire>
             <from id="dsrff@220:260" number="5"/>
-            <to id="led@350:280" number="0"/>
+            <to id="led@350:280" number="0" type="gate"/>
         </wire>
         <wire>
             <from id="switch@80:170" number="0"/>
-            <to id="dff@220:180" number="0"/>
+            <to id="dff@220:180" number="0" type="gate"/>
         </wire>
         <wire>
             <from id="switch@80:170" number="0"/>
-            <to id="dsrff@220:260" number="0"/>
+            <to id="dsrff@220:260" number="0" type="gate"/>
             <point node="false" number="0" x="130" y="200"/>
             <point node="false" number="1" x="130" y="270"/>
         </wire>
         <wire>
-            <from id="clock@50:340" number="0"/>
-            <to id="dsrff@220:260" number="3"/>
-            <point node="false" number="0" x="190" y="380"/>
+            <from id="clock@40:460" number="0"/>
+            <to id="dsrff@220:260" number="3" type="gate"/>
+            <point node="false" number="0" x="190" y="500"/>
             <point node="false" number="1" x="190" y="310"/>
         </wire>
         <wire>
-            <from id="clock@50:340" number="0"/>
-            <to id="dff@220:180" number="1"/>
-            <point node="false" number="0" x="190" y="380"/>
+            <from id="clock@40:460" number="0"/>
+            <to id="dff@220:180" number="1" type="gate"/>
+            <point node="false" number="0" x="190" y="500"/>
             <point node="false" number="1" x="190" y="220"/>
         </wire>
         <wire>
-            <from id="clock@50:340" number="0"/>
-            <to id="srff@220:100" number="2"/>
-            <point node="false" number="0" x="190" y="380"/>
+            <from id="clock@40:460" number="0"/>
+            <to id="srff@220:100" number="2" type="gate"/>
+            <point node="false" number="0" x="190" y="500"/>
             <point node="false" number="1" x="190" y="150"/>
+        </wire>
+        <wire>
+            <from id="switch@80:170" number="0"/>
+            <to id="monoflop@220:420" number="0" type="gate"/>
+            <point node="false" number="0" x="130" y="200"/>
+            <point node="false" number="1" x="130" y="450"/>
+        </wire>
+        <wire>
+            <from id="monoflop@220:420" number="1"/>
+            <to id="led@350:430" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="clock@40:460" number="0"/>
+            <to id="jkff@220:340" number="1" type="gate"/>
+            <point node="false" number="0" x="190" y="500"/>
+            <point node="false" number="1" x="190" y="370"/>
+        </wire>
+        <wire>
+            <from id="switch@80:320" number="0"/>
+            <to id="jkff@220:340" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="switch@80:360" number="0"/>
+            <to id="jkff@220:340" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="jkff@220:340" number="3"/>
+            <to id="led@350:330" number="0" type="gate"/>
+            <point node="false" number="0" x="330" y="360"/>
+            <point node="false" number="1" x="330" y="350"/>
+        </wire>
+        <wire>
+            <from id="jkff@220:340" number="4"/>
+            <to id="led@350:360" number="0" type="gate"/>
         </wire>
     </wires>
 </logicsim>
