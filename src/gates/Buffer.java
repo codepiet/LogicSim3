@@ -1,6 +1,5 @@
 package gates;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
@@ -51,31 +50,38 @@ public class Buffer extends Gate {
 	@Override
 	protected void drawFrame(Graphics2D g2) {
 		String gateType = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN, LSProperties.GATEDESIGN_IEC);
-		if (gateType.equals(LSProperties.GATEDESIGN_IEC))
+		if (gateType.equals(LSProperties.GATEDESIGN_IEC)) {
+			if (getPin(0).getX() == getX() + 10) {
+				getPin(0).setX(getPin(0).getX() - 10);
+				getPin(1).setX(getPin(1).getX() + 10);
+			}
 			super.drawFrame(g2);
-		else
+		} else
 			drawANSI(g2);
 	}
 
 	private void drawANSI(Graphics2D g2) {
 		Path2D p = new Path2D.Double();
 		double yu = getY() + CONN_SIZE + 6;
-		double xr = getX() + width - CONN_SIZE + 1;
+		double xr = getX() + width - 10 - CONN_SIZE + 1;
 		double yb = getY() + height - CONN_SIZE - 6;
+		double xl = getX() + 10 + CONN_SIZE;
+		// check coordinates of pins, x coordinates shoud be a little more inwards
+		if (getPin(0).getX() == getX()) {
+			getPin(0).setX(getPin(0).getX() + 10);
+			getPin(1).setX(getPin(1).getX() - 10);
+		}
 
-		p.moveTo(xc, yc);
-		p.lineTo(xc, yb);
+		p.moveTo(xl, yc);
+		p.lineTo(xl, yb);
 		p.lineTo(xr, yc);
-		p.lineTo(xc, yu);
+		p.lineTo(xl, yu);
 		p.closePath();
 
 		g2.setPaint(Color.WHITE);
 		g2.fill(p);
 		g2.setPaint(Color.black);
 		g2.draw(p);
-
-		g2.setStroke(new BasicStroke(2));
-		g2.drawLine(getX() + CONN_SIZE, (int) yc, (int) xc - 1, (int) yc);
 	}
 
 	@Override

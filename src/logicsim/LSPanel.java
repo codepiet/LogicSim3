@@ -231,6 +231,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 							|| currentAction == Pin.NORMAL) {
 						// 1. if we clicked on an input modificator
 						pin.setLevelType(currentAction);
+						pin.changedLevel(new LSLevelEvent(new Wire(null, null), pin.level, true));
 						currentAction = ACTION_NONE;
 						fireCircuitChanged();
 						return;

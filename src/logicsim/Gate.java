@@ -209,10 +209,10 @@ public class Gate extends CircuitPart {
 		}
 	}
 
-	public Pin findConnector(int atX, int atY) {
-		for (Pin c : pins) {
-			if (c.isAt(atX, atY)) {
-				return c;
+	public Pin findPin(int atX, int atY) {
+		for (Pin p : pins) {
+			if (p.isAt(atX, atY)) {
+				return p;
 			}
 		}
 		return null;
@@ -222,14 +222,14 @@ public class Gate extends CircuitPart {
 		int rx = round(x);
 		int ry = round(y);
 
+		// check connectors
+		Pin pin = findPin(rx, ry);
+		if (pin != null)
+			return pin;
+
 		// if inside frame, it could only be a gate
 		if (insideFrame(x, y))
 			return this;
-
-		// check connectors
-		Pin conn = findConnector(rx, ry);
-		if (conn != null)
-			return conn;
 
 		return null;
 	}
