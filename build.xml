@@ -21,7 +21,7 @@
 
 	<target name="compile">
 		<mkdir dir="${classes.dir}" />
-		<javac srcdir="${src.dir}" destdir="${classes.dir}">
+		<javac target="1.8" source="1.8" srcdir="${src.dir}" destdir="${classes.dir}">
 			<exclude name="test/**" />
 		</javac>
 	</target>
