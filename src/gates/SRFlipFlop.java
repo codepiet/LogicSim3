@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.Pin;
 
 /**
@@ -19,7 +20,6 @@ public class SRFlipFlop extends Gate {
 	static final long serialVersionUID = 1049162074522360589L;
 
 	Color bg = Color.white;
-	boolean out0 = false;
 
 	public SRFlipFlop() {
 		super("flipflops");
@@ -37,8 +37,6 @@ public class SRFlipFlop extends Gate {
 		getPin(4).label = "/Q";
 		getPin(4).setLevelType(Pin.INVERTED);
 		getPin(4).moveBy(0, -10);
-
-		reset();
 	}
 
 	@Override
@@ -47,37 +45,26 @@ public class SRFlipFlop extends Gate {
 	}
 
 	@Override
-	public void simulate() {
-		super.simulate();
-		boolean s = getPin(0).getLevel();
-		boolean r = getPin(1).getLevel();
-		boolean clk = getPin(2).getLevel();
-
-		if (clk && s && r) {
-			bg = Color.yellow;
-			getPin(4).setLevel(false);
-			getPin(5).setLevel(false);
-			return;
-		} else {
-			bg = Color.white;
+	public void changedLevel(LSLevelEvent e) {
+		// clock: pin2
+		// s: pin0
+		// r: pin1
+		if (e.source.equals(getPin(2)) && e.level == HIGH) {
+			// clock rising edge detection
+			boolean s = getPin(0).getLevel();
+			boolean r = getPin(1).getLevel();
+			if (r) {
+				LSLevelEvent evt = new LSLevelEvent(this, LOW);
+				getPin(3).changedLevel(evt);
+				getPin(4).changedLevel(evt);
+			} else if (s) {
+				LSLevelEvent evt = new LSLevelEvent(this, HIGH);
+				getPin(3).changedLevel(evt);
+				getPin(4).changedLevel(evt);
+			}
 		}
-
-		if (clk) {
-			if (!s && r)
-				out0 = false;
-			else if (s && !r)
-				out0 = true;
-		}
-		getPin(3).setLevel(out0);
-		getPin(4).setLevel(out0);
 	}
 
-	@Override
-	public void reset() {
-		out0 = false;
-		getPin(3).setLevel(out0);
-		getPin(4).setLevel(out0);
-	}
 	@Override
 	public void loadLanguage() {
 		I18N.addGate(I18N.ALL, type, I18N.TITLE, "SR-FlipFlop");

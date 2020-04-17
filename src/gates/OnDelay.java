@@ -3,14 +3,13 @@ package gates;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.util.Date;
 
 import javax.swing.JOptionPane;
 
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.Lang;
-import logicsim.Pin;
 
 /**
  * ON-Delay component for LogicSim
@@ -19,14 +18,13 @@ import logicsim.Pin;
  * @author Peter Gabriel
  * @version 2.0
  */
-public class OnDelay extends Gate {
+public class OnDelay extends Gate implements Runnable {
 	static final long serialVersionUID = -2350098633141393951L;
 
 	static final String DELAY = "delay";
 	static final String DELAY_DEFAULT = "500";
 
-	transient long startTime;
-	transient boolean lastInputState;
+	private Thread thread;
 	int delayTime = 1000;
 
 	public OnDelay() {
@@ -42,21 +40,30 @@ public class OnDelay extends Gate {
 		delayTime = Integer.parseInt(getPropertyWithDefault(DELAY, DELAY_DEFAULT));
 	}
 
-	public void simulate() {
-		Pin in = getPin(0);
-		Pin out = getPin(1);
-
-		if (lastInputState == false && in.getLevel()) { // positive flanke
-			startTime = new Date().getTime();
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		if (e.source.equals(getPin(0))) {
+			if (e.level == HIGH) {
+				// rising edge detection of input
+				thread = new Thread(this);
+				thread.setPriority(Thread.MIN_PRIORITY);
+				thread.start();
+			} else {
+				//low let through
+				LSLevelEvent evt = new LSLevelEvent(this, LOW);
+				getPin(1).changedLevel(evt);				
+			}
 		}
+	}
 
-		if (new Date().getTime() - startTime > delayTime && in.getLevel())
-			out.setLevel(true);
-
-		if (!in.getLevel())
-			out.setLevel(false);
-
-		lastInputState = in.getLevel();
+	@Override
+	public void run() {
+		try {
+			Thread.sleep(delayTime);
+		} catch (InterruptedException e) {
+		}
+		LSLevelEvent evt = new LSLevelEvent(this, HIGH);
+		getPin(1).changedLevel(evt);
 	}
 
 	public boolean hasPropertiesUI() {

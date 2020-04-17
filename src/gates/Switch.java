@@ -20,7 +20,6 @@ import javax.swing.JRadioButton;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import logicsim.App;
 import logicsim.ColorFactory;
 import logicsim.Gate;
 import logicsim.I18N;

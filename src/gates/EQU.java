@@ -1,7 +1,5 @@
 package gates;
 
-import javax.swing.event.ListSelectionEvent;
-
 import logicsim.Gate;
 import logicsim.I18N;
 import logicsim.LSLevelEvent;

@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.Pin;
 
 /**
@@ -16,7 +17,6 @@ import logicsim.Pin;
  */
 public class DSRFlipFlop extends Gate {
 
-	boolean lastClk;
 	boolean clk = false;
 	boolean out0 = false;
 	boolean out1 = true;
@@ -26,8 +26,6 @@ public class DSRFlipFlop extends Gate {
 		type = "dsrff";
 		createInputs(4);
 		createOutputs(2);
-		out0 = false;
-		out1 = true;
 
 		getPin(0).label = "D";
 		getPin(1).label = "S";
@@ -40,56 +38,40 @@ public class DSRFlipFlop extends Gate {
 
 		getPin(4).moveBy(0, 10);
 		getPin(5).moveBy(0, -10);
-
-		reset();
 	}
 
 	@Override
-	public void simulate() {
-		boolean d = getPin(0).getLevel();
-		boolean s = getPin(1).getLevel();
-		boolean r = getPin(2).getLevel();
-		boolean clk = getPin(3).getLevel();
+	public void changedLevel(LSLevelEvent e) {
+		// clock: pin3
+		// d: pin0
+		// s: pin1
+		// r: pin2
 
-		boolean sthHasHappened = false;
-		// rising edge
-		if (clk && !lastClk && !r && !s) {
-			out0 = d;
-			out1 = !d;
-			sthHasHappened = true;
-		} else if (r && !s) {
-			out0 = false;
-			out1 = true;
-			sthHasHappened = true;
-		} else if (!r && s) {
-			out0 = true;
-			out1 = false;
-			sthHasHappened = true;
-		} else if (r && s) {
-			out0 = true;
-			out1 = true;
-			sthHasHappened = true;
+		if (e.source.equals(getPin(3)) && e.level == HIGH) {
+			// clock rising edge detection
+			boolean d = getPin(0).getLevel();
+			boolean s = getPin(1).getLevel();
+			boolean r = getPin(2).getLevel();
+			if (!r && !s) {
+				LSLevelEvent evt = new LSLevelEvent(this, d);
+				getPin(4).changedLevel(evt);
+				getPin(5).changedLevel(evt);
+			}
+		} else if (e.source.equals(getPin(1)) && e.level == HIGH) {
+			LSLevelEvent evt = new LSLevelEvent(this, HIGH);
+			getPin(4).changedLevel(evt);
+			getPin(5).changedLevel(evt);
+		} else if (e.source.equals(getPin(2)) && e.level == HIGH) {
+			LSLevelEvent evt = new LSLevelEvent(this, LOW);
+			getPin(4).changedLevel(evt);
+			getPin(5).changedLevel(evt);
 		}
-		if (sthHasHappened) {
-			getPin(4).setLevel(out0);
-			getPin(5).setLevel(!out1);
-		}
-		lastClk = clk;
 	}
 
 	@Override
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
 		drawLabel(g2, "DSR", Pin.smallFont);
-	}
-
-	@Override
-	public void reset() {
-		super.reset();
-		out0 = false;
-		out1 = true;
-		lastClk = false;
-		clk = false;
 	}
 
 	@Override

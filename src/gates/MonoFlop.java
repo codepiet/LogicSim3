@@ -4,12 +4,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.util.Date;
 
 import javax.swing.JOptionPane;
 
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.Lang;
 
 /**
@@ -19,15 +19,15 @@ import logicsim.Lang;
  * @author Peter Gabriel
  * @version 2.0
  */
-public class MonoFlop extends Gate {
+public class MonoFlop extends Gate implements Runnable {
+
 	static final long serialVersionUID = -6063406618533983926L;
 
-	long startTime;
-	boolean lastState;
+	private Thread thread;
 
 	static final String HT = "hightime";
 
-	static final String HT_DEFAULT = "500";
+	static final String HT_DEFAULT = "1000";
 
 	int highTime;
 
@@ -43,6 +43,31 @@ public class MonoFlop extends Gate {
 	@Override
 	protected void loadProperties() {
 		highTime = Integer.parseInt(getPropertyWithDefault(HT, HT_DEFAULT));
+	}
+
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		if (e.source.equals(getPin(0))) {
+			if (e.level == HIGH) {
+				LSLevelEvent evt = new LSLevelEvent(this, HIGH);
+				getPin(1).changedLevel(evt);
+
+				// rising edge detection of input
+				thread = new Thread(this);
+				thread.setPriority(Thread.MIN_PRIORITY);
+				thread.start();
+			}
+		}
+	}
+
+	@Override
+	public void run() {
+		try {
+			Thread.sleep(highTime);
+		} catch (InterruptedException e) {
+		}
+		LSLevelEvent evt = new LSLevelEvent(this, LOW);
+		getPin(1).changedLevel(evt);
 	}
 
 	@Override
@@ -63,30 +88,14 @@ public class MonoFlop extends Gate {
 	}
 
 	@Override
-	public void simulate() {
-		boolean in = getPin(0).getLevel();
-		// detect rising edge
-		if (lastState == false && in) {
-			getPin(1).setLevel(true);
-			startTime = new Date().getTime();
-		}
-
-		if (new Date().getTime() - startTime > highTime)
-			getPin(1).setLevel(false);
-
-		lastState = in;
-	}
-
-	@Override
 	public boolean hasPropertiesUI() {
 		return true;
 	}
 
 	@Override
 	public boolean showPropertiesUI(Component frame) {
-		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, HT),
-				I18N.tr(Lang.SETTINGS), JOptionPane.QUESTION_MESSAGE, null, null,
-				Integer.toString((int) highTime));
+		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, HT), I18N.tr(Lang.SETTINGS),
+				JOptionPane.QUESTION_MESSAGE, null, null, Integer.toString((int) highTime));
 		if (h != null && h.length() > 0) {
 			highTime = Integer.parseInt(h);
 			setPropertyInt(HT, highTime);

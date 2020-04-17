@@ -4,6 +4,7 @@ package gates;
 import logicsim.Pin;
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 
 /**
  * JK-Flipflop for LogicSim - rising edge driven
@@ -12,19 +13,12 @@ import logicsim.I18N;
  * @author Peter Gabriel
  * @version 2.0
  */
-public class JKCFlipFlop extends Gate {
+public class JKFlipFlop extends Gate {
 	static final long serialVersionUID = -5614329713407328370L;
 
-	transient boolean lastClk;
-	transient boolean clk;
-	transient boolean out0;
-	transient boolean out1;
-	boolean j;
-	boolean k;
-
-	public JKCFlipFlop() {
+	public JKFlipFlop() {
 		super("flipflops");
-		type = "jkcff";
+		type = "jkff";
 		label = "JK";
 		createInputs(3);
 		createOutputs(2);
@@ -38,38 +32,25 @@ public class JKCFlipFlop extends Gate {
 
 		getPin(3).moveBy(0, 10);
 		getPin(4).moveBy(0, -10);
-
-		reset();
+		getPin(4).setLevelType(Pin.INVERTED);
 	}
 
-	public void simulate() {
-		j = getPin(0).getLevel();
-		clk = getPin(1).getLevel();
-		k = getPin(2).getLevel();
-		out0 = getPin(3).getLevel();
-		out1 = getPin(4).getLevel();
-
-		if (j && !lastClk && k && out0) {
-			out0 = true;
-			out1 = false;
-		} else if (k && !lastClk && clk && out0) {
-			out0 = false;
-			out1 = true;
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		// clock: pin1
+		// j: pin0
+		// k: pin2
+		if (e.source.equals(getPin(1)) && e.level == HIGH) {
+			// clock rising edge detection
+			boolean j = getPin(0).getLevel();
+			boolean k = getPin(2).getLevel();
+			if (j && k) {
+				boolean out = getPin(3).getInternalLevel();
+				LSLevelEvent evt = new LSLevelEvent(this, !out);
+				getPin(3).changedLevel(evt);
+				getPin(4).changedLevel(evt);
+			}
 		}
-		lastClk = clk;
-
-		getPin(3).setLevel(out0);
-		getPin(4).setLevel(out1);
-	}
-
-	public void reset() {
-		super.reset();
-		j = false;
-		k = false;
-		out0 = false;
-		out1 = true;
-		clk = false;
-		lastClk = false;
 	}
 
 	@Override

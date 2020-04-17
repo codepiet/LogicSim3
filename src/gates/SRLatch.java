@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import logicsim.Pin;
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.LSLevelEvent;
 import logicsim.Wire;
 
 /**
@@ -38,8 +39,6 @@ public class SRLatch extends Gate {
 		getPin(2).moveBy(0, 10);
 		getPin(3).moveBy(0, -10);
 
-		reset();
-
 		// build gate
 		// https://www.elektronik-kompendium.de/sites/dig/0209302.htm
 
@@ -51,7 +50,13 @@ public class SRLatch extends Gate {
 		nor2.getPin(0).connect(nor2_nor1b);
 		nor1.getPin(2).connect(nor2_nor1b);
 
-		simulate();
+		nor1.getPin(0).addLevelListener(this);
+		nor2.getPin(0).addLevelListener(this);
+
+		// nor2.getPin(2).changedLevel(new LSLevelEvent(new Wire(null,null), HIGH));
+		// nor2.getPin(2).changedLevel(new LSLevelEvent(new Wire(null,null), LOW));
+		nor1.getPin(0).changedLevel(new LSLevelEvent(nor1, HIGH));
+		nor2.getPin(0).changedLevel(new LSLevelEvent(nor2, HIGH));
 	}
 
 	@Override
@@ -61,23 +66,24 @@ public class SRLatch extends Gate {
 	}
 
 	@Override
-	public void simulate() {
-		super.simulate();
-
-		nor1.getPin(1).setLevel(getPin(0).getLevel());
-		nor2.getPin(2).setLevel(getPin(1).getLevel());
-
-		nor1.simulate();
-		nor2.simulate();
-
-		getPin(2).setLevel(!nor1.getPin(0).getLevel());
-		getPin(3).setLevel(!nor2.getPin(0).getLevel());
-	}
-
-	@Override
-	public void reset() {
-		getPin(2).setLevel(!nor1.getPin(0).getLevel());
-		getPin(3).setLevel(!nor2.getPin(0).getLevel());
+	public void changedLevel(LSLevelEvent e) {
+		Pin p = (Pin) e.source;
+		if (p.isInput()) {
+			// forward to nor-pin
+			if (p.number == 0)
+				nor1.getPin(1).changedLevel(new LSLevelEvent(new Wire(null, null), getPin(0).getLevel()));
+			else
+				nor2.getPin(2).changedLevel(new LSLevelEvent(new Wire(null, null), getPin(1).getLevel()));
+		} else {
+			// output
+			if (p.gate == nor1) {
+				LSLevelEvent evt2 = new LSLevelEvent(this, !e.level);
+				getPin(2).changedLevel(evt2);
+			} else {
+				LSLevelEvent evt3 = new LSLevelEvent(this, !e.level);
+				getPin(3).changedLevel(evt3);
+			}
+		}
 	}
 
 	@Override
