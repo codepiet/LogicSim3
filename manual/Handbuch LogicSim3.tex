@@ -11,6 +11,10 @@
 
 \newcommand{\lsN}{\textit{LogicSim 3}}
 \newcommand{\lsA}{\textit{LogicSim 2}}
+\newcommand{\lsbild}[2]{%
+\fbox{\includegraphics[width=1cm]{../src/logicsim/images/#148}}
+}
+
 \newcommand{\bild}[2]{%
 \begin{figure}[htb!]
 \centering
@@ -24,6 +28,10 @@
 \author{P. Gabriel}
 \date{April 2020}
 \vspace*{-11mm}
+
+\begin{center}
+\includegraphics[width=10cm]{../src/logicsim/images/about}
+\end{center}
 
 \section{Einleitung}
 Der \textit{Logic Simulator}, im folgenden abgekürzt durch \lsN{}, ist der Nachfolger von Andreas Tetzls \lsA{}. \lsA{} ist auf seiner Webseite \url{http://tetzl.de} veröffentlicht.\\
@@ -46,19 +54,38 @@ Bitte verwenden Sie auch diesen Weg, falls Sie Fehler der Software melden möcht
 \section{Bedienung}
 
 \subsection{Start}
-\lsN{} wird als JAR-Datei ausgeliefert. Hierbei handelt es sich um ein Java-Archiv, dass nur dann lauffähig ist, wenn auf dem Computer JAVA installiert ist. Der Start des Programms geschieht im Normalfall über einen Doppelklick. Sollte dies nicht funktionieren, so kann die Einrichtung des Doppelklicks i
+\lsN{} wird als JAR-Datei ausgeliefert. Hierbei handelt es sich um ein Java-Archiv, dass nur dann lauffähig ist, wenn auf dem Computer JAVA installiert ist. Der Start des Programms geschieht im Normalfall über einen Doppelklick. Sollte dies nicht funktionieren, so kann das Programm auch im Falle von Windows über eine Batchdatei (logicsim.bat) gestartet werden. Sollte auch dies nicht möglich sein, ist evtl. Java nicht korrekt installiert.
 
-
+\subsection{Grundsätzliche Bedienung}
 Die Softwarebedienung erschließt sich in weiten Teilen von selbst. Besonderheiten:
 \begin{compactitem}
-\item Bauteile werden in die Arbeitsfläche eingefügt, indem zunächst das Bauteil links in der Liste angeklickt wird. Durch einen Klick auf eine freie Stelle in der Arbeitsfläche wird das Teil mit dem oberen linken Punkt am Mauszeiger eingefügt.
+\item Bauteile werden in die Arbeitsfläche eingefügt, indem es aus der Liste ausgewählt wird. Es wird dann immer in der linken oberen Stelle der Arbeitsfläche positioniert. Bei mehrfachem Anklicken eines Bauteils werden weitere Bauteile versetzt eingefügt.
 \item Neue Kabel werden eingefügt, indem stets \textit{ein Ausgang} eines Gatters angeklickt wird. Das freie Kabelende ist immer am Mauszeiger. Jeder weitere Klick auf eine freie Stelle fügt in dem Kabel ein >>Knick<< ein. Ein Kabel wird fertiggestellt, in dem \textit{ein Eingang} eines Bauteils angeklickt wird.\\
 Während der Bearbeitung des Kabels kann die Taste \textit{Escape} gedrückt werden, um den zuletzt eingefügten Punkt zu löschen, falls versehentlich ein Punkt platziert wurde.
 \item Das Anklicken eines Bauteils oder eines Kabels führt zur Auswahl (\textit{Selektion}) des Teils. Es kann dann per Pfeiltasten oder durch Drag\&Drop mit der Maus verschoben werden. Bei Kabeln werden nur die inneren Punkte bewegt, die äußeren Punkte bleiben an angeschlossenen Bauteile. Werden Bauteilen bewegt, werden entsprechend nur die Kabelenden der angeschlossenen Kabel mitbewegt.
+\item Es können mehrere Bauteile ausgewählt werden. Hierzu kann man die Shift-Taste verwenden bei gleichzeitigem Klick auf Bauteile hintereinander, oder der Klick auf die Schaltfläche >>Selekt<< erlaubt das Ziehen eines gestrichelten Kastens um die zu selektierenden Bauteile per Drag\&Drop.
 \item Selektierte Bauteile oder Kabel können durch Druck auf die Backspace-Taste (auch Entf- oder Lösch-Taste) entfernt werden. Werden Bauteile gelöscht, so werden automatisch alle angeschlossenen Kabel mitgelöscht.
 \item Kabel müssen immer an zwei Enden angeschlossen sein, es gibt keine >>Luftenden<<.
-\item Das Mausrad wird nun unterstützt, Zoomen ist damit möglich, Zusätzlich dazu gibt es passende Schaltflächen zum Vergrößern, Verkleinern und auf den verwendeten Bereich Zoomen.
+\item Das Mausrad wird unterstützt, Zoomen ist damit möglich, Zusätzlich dazu gibt es passende Schaltflächen zum Vergrößern, Verkleinern und auf den verwendeten Bereich Zoomen.
 \end{compactitem}
+
+\subsection{Funktionen - einzeln erläutert}
+\lsbild{open}, \lsbild{save}, \lsbild{new}: Dateifunktionen zum öffnen, speichern oder neu erstellen einer Datei.
+
+\lsbild{inputhigh}, \lsbild{inputlow}, \lsbild{inputnorm}, \lsbild{inputinv}: Damit wird ein Eingang eines Gatters modifiziert: als Eingang, der immer HIGH ist, der immer LOW ist, als normaler Eingang oder als invertierter Eingang. DIe Modifikation des Eingangs ist im Schaltplan durch Symbole sichtbar und wirkt sich unmittelbar auf die folgenden Signale aus.
+
+\lsbild{delpoint}, \lsbild{addpoint}: löschen und erstellen einen >>Knickpunkt<< in einem Kabel. Das einmalige Anklicken der Schaltfläche (oder der Auswahl im Menü) erwartet als nächste Aktion ein Klick auf ein Kabel. An der geklickten Stelle wird nun der Knickpunkt gelöscht bzw. ein neuer Punkt eingfügt.
+
+\lsbild{rotate}, \lsbild{mirror}: Rotiert bzw. spiegelt selektierte Bauteile. Es müssen dazu bereits Bauteile ausgewählt sein.
+
+\lsbild{zoomm}, \lsbild{zoomp}: Zoomt herein oder heraus.
+
+\lsbild{select}: Erlaubt das Ziehen eines Kastens um zu selektierende Bauteile. Es werden alle Bauteile ausgewählt, die vollständig im Kasten enthalten sind.
+
+\subsection{Einen Schaltplan erstellen}
+Begonnen wird mit der leeren Arbeitsfläche
+
+
 
 \subsection{Einsatz in der Schule}
 Neu ist das Verzeichnis >>gates<< im Hauptverzeichnis des Programms. In ihm sind kompilierte Klassen, die ihrerseits Gatter und Bauteile für \lsN{} bereitstellen. \lsN{} wird dadurch erweiter- und beschränkbar. Durch Entfernen von Klassendateien aus diesem Verzeichnis sind die entsprechenden Bauteile im Programm nicht mehr verfügbar. So kann in einer Unterrichtsreihe in der Schule zunächst mit Grundkomponenten wie AND, OR, NOT sowie Schaltern und LEDs begonnen werden. Später können dann weitere Komponenten hinzugenommen werden, so dass Schülerinnen und Schülern bei den gewünschten Funktionen bleiben.
