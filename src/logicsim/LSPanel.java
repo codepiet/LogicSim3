@@ -55,7 +55,10 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 			draw(g2);
 
-			// TODO redraw selected parts?
+			// redraw selected parts so that there are in the foreground
+			for (CircuitPart part : circuit.getSelected()) {
+				part.draw(g2);
+			}
 
 			if (currentAction == ACTION_SELECT) {
 				g2.setStroke(dashed);
@@ -63,7 +66,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				if (selectRect != null)
 					g2.draw(selectRect);
 			}
-
 		}
 	}
 
@@ -252,6 +254,11 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				}
 			}
 			if (cp instanceof Gate) {
+				String type = ((Gate) cp).type;
+				if (cp instanceof Module)
+					fireStatusText(I18N.tr(Lang.MODULE) + ": " + type);
+				else
+					fireStatusText(I18N.getString(type, I18N.DESCRIPTION));
 				if (parts.length > 0) {
 					// check if we clicked a new gate
 					if (!cp.isSelected()) {
