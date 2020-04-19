@@ -67,9 +67,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	DefaultListModel<Object> partListModel = new DefaultListModel<Object>();
 	JList<Object> lstParts = new JList<Object>(partListModel);
 
-	JRadioButtonMenuItem mGatedesignIEC = new JRadioButtonMenuItem();
-	JRadioButtonMenuItem mGatedesignANSI = new JRadioButtonMenuItem();
-
 	int popupGateIdx;
 	int popupModule;
 
@@ -125,55 +122,50 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		JMenu mnuFile = new JMenu(I18N.tr(Lang.FILE));
 
-		JMenuItem mFileNew = new JMenuItem(I18N.tr(Lang.NEW));
-		mFileNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK, false));
-		mFileNew.addActionListener(new ActionListener() {
+		JMenuItem m = createMenuItem(Lang.NEW, KeyEvent.VK_N, false);
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionNew(e);
 			}
 		});
-		mnuFile.add(mFileNew);
+		mnuFile.add(m);
 
-		JMenuItem mFileOpen = new JMenuItem(I18N.tr(Lang.OPEN) + "...");
-		mFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK, false));
-		mFileOpen.addActionListener(new ActionListener() {
+		m = createMenuItem(Lang.OPEN, KeyEvent.VK_O, true);
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionOpen(e);
 			}
 		});
-		mnuFile.add(mFileOpen);
+		mnuFile.add(m);
 
 		mnuFile.addSeparator();
 
-		JMenuItem mFileSave = new JMenuItem(I18N.tr(Lang.SAVE));
-		mFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK, false));
-		mFileSave.addActionListener(new ActionListener() {
+		m = createMenuItem(Lang.SAVE, KeyEvent.VK_S, true);
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionSave(e);
 			}
 		});
-		mnuFile.add(mFileSave);
+		mnuFile.add(m);
 
-		JMenuItem mFileSaveAs = new JMenuItem(I18N.tr(Lang.SAVEAS) + "...");
-		mFileSaveAs.addActionListener(new ActionListener() {
+		m = createMenuItem(Lang.SAVEAS, 0, true);
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (showSaveDialog() == false)
-					return;
 				actionSave(e);
 			}
 		});
-		mnuFile.add(mFileSaveAs);
+		mnuFile.add(m);
 
 		mnuFile.addSeparator();
 
-		JMenuItem mFileCreateMode = new JMenuItem(I18N.tr(Lang.MODULECREATE) + "...");
-		mFileCreateMode.addActionListener(new ActionListener() {
+		m = createMenuItem(Lang.MODULECREATE, 0, true);
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionCreateModule(e);
 			}
 		});
-		mnuFile.add(mFileCreateMode);
-
+		mnuFile.add(m);
+		
 		JMenuItem mFileProperties = new JMenuItem(I18N.tr(Lang.PROPERTIES) + "...");
 		mFileProperties.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -343,29 +335,58 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		String gatedesign = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN,
 				LSProperties.GATEDESIGN_IEC);
 
+		JRadioButtonMenuItem mGatedesignIEC = new JRadioButtonMenuItem();
 		mGatedesignIEC.setText(I18N.tr(Lang.GATEDESIGN_IEC));
 		mGatedesignIEC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionGateDesign(e);
 			}
 		});
-		mGatedesignIEC.setSelected("iec".equals(gatedesign));
+		mGatedesignIEC.setSelected(LSProperties.GATEDESIGN_IEC.equals(gatedesign));
 		mGatedesign.add(mGatedesignIEC);
 
+		JRadioButtonMenuItem mGatedesignANSI = new JRadioButtonMenuItem();
 		mGatedesignANSI.setText(I18N.tr(Lang.GATEDESIGN_ANSI));
 		mGatedesignANSI.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionGateDesign(e);
 			}
 		});
-		mGatedesignANSI.setSelected("ansi".equals(gatedesign));
+		mGatedesignANSI.setSelected(LSProperties.GATEDESIGN_ANSI.equals(gatedesign));
 		mGatedesign.add(mGatedesignANSI);
 
-		ButtonGroup buttongroup_gatedesign = new ButtonGroup();
-		buttongroup_gatedesign.add(mGatedesignIEC);
-		buttongroup_gatedesign.add(mGatedesignANSI);
+		ButtonGroup btnGroup = new ButtonGroup();
+		btnGroup.add(mGatedesignIEC);
+		btnGroup.add(mGatedesignANSI);
 
 		mnuSettings.add(mGatedesign);
+
+		JMenu mnu = new JMenu(I18N.tr(Lang.MODE));
+		String mode = LSProperties.getInstance().getProperty(LSProperties.MODE, LSProperties.MODE_NORMAL);
+		btnGroup = new ButtonGroup();
+
+		JRadioButtonMenuItem mnuItem = new JRadioButtonMenuItem(I18N.tr(Lang.NORMAL));
+		mnuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionMode(e);
+			}
+		});
+		mnuItem.setSelected(LSProperties.MODE_NORMAL.equals(mode));
+		btnGroup.add(mnuItem);
+		mnu.add(mnuItem);
+
+		mnuItem = new JRadioButtonMenuItem(I18N.tr(Lang.EXPERT));
+		mnuItem.setEnabled(false);
+		mnuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionMode(e);
+			}
+		});
+		mnuItem.setSelected(LSProperties.MODE_EXPERT.equals(mode));
+		btnGroup.add(mnuItem);
+		mnu.add(mnuItem);
+
+		mnuSettings.add(mnu);
 
 		JMenu mnuLanguage = new JMenu(I18N.tr(Lang.LANGUAGE));
 		String currentLanguage = LSProperties.getInstance().getProperty(LSProperties.LANGUAGE, "de");
@@ -639,6 +660,14 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		setAppTitle();
 
 		lspanel.requestFocusInWindow();
+	}
+
+	private JMenuItem createMenuItem(Lang lang, int key, boolean isDialog) {
+		JMenuItem m = new JMenuItem(I18N.tr(lang) + (isDialog ? "..." : ""));
+		if (key != 0)
+			m.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK, false));
+		m.setName(lang.toString());
+		return m;
 	}
 
 	private void setStatusText(String string) {
@@ -983,10 +1012,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			}
 			lspanel.requestFocusInWindow();
 		}
-
-		// TODO - this removes the selection from the list
-		// it would be nicer to hold the selection until a gate is placed on lspanel
-		// or any other button has been pressed
 		lstParts.clearSelection();
 	}
 
@@ -997,11 +1022,44 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	 */
 	void actionGateDesign(ActionEvent e) {
 		String gatedesign = null;
-		if (mGatedesignIEC.isSelected())
-			gatedesign = "iec";
-		else
-			gatedesign = "ansi";
+		JRadioButtonMenuItem src = (JRadioButtonMenuItem) e.getSource();
+		if (src.getText().equals(I18N.tr(Lang.GATEDESIGN_IEC))) {
+			if (src.isSelected())
+				gatedesign = LSProperties.GATEDESIGN_IEC;
+			else
+				gatedesign = LSProperties.GATEDESIGN_ANSI;
+		} else {
+			if (src.isSelected())
+				gatedesign = LSProperties.GATEDESIGN_ANSI;
+			else
+				gatedesign = LSProperties.GATEDESIGN_IEC;
+		}
 		LSProperties.getInstance().setProperty(LSProperties.GATEDESIGN, gatedesign);
+		this.lspanel.repaint();
+	}
+
+	/**
+	 * handles mode (normal/expert)
+	 * 
+	 * @param e
+	 */
+	void actionMode(ActionEvent e) {
+		String mode = null;
+		JRadioButtonMenuItem src = (JRadioButtonMenuItem) e.getSource();
+		if (src.getText().equals(I18N.tr(Lang.NORMAL))) {
+			if (src.isSelected())
+				mode = LSProperties.MODE_NORMAL;
+			else
+				mode = LSProperties.MODE_EXPERT;
+		} else {
+			// the expert item is clicked
+			if (src.isSelected()) {
+				mode = LSProperties.MODE_EXPERT;
+			} else {
+				mode = LSProperties.MODE_NORMAL;
+			}
+		}
+		LSProperties.getInstance().setProperty(LSProperties.MODE, mode);
 		this.lspanel.repaint();
 	}
 

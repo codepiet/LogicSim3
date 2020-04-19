@@ -7,15 +7,19 @@ import java.util.Properties;
 
 public class LSProperties {
 
-	public static final String GATEDESIGN = "gatedesign";
-
 	public static final String PAINTGRID = "paintgrid";
 
 	public static final String LANGUAGE = "language";
 
-	public static final String GATEDESIGN_IEC = "iec";
-
 	public static final String AUTOWIRE = "autowire";
+
+	public static final String MODE = "mode";
+	public static final String MODE_NORMAL = "normal";
+	public static final String MODE_EXPERT = "expert";
+
+	public static final String GATEDESIGN = "gatedesign";
+	public static final String GATEDESIGN_IEC = "iec";
+	public static final String GATEDESIGN_ANSI = "ansi";
 
 	private static LSProperties instance = null;
 

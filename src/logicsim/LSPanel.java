@@ -306,20 +306,12 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		}
 	}
 
-	static final int ACTION_ADDPOINT = 16;
+	static final short ACTION_NONE = 0;
+	static final short ACTION_ADDWIRE = 0x50;
+	static final short ACTION_ADDPOINT = 0x51;
+	static final short ACTION_DELPOINT = 0x52;
+	static final short ACTION_SELECT = 1;
 
-	static final int ACTION_CONNECT = 14;
-
-	static final int ACTION_DELPOINT = 17;
-
-	static final int ACTION_DRAWWIRE = 15;
-
-	static final int ACTION_GATE = 1;
-
-	static final int ACTION_MODULE = 18;
-	static final int ACTION_NONE = 0;
-	static final int ACTION_SELECT = 19;
-	static final int ACTION_SIMULATION = 20;
 	final static Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10,
 			new float[] { 10 }, 0);
 	public static final Color gridColor = Color.black;
@@ -545,7 +537,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	}
 
 	public void setAction(CircuitPart g) {
-		currentAction = ACTION_GATE;
 		if (g != null) {
 			circuit.deselectAll();
 			// place new gate

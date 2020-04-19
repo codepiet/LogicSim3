@@ -75,3 +75,6 @@ unnamed=Unnamed
 yes=Yes
 zoomin=Zoom In
 zoomout=Zoom Out
+mode=Mode
+expert=Expert
+normal=Normal
