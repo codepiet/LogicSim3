@@ -28,6 +28,28 @@ public class MODIN extends Gate {
 	}
 
 	@Override
+	public void mousePressed(LSMouseEvent e) {
+		super.mousePressed(e);
+		if (Simulation.getInstance().isRunning())
+			return;
+		// check click x-position
+		int x = e.getX();
+		int y = e.getY();
+		if (x > getX() + CONN_SIZE && x < getX() + 3 * CONN_SIZE) {
+			// y position
+			for (Pin p : getInputs()) {
+				Pin out = getPin(p.number + 16);
+				if (!out.isConnected())
+					continue;
+				if (y > p.getY() - 5 && y < p.getY() + 5) {
+					// found clicked pin - show dialog
+					System.out.println(p);
+				}
+			}
+		}
+	}
+
+	@Override
 	protected void drawLabel(Graphics2D g2, String lbl, Font font) {
 		g2.setFont(bigFont);
 		int sw = g2.getFontMetrics().stringWidth(label);
@@ -37,18 +59,30 @@ public class MODIN extends Gate {
 	@Override
 	public void changedLevel(LSLevelEvent e) {
 		Pin p = (Pin) e.source;
-		//forward event to the appropriate output
+		// forward event to the appropriate output
 		int target = p.number + getNumInputs();
 		LSLevelEvent evt = new LSLevelEvent(this, p.getLevel());
 		getPin(target).changedLevel(evt);
 	}
 
 	@Override
+	public void rotate() {
+		// don't rotate
+	}
+
+	@Override
+	public void mirror() {
+		// don't mirror
+	}
+
+	@Override
 	public void loadLanguage() {
 		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Inputs");
-		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Input Gate for Modules");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION,
+				"Input Gate for Modules - click label area to set an input pin's label");
 		I18N.addGate("de", type, I18N.TITLE, "Moduleingänge");
-		I18N.addGate("de", type, I18N.DESCRIPTION, "Eingangsgatter für Module");
+		I18N.addGate("de", type, I18N.DESCRIPTION,
+				"Eingangsgatter für Module - klicke den Labelbereich um einen Pin zu benennen.");
 	}
 
 }

@@ -470,8 +470,6 @@ public class Gate extends CircuitPart {
 	@Override
 	public void mousePressed(LSMouseEvent e) {
 		super.mousePressed(e);
-		notifyMessage(I18N.getString(type, I18N.TITLE));
-
 		if (Simulation.getInstance().isRunning())
 			mousePressedSim(e);
 		else {
