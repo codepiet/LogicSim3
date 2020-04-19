@@ -1,8 +1,11 @@
 package logicsim;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics2D;
+
+import javax.swing.JOptionPane;
 
 /**
  * input gate for modules
@@ -16,6 +19,7 @@ import java.awt.Graphics2D;
  */
 public class MODIN extends Gate {
 	static final long serialVersionUID = -2338870902247206767L;
+	private static final String INPUT_LABEL = "inputlabel";
 
 	public MODIN() {
 		super();
@@ -43,10 +47,19 @@ public class MODIN extends Gate {
 					continue;
 				if (y > p.getY() - 5 && y < p.getY() + 5) {
 					// found clicked pin - show dialog
-					System.out.println(p);
+					p.label = inputLabelText(null, p.label);
 				}
 			}
 		}
+	}
+
+	public String inputLabelText(Component frame, String oldLabel) {
+		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, INPUT_LABEL),
+				I18N.tr(Lang.PROPERTIES), JOptionPane.QUESTION_MESSAGE, null, null, oldLabel);
+		if (h != null && h.length() > 0) {
+			return h;
+		}
+		return null;
 	}
 
 	@Override
@@ -80,6 +93,7 @@ public class MODIN extends Gate {
 		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Inputs");
 		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION,
 				"Input Gate for Modules - click label area to set an input pin's label");
+		I18N.addGate(I18N.ALL, type, INPUT_LABEL, "Label");
 		I18N.addGate("de", type, I18N.TITLE, "Moduleingänge");
 		I18N.addGate("de", type, I18N.DESCRIPTION,
 				"Eingangsgatter für Module - klicke den Labelbereich um einen Pin zu benennen.");

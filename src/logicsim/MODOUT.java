@@ -1,8 +1,11 @@
 package logicsim;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics2D;
+
+import javax.swing.JOptionPane;
 
 /**
  * output gate for modules
@@ -16,6 +19,7 @@ import java.awt.Graphics2D;
  */
 public class MODOUT extends Gate {
 	static final long serialVersionUID = 1824440628969344103L;
+	private static final String INPUT_LABEL = "inputlabel";
 
 	public MODOUT() {
 		super();
@@ -25,6 +29,37 @@ public class MODOUT extends Gate {
 		height = 170;
 		createInputs(16);
 		createOutputs(16);
+	}
+
+	@Override
+	public void mousePressed(LSMouseEvent e) {
+		super.mousePressed(e);
+		if (Simulation.getInstance().isRunning())
+			return;
+		// check click x-position
+		int x = e.getX();
+		int y = e.getY();
+		if (x > getX() + width - 3 * CONN_SIZE && x < getX() + width - CONN_SIZE) {
+			// y position
+			for (Pin p : getOutputs()) {
+				Pin in = getPin(p.number - 16);
+				if (!in.isConnected())
+					continue;
+				if (y > p.getY() - 5 && y < p.getY() + 5) {
+					// found clicked pin - show dialog
+					p.label = inputLabelText(null, p.label);
+				}
+			}
+		}
+	}
+
+	public String inputLabelText(Component frame, String oldLabel) {
+		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, INPUT_LABEL),
+				I18N.tr(Lang.PROPERTIES), JOptionPane.QUESTION_MESSAGE, null, null, oldLabel);
+		if (h != null && h.length() > 0) {
+			return h;
+		}
+		return null;
 	}
 
 	@Override
@@ -46,6 +81,7 @@ public class MODOUT extends Gate {
 	public void loadLanguage() {
 		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Outputs");
 		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Output Gate for Modules");
+		I18N.addGate(I18N.ALL, type, INPUT_LABEL, "Label");
 		I18N.addGate("de", type, I18N.TITLE, "Modulausgänge");
 		I18N.addGate("de", type, I18N.DESCRIPTION, "Ausgangsgatter für Module");
 	}
