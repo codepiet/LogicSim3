@@ -53,27 +53,21 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 	LogicSimFile lsFile;
 
-	JPopupMenu popup;
-	JPopupMenu popup_list;
-
-	JMenuItem menuItem_remove;
-	JMenuItem menuItem_properties;
-	JMenuItem menuItem_list_delmod;
-
-	LSPanel lspanel = new LSPanel();
-	JLabel sbText = new JLabel();
-	JLabel sbCoordinates = new JLabel();
+	JMenuBar mnuBar;
+	JToolBar btnBar;
 
 	DefaultListModel<Object> partListModel = new DefaultListModel<Object>();
 	JList<Object> lstParts = new JList<Object>(partListModel);
+	JComboBox<String> cbNumInputs = null;
+	LSPanel lspanel = new LSPanel();
+
+	JLabel sbText = new JLabel();
+	JLabel sbCoordinates = new JLabel();
 
 	int popupGateIdx;
-	int popupModule;
-
-	JMenuBar mnuBar;
-
-	ButtonGroup buttongroup_language = new ButtonGroup();
-	JComboBox<String> jComboBox_numinput = null;
+	JPopupMenu popup;
+	JMenuItem menuItem_remove;
+	JMenuItem menuItem_properties;
 
 	public LSFrame(String title) {
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
@@ -120,7 +114,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		mnuBar = new JMenuBar();
 
-		JMenu mnuFile = new JMenu(I18N.tr(Lang.FILE));
+		JMenu mnu = new JMenu(I18N.tr(Lang.FILE));
 
 		JMenuItem m = createMenuItem(Lang.NEW, KeyEvent.VK_N, false);
 		m.addActionListener(new ActionListener() {
@@ -128,7 +122,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 				actionNew(e);
 			}
 		});
-		mnuFile.add(m);
+		mnu.add(m);
 
 		m = createMenuItem(Lang.OPEN, KeyEvent.VK_O, true);
 		m.addActionListener(new ActionListener() {
@@ -136,9 +130,9 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 				actionOpen(e);
 			}
 		});
-		mnuFile.add(m);
+		mnu.add(m);
 
-		mnuFile.addSeparator();
+		mnu.addSeparator();
 
 		m = createMenuItem(Lang.SAVE, KeyEvent.VK_S, true);
 		m.addActionListener(new ActionListener() {
@@ -146,7 +140,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 				actionSave(e);
 			}
 		});
-		mnuFile.add(m);
+		mnu.add(m);
 
 		m = createMenuItem(Lang.SAVEAS, 0, true);
 		m.addActionListener(new ActionListener() {
@@ -154,9 +148,9 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 				actionSave(e);
 			}
 		});
-		mnuFile.add(m);
+		mnu.add(m);
 
-		mnuFile.addSeparator();
+		mnu.addSeparator();
 
 		m = createMenuItem(Lang.MODULECREATE, 0, true);
 		m.addActionListener(new ActionListener() {
@@ -164,148 +158,156 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 				actionCreateModule(e);
 			}
 		});
-		mnuFile.add(m);
-		
-		JMenuItem mFileProperties = new JMenuItem(I18N.tr(Lang.PROPERTIES) + "...");
-		mFileProperties.addActionListener(new ActionListener() {
+		mnu.add(m);
+
+		m = new JMenuItem(I18N.tr(Lang.PROPERTIES) + "...");
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (FileInfoDialog.showFileInfo(LSFrame.this, lsFile)) {
 					setAppTitle();
 				}
 			}
 		});
-		mnuFile.add(mFileProperties);
+		mnu.add(m);
 
-		mnuFile.addSeparator();
+		mnu.addSeparator();
 
-		JMenuItem mFileExportImage = new JMenuItem(I18N.tr(Lang.EXPORT) + "...");
-		mFileExportImage.addActionListener(new ActionListener() {
+		m = new JMenuItem(I18N.tr(Lang.EXPORT) + "...");
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exportImage();
 			}
 		});
-		mnuFile.add(mFileExportImage);
+		mnu.add(m);
 
-		JMenuItem mFilePrint = new JMenuItem(I18N.tr(Lang.PRINT) + "...");
-		mFilePrint.addActionListener(new ActionListener() {
+		m = new JMenuItem(I18N.tr(Lang.PRINT) + "...");
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.doPrint();
 			}
 		});
-		mnuFile.add(mFilePrint);
+		mnu.add(m);
 
-		mnuFile.addSeparator();
+		mnu.addSeparator();
 
-		JMenuItem mFileExit = new JMenuItem(I18N.tr(Lang.EXIT));
-		mFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK, false));
-		mFileExit.addActionListener(new ActionListener() {
+		m = new JMenuItem(I18N.tr(Lang.EXIT));
+		m.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK, false));
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (showDiscardDialog(I18N.tr(Lang.EXIT)) == false)
 					return;
 				System.exit(0);
 			}
 		});
-		mnuFile.add(mFileExit);
+		mnu.add(m);
 
-		mnuBar.add(mnuFile);
+		mnuBar.add(mnu);
 
 		// ------------------------------------------------------------------
 		// EDIT
-		JMenu mnuEdit = new JMenu(I18N.tr(Lang.EDIT));
+		mnu = new JMenu(I18N.tr(Lang.EDIT));
 
-		JMenuItem mEdit = new JMenuItem(I18N.tr(Lang.SELECTALL));
-		mEdit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK, false));
-		mEdit.addActionListener(new ActionListener() {
+		m = new JMenuItem(I18N.tr(Lang.SELECTALL));
+		m.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK, false));
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.circuit.selectAll();
 				lspanel.repaint();
 			}
 		});
-		mnuEdit.add(mEdit);
+		mnu.add(m);
 
-		mEdit = new JMenuItem(I18N.tr(Lang.SELECT));
-		mEdit.addActionListener(new ActionListener() {
+		m = new JMenuItem(I18N.tr(Lang.SELECT));
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(LSPanel.ACTION_SELECT);
 				lspanel.requestFocusInWindow();
 			}
 		});
-		mnuEdit.add(mEdit);
+		mnu.add(m);
 
-		mEdit = new JMenuItem(I18N.tr(Lang.SELECTNONE));
-		mEdit.addActionListener(new ActionListener() {
+		m = new JMenuItem(I18N.tr(Lang.SELECTNONE));
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.circuit.deselectAll();
 				lspanel.repaint();
 			}
 		});
-		mnuEdit.add(mEdit);
+		mnu.add(m);
 
-		mnuEdit.addSeparator();
+		mnu.addSeparator();
 
-		mEdit = new JMenuItem(I18N.tr(Lang.NEWWIRE));
-		mEdit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK, false));
-		mEdit.addActionListener(new ActionListener() {
+		m = new JMenuItem(I18N.tr(Lang.NEWWIRE));
+		m.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK, false));
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		mEdit.setEnabled(false);
-		mnuEdit.add(mEdit);
+		m.setEnabled(false);
+		mnu.add(m);
 
-		mnuEdit.addSeparator();
+		mnu.addSeparator();
 
-		mEdit = new JMenuItem(I18N.tr(Lang.INPUTHIGH));
-		mEdit.addActionListener(new ActionListener() {
+		m = new JMenuItem(I18N.tr(Lang.INPUTHIGH));
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				lspanel.setAction(Pin.HIGH);
+				setStatusText(I18N.tr(Lang.INPUTHIGH_HELP));
 			}
 		});
-		mnuEdit.add(mEdit);
+		mnu.add(m);
 
-		mEdit = new JMenuItem(I18N.tr(Lang.INPUTLOW));
-		mEdit.addActionListener(new ActionListener() {
+		m = new JMenuItem(I18N.tr(Lang.INPUTLOW));
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				lspanel.setAction(Pin.LOW);
+				setStatusText(I18N.tr(Lang.INPUTLOW_HELP));
 			}
 		});
-		mnuEdit.add(mEdit);
+		mnu.add(m);
 
-		mEdit = new JMenuItem(I18N.tr(Lang.INPUTINV));
-		mEdit.addActionListener(new ActionListener() {
+		m = new JMenuItem(I18N.tr(Lang.INPUTINV));
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				lspanel.setAction(Pin.INVERTED);
+				setStatusText(I18N.tr(Lang.INPUTINV_HELP));
 			}
 		});
-		mnuEdit.add(mEdit);
+		mnu.add(m);
 
-		mEdit = new JMenuItem(I18N.tr(Lang.INPUTNORM));
-		mEdit.addActionListener(new ActionListener() {
+		m = new JMenuItem(I18N.tr(Lang.INPUTNORM));
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				lspanel.setAction(Pin.NORMAL);
+				setStatusText(I18N.tr(Lang.INPUTNORM_HELP));
 			}
 		});
-		mnuEdit.add(mEdit);
+		mnu.add(m);
 
-		mnuEdit.addSeparator();
+		mnu.addSeparator();
 
-		mEdit = new JMenuItem(I18N.tr(Lang.ROTATE));
-		mEdit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK, false));
-		mEdit.addActionListener(new ActionListener() {
+		m = new JMenuItem(I18N.tr(Lang.ROTATE));
+		m.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK, false));
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.rotateSelected();
 			}
 		});
-		mnuEdit.add(mEdit);
+		mnu.add(m);
 
-		mEdit = new JMenuItem(I18N.tr(Lang.MIRROR));
-		mEdit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK, false));
-		mEdit.addActionListener(new ActionListener() {
+		m = new JMenuItem(I18N.tr(Lang.MIRROR));
+		m.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK, false));
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.mirrorSelected();
 			}
 		});
-		mnuEdit.add(mEdit);
+		mnu.add(m);
 
-		mnuBar.add(mnuEdit);
+		mnuBar.add(mnu);
 		// ------------------------------------------------------------------
 		// SETTINGS
-		JMenu mnuSettings = new JMenu(I18N.tr(Lang.SETTINGS));
+		mnu = new JMenu(I18N.tr(Lang.SETTINGS));
 
 		boolean sel = LSProperties.getInstance().getPropertyBoolean(LSProperties.PAINTGRID, true);
 		final JCheckBoxMenuItem mSettingsPaintGrid = new JCheckBoxMenuItem(I18N.tr(Lang.PAINTGRID));
@@ -317,21 +319,22 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 				lspanel.repaint();
 			}
 		});
-		mnuSettings.add(mSettingsPaintGrid);
+		mnu.add(mSettingsPaintGrid);
 
 		boolean autowire = LSProperties.getInstance().getPropertyBoolean(LSProperties.AUTOWIRE, true);
-		final JCheckBoxMenuItem mSettingsAutoWire = new JCheckBoxMenuItem(I18N.tr(Lang.AUTOWIRE));
-		mSettingsAutoWire.setSelected(autowire);
-		mSettingsAutoWire.addActionListener(new ActionListener() {
+		final JCheckBoxMenuItem cbMenuItem = new JCheckBoxMenuItem(I18N.tr(Lang.AUTOWIRE));
+		cbMenuItem.setSelected(autowire);
+		cbMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LSProperties.getInstance().setPropertyBoolean(LSProperties.AUTOWIRE, mSettingsAutoWire.isSelected());
+				JCheckBoxMenuItem bmi = (JCheckBoxMenuItem) e.getSource();
+				LSProperties.getInstance().setPropertyBoolean(LSProperties.AUTOWIRE, bmi.isSelected());
 				lspanel.repaint();
 			}
 		});
-		mnuSettings.add(mSettingsAutoWire);
+		mnu.add(cbMenuItem);
 
-		JMenu mGatedesign = new JMenu(I18N.tr(Lang.GATEDESIGN));
+		m = new JMenu(I18N.tr(Lang.GATEDESIGN));
 		String gatedesign = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN,
 				LSProperties.GATEDESIGN_IEC);
 
@@ -343,7 +346,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			}
 		});
 		mGatedesignIEC.setSelected(LSProperties.GATEDESIGN_IEC.equals(gatedesign));
-		mGatedesign.add(mGatedesignIEC);
+		m.add(mGatedesignIEC);
 
 		JRadioButtonMenuItem mGatedesignANSI = new JRadioButtonMenuItem();
 		mGatedesignANSI.setText(I18N.tr(Lang.GATEDESIGN_ANSI));
@@ -353,15 +356,15 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			}
 		});
 		mGatedesignANSI.setSelected(LSProperties.GATEDESIGN_ANSI.equals(gatedesign));
-		mGatedesign.add(mGatedesignANSI);
+		m.add(mGatedesignANSI);
 
 		ButtonGroup btnGroup = new ButtonGroup();
 		btnGroup.add(mGatedesignIEC);
 		btnGroup.add(mGatedesignANSI);
 
-		mnuSettings.add(mGatedesign);
+		mnu.add(m);
 
-		JMenu mnu = new JMenu(I18N.tr(Lang.MODE));
+		JMenu mnuMode = new JMenu(I18N.tr(Lang.MODE));
 		String mode = LSProperties.getInstance().getProperty(LSProperties.MODE, LSProperties.MODE_NORMAL);
 		btnGroup = new ButtonGroup();
 
@@ -373,7 +376,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		mnuItem.setSelected(LSProperties.MODE_NORMAL.equals(mode));
 		btnGroup.add(mnuItem);
-		mnu.add(mnuItem);
+		mnuMode.add(mnuItem);
 
 		mnuItem = new JRadioButtonMenuItem(I18N.tr(Lang.EXPERT));
 		mnuItem.setEnabled(false);
@@ -384,26 +387,26 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		mnuItem.setSelected(LSProperties.MODE_EXPERT.equals(mode));
 		btnGroup.add(mnuItem);
-		mnu.add(mnuItem);
+		mnuMode.add(mnuItem);
 
-		mnuSettings.add(mnu);
+		mnu.add(mnuMode);
 
-		JMenu mnuLanguage = new JMenu(I18N.tr(Lang.LANGUAGE));
+		JMenu mnuLang = new JMenu(I18N.tr(Lang.LANGUAGE));
 		String currentLanguage = LSProperties.getInstance().getProperty(LSProperties.LANGUAGE, "de");
-		createLanguageMenu(mnuLanguage, currentLanguage);
-		mnuSettings.add(mnuLanguage);
+		createLanguageMenu(mnuLang, currentLanguage);
+		mnu.add(mnuLang);
 
-		mnuSettings.addSeparator();
+		mnu.addSeparator();
 
-		JMenuItem mGate = new JMenuItem(I18N.tr(Lang.GATESETTINGS) + "...");
-		mGate.addActionListener(new ActionListener() {
+		m= new JMenuItem(I18N.tr(Lang.GATESETTINGS) + "...");
+		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.gateSettings();
 			}
 		});
-		mnuSettings.add(mGate);
+		mnu.add(m);
 
-		mnuBar.add(mnuSettings);
+		mnuBar.add(mnu);
 
 		// ------------------------------------------------------------------
 		// HELP
@@ -460,14 +463,14 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		for (int i = 0; i < 4; i++) {
 			gateInputNums[i] = (i + 2) + " " + I18N.tr(Lang.INPUTS);
 		}
-		jComboBox_numinput = new JComboBox<String>(gateInputNums);
+		cbNumInputs = new JComboBox<String>(gateInputNums);
 
 		JPanel pnlGateList = new JPanel();
 		pnlGateList.setLayout(new BorderLayout());
 		pnlGateList.setPreferredSize(new Dimension(120, 200));
 		pnlGateList.setMinimumSize(new Dimension(100, 200));
 		pnlGateList.add(new JScrollPane(lstParts), BorderLayout.CENTER);
-		pnlGateList.add(jComboBox_numinput, BorderLayout.SOUTH);
+		pnlGateList.add(cbNumInputs, BorderLayout.SOUTH);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
 		splitPane.setOneTouchExpandable(true);
@@ -477,165 +480,162 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 
-		// ------------------------------------------------------------------
-		// button bar
-		JToolBar btnBar = new JToolBar();
+		btnBar = new JToolBar();
 
-		LSButton btnNew = new LSButton("new", Lang.NEW);
-		btnNew.addActionListener(new ActionListener() {
+		LSButton btnLS = new LSButton("new", Lang.NEW);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionNew(e);
 			}
 		});
-		btnBar.add(btnNew, null);
+		btnBar.add(btnLS, null);
 
-		LSButton btnOpen = new LSButton("open", Lang.OPEN);
-		btnOpen.addActionListener(new ActionListener() {
+		btnLS = new LSButton("open", Lang.OPEN);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionOpen(e);
 			}
 		});
-		btnBar.add(btnOpen);
+		btnBar.add(btnLS);
 
-		LSButton btnSave = new LSButton("save", Lang.SAVE);
-		btnSave.addActionListener(new ActionListener() {
+		btnLS = new LSButton("save", Lang.SAVE);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionSave(e);
 			}
 		});
-		btnBar.add(btnSave);
+		btnBar.add(btnLS);
 
 		btnBar.add(getMenuGap());
 
-		LSToggleButton btnSimulate = new LSToggleButton("play", Lang.SIMULATE);
-		btnSimulate.addActionListener(new ActionListener() {
+		LSToggleButton btnToggle = new LSToggleButton("play", Lang.SIMULATE);
+		btnToggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionSimulate(e);
 			}
 		});
-		btnBar.add(btnSimulate, null);
+		btnBar.add(btnToggle, null);
 
-		LSButton btnReset = new LSButton("reset", Lang.RESET);
-		btnReset.addActionListener(new ActionListener() {
+		btnLS = new LSButton("reset", Lang.RESET);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.circuit.reset();
 				lspanel.repaint();
 			}
 		});
-		btnBar.add(btnReset, null);
+		btnBar.add(btnLS, null);
 
 		btnBar.add(getMenuGap());
 
-		LSButton btnZoomM = new LSButton("zoomm", Lang.ZOOMOUT);
-		btnZoomM.addActionListener(new ActionListener() {
+		btnLS = new LSButton("zoomm", Lang.ZOOMOUT);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.zoomOut();
 				lspanel.requestFocusInWindow();
 			}
 		});
-		btnBar.add(btnZoomM, null);
+		btnBar.add(btnLS, null);
 
-		LSButton btnZoomP = new LSButton("zoomp", Lang.ZOOMIN);
-		btnZoomP.addActionListener(new ActionListener() {
+		btnLS = new LSButton("zoomp", Lang.ZOOMIN);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.zoomIn();
 				lspanel.requestFocusInWindow();
 			}
 		});
-		btnBar.add(btnZoomP, null);
+		btnBar.add(btnLS, null);
 
-		LSButton btnSelect = new LSButton("select", Lang.SELECT);
-		btnSelect.addActionListener(new ActionListener() {
+		btnLS = new LSButton("select", Lang.SELECT);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(LSPanel.ACTION_SELECT);
 				lspanel.requestFocusInWindow();
 			}
 		});
-		btnBar.add(btnSelect, null);
+		btnBar.add(btnLS, null);
 
 		btnBar.add(getMenuGap());
 
-		LSButton btnRotate = new LSButton("rotate", Lang.ROTATE);
-		btnRotate.addActionListener(new ActionListener() {
+		btnLS = new LSButton("rotate", Lang.ROTATE);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.rotateSelected();
 				lspanel.requestFocusInWindow();
 			}
 		});
-		btnBar.add(btnRotate, null);
+		btnBar.add(btnLS, null);
 
-		LSButton btnMirror = new LSButton("mirror", Lang.MIRROR);
-		btnMirror.addActionListener(new ActionListener() {
+		btnLS = new LSButton("mirror", Lang.MIRROR);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.mirrorSelected();
 				lspanel.requestFocusInWindow();
 			}
 		});
-		btnBar.add(btnMirror);
+		btnBar.add(btnLS);
 
 		btnBar.add(getMenuGap());
 
-		LSButton btnInputNorm = new LSButton("inputnorm", Lang.INPUTNORM);
-		btnInputNorm.addActionListener(new ActionListener() {
+		btnLS = new LSButton("inputnorm", Lang.INPUTNORM);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(Pin.NORMAL);
 				setStatusText(I18N.tr(Lang.INPUTNORM_HELP));
 				lspanel.requestFocusInWindow();
 			}
 		});
-		btnBar.add(btnInputNorm, null);
+		btnBar.add(btnLS, null);
 
-		LSButton btnInputInv = new LSButton("inputinv", Lang.INPUTINV);
-		btnInputInv.addActionListener(new ActionListener() {
+		btnLS = new LSButton("inputinv", Lang.INPUTINV);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(Pin.INVERTED);
 				setStatusText(I18N.tr(Lang.INPUTINV_HELP));
 				lspanel.requestFocusInWindow();
 			}
 		});
-		btnBar.add(btnInputInv, null);
+		btnBar.add(btnLS, null);
 
-		LSButton btnInputHigh = new LSButton("inputhigh", Lang.INPUTHIGH);
-		btnInputHigh.addActionListener(new ActionListener() {
+		btnLS = new LSButton("inputhigh", Lang.INPUTHIGH);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(Pin.HIGH);
 				setStatusText(I18N.tr(Lang.INPUTHIGH_HELP));
-				lspanel.requestFocusInWindow();
 			}
 		});
-		btnBar.add(btnInputHigh, null);
+		btnBar.add(btnLS, null);
 
-		LSButton btnInputLow = new LSButton("inputlow", Lang.INPUTLOW);
-		btnInputLow.addActionListener(new ActionListener() {
+		btnLS = new LSButton("inputlow", Lang.INPUTLOW);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(Pin.LOW);
 				setStatusText(I18N.tr(Lang.INPUTLOW_HELP));
 				lspanel.requestFocusInWindow();
 			}
 		});
-		btnBar.add(btnInputLow, null);
+		btnBar.add(btnLS, null);
 
 		btnBar.add(getMenuGap());
 
-		LSButton btnAddPoint = new LSButton("addpoint", Lang.ADDPOINT);
-		btnAddPoint.addActionListener(new ActionListener() {
+		btnLS = new LSButton("addpoint", Lang.ADDPOINT);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(LSPanel.ACTION_ADDPOINT);
 				setStatusText(I18N.tr(Lang.ADDPOINT_HELP));
 				lspanel.requestFocusInWindow();
 			}
 		});
-		btnBar.add(btnAddPoint, null);
+		btnBar.add(btnLS, null);
 
-		LSButton btnDelPoint = new LSButton("delpoint", Lang.REMOVEPOINT);
-		btnDelPoint.addActionListener(new ActionListener() {
+		btnLS = new LSButton("delpoint", Lang.REMOVEPOINT);
+		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(LSPanel.ACTION_DELPOINT);
 				setStatusText(I18N.tr(Lang.REMOVEPOINT_HELP));
 				lspanel.requestFocusInWindow();
 			}
 		});
-		btnBar.add(btnDelPoint, null);
+		btnBar.add(btnLS, null);
 
 		add(btnBar, BorderLayout.NORTH);
 
@@ -650,11 +650,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		popup.add(menuItem_properties);
 		// Add listener to components that can bring up popup menus.
 		lspanel.addMouseListener(new PopupListener());
-
-		popup_list = new JPopupMenu();
-		menuItem_list_delmod = new JMenuItem(I18N.tr(Lang.DELETE));
-		menuItem_list_delmod.addActionListener(this);
-		popup_list.add(menuItem_list_delmod);
 
 		fillGateList();
 		setAppTitle();
@@ -693,15 +688,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 				g.showPropertiesUI(this);
 				lspanel.repaint();
 			}
-		} else if (source == menuItem_list_delmod) {
-			String fname = App.getModulePath() + partListModel.getElementAt(popupModule) + ".mod";
-			String s = I18N.tr(Lang.QUESTION_DELETE).replaceFirst("%s", fname);
-			int r = JOptionPane.showConfirmDialog(this, s);
-			if (r == 0) {
-				File f = new File(fname);
-				f.delete();
-				fillGateList();
-			}
 		}
 	}
 
@@ -725,13 +711,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 							popup.show(e.getComponent(), e.getX(), e.getY());
 							break;
 						}
-					}
-				} else if (e.getSource() == lstParts) {
-					int idx = lstParts.locationToIndex(e.getPoint());
-					// TODO vor 6 stand hier actions.length
-					if (idx >= 6) {
-						popupModule = idx;
-						popup_list.show(e.getComponent(), e.getX(), e.getY());
 					}
 				}
 			}
@@ -980,7 +959,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		int sel = lstParts.getSelectedIndex();
 		if (sel < 0)
 			return;
-		int numInputs = Integer.parseInt(jComboBox_numinput.getSelectedItem().toString().substring(0, 1));
+		int numInputs = Integer.parseInt(cbNumInputs.getSelectedItem().toString().substring(0, 1));
 
 		Object o = lstParts.getSelectedValue();
 		if (!(o instanceof Gate))
@@ -1071,6 +1050,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	 */
 	void createLanguageMenu(JMenu menu, String currentLanguage) {
 		List<String> langs = I18N.getLanguages();
+		ButtonGroup btnGroup = new ButtonGroup();
 		for (String lang : langs) {
 			JMenuItem item = new JRadioButtonMenuItem(lang);
 			if (lang.equals(currentLanguage))
@@ -1082,7 +1062,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 					JOptionPane.showMessageDialog(LSFrame.this, I18N.tr(Lang.LSRESTART));
 				}
 			});
-			buttongroup_language.add(item);
+			btnGroup.add(item);
 			menu.add(item);
 		}
 	}
@@ -1097,9 +1077,9 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 	@Override
 	public void changedStatusText(String text) {
-		// hack: control buttons
+		// this is a hack - maybe it is ok...
 		if ("DESELECT_BUTTONS".contentEquals(text)) {
-			for (Component c : mnuBar.getComponents()) {
+			for (Component c : btnBar.getComponents()) {
 				if (c instanceof LSToggleButton) {
 					LSToggleButton b = (LSToggleButton) c;
 					b.setSelected(false);
