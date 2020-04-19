@@ -78,8 +78,12 @@ public class App {
 
 	private static void initializeGateCategories() {
 		Category cat = new Category("hidden");
-		cat.addGate(new MODIN());
-		cat.addGate(new MODOUT());
+		Gate g = new MODIN();
+		g.loadLanguage();
+		cat.addGate(g);
+		g = new MODOUT();
+		g.loadLanguage();
+		cat.addGate(g);
 		cats.add(cat);
 
 		cats.add(new Category("basic"));
