@@ -2,12 +2,16 @@ package logicsim;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Properties;
+
+import javax.swing.JOptionPane;
 
 public abstract class CircuitPart implements LSLevelListener {
 	public static final int BOUNDING_SPACE = 6;
@@ -47,11 +51,71 @@ public abstract class CircuitPart implements LSLevelListener {
 	private int x;
 
 	private int y;
+	
+	public String TEXT = "text";
 
+	public String TEXT_DEFAULT = "";
+
+	public String text;
+	
+	String type = "wire";
+	
 	public CircuitPart(int x, int y) {
 		this.x = x;
 		this.y = y;
 		this.listeners = new ArrayList<LSLevelListener>();
+	}
+	
+	protected Properties properties = new Properties();
+	
+	public Properties getProperties() {
+		return properties;
+	}
+
+	protected String getProperty(String string) {
+		return properties.getProperty(string);
+	}
+	
+	protected int getPropertyInt(String string) {
+		return Integer.parseInt(getProperty(string));
+	}
+	
+	protected String getPropertyWithDefault(String key, String sdefault) {
+		String s = getProperty(key);
+		if (s == null)
+			return sdefault;
+		return s;
+	}
+	
+	protected void loadProperties() {
+		text = getPropertyWithDefault(TEXT, TEXT_DEFAULT);
+	}
+	
+	public boolean hasPropertiesUI() {
+		return true;
+	}
+
+	public boolean showPropertiesUI(Component frame) {
+		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, "ui.text"),
+				I18N.getString(type, "ui.title"), JOptionPane.QUESTION_MESSAGE, null, null, text);
+		if (h != null && h.length() > 0) {
+			text = h;
+			setProperty(TEXT, text);
+		}
+		return true;
+	}
+
+	public void setProperties(Properties properties) {
+		this.properties = properties;
+		loadProperties();
+	}
+
+	protected void setProperty(String key, String value) {
+		properties.setProperty(key, value);
+	}
+
+	protected void setPropertyInt(String key, int value) {
+		setProperty(key, String.valueOf(value));
 	}
 
 	private void checkXY(int x2, int y2) {
@@ -146,6 +210,10 @@ public abstract class CircuitPart implements LSLevelListener {
 	 * if this part is dragged
 	 * 
 	 */
+	
+	public void loadLanguage() {
+	}
+	
 	public void mouseDragged(MouseEvent e) {
 		if (mousePos == null) {
 			mousePos = new Point(e.getX(), e.getY());
@@ -153,6 +221,21 @@ public abstract class CircuitPart implements LSLevelListener {
 	}
 
 	public void mousePressed(LSMouseEvent e) {
+		notifyMessage(I18N.getString(type, I18N.TITLE));
+
+		if (Simulation.getInstance().isRunning())
+			mousePressedSim(e);
+		else {
+			select();
+			notifyRepaint();
+		}
+
+		if (e.isAltDown()) {
+			this.showPropertiesUI(null);
+		}
+	}
+	
+	public void mousePressedSim(LSMouseEvent e) {
 	}
 
 	/**

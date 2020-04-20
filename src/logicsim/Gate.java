@@ -18,6 +18,7 @@ import java.util.Vector;
  *
  * @author Andreas Tetzl
  * @author Peter Gabriel
+ * @author Matthew Lister
  * @version 2.0
  */
 public class Gate extends CircuitPart {
@@ -52,6 +53,11 @@ public class Gate extends CircuitPart {
 	protected int height = 60;
 
 	protected String label;
+	
+	protected int labelOffsetX;
+	
+	protected int labelOffsetY;
+	
 
 	/**
 	 * mirroring of part.
@@ -61,8 +67,6 @@ public class Gate extends CircuitPart {
 	 */
 	public int mirror = 0;
 	protected Vector<Pin> pins = new Vector<Pin>();
-
-	protected Properties properties = new Properties();
 
 	/**
 	 * rotate in 90 degree steps clockwise (0-3).
@@ -209,6 +213,15 @@ public class Gate extends CircuitPart {
 		}
 	}
 
+	protected void drawLabelWithOffset(Graphics2D g2, String lbl, Font font, int OffsetX, int OffsetY) {
+		if (lbl != null) {
+			g2.setFont(font);
+			int sw = g2.getFontMetrics().stringWidth(lbl);
+			g2.drawString(lbl, getX() + getWidth() / 2 - sw / 2 + OffsetX,
+					getY() + getHeight() / 2 + (g2.getFont().getSize() / 2) - 2 + OffsetY);
+		}
+	}
+	
 	public Pin findPin(int atX, int atY) {
 		for (Pin p : pins) {
 			if (p.isAt(atX, atY)) {
@@ -354,7 +367,9 @@ public class Gate extends CircuitPart {
 	public Vector<Pin> getPins() {
 		return pins;
 	}
-
+	
+	/*protected Properties properties = new Properties();
+	
 	public Properties getProperties() {
 		return properties;
 	}
@@ -374,6 +389,29 @@ public class Gate extends CircuitPart {
 		return s;
 	}
 
+	public void setProperties(Properties properties) {
+		this.properties = properties;
+		loadProperties();
+	}
+
+	protected void setProperty(String key, String value) {
+		properties.setProperty(key, value);
+	}
+
+	protected void setPropertyInt(String key, int value) {
+		setProperty(key, String.valueOf(value));
+	}
+	
+	public boolean hasPropertiesUI() {
+		return false;
+	}
+	
+	public boolean showPropertiesUI(Component frame) {
+		return false;
+	}
+	
+	Moved up to CircuitPart ML 19/04/20*/
+
 	public int getWidth() {
 		return width;
 	}
@@ -383,9 +421,6 @@ public class Gate extends CircuitPart {
 	 * Gattern ohne Einstellungen der Punkt "Properties" im Context-Menü
 	 * ausgeblendet wird
 	 */
-	public boolean hasPropertiesUI() {
-		return false;
-	}
 
 	/**
 	 * true, wenn Koordinaten mx,my innerhalb der gate Area liegen
@@ -408,8 +443,8 @@ public class Gate extends CircuitPart {
 	 * implement this in gates if some settings should be applied after setting
 	 * properties
 	 */
-	protected void loadProperties() {
-	}
+	/*protected void loadProperties() {
+	}*/
 
 	/**
 	 * mirror the gate first in x-axis, then in y-axis, then both axes, then normal
@@ -439,6 +474,7 @@ public class Gate extends CircuitPart {
 		}
 	}
 
+	@Override
 	public void loadLanguage() {
 	}
 
@@ -470,14 +506,17 @@ public class Gate extends CircuitPart {
 	@Override
 	public void mousePressed(LSMouseEvent e) {
 		super.mousePressed(e);
+		/*notifyMessage(I18N.getString(type, I18N.TITLE));
+
 		if (Simulation.getInstance().isRunning())
 			mousePressedSim(e);
 		else {
 			select();
 			notifyRepaint();
-		}
+		}*/
 	}
 
+	@Override
 	public void mousePressedSim(LSMouseEvent e) {
 	}
 
@@ -569,25 +608,9 @@ public class Gate extends CircuitPart {
 		}
 	}
 
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-		loadProperties();
-	}
-
-	protected void setProperty(String key, String value) {
-		properties.setProperty(key, value);
-	}
-
-	protected void setPropertyInt(String key, int value) {
-		setProperty(key, String.valueOf(value));
-	}
-
 	/**
 	 * Über Context-Menü aufgerufen
 	 */
-	public boolean showPropertiesUI(Component frame) {
-		return false;
-	}
 
 	public void simulate() {
 	}
