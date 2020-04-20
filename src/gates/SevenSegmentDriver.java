@@ -151,7 +151,8 @@ public class SevenSegmentDriver extends Gate {
 	@Override
 	public void loadLanguage() {
 		I18N.addGate(I18N.ALL, type, I18N.TITLE, "7-Segment-driver");
-
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "binary to 7-Segment-display driver");
 		I18N.addGate("de", type, I18N.TITLE, "7-Segment-Treiber");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "Binärzahl-zu-7Segment-Anzeige Konverter");
 	}
 }
