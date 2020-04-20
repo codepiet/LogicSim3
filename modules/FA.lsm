@@ -3,7 +3,10 @@
     <info/>
     <gates>
         <gate type="modin" x="150" y="100"/>
-        <gate type="modout" x="610" y="100"/>
+        <gate type="modout" x="610" y="100">
+            <io iotype="output" label="S" number="16"/>
+            <io iotype="output" label="C" number="17"/>
+        </gate>
         <gate module="true" type="HA" x="280" y="140"/>
         <gate module="true" type="HA" x="380" y="100"/>
         <gate type="or" x="480" y="140"/>
@@ -11,39 +14,39 @@
     <wires>
         <wire>
             <from id="modin@150:100" number="16"/>
-            <to id="HA@380:100" number="0"/>
+            <to id="HA@380:100" number="0" type="gate"/>
         </wire>
         <wire>
             <from id="modin@150:100" number="17"/>
-            <to id="HA@280:140" number="0"/>
+            <to id="HA@280:140" number="0" type="gate"/>
             <point node="false" number="0" x="260" y="120"/>
             <point node="false" number="1" x="260" y="150"/>
         </wire>
         <wire>
             <from id="modin@150:100" number="18"/>
-            <to id="HA@280:140" number="1"/>
+            <to id="HA@280:140" number="1" type="gate"/>
             <point node="false" number="0" x="250" y="130"/>
             <point node="false" number="1" x="250" y="190"/>
         </wire>
         <wire>
             <from id="HA@280:140" number="16"/>
-            <to id="HA@380:100" number="1"/>
+            <to id="HA@380:100" number="1" type="gate"/>
         </wire>
         <wire>
             <from id="HA@280:140" number="17"/>
-            <to id="or@480:140" number="2"/>
+            <to id="or@480:140" number="2" type="gate"/>
         </wire>
         <wire>
             <from id="HA@380:100" number="16"/>
-            <to id="modout@610:100" number="0"/>
+            <to id="modout@610:100" number="0" type="gate"/>
         </wire>
         <wire>
             <from id="HA@380:100" number="17"/>
-            <to id="or@480:140" number="1"/>
+            <to id="or@480:140" number="1" type="gate"/>
         </wire>
         <wire>
             <from id="or@480:140" number="0"/>
-            <to id="modout@610:100" number="1"/>
+            <to id="modout@610:100" number="1" type="gate"/>
             <point node="false" number="0" x="570" y="170"/>
             <point node="false" number="1" x="570" y="120"/>
         </wire>

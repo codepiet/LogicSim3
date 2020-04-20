@@ -1,7 +1,5 @@
  body {
  	color:#000;
  	background-color:#fff;
- }
- h1,h2,p {
- 	font-face:Helvetica,Verdana,sans-serif;
+ 	font-family:Helvetica,Arial,sans-serif;
  }

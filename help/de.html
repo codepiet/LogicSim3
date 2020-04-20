@@ -1,63 +1,79 @@
-<html>
+<!DOCTYPE html>
+<html lang="de">
 <head>
+<meta charset="utf-8"/>
 <title>LogicSim Kurzanleitung</title>
-<link rel="style.css" type="stylesheet"/>
+<link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 
 <body bgcolor=#ffffff>
 <h1>LogicSim Kurzanleitung</h1>
 
-<p>Aus der Liste auf der linken Seite werden Schaltkreise (Gatter) ausgewählt und auf
-der Arbeitsfläche plaziert.</p>
-<p>Zum Verkabeln auf den Ausgang (rechte Seite) eines Gatters klicken und das Kabel bis zum Eingang (linke Seite) eines Gatters
-f�hren. Mit Shift und Mausklick auf ein bestehendes Kabel wird ein neues Kabel
-an diese Stelle angeschlossen.</p>
-<p>Gatter und Kabel k�nnen durch Anklicken aktiviert, und mittels der
-Entfernen-Taste gel�scht werden.</p>
-<p>Bei einigen Gattern (z.B. Clock, MonoFlop, LCD, TextLabel) k�nnen Einstellungen ver�ndert werden, indem im
-Kontext-Men� (rechte Maustaste) des Gatters "Properties" gew�hlt wird.</p>
-<br><br>
-
-<p>F�r manche Gatter (AND, OR, XOR, usw) kann die Anzahl der Eing�nge in der Auswahlbox
-unter der Gatterliste eingestellt werden.<br>
-Die Gatter verhalten sich dann, als w�ren
-sie auf diese Weise verbunden:</p>
+<p>Aus der Liste auf der linken Seite wird durch Klick eine Komponenten ausgewählt. 
+Diese wird automatisch auf der Arbeitsfläche platziert.</p>
+<p>Die Komponente wird verkabelt, indem auf den Ausgang (meist rechte Seite) eines Gatters 
+geklickt wird und das Kabel auch über Zwischenklicks bis zum Eingang (meist linke Seite) 
+eines anderen Gatters geführt wird.</p>
+<p>Gatter und Kabel können durch Anklicken ausgewählt werden. Verschieben (per Drag) und 
+Löschen (Entf./Del-Taste) ist möglich.</p>
+<p>Bei einigen Gattern (z.B. Clock, MonoFlop, LCD, TextLabel) können Einstellungen 
+verändert werden, indem im Kontext-Menü (rechte Maustaste) des Gatters "Eigenschaften" 
+ausgewählt wird.</p>
+<p>Einige Komponenten, normalerweise Eingabebauteile, unterstützen einen interaktiven Modus. 
+Durch Auswahl (Klick) und anschließendem Drücken der Leertaste wird eine Aktion ausgeführt. 
+Bei Schaltern wird der Schaltzustand umgeschaltet.</p> 
+<p>Für manche Gatter (AND, OR, XOR, usw.) kann die Anzahl der Eingänge vor dem Einfügen
+in der Auswahlbox unter der Gatterliste eingestellt werden, um Gatterkaskaden zu vermeiden, 
+s. Abbildung.</br>
 <img src="images/and4input.gif">
 <br clear=all>
+<hr>
 
 
-<b>Eingangsbeschaltung</b>
-<img src="images/input.gif" align=right valign=top>
-<p>Mit dem "input inverter" wird der Pegel auf einem Kabel am Eingang eines Gatters negiert.
-Zum Platzieren den Negator aus der Liste w�hlen und auf den Eingang eines Gatters klicken.<br>
-Mit "input high" und "input low" k�nnen Eing�nge auf einen bestimmten Pegel gesetzt werden, ohne
-dass ein Kabel daran angeschlossen werden muss.<br>
-Zum R�cksetzen eines Eingangs auf das normale Verhalten wird ein "normal input" auf dem entsprechenden
-Eingang platziert.</p>
+<h2>Eingangsbeschaltung</h2>
+<img src="images/input.png" align=right valign=top>
+<p>Im Menü und über die dargestellten Schaltflächen können die Eingänge 
+von Gattern verändert werden. Für die Eingänge stehen die Verhaltensweisen "Normal", 
+"Negiert", "HIGH" und "LOW" zur Verfügung. Zur Veränderung eines Eingangs wird der gewünschte 
+Eingangsbeschaltung per Knopf oder Menüeintrag ausgewählt. Anschließend wird per Klick auf 
+einen Eingangspin einer Komponente die Beschaltung aktiv.<br>
+Die Eingangsbeschaltungen HIGH und LOW bewirken einen ständigen, festgelegten Pegel am Eingang.</p>
 <br clear=all>
 <br>
 
-
-<h4>Erstellen eines Moduls</h4>
-<p>In einem Modul ist eine Schaltung zusammengefasst, die dann als Gatter
-in einer anderen Schaltung verwendet wird.</p>
-<p>Zum Erstellen aus dem Men� "Module" den Men�punkt "Create Module" ausw�hlen.
-In den ge�ffneten Dialog wird die Beschreibung des Moduls eingetragen.
-Der "Module Name" ist gleichzeitig der Dateiname des Moduls. Das "Module Label"
-ist die Beschriftung des Gatters. </p>
-<p>Nach Dr�cken der "Use" Schaltfl�che erscheinen Input-/Output-Gatter, welche
-die Ein-/Ausg�nge des Moduls repr�sentieren.
-Die LogicSim Schaltung wird daran angeschlossen.
-Zum Test des Moduls k�nnen an die Eing�nge des Input Gatters
-Schalter und an die Ausg�nge des Output Gatters LEDs angeschlossen werden.</p>
+<h2>Erstellen eines Moduls</h2>
+<p>In einem Modul wird eine Schaltung zusammengefasst, die dann als Gatter
+in einer anderen Schaltung verwendet werden kann.</p>
+<p>Zum Erstellen aus dem Menü "Datei" den Menüpunkt "Modul erstellen" auswählen. Im 
+Dialogfenster kann eine Beschreibung eingetragen werden.</p>
+<p>Es erscheinen nach dem Schließen des Dialogfenster zwei Gatter, die nicht gelöscht werden können: 
+INPUT und OUTPUT. An die Ausgänge des INPUT-Gatters können die Kabel angeschlossen werden, die zur
+Schaltung gehören. An die Eingänge des INPUT-Gatters können zum Test z.B. Schalter angeschlossen werden,
+diese werden bei Verwendung in einer Schaltung automatisch entfernt. Ebenso werden an die Eingänge des 
+OUTPUT-Gatters die späteren Ausgänge der Schaltung angeschlossen. An die Ausgänge des OUTPUT-Gatters
+können wiederum zum Test LEDs u.ä. angeschlossen werden. Diese werden ebenso automatisch beim Verwenden
+des Moduls gelöscht, werden jedoch nicht aus der Datei entfernt, so dass jederzeit eine Weiterentwicklung 
+möglich ist.</p>
+<p>Das Ein- und Ausgänge des Moduls können mit Beschriftungen (Labels) versehen werden. Dazu muss neben die
+Pins in das Gehäuse geklickt werden. Es öffnet sich dann ein Abfragefenster für die Beschriftung. Es ist jeweils
+Platz für ca. ein Zeichen.</p>
 <p>Beim Speichern wird das Modul unter dem angegebenen Namen im "modules" Verzeichnis
-gespeichert. Daraufhin erscheint es in der Gatter-Liste und kann in eine neue
-Schaltung eingebaut werden.</p>
-<p>Als Beispiel "FullAdder.mod" aus dem "modules" Verzeichnis �ffnen. Dieses Modul
-wird in der Schaltung "5 Bit Adder.lsim" verwendet.</p>
-<br>
-<img src="images/ls1.gif"><br>5 Bit Addierschaltung, in der f�nf Volladder Module verwendet werden.<br><br>
-<img src="images/ls2.gif"><br>Volladder Modul
+gespeichert. Der Name, unter dem gespeichert wird,
+ist gleichzeitig der Name des Moduls. Der Name sollte also kurz gehalten werden. Das Modul erscheint 
+in der Liste der Komponenten zuunterst und kann in neue Schaltungen eingebaut werden.</p>
+<p>Es sind bereits Module vorbereitet, HA und FA stellen ein Halbaddierer und ein 
+Volladdierer (Full Adder) zur Verfügung. Der Volladdierer verwendet Halbaddierer.</p>
 
+<h3>Beispiel</h3>
+<p>Die beiden nachfolgenden Abbildungen zeigen den Volladdierern in der 
+Bearbeitungsansicht und in der Verwendung. Es ist erkennbar, dass die Ausgänge des OUTPUT-Gatters mit 
+Beschriftungen versehen wurden.</p>
+<div align="center">
+<img src="images/fa.png"/><br>
+Volladdierer in der Bearbeitungsansicht<br/><br/>
+
+<img src="images/fanet.png"/><br/>
+Addiernetz aus 8 Volladdierern zur Addition zweier 8-stelliger Binärzahlen (11+13=24)</br/>
+</div>
 </body>
 </html>
