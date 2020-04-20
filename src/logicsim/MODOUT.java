@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 import javax.swing.JOptionPane;
 
@@ -63,6 +64,18 @@ public class MODOUT extends Gate {
 	}
 
 	@Override
+	public void draw(Graphics2D g2) {
+		super.draw(g2);
+		g2.setColor(Color.GREEN);
+		// draw klick areas if pin is connected
+		for (Pin p : getOutputs()) {
+			Pin pin = getPin(p.number - 16);
+			if (pin.isConnected() && p.label == null)
+				g2.fill(new Rectangle(getX() +width- CONN_SIZE -9, p.getY() - 4, 8, 8));
+		}
+	}
+	
+	@Override
 	protected void drawLabel(Graphics2D g2, String lbl, Font font) {
 		g2.setFont(bigFont);
 		int sw = g2.getFontMetrics().stringWidth(label);
@@ -77,6 +90,16 @@ public class MODOUT extends Gate {
 		getPin(target).changedLevel(evt);
 	}
 
+	@Override
+	public void rotate() {
+		// don't rotate
+	}
+
+	@Override
+	public void mirror() {
+		// don't mirror
+	}
+	
 	@Override
 	public void loadLanguage() {
 		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Outputs");
