@@ -90,5 +90,6 @@ public class LED extends Gate {
 	@Override
 	public void loadLanguage() {
 		I18N.addGate(I18N.ALL, type, I18N.TITLE, "LED");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "LED");
 	}
 }

@@ -76,5 +76,7 @@ yes=Yes
 zoomin=Zoom In
 zoomout=Zoom Out
 mode=Mode
+text=Text
 expert=Expert
+wire=wire
 normal=Normal

@@ -88,5 +88,6 @@ public class SRLatch extends Gate {
 	@Override
 	public void loadLanguage() {
 		I18N.addGate(I18N.ALL, type, I18N.TITLE, "SR-Latch");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "SR-Latch");
 	}
 }
