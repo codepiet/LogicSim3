@@ -170,12 +170,8 @@ public class Switch extends Gate {
 	}
 
 	@Override
-	public boolean hasPropertiesUI() {
-		return true;
-	}
-
-	@Override
 	public boolean showPropertiesUI(Component frame) {
+		super.showPropertiesUI(frame);
 		JRadioButton jRadioButton1 = new JRadioButton();
 		JRadioButton jRadioButton2 = new JRadioButton();
 
