@@ -96,7 +96,7 @@ public abstract class CircuitPart implements LSLevelListener {
 	public boolean showPropertiesUI(Component frame) {
 		String h = (String) JOptionPane.showInputDialog(frame, I18N.tr(Lang.TEXT), I18N.tr(Lang.PROPERTIES),
 				JOptionPane.QUESTION_MESSAGE, null, null, text);
-		if (h != null && h.length() > 0) {
+		if (h != null) {
 			text = h;
 			setProperty(TEXT, text);
 		}

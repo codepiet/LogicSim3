@@ -154,10 +154,15 @@ public class XMLCreator {
 				String keyS = (String) key;
 				Element n = doc.createElement("property");
 				n.setAttribute("key", keyS);
-				n.setTextContent(ps.getProperty(keyS));
+				String value = ps.getProperty(keyS);
+				if (value == null || value.length() == 0)
+					continue;
+				n.setTextContent(value);
 				node.appendChild(n);
 			}
-			return node;
+			// check if node contains properties
+			if (node.hasChildNodes())
+				return node;
 		}
 		return null;
 	}
