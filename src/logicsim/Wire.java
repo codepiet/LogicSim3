@@ -481,4 +481,24 @@ public class Wire extends CircuitPart implements Cloneable {
 		return s;
 	}
 
+	public void addPointFitting(int x, int y) {
+		Vector<WirePoint> ps = getAllPoints();
+		for (int i = 0; i < ps.size() - 1; i++) {
+			// set current and next wirepoint
+			WirePoint c = ps.get(i);
+			WirePoint n = ps.get(i + 1);
+			if (n.isAt(x, y)) {
+				n.show = true;
+				return;
+			}
+			Line2D l = new Line2D.Float((float) c.getX(), (float) c.getY(), (float) n.getX(), (float) n.getY());
+			double dist = l.ptSegDist((double) x, (double) y);
+			if (dist < 4.5f) {
+				// so the point should be after "c"
+				insertPointAfter(i, x, y);
+				return;
+			}
+		}
+	}
+
 }

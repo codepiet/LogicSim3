@@ -194,6 +194,11 @@ public abstract class CircuitPart implements LSLevelListener {
 		return getX() + ":" + getY();
 	}
 
+	@Override
+	public String toString() {
+		return this.getId();
+	}
+	
 	public int getX() {
 		return x;
 	}
