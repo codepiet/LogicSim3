@@ -35,7 +35,7 @@ public class LSFrame_AboutBox extends JWindow {
 		this.imgSplash = new ImageIcon(logicsim.LSFrame.class.getResource("images/about.jpg")).getImage();
 
 		imgWidth = imgSplash.getWidth(this);
-		imgHeight = imgSplash.getHeight(this) + 140;
+		imgHeight = imgSplash.getHeight(this) + 155;
 		pS = parent.getSize();
 		pL = parent.getLocation();
 		setLocation(pL.x + pS.width / 2 - imgWidth / 2, pL.y + pS.height / 2 - imgHeight / 2);
@@ -78,7 +78,8 @@ public class LSFrame_AboutBox extends JWindow {
 			g2.drawString("Programmed 2020 by Peter Gabriel - http://sis.schule", 10, 260);
 			g2.drawString("Based on LogicSim 2.4 (2009) by Andreas Tetzl - http://tetzl.de", 10, 290);
 			g2.drawString("About Graphic by Jens Borsdorf, http://jens.borsdorf.name", 10, 310);
-			g2.drawString("LogicSim is free software-Released under the GPL-Download on Github", 10, 340);
+			g2.drawString("Contributions by Matthew Lister (chocolatepatty@github)", 10, 330);
+			g2.drawString("LogicSim is free software-Released under the GPL-Download on Github", 10, 360);
 		}
 	}
 
