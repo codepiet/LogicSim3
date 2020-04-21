@@ -270,6 +270,11 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					}
 				}
 			} else if (cp instanceof Wire) {
+				String s = cp.getProperty(CircuitPart.TEXT);
+				String desc = I18N.tr(Lang.WIRE);
+				if (s != null)
+					desc += ": " + s;
+				fireStatusText(desc);
 				circuit.deselectAll();
 				cp.select();
 			} else if (cp instanceof WirePoint) {

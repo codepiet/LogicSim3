@@ -51,23 +51,21 @@ public abstract class CircuitPart implements LSLevelListener {
 	private int x;
 
 	private int y;
-	
-	public String TEXT = "text";
+
+	public static final String TEXT = "text";
 
 	public String TEXT_DEFAULT = "";
 
 	public String text;
-	
-	String type = "wire";
-	
+
 	public CircuitPart(int x, int y) {
 		this.x = x;
 		this.y = y;
 		this.listeners = new ArrayList<LSLevelListener>();
 	}
-	
+
 	protected Properties properties = new Properties();
-	
+
 	public Properties getProperties() {
 		return properties;
 	}
@@ -75,29 +73,29 @@ public abstract class CircuitPart implements LSLevelListener {
 	protected String getProperty(String string) {
 		return properties.getProperty(string);
 	}
-	
+
 	protected int getPropertyInt(String string) {
 		return Integer.parseInt(getProperty(string));
 	}
-	
+
 	protected String getPropertyWithDefault(String key, String sdefault) {
 		String s = getProperty(key);
 		if (s == null)
 			return sdefault;
 		return s;
 	}
-	
+
 	protected void loadProperties() {
 		text = getPropertyWithDefault(TEXT, TEXT_DEFAULT);
 	}
-	
+
 	public boolean hasPropertiesUI() {
 		return true;
 	}
 
 	public boolean showPropertiesUI(Component frame) {
-		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, "ui.text"),
-				I18N.getString(type, "ui.title"), JOptionPane.QUESTION_MESSAGE, null, null, text);
+		String h = (String) JOptionPane.showInputDialog(frame, I18N.tr(Lang.TEXT), I18N.tr(Lang.PROPERTIES),
+				JOptionPane.QUESTION_MESSAGE, null, null, text);
 		if (h != null && h.length() > 0) {
 			text = h;
 			setProperty(TEXT, text);
@@ -210,10 +208,10 @@ public abstract class CircuitPart implements LSLevelListener {
 	 * if this part is dragged
 	 * 
 	 */
-	
+
 	public void loadLanguage() {
 	}
-	
+
 	public void mouseDragged(MouseEvent e) {
 		if (mousePos == null) {
 			mousePos = new Point(e.getX(), e.getY());
@@ -221,8 +219,6 @@ public abstract class CircuitPart implements LSLevelListener {
 	}
 
 	public void mousePressed(LSMouseEvent e) {
-		notifyMessage(I18N.getString(type, I18N.TITLE));
-
 		if (Simulation.getInstance().isRunning())
 			mousePressedSim(e);
 		else {
@@ -234,7 +230,7 @@ public abstract class CircuitPart implements LSLevelListener {
 			this.showPropertiesUI(null);
 		}
 	}
-	
+
 	public void mousePressedSim(LSMouseEvent e) {
 	}
 

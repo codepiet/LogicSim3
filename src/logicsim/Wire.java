@@ -9,7 +9,6 @@ package logicsim;
  */
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -17,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.util.Vector;
-import javax.swing.JOptionPane;
 
 public class Wire extends CircuitPart implements Cloneable {
 	static final long serialVersionUID = -7554728800898882892L;
@@ -59,26 +57,10 @@ public class Wire extends CircuitPart implements Cloneable {
 		super(x, y);
 		loadProperties();
 	}
-	
+
 	@Override
 	protected void loadProperties() {
 		text = getPropertyWithDefault(TEXT, TEXT_DEFAULT);
-	}
-	
-	@Override
-	public boolean hasPropertiesUI() {
-		return true;
-	}
-	
-	@Override
-	public boolean showPropertiesUI(Component frame) {
-		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, "ui.text"),
-				I18N.getString(type, "ui.title"), JOptionPane.QUESTION_MESSAGE, null, null, text);
-		if (h != null && h.length() > 0) {
-			text = h;
-			setProperty(TEXT, text);
-		}
-		return true;
 	}
 
 	public void addPoint(int x, int y) {
@@ -168,14 +150,13 @@ public class Wire extends CircuitPart implements Cloneable {
 		}
 
 		g2.setColor(Color.black);
-		
+
 		if (points.size() > 0) {
 			g2.drawString(text, (from.getX() + points.get(0).getX()) / 2, (from.getY() + points.get(0).getY()) / 2);
 		} else {
 			if (from != null && to == null && tempPoint != null) {
 				g2.drawString(text, (from.getX() + tempPoint.x) / 2, (from.getY() + tempPoint.y) / 2);
-			}
-			else if (from != null && to != null) {
+			} else if (from != null && to != null) {
 				g2.drawString(text, (from.getX() + to.getX()) / 2, (from.getY() + to.getY()) / 2);
 			}
 		}
@@ -329,7 +310,6 @@ public class Wire extends CircuitPart implements Cloneable {
 	@Override
 	public void mousePressed(LSMouseEvent e) {
 		super.mousePressed(e);
-
 		if (Simulation.getInstance().isRunning())
 			return;
 
@@ -354,9 +334,6 @@ public class Wire extends CircuitPart implements Cloneable {
 			select();
 			// call listener of fromGate
 			from.notifyRepaint();
-		}
-		if (e.isAltDown()) {
-			this.showPropertiesUI(null);
 		}
 //		// clicked CTRL on a Wire -> insert node
 //		if (e.isControlDown()) {
