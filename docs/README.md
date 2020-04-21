@@ -1,5 +1,3 @@
-# LogicSim3
-
 ![](../src/logicsim/images/about.jpg?raw=true)
 
 ## Introduction
