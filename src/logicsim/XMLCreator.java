@@ -221,6 +221,12 @@ public class XMLCreator {
 				point.setAttribute("node", String.valueOf(wp.show));
 				n.appendChild(point);
 			}
+
+			// label
+			Node snode = createSettingsNode(doc, w.getProperties());
+			if (snode != null)
+				n.appendChild(snode);
+
 			return n;
 		}
 		return null;

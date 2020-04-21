@@ -223,7 +223,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				return;
 			}
 			// check if the part is a connector
-			if (cp instanceof Pin) {
+			if (cp instanceof Pin && !e.isAltDown()) {
 				Pin pin = ((Pin) cp);
 
 				// we cannot edit a Connector, but we can

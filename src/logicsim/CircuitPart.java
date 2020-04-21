@@ -145,7 +145,7 @@ public abstract class CircuitPart implements LSLevelListener {
 	public void clear() {
 	}
 
-	public final void deselect() {
+	public void deselect() {
 		selected = false;
 	}
 

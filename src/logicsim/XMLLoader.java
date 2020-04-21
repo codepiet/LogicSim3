@@ -135,6 +135,14 @@ public class XMLLoader {
 					WirePoint wp = new WirePoint(xp, yp, b);
 					wire.points.add(wp);
 				}
+				
+				Properties ps = getProperties(wnode);
+				for (Object k : ps.keySet()) {
+					String key = (String) k;
+					wire.setProperty(key, ps.getProperty(key));
+				}
+				wire.loadProperties();
+				
 				wire.selected = false;
 				// connect wire to gates
 				wires.add(wire);

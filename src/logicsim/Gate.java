@@ -51,11 +51,10 @@ public class Gate extends CircuitPart {
 	protected int height = 60;
 
 	protected String label;
-	
+
 	protected int labelOffsetX;
-	
+
 	protected int labelOffsetY;
-	
 
 	/**
 	 * mirroring of part.
@@ -87,6 +86,13 @@ public class Gate extends CircuitPart {
 	public Gate() {
 		this(0, 0);
 		selected = true;
+	}
+
+	@Override
+	public void deselect() {
+		super.deselect();
+		for (Pin p : pins)
+			p.deselect();
 	}
 
 	public Gate(int x, int y) {
@@ -219,7 +225,7 @@ public class Gate extends CircuitPart {
 					getY() + getHeight() / 2 + (g2.getFont().getSize() / 2) - 2 + OffsetY);
 		}
 	}
-	
+
 	public Pin findPin(int atX, int atY) {
 		for (Pin p : pins) {
 			if (p.isAt(atX, atY)) {
@@ -365,50 +371,36 @@ public class Gate extends CircuitPart {
 	public Vector<Pin> getPins() {
 		return pins;
 	}
-	
-	/*protected Properties properties = new Properties();
-	
-	public Properties getProperties() {
-		return properties;
-	}
 
-	protected String getProperty(String string) {
-		return properties.getProperty(string);
-	}
-
-	protected int getPropertyInt(String string) {
-		return Integer.parseInt(getProperty(string));
-	}
-
-	protected String getPropertyWithDefault(String key, String sdefault) {
-		String s = getProperty(key);
-		if (s == null)
-			return sdefault;
-		return s;
-	}
-
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-		loadProperties();
-	}
-
-	protected void setProperty(String key, String value) {
-		properties.setProperty(key, value);
-	}
-
-	protected void setPropertyInt(String key, int value) {
-		setProperty(key, String.valueOf(value));
-	}
-	
-	public boolean hasPropertiesUI() {
-		return false;
-	}
-	
-	public boolean showPropertiesUI(Component frame) {
-		return false;
-	}
-	
-	Moved up to CircuitPart ML 19/04/20*/
+	/*
+	 * protected Properties properties = new Properties();
+	 * 
+	 * public Properties getProperties() { return properties; }
+	 * 
+	 * protected String getProperty(String string) { return
+	 * properties.getProperty(string); }
+	 * 
+	 * protected int getPropertyInt(String string) { return
+	 * Integer.parseInt(getProperty(string)); }
+	 * 
+	 * protected String getPropertyWithDefault(String key, String sdefault) { String
+	 * s = getProperty(key); if (s == null) return sdefault; return s; }
+	 * 
+	 * public void setProperties(Properties properties) { this.properties =
+	 * properties; loadProperties(); }
+	 * 
+	 * protected void setProperty(String key, String value) {
+	 * properties.setProperty(key, value); }
+	 * 
+	 * protected void setPropertyInt(String key, int value) { setProperty(key,
+	 * String.valueOf(value)); }
+	 * 
+	 * public boolean hasPropertiesUI() { return false; }
+	 * 
+	 * public boolean showPropertiesUI(Component frame) { return false; }
+	 * 
+	 * Moved up to CircuitPart ML 19/04/20
+	 */
 
 	public int getWidth() {
 		return width;
@@ -441,8 +433,9 @@ public class Gate extends CircuitPart {
 	 * implement this in gates if some settings should be applied after setting
 	 * properties
 	 */
-	/*protected void loadProperties() {
-	}*/
+	/*
+	 * protected void loadProperties() { }
+	 */
 
 	/**
 	 * mirror the gate first in x-axis, then in y-axis, then both axes, then normal
@@ -504,14 +497,12 @@ public class Gate extends CircuitPart {
 	@Override
 	public void mousePressed(LSMouseEvent e) {
 		super.mousePressed(e);
-		/*notifyMessage(I18N.getString(type, I18N.TITLE));
-
-		if (Simulation.getInstance().isRunning())
-			mousePressedSim(e);
-		else {
-			select();
-			notifyRepaint();
-		}*/
+		/*
+		 * notifyMessage(I18N.getString(type, I18N.TITLE));
+		 * 
+		 * if (Simulation.getInstance().isRunning()) mousePressedSim(e); else {
+		 * select(); notifyRepaint(); }
+		 */
 	}
 
 	@Override

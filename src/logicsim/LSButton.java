@@ -14,6 +14,7 @@ public class LSButton extends JButton {
 		this.setDoubleBuffered(true);
 		this.setIcon(getIcon(iconName));
 		this.setToolTipText(I18N.tr(toolTip));
+		this.setName(toolTip.toString());
 		// this.setBorderPainted(true);
 		// this.setBorder(BorderFactory.createLineBorder(Color.black));
 		// this.addMouseListener(this);
