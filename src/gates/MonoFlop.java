@@ -88,12 +88,8 @@ public class MonoFlop extends Gate implements Runnable {
 	}
 
 	@Override
-	public boolean hasPropertiesUI() {
-		return true;
-	}
-
-	@Override
 	public boolean showPropertiesUI(Component frame) {
+		super.showPropertiesUI(frame);
 		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, HT), I18N.tr(Lang.SETTINGS),
 				JOptionPane.QUESTION_MESSAGE, null, null, Integer.toString((int) highTime));
 		if (h != null && h.length() > 0) {

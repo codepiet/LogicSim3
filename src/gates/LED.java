@@ -69,12 +69,8 @@ public class LED extends Gate {
 	}
 
 	@Override
-	public boolean hasPropertiesUI() {
-		return true;
-	}
-
-	@Override
 	public boolean showPropertiesUI(Component frame) {
+		super.showPropertiesUI(frame);
 		Color newColor = JColorChooser.showDialog(null, I18N.getString(type, I18N.TITLE) + " " + I18N.tr(Lang.SETTINGS),
 				color);
 		if (newColor != null)

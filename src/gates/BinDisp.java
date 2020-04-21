@@ -76,11 +76,9 @@ public class BinDisp extends Gate {
 		g.drawString(sval, getX() + getWidth() / 2 - sw / 2, getY() + getHeight() - 20);
 	}
 
-	public boolean hasPropertiesUI() {
-		return true;
-	}
-
+	@Override
 	public boolean showPropertiesUI(Component frame) {
+		super.showPropertiesUI(frame);
 		JRadioButton jRadioButton1 = new JRadioButton();
 		JRadioButton jRadioButton2 = new JRadioButton();
 
