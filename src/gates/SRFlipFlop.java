@@ -27,14 +27,14 @@ public class SRFlipFlop extends Gate {
 		createInputs(3);
 		createOutputs(2);
 
-		getPin(0).label = "S";
-		getPin(1).label = "R";
-		getPin(2).label = Pin.POS_EDGE_TRIG;
+		getPin(0).setProperty(TEXT, "S");
+		getPin(1).setProperty(TEXT, "R");
+		getPin(2).setProperty(TEXT, Pin.POS_EDGE_TRIG);
 
-		getPin(3).label = "Q";
+		getPin(3).setProperty(TEXT, "Q");
 		getPin(3).moveBy(0, 10);
 
-		getPin(4).label = "/Q";
+		getPin(4).setProperty(TEXT, "/Q");
 		getPin(4).setLevelType(Pin.INVERTED);
 		getPin(4).moveBy(0, -10);
 	}

@@ -24,7 +24,7 @@ public class SevenSegment extends Gate {
 		height = 80;
 		createInputs(7);
 		for (int i = 0; i < 7; i++)
-			getPin(i).label = String.valueOf((char) (((int) 'a') + i));
+			getPin(i).setProperty(TEXT, String.valueOf((char) (((int) 'a') + i)));
 		reset();
 	}
 

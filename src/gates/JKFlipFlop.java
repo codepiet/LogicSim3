@@ -23,12 +23,12 @@ public class JKFlipFlop extends Gate {
 		createInputs(3);
 		createOutputs(2);
 
-		getPin(0).label = "J";
-		getPin(1).label = Pin.POS_EDGE_TRIG;
-		getPin(2).label = "K";
+		getPin(0).setProperty(TEXT, "J");
+		getPin(1).setProperty(TEXT, Pin.POS_EDGE_TRIG);
+		getPin(2).setProperty(TEXT, "K");
 
-		getPin(3).label = "Q";
-		getPin(4).label = "/Q";
+		getPin(3).setProperty(TEXT, "Q");
+		getPin(4).setProperty(TEXT, "/Q");
 
 		getPin(3).moveBy(0, 10);
 		getPin(4).moveBy(0, -10);

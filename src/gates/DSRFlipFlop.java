@@ -27,13 +27,13 @@ public class DSRFlipFlop extends Gate {
 		createInputs(4);
 		createOutputs(2);
 
-		getPin(0).label = "D";
-		getPin(1).label = "S";
-		getPin(2).label = "R";
-		getPin(3).label = Pin.POS_EDGE_TRIG;
+		getPin(0).setProperty(TEXT, "D");
+		getPin(1).setProperty(TEXT, "S");
+		getPin(2).setProperty(TEXT, "R");
+		getPin(3).setProperty(TEXT, Pin.POS_EDGE_TRIG);
 
-		getPin(4).label = "Q";
-		getPin(5).label = "/Q";
+		getPin(4).setProperty(TEXT, "Q");
+		getPin(5).setProperty(TEXT, "/Q");
 		getPin(5).setLevelType(Pin.INVERTED);
 
 		getPin(4).moveBy(0, 10);

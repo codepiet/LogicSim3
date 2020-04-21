@@ -40,7 +40,6 @@ public class Pin extends CircuitPart {
 	 * type can be HIGH, LOW, INVERTED or NORMAL
 	 */
 	int levelType = NORMAL;
-	public String label = null;
 	public Gate gate;
 
 	public Pin(int x, int y, Gate gate, int number) {
@@ -60,7 +59,7 @@ public class Pin extends CircuitPart {
 	}
 
 	/**
-	 * draw connector label (inside gate frame)
+	 * draw pin label (inside gate frame)
 	 * 
 	 * @param g2
 	 */
@@ -69,44 +68,44 @@ public class Pin extends CircuitPart {
 		int y = getY();
 
 		g2.setFont(smallFont);
-		if (label != null) {
-			int lw = g2.getFontMetrics().stringWidth(label);
+		if (text != null) {
+			int lw = g2.getFontMetrics().stringWidth(text);
 			if (paintDirection == RIGHT) {
-				if (POS_EDGE_TRIG.equals(label)) {
+				if (POS_EDGE_TRIG.equals(text)) {
 					Polygon tr = new Polygon();
 					tr.addPoint(x + 1 + CONN_SIZE, y - 4);
 					tr.addPoint(x + 1 + CONN_SIZE, y + 4);
 					tr.addPoint(x + 1 + CONN_SIZE + 8, y);
 					g2.draw(tr);
 				} else
-					g2.drawString(label, x + CONN_SIZE + 3, y + 5);
+					g2.drawString(text, x + CONN_SIZE + 3, y + 5);
 			} else if (paintDirection == LEFT) {
-				if (POS_EDGE_TRIG.equals(label)) {
+				if (POS_EDGE_TRIG.equals(text)) {
 					Polygon tr = new Polygon();
 					tr.addPoint(x - 1 - CONN_SIZE, y - 4);
 					tr.addPoint(x - 1 - CONN_SIZE, y + 4);
 					tr.addPoint(x - 1 - CONN_SIZE - 8, y);
 					g2.draw(tr);
 				} else
-					g2.drawString(label, x - CONN_SIZE - lw - 2, y + 5);
+					g2.drawString(text, x - CONN_SIZE - lw - 2, y + 5);
 			} else if (paintDirection == UP) {
-				if (POS_EDGE_TRIG.equals(label)) {
+				if (POS_EDGE_TRIG.equals(text)) {
 					Polygon tr = new Polygon();
 					tr.addPoint(x - 4, y - 1 - CONN_SIZE);
 					tr.addPoint(x + 4, y - 1 - CONN_SIZE);
 					tr.addPoint(x, y - 1 - CONN_SIZE - 8);
 					g2.draw(tr);
 				} else
-					g2.drawString(label, x - lw / 2, y - CONN_SIZE - 3);
+					g2.drawString(text, x - lw / 2, y - CONN_SIZE - 3);
 			} else if (paintDirection == DOWN) {
-				if (POS_EDGE_TRIG.equals(label)) {
+				if (POS_EDGE_TRIG.equals(text)) {
 					Polygon tr = new Polygon();
 					tr.addPoint(x - 4, y + 1 + CONN_SIZE);
 					tr.addPoint(x + 4, y + 1 + CONN_SIZE);
 					tr.addPoint(x, y + 1 + CONN_SIZE + 8);
 					g2.draw(tr);
 				} else
-					g2.drawString(label, x - lw / 2, y + CONN_SIZE + 12);
+					g2.drawString(text, x - lw / 2, y + CONN_SIZE + 12);
 			}
 		}
 	}
@@ -242,7 +241,7 @@ public class Pin extends CircuitPart {
 			lt = "L";
 		else if (levelType == Pin.INVERTED)
 			lt = "I";
-		return it + number + it + "-" + lt + "-" + (label == null ? "" : "\"" + label + "\"") + getX() + ":" + getY()
+		return it + number + it + "-" + lt + "-" + (text == null ? "" : "\"" + text + "\"") + getX() + ":" + getY()
 				+ "@" + gate.getId();
 	}
 

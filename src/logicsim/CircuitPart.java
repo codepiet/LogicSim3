@@ -108,8 +108,10 @@ public abstract class CircuitPart implements LSLevelListener {
 		loadProperties();
 	}
 
-	protected void setProperty(String key, String value) {
+	public void setProperty(String key, String value) {
 		properties.setProperty(key, value);
+		if (TEXT.equals(key))
+			text = value;
 	}
 
 	protected void setPropertyInt(String key, int value) {

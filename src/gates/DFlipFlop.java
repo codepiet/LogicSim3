@@ -22,11 +22,11 @@ public class DFlipFlop extends Gate {
 		createInputs(2);
 		createOutputs(2);
 
-		getPin(0).label = "D";
-		getPin(1).label = Pin.POS_EDGE_TRIG;
+		getPin(0).setProperty(TEXT, "D");
+		getPin(1).setProperty(TEXT, Pin.POS_EDGE_TRIG);
 
-		getPin(2).label = "Q";
-		getPin(3).label = "/Q";
+		getPin(2).setProperty(TEXT, "Q");
+		getPin(3).setProperty(TEXT, "/Q");
 		getPin(3).setLevelType(Pin.INVERTED);
 
 		getPin(0).moveBy(0, 10);

@@ -1,6 +1,7 @@
 package logicsim;
 
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.Vector;
 
 /**
@@ -80,42 +81,19 @@ public class XMLLoader {
 				}
 
 				// settings
-				Xml snode = gnode.optChild("properties");
-				if (snode != null) {
-					for (Xml n : snode.children("property")) {
-						String key = n.string("key");
-						gate.setProperty(key, n.content());
-					}
-					gate.loadProperties();
+				Properties ps = getProperties(gnode);
+				for (Object k : ps.keySet()) {
+					String key = (String) k;
+					gate.setProperty(key, ps.getProperty(key));
 				}
+				gate.loadProperties();
 
-				// in/output nodes (labels, numbers)
-				for (Xml inode : gnode.children("io")) {
-					String ioType = inode.string("iotype");
-					if ("input".equals(ioType)) {
-						int inputNumber = Integer.parseInt(inode.string("number"));
+				// old
+				if (gnode.children("io").size() > 0)
+					loadPinsIO(gate, gnode);
+				else
+					loadPins(gate, gnode);
 
-						String label = inode.optString("label");
-						gate.getPin(inputNumber).label = label;
-
-						String inpType = inode.optString("type");
-						if (inpType != null) {
-							int inputType = 0;
-							if ("high".equals(inpType)) {
-								inputType = Pin.HIGH;
-							} else if ("low".equals(inpType)) {
-								inputType = Pin.LOW;
-							} else if ("inv".equals(inpType)) {
-								inputType = Pin.INVERTED;
-							}
-							gate.getPin(inputNumber).levelType = inputType;
-						}
-					} else {
-						int outputNumber = Integer.parseInt(inode.string("number"));
-						String label = inode.optString("label");
-						gate.getPin(outputNumber).label = label;
-					}
-				}
 				node = doc.optChild("properties");
 				if (node != null) {
 					for (Xml n : node.children("property")) {
@@ -167,6 +145,77 @@ public class XMLLoader {
 		ls.setGates(gates);
 		ls.setWires(wires);
 		return ls;
+	}
+
+	private static Properties getProperties(Xml gnode) {
+		Properties ps = new Properties();
+		Xml snode = gnode.optChild("properties");
+		if (snode != null) {
+			for (Xml n : snode.children("property")) {
+				String key = n.string("key");
+				ps.setProperty(key, n.content());
+			}
+		}
+		return ps;
+	}
+
+	@Deprecated
+	private static void loadPinsIO(Gate gate, Xml gnode) {
+		// pins: in/output nodes (labels, numbers)
+		for (Xml inode : gnode.children("io")) {
+			String ioType = inode.string("iotype");
+
+			int number = Integer.parseInt(inode.string("number"));
+
+			String label = inode.optString("label");
+			if (label != null)
+				gate.getPin(number).setProperty(CircuitPart.TEXT, label);
+			gate.getPin(number).loadProperties();
+
+			if ("input".equals(ioType)) {
+				String inpType = inode.optString("type");
+				if (inpType != null) {
+					int inputType = 0;
+					if ("high".equals(inpType)) {
+						inputType = Pin.HIGH;
+					} else if ("low".equals(inpType)) {
+						inputType = Pin.LOW;
+					} else if ("inv".equals(inpType)) {
+						inputType = Pin.INVERTED;
+					}
+					gate.getPin(number).levelType = inputType;
+				}
+			}
+		}
+	}
+
+	private static void loadPins(Gate gate, Xml gnode) {
+		// pins: in/output nodes (labels, numbers)
+		for (Xml inode : gnode.children("pin")) {
+			String ioType = inode.string("iotype");
+			int number = Integer.parseInt(inode.string("number"));
+			Properties ps = getProperties(inode);
+			for (Object k : ps.keySet()) {
+				String key = (String) k;
+				gate.getPin(number).setProperty(key, ps.getProperty(key));
+			}
+			gate.getPin(number).loadProperties();
+
+			if (XMLCreator.INPUT.equals(ioType)) {
+				String inpType = inode.optString("type");
+				if (inpType != null) {
+					int inputType = 0;
+					if ("high".equals(inpType)) {
+						inputType = Pin.HIGH;
+					} else if ("low".equals(inpType)) {
+						inputType = Pin.LOW;
+					} else if ("inv".equals(inpType)) {
+						inputType = Pin.INVERTED;
+					}
+					gate.getPin(number).levelType = inputType;
+				}
+			}
+		}
 	}
 
 	private static Gate findGateById(Vector<Gate> gates, String id) {

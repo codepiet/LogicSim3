@@ -74,7 +74,8 @@ public class Module extends Gate {
 						newIn.ioType = Pin.INPUT;
 						newIn.levelType = Pin.NORMAL;
 						Pin in = moduleIn.getPin(c.number - 16);
-						newIn.label = in.label;
+						if (in.getProperty(TEXT) != null)
+							newIn.setProperty(TEXT, in.getProperty(TEXT));
 						pins.add(newIn);
 					}
 				}
@@ -92,7 +93,8 @@ public class Module extends Gate {
 						newOut.paintDirection = Pin.LEFT;
 						newOut.levelType = Pin.NORMAL;
 						Pin out = moduleOut.getPin(c.number + 16);
-						newOut.label = out.label;
+						if (out.getProperty(TEXT) != null)
+							newOut.setProperty(TEXT, out.getProperty(TEXT));
 						pins.add(newOut);
 					}
 				}

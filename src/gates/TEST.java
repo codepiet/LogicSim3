@@ -28,7 +28,7 @@ public class TEST extends Gate {
 		int offset = 30;
 
 		for (int i = 0; i < 4; i++) {
-			getPin(i).label = "I" + (i + 1);
+			getPin(i).setProperty(TEXT, "I" + (i + 1));
 			getPin(i).setDirection(Pin.RIGHT + i);
 		}
 		getPin(0).moveTo(getX(), getY() + offset);
@@ -37,7 +37,7 @@ public class TEST extends Gate {
 		getPin(3).moveTo(getX() + offset, getY() + getHeight());
 
 		for (int i = 0; i < 4; i++) {
-			getPin(i + 4).label = "O" + (i + 1);
+			getPin(i + 4).setProperty(TEXT, "O" + (i + 1));
 			getPin(i + 4).setLevelType(Pin.INVERTED);
 			getPin(i + 4).setDirection(Pin.RIGHT + i);
 		}

@@ -28,11 +28,11 @@ public class SRLatch extends Gate {
 		createInputs(2);
 		createOutputs(2);
 
-		getPin(0).label = "S";
-		getPin(1).label = "R";
+		getPin(0).setProperty(TEXT, "S");
+		getPin(1).setProperty(TEXT, "R");
 
-		getPin(2).label = "Q";
-		getPin(3).label = "/Q";
+		getPin(2).setProperty(TEXT, "Q");
+		getPin(3).setProperty(TEXT, "/Q");
 
 		getPin(0).moveBy(0, 10);
 		getPin(1).moveBy(0, -10);
@@ -53,7 +53,7 @@ public class SRLatch extends Gate {
 		nor1.getPin(0).addLevelListener(this);
 		nor2.getPin(0).addLevelListener(this);
 
-		//initial change level
+		// initial change level
 		nor1.getPin(0).changedLevel(new LSLevelEvent(nor1, HIGH));
 		nor2.getPin(0).changedLevel(new LSLevelEvent(nor2, HIGH));
 	}

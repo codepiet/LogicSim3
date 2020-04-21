@@ -28,16 +28,16 @@ public class SevenSegmentDriver extends Gate {
 		createOutputs(7);
 
 		for (int i = 0; i < 4; i++) {
-			getPin(i).label = "I" + (i + 1);
+			getPin(i).setProperty(TEXT, "I" + (i + 1));
 			getPin(i).setY(getY() + (i + 1) * 10);
 		}
-		getPin(4).label = "a";
-		getPin(5).label = "b";
-		getPin(6).label = "c";
-		getPin(7).label = "d";
-		getPin(8).label = "e";
-		getPin(9).label = "f";
-		getPin(10).label = "g";
+		getPin(4).setProperty(TEXT, "a");
+		getPin(5).setProperty(TEXT, "b");
+		getPin(6).setProperty(TEXT, "c");
+		getPin(7).setProperty(TEXT, "d");
+		getPin(8).setProperty(TEXT, "e");
+		getPin(9).setProperty(TEXT, "f");
+		getPin(10).setProperty(TEXT, "g");
 
 		reset();
 	}
