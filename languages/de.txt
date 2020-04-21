@@ -42,6 +42,7 @@ modules=Module
 name=Name
 new=Neu
 newwire=Neues Kabel
+newwire.help=SORRY, FEATURE NOCH NICHT FERTIG!
 no=Nein
 nomodule=Die Schaltplandatei ist kein Modul
 ok=OK

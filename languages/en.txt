@@ -42,6 +42,7 @@ modules=Modules
 name=Name
 new=New
 newwire=New Wire
+newwire.help=SORRY, FEATURE NOT IMPLEMENTED YET
 no=No
 nomodule=circuit is not a module
 ok=OK

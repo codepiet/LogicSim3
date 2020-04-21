@@ -241,7 +241,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		m = createMenuItem(Lang.NEWWIRE, KeyEvent.VK_W, false);
 		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lspanel.setAction(LSPanel.ACTION_ADDWIRE);
+				getButtonWidget(Lang.NEWWIRE).doClick();
 			}
 		});
 		m.setEnabled(LSProperties.MODE_EXPERT.equals(mode));
@@ -619,8 +619,8 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnLS.setEnabled(getMenuWidget(Lang.NEWWIRE).isEnabled());
 		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lspanel.setAction(LSPanel.ACTION_ADDPOINT);
-				setStatusText(I18N.tr(Lang.ADDPOINT_HELP));
+				lspanel.setAction(LSPanel.ACTION_ADDWIRE);
+				setStatusText(I18N.tr(Lang.NEWWIRE_HELP));
 				lspanel.requestFocusInWindow();
 			}
 		});
