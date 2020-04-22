@@ -448,10 +448,16 @@ public class Wire extends CircuitPart implements Cloneable {
 	 * @param connector
 	 */
 	public void disconnect(Pin connector) {
-		to.removeLevelListener(this);
-		from.removeLevelListener(this);
-		to = null;
-		from = null;
+		if (to != null) {
+			to.removeLevelListener(this);
+			this.removeLevelListener(to);
+			to = null;
+		}
+		if (from != null) {
+			from.removeLevelListener(this);
+			this.removeLevelListener(from);
+			from = null;
+		}
 	}
 
 	@Override

@@ -450,10 +450,12 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				Wire w = (Wire) parts[0];
 				int pointsOfWire = w.removeLastPoint();
 				if (pointsOfWire == 0) {
+					//delete wire
+					w.disconnect(null);
+					circuit.remove(w);
 					w = null;
 					parts = null;
 					circuit.deselectAll();
-					// TODO must the wire be deleted somewhere?
 				}
 			} else if (parts.length > 1) {
 				circuit.deselectAll();

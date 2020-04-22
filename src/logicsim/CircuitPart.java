@@ -142,7 +142,9 @@ public abstract class CircuitPart implements LSLevelListener {
 			getListeners().remove(l);
 	}
 
+	
 	public void clear() {
+		
 	}
 
 	public void deselect() {

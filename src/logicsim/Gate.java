@@ -632,9 +632,8 @@ public class Gate extends CircuitPart {
 
 	/**
 	 * gates can implement this method to let something happen when pressing the
-	 * action key (SPACE?)
+	 * action key (SPACE-Bar)
 	 */
 	public void interact() {
 	}
-
 }

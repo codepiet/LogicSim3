@@ -1,6 +1,7 @@
 package logicsim;
 
 import java.awt.geom.Rectangle2D;
+import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -48,7 +49,7 @@ public class Circuit implements LSRepaintListener {
 
 	}
 
-	private CircuitPart[] findPartsAt(Class clazz, int x, int y) {
+	private CircuitPart[] findPartsAt(Class<?> clazz, int x, int y) {
 		Vector<CircuitPart> parts = new Vector<CircuitPart>();
 		for (Gate g : gates) {
 			CircuitPart cp = g.findPartAt(x, y);
@@ -185,8 +186,7 @@ public class Circuit implements LSRepaintListener {
 			if (part instanceof Gate) {
 				Gate g = (Gate) part;
 				// remove outgoing wires
-				g.clear();
-				gates.remove(g);
+				removeGate(g);
 			} else if (part instanceof Wire) {
 				Wire w = (Wire) part;
 				w.disconnect(null);
@@ -202,28 +202,38 @@ public class Circuit implements LSRepaintListener {
 		if (g.type.equals("modin") || g.type.equals("modout"))
 			return false;
 		// 1. check all wires if they are connected to that gate
-		for (Wire w : wires) {
+		for (Pin p : g.pins) {
+			if (p.isConnected()) {
+				for (LSLevelListener l : g.getListeners()) {
+					// must be a wire
+					if (l instanceof Wire) {
+						// 2. delete them
+						Wire w = (Wire) l;
+						w.disconnect(null);
+						wires.remove(w);
+					}
+				}
+			}
+		}
+		for (Iterator<Wire> iter = wires.iterator(); iter.hasNext();) {
+			Wire w = iter.next();
 			if (w.to != null && w.to instanceof Pin) {
 				Pin p = (Pin) w.to;
 				if (p.gate == g) {
-					w.removeLevelListener(p);
-					p.removeLevelListener(w);
-					w.removeLevelListener(w.from);
-					w.from.removeLevelListener(w);
-					w.clear();
+					w.disconnect(null);
+					iter.remove();
 				}
 			}
 			if (w.from != null && w.from instanceof Pin) {
 				Pin p = (Pin) w.from;
 				if (p.gate == g) {
-					w.removeLevelListener(p);
-					p.removeLevelListener(w);
-					w.removeLevelListener(w.to);
-					w.to.removeLevelListener(w);
-					w.clear();
+					w.disconnect(null);
+					iter.remove();
 				}
 			}
 		}
+		checkWires();
+		gates.remove(g);
 		return true;
 	}
 
@@ -269,6 +279,12 @@ public class Circuit implements LSRepaintListener {
 		// WirePoint-position
 		for (Wire w : wires) {
 			for (WirePoint wp : w.points) {
+				wp.show = false;
+			}
+		}
+		
+		for (Wire w : wires) {
+			for (WirePoint wp : w.points) {
 				CircuitPart[] parts = findPartsAt(WirePoint.class, wp.getX(), wp.getY());
 				if (parts.length > 1) {
 					for (CircuitPart part : parts) {
@@ -287,6 +303,7 @@ public class Circuit implements LSRepaintListener {
 				}
 			}
 		}
+		this.needsRepaint(null);
 	}
 
 	private void fireRepaint(CircuitPart source) {
@@ -327,6 +344,13 @@ public class Circuit implements LSRepaintListener {
 	public void reset() {
 		for (Gate g : gates)
 			g.reset();
+	}
+
+	public void remove(CircuitPart part) {
+		if (part instanceof Wire)
+			wires.remove(part);
+		else
+			gates.remove(part);
 	}
 
 }
