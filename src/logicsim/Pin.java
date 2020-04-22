@@ -40,11 +40,10 @@ public class Pin extends CircuitPart {
 	 * type can be HIGH, LOW, INVERTED or NORMAL
 	 */
 	int levelType = NORMAL;
-	public Gate gate;
 
 	public Pin(int x, int y, Gate gate, int number) {
 		super(x, y);
-		this.gate = gate;
+		this.parent = gate;
 		this.number = number;
 	}
 
@@ -242,7 +241,7 @@ public class Pin extends CircuitPart {
 		else if (levelType == Pin.INVERTED)
 			lt = "I";
 		return it + number + it + "-" + lt + "-" + (text == null ? "" : "\"" + text + "\"") + getX() + ":" + getY()
-				+ "@" + gate.getId();
+				+ "@" + parent.getId();
 	}
 
 	@Override
@@ -261,7 +260,7 @@ public class Pin extends CircuitPart {
 			// call gate directly
 			if (level != e.level || e.force) {
 				level = e.level;
-				gate.changedLevel(new LSLevelEvent(this, getLevel(), e.force));
+				parent.changedLevel(new LSLevelEvent(this, getLevel(), e.force));
 
 				// and call all other wires which are connected to the pin
 				fireChangedLevel(e);
@@ -277,12 +276,8 @@ public class Pin extends CircuitPart {
 
 	@Override
 	public void connect(CircuitPart part) {
-		// pins connect to wires only
-		if (!(part instanceof Wire))
-			throw new RuntimeException("part is not a wire! cannot connect to pin");
+		super.connect(part);
 		Wire wire = (Wire) part;
-		wire.addLevelListener(this);
-		this.addLevelListener(wire);
 		if (isInput()) {
 			changedLevel(new LSLevelEvent(wire, wire.getLevel(), true));
 		} else {

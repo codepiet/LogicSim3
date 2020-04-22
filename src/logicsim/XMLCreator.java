@@ -200,10 +200,16 @@ public class XMLCreator {
 				Element g = doc.createElement("from");
 				if (w.from instanceof Pin) {
 					Pin p = (Pin) w.from;
-					g.setAttribute("id", p.gate.getId());
+					g.setAttribute("type", "gate");
+					g.setAttribute("id", p.parent.getId());
 					g.setAttribute("number", String.valueOf(p.number));
-					n.appendChild(g);
+				} else if (w.from instanceof WirePoint) {
+					WirePoint wp = (WirePoint) w.from;
+					g.setAttribute("type", "point");
+					g.setAttribute("x", String.valueOf(wp.getX()));
+					g.setAttribute("y", String.valueOf(wp.getY()));
 				}
+				n.appendChild(g);
 			}
 
 			if (w.to != null) {
@@ -211,8 +217,13 @@ public class XMLCreator {
 				if (w.to instanceof Pin) {
 					Pin p = (Pin) w.to;
 					g.setAttribute("type", "gate");
-					g.setAttribute("id", p.gate.getId());
+					g.setAttribute("id", p.parent.getId());
 					g.setAttribute("number", String.valueOf(p.number));
+				} else if (w.from instanceof WirePoint) {
+					WirePoint wp = (WirePoint) w.to;
+					g.setAttribute("type", "point");
+					g.setAttribute("x", String.valueOf(wp.getX()));
+					g.setAttribute("y", String.valueOf(wp.getY()));
 				}
 				n.appendChild(g);
 			}

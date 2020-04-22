@@ -5,80 +5,93 @@ import java.util.Iterator;
 import java.util.Vector;
 
 /**
- * Title: LogicSim Description: digital logic circuit simulator Copyright:
- * Copyright (c) 2001 Company:
+ * all parts that belong to the circuit
  * 
  * @author Andreas Tetzl
- * @version 1.0
+ * @author Peter Gabriel
+ * @version 2.0
  */
 
 public class Circuit implements LSRepaintListener {
 	static final long serialVersionUID = 3458986578856078326L;
 
-	Vector<Gate> gates;
-	Vector<Wire> wires;
+	Vector<CircuitPart> parts;
 
 	private LSRepaintListener repaintListener;
 
 	public Circuit() {
-		gates = new Vector<Gate>();
-		wires = new Vector<Wire>();
+		parts = new Vector<CircuitPart>();
 	}
 
 	public void clear() {
-		gates.clear();
-		wires.clear();
+		parts.clear();
 	}
 
 	public void addGate(Gate gate) {
-		gates.add(gate);
+		parts.add(gate);
 		gate.setRepaintListener(this);
 	}
 
-	public boolean addWire(Wire wire) {
+	public boolean addWire(Wire newWire) {
 		// only add a wire if there is not a wire from<->to
-		for (Wire w : wires) {
-			if (w.to.equals(wire.to) && w.from.equals(w.from)) {
-				// don't add
-				return false;
+		for (CircuitPart part : parts) {
+			if (part instanceof Wire) {
+				Wire w = (Wire) part;
+				if (w.to.equals(newWire.to) && w.from.equals(newWire.from)) {
+					// don't add
+					return false;
+				}
 			}
 		}
-		wires.add(wire);
-		wire.setRepaintListener(this);
+		parts.add(newWire);
+		newWire.setRepaintListener(this);
 		return true;
-
 	}
 
 	private CircuitPart[] findPartsAt(Class<?> clazz, int x, int y) {
-		Vector<CircuitPart> parts = new Vector<CircuitPart>();
-		for (Gate g : gates) {
-			CircuitPart cp = g.findPartAt(x, y);
-			if (cp != null && (clazz == null || (clazz != null && cp.getClass().equals(clazz))))
-				parts.add(cp);
+		Vector<CircuitPart> findParts = new Vector<CircuitPart>();
+		for (CircuitPart part : parts) {
+			if (part instanceof Gate) {
+				Gate g = (Gate) part;
+				CircuitPart cp = g.findPartAt(x, y);
+				if (cp != null && (clazz == null || (clazz != null && cp.getClass().equals(clazz))))
+					findParts.add(cp);
+			}
+			if (part instanceof Wire) {
+				Wire w = (Wire) part;
+				CircuitPart cp = w.findPartAt(x, y);
+				if (cp != null && (clazz == null || (clazz != null && cp.getClass().equals(clazz))))
+					findParts.add(cp);
+			}
 		}
-		for (Wire w : wires) {
-			CircuitPart cp = w.findPartAt(x, y);
-			if (cp != null && (clazz == null || (clazz != null && cp.getClass().equals(clazz))))
-				parts.add(cp);
-		}
-		return parts.toArray(new CircuitPart[parts.size()]);
+		return findParts.toArray(new CircuitPart[findParts.size()]);
+	}
+
+	public Vector<CircuitPart> getParts() {
+		return parts;
 	}
 
 	public Vector<Gate> getGates() {
+		Vector<Gate> gates = new Vector<Gate>();
+		for (CircuitPart part : parts) {
+			if (part instanceof Gate) {
+				gates.add((Gate) part);
+			}
+		}
 		return gates;
 	}
 
 	public Vector<Wire> getWires() {
+		Vector<Wire> wires = new Vector<Wire>();
+		for (CircuitPart part : parts) {
+			if (part instanceof Wire) {
+				wires.add((Wire) part);
+			}
+		}
 		return wires;
 	}
 
 	public void simulate() {
-//		for (int j = 0; j < 2; j++) {
-//			for (int i = 0; i < gates.size(); i++) {
-//				Gate g = (Gate) gates.get(i);
-//				g.simulate();
-//			}
-//		}
 	}
 
 	public void setRepaintListener(LSRepaintListener listener) {
@@ -87,28 +100,20 @@ public class Circuit implements LSRepaintListener {
 
 	public void selectAll() {
 		deselectAll();
-		for (Gate g : gates) {
-			g.select();
-		}
-		for (Wire w : wires) {
-			w.select();
+		for (CircuitPart p : parts) {
+			p.select();
 		}
 	}
 
 	// Alle Gatter und zugehörige Wires deaktivieren
 	public void deselectAll() {
-		for (Gate g : gates) {
-			g.deselect();
-		}
-		for (Wire w : wires) {
-			w.deselect();
-			for (WirePoint wp : w.points)
-				wp.deselect();
+		for (CircuitPart p : parts) {
+			p.deselect();
 		}
 	}
 
 	public boolean isModule() {
-		for (CircuitPart g : gates) {
+		for (CircuitPart g : parts) {
 			if (g instanceof MODIN) {
 				return true;
 			}
@@ -117,20 +122,20 @@ public class Circuit implements LSRepaintListener {
 	}
 
 	public boolean isPartAtCoordinates(int x, int y) {
-		for (Gate g : gates) {
-			if (g.getX() == x && g.getY() == y)
+		for (CircuitPart p : parts) {
+			if (p.getX() == x && p.getY() == y)
 				return true;
 		}
 		return false;
 	}
 
 	public CircuitPart findPartAt(int x, int y) {
-		for (Gate g : gates) {
+		for (Gate g : getGates()) {
 			CircuitPart cp = g.findPartAt(x, y);
 			if (cp != null)
 				return cp;
 		}
-		for (Wire w : wires) {
+		for (Wire w : getWires()) {
 			CircuitPart cp = w.findPartAt(x, y);
 			if (cp != null)
 				return cp;
@@ -138,44 +143,20 @@ public class Circuit implements LSRepaintListener {
 		return null;
 	}
 
-	/**
-	 * find all wires at this point and insert node
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	public void addWirePointOnAllWires(int x, int y) {
-		// TODO
-		// for (Gate g : gates) {
-//			Wire w = input.wire;
-//				if (w != null) {
-//					// check if this wire is at point x,y
-//					int pIdx = w.isAt(x, y);
-//					// check if there is a node at point x,y
-//					if (pIdx > -1 && w.getNodeIndexAt(x, y) == -1) {
-//						// add node
-//						w.insertPointAfter(pIdx, x, y);
-//						w.setNodeIsDrawn(pIdx);
-//					}
-//				}
-//		}
-	}
-
 	public CircuitPart[] getSelected() {
-		Vector<CircuitPart> parts = new Vector<CircuitPart>();
-
-		for (Gate g : gates) {
+		Vector<CircuitPart> selParts = new Vector<CircuitPart>();
+		for (Gate g : getGates()) {
 			if (g.selected)
-				parts.add(g);
+				selParts.add(g);
 		}
-		for (Wire w : wires) {
+		for (Wire w : getWires()) {
 			if (w.selected)
-				parts.add(w);
+				selParts.add(w);
 			for (WirePoint pt : w.points)
 				if (pt.isSelected())
-					parts.add(pt);
+					selParts.add(pt);
 		}
-		return parts.toArray(new CircuitPart[parts.size()]);
+		return selParts.toArray(new CircuitPart[selParts.size()]);
 	}
 
 	public boolean remove(CircuitPart[] parts) {
@@ -190,7 +171,7 @@ public class Circuit implements LSRepaintListener {
 			} else if (part instanceof Wire) {
 				Wire w = (Wire) part;
 				w.disconnect(null);
-				wires.remove(w);
+				this.parts.remove(part);
 			}
 		}
 		return true;
@@ -210,42 +191,45 @@ public class Circuit implements LSRepaintListener {
 						// 2. delete them
 						Wire w = (Wire) l;
 						w.disconnect(null);
-						wires.remove(w);
+						parts.remove(w);
 					}
 				}
 			}
 		}
-		for (Iterator<Wire> iter = wires.iterator(); iter.hasNext();) {
-			Wire w = iter.next();
+		for (Iterator<CircuitPart> iter = parts.iterator(); iter.hasNext();) {
+			CircuitPart part = iter.next();
+			if (!(part instanceof Wire))
+				continue;
+			Wire w = (Wire) part;
 			if (w.to != null && w.to instanceof Pin) {
 				Pin p = (Pin) w.to;
-				if (p.gate == g) {
+				if (p.parent == g) {
 					w.disconnect(null);
 					iter.remove();
 				}
 			}
 			if (w.from != null && w.from instanceof Pin) {
 				Pin p = (Pin) w.from;
-				if (p.gate == g) {
+				if (p.parent == g) {
 					w.disconnect(null);
 					iter.remove();
 				}
 			}
 		}
 		checkWires();
-		gates.remove(g);
+		parts.remove(g);
 		return true;
 	}
 
 	public boolean removeGateIdx(int idx) {
-		Gate g = gates.get(idx);
+		Gate g = (Gate) parts.get(idx);
 		return removeGate(g);
 	}
 
 	public Gate findGateById(String fromGateId) {
-		for (Gate g : gates) {
-			if (g.getId().equals(fromGateId))
-				return g;
+		for (CircuitPart p : parts) {
+			if (p.getId().equals(fromGateId))
+				return (Gate) p;
 		}
 		return null;
 	}
@@ -277,13 +261,13 @@ public class Circuit implements LSRepaintListener {
 	private void checkWires() {
 		// check if there is at least one wire at any
 		// WirePoint-position
-		for (Wire w : wires) {
+		for (Wire w : getWires()) {
 			for (WirePoint wp : w.points) {
 				wp.show = false;
 			}
 		}
-		
-		for (Wire w : wires) {
+
+		for (Wire w : getWires()) {
 			for (WirePoint wp : w.points) {
 				CircuitPart[] parts = findPartsAt(WirePoint.class, wp.getX(), wp.getY());
 				if (parts.length > 1) {
@@ -314,43 +298,33 @@ public class Circuit implements LSRepaintListener {
 	@Override
 	public String toString() {
 		String s = "";
-		for (Gate g : gates) {
+		for (Gate g : getGates()) {
 			s += "\n" + g;
 		}
-		for (Wire w : wires) {
+		for (Wire w : getWires()) {
 			s += "\n" + w;
 		}
-
 		return s = "Circuit:" + CircuitPart.indent(s, 3);
 	}
 
 	public CircuitPart[] findParts(Rectangle2D selectRect) {
-		Vector<CircuitPart> parts = new Vector<CircuitPart>();
-		for (Gate gate : gates) {
-			if (selectRect.contains(gate.getBoundingBox())) {
-				parts.add(gate);
-				gate.select();
+		Vector<CircuitPart> findParts = new Vector<CircuitPart>();
+		for (CircuitPart p : parts) {
+			if (selectRect.contains(p.getBoundingBox())) {
+				p.select();
+				findParts.add(p);
 			}
 		}
-		for (Wire w : wires) {
-			if (selectRect.contains(w.getBoundingBox())) {
-				w.select();
-				parts.add(w);
-			}
-		}
-		return parts.toArray(new CircuitPart[parts.size()]);
+		return findParts.toArray(new CircuitPart[findParts.size()]);
 	}
 
 	public void reset() {
-		for (Gate g : gates)
-			g.reset();
+		for (CircuitPart p : parts)
+			p.reset();
 	}
 
 	public void remove(CircuitPart part) {
-		if (part instanceof Wire)
-			wires.remove(part);
-		else
-			gates.remove(part);
+		parts.remove(part);
 	}
 
 }

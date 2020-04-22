@@ -111,23 +111,43 @@ public class XMLLoader {
 		if (node != null) {
 			for (Xml wnode : node.children("wire")) {
 				Xml gnode = wnode.child("from");
-				String fromGateId = gnode.string("id");
-				int fromNumber = Integer.parseInt(gnode.string("number"));
+				// check type
+				String type = gnode.optString("type");
+				CircuitPart from = null;
+				CircuitPart to = null;
+				if (type == null || "gate".equals(type)) {
+					String fromGateId = gnode.string("id");
+					int fromNumber = Integer.parseInt(gnode.string("number"));
+					// try to get the gate
+					Gate fromGate = findGateById(gates, fromGateId);
+					if (fromGate == null)
+						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": from gate is null");
+					from = fromGate.getPin(fromNumber);
+				} else if ("point".equals(type)) {
+					int x = Integer.parseInt(gnode.string("x"));
+					int y = Integer.parseInt(gnode.string("y"));
+					from = new WirePoint(x, y);
+				}
 				gnode = wnode.child("to");
-				String toGateId = gnode.string("id");
-				int toNumber = Integer.parseInt(gnode.string("number"));
+				if (type == null || "gate".equals(type)) {
+					String toGateId = gnode.string("id");
+					int toNumber = Integer.parseInt(gnode.string("number"));
 
-				// try to get the gates
-				Gate fromGate = findGateById(gates, fromGateId);
-				Gate toGate = findGateById(gates, toGateId);
-				if (fromGate == null)
-					throw new RuntimeException(I18N.tr(Lang.READERROR) + ": from gate is null");
-				if (toGate == null)
-					throw new RuntimeException(I18N.tr(Lang.READERROR) + ": to gate is null");
-
-				Pin from = fromGate.getPin(fromNumber);
-				Pin to = toGate.getPin(toNumber);
+					Gate toGate = findGateById(gates, toGateId);
+					if (toGate == null)
+						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": to gate is null");
+					to = toGate.getPin(toNumber);
+				} else if ("point".equals(type)) {
+					int x = Integer.parseInt(gnode.string("x"));
+					int y = Integer.parseInt(gnode.string("y"));
+					to = new WirePoint(x, y);
+				}
+				
+				if (from == null || to == null)
+					throw new RuntimeException("wire cannot be connected");
 				Wire wire = new Wire(from, to);
+				
+				//load points
 				for (Xml pnode : wnode.children("point")) {
 					boolean b = Boolean.parseBoolean(pnode.string("node"));
 					int xp = Integer.parseInt(pnode.string("x"));
@@ -135,17 +155,18 @@ public class XMLLoader {
 					WirePoint wp = new WirePoint(xp, yp, b);
 					wire.points.add(wp);
 				}
-				
+
+				//load properties
 				Properties ps = getProperties(wnode);
 				for (Object k : ps.keySet()) {
 					String key = (String) k;
 					wire.setProperty(key, ps.getProperty(key));
 				}
 				wire.loadProperties();
-				
+
 				wire.selected = false;
-				// connect wire to gates
 				wires.add(wire);
+				// connect wire to CircuitPart
 				from.connect(wire);
 				to.connect(wire);
 			}

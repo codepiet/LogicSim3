@@ -42,7 +42,7 @@ public abstract class CircuitPart implements LSLevelListener {
 	private CircuitChangedListener changeListener = null;
 
 	protected Point mousePos;
-
+	public CircuitPart parent;
 	/**
 	 * if part is currently being edited
 	 */
@@ -142,9 +142,8 @@ public abstract class CircuitPart implements LSLevelListener {
 			getListeners().remove(l);
 	}
 
-	
 	public void clear() {
-		
+
 	}
 
 	public void deselect() {
@@ -200,7 +199,7 @@ public abstract class CircuitPart implements LSLevelListener {
 	public String toString() {
 		return this.getId();
 	}
-	
+
 	public int getX() {
 		return x;
 	}
@@ -309,6 +308,8 @@ public abstract class CircuitPart implements LSLevelListener {
 	}
 
 	public void connect(CircuitPart part) {
+		this.addLevelListener(part);
+		part.addLevelListener(this);
 	}
 
 	protected void fireChangedLevel(LSLevelEvent e) {

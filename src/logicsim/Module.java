@@ -63,7 +63,7 @@ public class Module extends Gate {
 		label = lsFile.getLabel();
 
 		// in der geladenen GateList nach MODIN und MODOUT Gattern suchen
-		for (CircuitPart g : lsFile.circuit.gates) {
+		for (CircuitPart g : lsFile.circuit.parts) {
 			if (g instanceof MODIN) {
 				moduleIn = (MODIN) g;
 				for (Pin c : moduleIn.getOutputs()) {
@@ -81,7 +81,7 @@ public class Module extends Gate {
 				}
 			}
 		}
-		for (CircuitPart g : lsFile.circuit.gates) {
+		for (CircuitPart g : lsFile.circuit.parts) {
 			if (g instanceof MODOUT) {
 				moduleOut = (MODOUT) g;
 				// add MODOUT's output-connectors to module:

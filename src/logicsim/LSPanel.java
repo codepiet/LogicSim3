@@ -184,21 +184,42 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		public void mousePressed(MouseEvent e) {
 			e = convertToWorld(e);
 			setPoint(e.getX(), e.getY());
+			int rx = CircuitPart.round(e.getX());
+			int ry = CircuitPart.round(e.getY());
+
 			if (currentAction == ACTION_SELECT) {
 				selectRect = new Rectangle2D.Double(e.getX(), e.getY(), 0, 0);
 			}
 
 			CircuitPart[] parts = circuit.getSelected();
 			CircuitPart cp = circuit.findPartAt(e.getX(), e.getY());
+
+			if (currentAction == ACTION_ADDWIRE) {
+				if (cp == null) {
+					// empty space
+					WirePoint wp = new WirePoint(rx, ry);
+					Wire newWire = new Wire(wp, null);
+					if (circuit.addWire(newWire)) {
+						wp.connect(newWire);
+					}
+					fireStatusText(I18N.tr(Lang.EDITWIRE));
+					circuit.deselectAll();
+					newWire.select();
+					fireCircuitChanged();
+					currentAction = ACTION_NONE;
+					return;
+				}
+			}
+
 			boolean wireNotFinished = (parts.length == 1 && parts[0] instanceof Wire
 					&& ((Wire) parts[0]).isNotFinished());
 			if (wireNotFinished) {
 				// we are drawing a wire: add a new point and change nothing else
 				Wire wire = (Wire) parts[0];
-				if (cp == null)
+				if (cp == null) {
 					// empty space clicked
-					wire.addPoint(CircuitPart.round(e.getX()), CircuitPart.round(e.getY()));
-				else if (cp instanceof Pin) {
+					wire.addPoint(rx, ry);
+				} else if (cp instanceof Pin) {
 					Pin pin = ((Pin) cp);
 					wire.to = pin;
 					pin.connect(wire);
@@ -211,6 +232,23 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					wire.setTempPoint(null);
 					fireCircuitChanged();
 					// now we have a finished wire, the wire stays active
+				} else if (cp instanceof WirePoint){
+					// if expert mode is on then we may finish the wire at another point or in air
+					if (LSProperties.MODE_EXPERT.equals(
+							LSProperties.getInstance().getProperty(LSProperties.MODE, LSProperties.MODE_NORMAL))) {
+						// so check if we clicked the last point of the wire to finish it
+						WirePoint lp = wire.getLastPoint();
+						if (lp.getX() == rx && lp.getY() == ry) {
+							// it is the same point as the last one
+							wire.removeLastPoint();
+							wire.to = new WirePoint(rx, ry);
+							wire.to.connect(wire);
+							wire.setTempPoint(null);
+							fireCircuitChanged();
+						} else {
+							wire.addPoint(rx, ry);
+						}
+					} // if expert mode
 				}
 				repaint();
 				return;
@@ -411,11 +449,12 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	}
 
 	public void draw(Graphics2D g2) {
-		// Log.getInstance().print("Drawing panel");
-		for (CircuitPart gate : circuit.gates) {
+		// draw panels first
+		for (CircuitPart gate : circuit.getGates()) {
 			gate.draw(g2);
 		}
-		for (CircuitPart wire : circuit.wires) {
+		// then wires
+		for (CircuitPart wire : circuit.getWires()) {
 			wire.draw(g2);
 		}
 	}
@@ -450,7 +489,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				Wire w = (Wire) parts[0];
 				int pointsOfWire = w.removeLastPoint();
 				if (pointsOfWire == 0) {
-					//delete wire
+					// delete wire
 					w.disconnect(null);
 					circuit.remove(w);
 					w = null;

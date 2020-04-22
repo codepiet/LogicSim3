@@ -45,10 +45,10 @@ public class Wire extends CircuitPart implements Cloneable {
 	 * @param g
 	 * @param fromOutput
 	 */
-	public Wire(Pin fromConn, Pin toConn) {
+	public Wire(CircuitPart fromPart, CircuitPart toPart) {
 		this(0, 0);
-		this.from = fromConn;
-		this.to = toConn;
+		this.from = fromPart;
+		this.to = toPart;
 		selected = true;
 		loadProperties();
 	}
@@ -359,6 +359,12 @@ public class Wire extends CircuitPart implements Cloneable {
 		// move wirepoints
 		for (WirePoint wp : points) {
 			wp.moveBy(dx, dy);
+		}
+		if (from instanceof WirePoint) {
+			from.moveBy(dx, dy);
+		}
+		if (to instanceof WirePoint) {
+			to.moveBy(dx, dy);
 		}
 	}
 

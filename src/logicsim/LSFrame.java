@@ -693,7 +693,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			lspanel.repaint();
 		} else if (source == menuItem_properties) {
 			if (popupGateIdx >= 0) {
-				Gate g = lspanel.circuit.gates.get(popupGateIdx);
+				Gate g = (Gate) lspanel.circuit.parts.get(popupGateIdx);
 				g.showPropertiesUI(this);
 				lspanel.repaint();
 			}
@@ -712,13 +712,16 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		private void maybeShowPopup(MouseEvent e) {
 			if (e.isPopupTrigger()) {
 				if (e.getSource() == lspanel) {
-					for (int i = 0; i < lspanel.circuit.gates.size(); i++) {
-						Gate g = lspanel.circuit.gates.get(i);
-						if (g.insideFrame(e.getX(), e.getY())) {
-							popupGateIdx = i;
-							menuItem_properties.setEnabled(g.hasPropertiesUI());
-							popup.show(e.getComponent(), e.getX(), e.getY());
-							break;
+					for (int i = 0; i < lspanel.circuit.parts.size(); i++) {
+						CircuitPart part = lspanel.circuit.parts.get(i);
+						if (part instanceof Gate) {
+							Gate g = (Gate) part;
+							if (g.insideFrame(e.getX(), e.getY())) {
+								popupGateIdx = i;
+								menuItem_properties.setEnabled(g.hasPropertiesUI());
+								popup.show(e.getComponent(), e.getX(), e.getY());
+								break;
+							}
 						}
 					}
 				}

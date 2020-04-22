@@ -75,7 +75,7 @@ public class SRLatch extends Gate {
 				nor2.getPin(2).changedLevel(new LSLevelEvent(new Wire(null, null), getPin(1).getLevel()));
 		} else {
 			// output
-			if (p.gate == nor1) {
+			if (p.parent == nor1) {
 				LSLevelEvent evt2 = new LSLevelEvent(this, !e.level);
 				getPin(2).changedLevel(evt2);
 			} else {
