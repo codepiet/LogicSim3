@@ -525,7 +525,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		btnBar.add(getMenuGap());
 
-		btnLS = new LSButton("zoomm", Lang.ZOOMOUT);
+		btnLS = new LSButton("zoomout", Lang.ZOOMOUT);
 		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.zoomOut();
@@ -534,7 +534,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnLS, null);
 
-		btnLS = new LSButton("zoomp", Lang.ZOOMIN);
+		btnLS = new LSButton("zoomin", Lang.ZOOMIN);
 		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.zoomIn();

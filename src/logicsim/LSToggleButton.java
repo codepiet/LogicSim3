@@ -19,7 +19,7 @@ public class LSToggleButton extends JToggleButton {
 	}
 
 	private ImageIcon getIcon(String imgname) {
-		String filename = "images/" + imgname + "48.png";
+		String filename = "images/" + imgname + ".png";
 		int is = LSProperties.getInstance().getPropertyInteger("iconsize", 48);
 		is = 36;
 		// return new ImageIcon(LSFrame.class.getResource(filename));
