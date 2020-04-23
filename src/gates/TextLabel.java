@@ -1,8 +1,11 @@
 package gates;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+
+import javax.swing.JOptionPane;
 
 import logicsim.Gate;
 import logicsim.I18N;
@@ -17,7 +20,7 @@ import logicsim.I18N;
 public class TextLabel extends Gate {
 	static final long serialVersionUID = 6576677427368074734L;
 
-	static final String TEXTLABEL_DEFAULT = "Text";
+	/*String TEXT_DEFAULT = "<Text>";*/
 
 	public TextLabel() {
 		super("output");
@@ -27,11 +30,11 @@ public class TextLabel extends Gate {
 		loadProperties();
 	}
 
-	@Override
+	/*@Override
 	protected void loadProperties() {
-		text = getPropertyWithDefault(TEXT, TEXTLABEL_DEFAULT);
-	}
-
+		text = getPropertyWithDefault(TEXT, TEXT_DEFAULT);
+	}*/
+	
 	@Override
 	public boolean insideFrame(int mx, int my) {
 		return getBoundingBox().contains(mx, my);
@@ -70,6 +73,20 @@ public class TextLabel extends Gate {
 		g2.drawString(text, getX() + getWidth() / 2 - width / 2, getY() + getHeight() / 2 + 4);
 
 	}
+
+	/*public boolean hasPropertiesUI() {
+		return true;
+	}
+
+	public boolean showPropertiesUI(Component frame) {
+		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, "ui.text"),
+				I18N.getString(type, "ui.title"), JOptionPane.QUESTION_MESSAGE, null, null, text);
+		if (h != null && h.length() > 0) {
+			text = h;
+			setProperty(TEXT, text);
+		}
+		return true;
+	}*/
 
 	@Override
 	public void loadLanguage() {
