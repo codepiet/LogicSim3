@@ -36,7 +36,7 @@ public class XMLLoader {
 		Vector<Gate> gates = new Vector<Gate>();
 		node = doc.optChild("gates");
 		if (node != null) {
-			for (Xml gnode : node.children("gate")) {
+			for (Xml gnode : node.children(XMLCreator.TYPE_GATE)) {
 				// acquire basic information
 				String type = gnode.string("type").toLowerCase();
 				int x = Integer.parseInt(gnode.string("x"));
@@ -109,13 +109,14 @@ public class XMLLoader {
 		Vector<Wire> wires = new Vector<Wire>();
 		node = doc.optChild("wires");
 		if (node != null) {
-			for (Xml wnode : node.children("wire")) {
-				Xml gnode = wnode.child("from");
-				// check type
-				String type = gnode.optString("type");
+			for (Xml wnode : node.children(XMLCreator.TYPE_WIRE)) {
 				CircuitPart from = null;
 				CircuitPart to = null;
-				if (type == null || "gate".equals(type)) {
+
+				// from node
+				Xml gnode = wnode.child("from");
+				String type = gnode.optString("type");
+				if (type == null || XMLCreator.TYPE_GATE.equals(type)) {
 					String fromGateId = gnode.string("id");
 					int fromNumber = Integer.parseInt(gnode.string("number"));
 					// try to get the gate
@@ -123,13 +124,27 @@ public class XMLLoader {
 					if (fromGate == null)
 						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": from gate is null");
 					from = fromGate.getPin(fromNumber);
-				} else if ("point".equals(type)) {
+				} else if (XMLCreator.TYPE_WIREPOINT.equals(type)) {
 					int x = Integer.parseInt(gnode.string("x"));
 					int y = Integer.parseInt(gnode.string("y"));
 					from = new WirePoint(x, y);
+				} else if (XMLCreator.TYPE_WIRE.equals(type)) {
+					int x = Integer.parseInt(gnode.string("x"));
+					int y = Integer.parseInt(gnode.string("y"));
+					// search wire
+					for (Wire w : wires) {
+						CircuitPart cp = w.findPartAt(x, y);
+						if (cp instanceof WirePoint) {
+							// found
+							from = cp;
+						}
+					}
 				}
+
+				// to node
 				gnode = wnode.child("to");
-				if (type == null || "gate".equals(type)) {
+				type = gnode.optString("type");
+				if (type == null || XMLCreator.TYPE_GATE.equals(type)) {
 					String toGateId = gnode.string("id");
 					int toNumber = Integer.parseInt(gnode.string("number"));
 
@@ -137,26 +152,36 @@ public class XMLLoader {
 					if (toGate == null)
 						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": to gate is null");
 					to = toGate.getPin(toNumber);
-				} else if ("point".equals(type)) {
+				} else if (XMLCreator.TYPE_WIREPOINT.equals(type)) {
 					int x = Integer.parseInt(gnode.string("x"));
 					int y = Integer.parseInt(gnode.string("y"));
 					to = new WirePoint(x, y);
+				} else if (XMLCreator.TYPE_WIRE.equals(type)) {
+					String id = gnode.string("id");
+					// search wire
+					for (Wire w : wires) {
+						for (WirePoint wp : w.getPoints()) {
+							if (id.equals(wp.getId()))
+								to = wp;
+						}
+					}
 				}
-				
+
 				if (from == null || to == null)
 					throw new RuntimeException("wire cannot be connected");
 				Wire wire = new Wire(from, to);
-				
-				//load points
+
+				// load points
 				for (Xml pnode : wnode.children("point")) {
 					boolean b = Boolean.parseBoolean(pnode.string("node"));
 					int xp = Integer.parseInt(pnode.string("x"));
 					int yp = Integer.parseInt(pnode.string("y"));
 					WirePoint wp = new WirePoint(xp, yp, b);
-					wire.points.add(wp);
+					wp.parent = wire;
+					wire.addPoint(wp);
 				}
 
-				//load properties
+				// load properties
 				Properties ps = getProperties(wnode);
 				for (Object k : ps.keySet()) {
 					String key = (String) k;

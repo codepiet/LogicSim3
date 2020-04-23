@@ -161,7 +161,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			CircuitPart[] parts = circuit.getSelected();
 			if (parts.length == 1 && parts[0] instanceof Wire) {
 				Wire wire = (Wire) parts[0];
-
 				if (wire.isNotFinished()) {
 					if (e.isShiftDown()) {
 						// pressed SHIFT while moving and drawing wire
@@ -187,6 +186,9 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			int rx = CircuitPart.round(e.getX());
 			int ry = CircuitPart.round(e.getY());
 
+			boolean expertMode = LSProperties.MODE_EXPERT
+					.equals(LSProperties.getInstance().getProperty(LSProperties.MODE, LSProperties.MODE_NORMAL));
+
 			if (currentAction == ACTION_SELECT) {
 				selectRect = new Rectangle2D.Double(e.getX(), e.getY(), 0, 0);
 			}
@@ -194,65 +196,111 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			CircuitPart[] parts = circuit.getSelected();
 			CircuitPart cp = circuit.findPartAt(e.getX(), e.getY());
 
+			if (cp instanceof Pin && !e.isAltDown() && currentAction == ACTION_NONE) {
+				// we start a new wire if the pin we clicked is an output OR
+				// if we are in expert mode
+				if (((Pin) cp).isOutput() || expertMode)
+					currentAction = ACTION_ADDWIRE;
+			}
+
 			if (currentAction == ACTION_ADDWIRE) {
+				WirePoint wp = null;
+				Wire newWire = null;
 				if (cp == null) {
 					// empty space
-					WirePoint wp = new WirePoint(rx, ry);
-					Wire newWire = new Wire(wp, null);
+					wp = new WirePoint(rx, ry);
+				} else if (cp instanceof Wire) {
+					// put a wirepoint at this position
+					Wire clickedWire = (Wire) cp;
+					int pt = clickedWire.isAt(e.getX(), e.getY());
+					clickedWire.insertPointAfter(pt, rx, ry);
+					cp = clickedWire.findPartAt(rx, ry);
+					wp = (WirePoint) cp;
+				} else if (cp instanceof WirePoint) {
+					wp = (WirePoint) cp;
+				} else if (cp instanceof Pin) {
+					Pin p = (Pin) cp;
+					newWire = new Wire(p, null);
+					if (circuit.addWire(newWire)) {
+						p.connect(newWire);
+					}
+				}
+				if (newWire == null) {
+					newWire = new Wire(wp, null);
 					if (circuit.addWire(newWire)) {
 						wp.connect(newWire);
 					}
-					fireStatusText(I18N.tr(Lang.EDITWIRE));
-					circuit.deselectAll();
-					newWire.select();
-					fireCircuitChanged();
-					currentAction = ACTION_NONE;
-					return;
 				}
+				fireStatusText(I18N.tr(Lang.EDITWIRE));
+				circuit.deselectAll();
+				newWire.select();
+				fireCircuitChanged();
+				currentAction = ACTION_EDITWIRE;
+				return;
 			}
 
-			boolean wireNotFinished = (parts.length == 1 && parts[0] instanceof Wire
-					&& ((Wire) parts[0]).isNotFinished());
-			if (wireNotFinished) {
-				// we are drawing a wire: add a new point and change nothing else
-				Wire wire = (Wire) parts[0];
+			if (currentAction == ACTION_EDITWIRE) {
+				Wire wire = circuit.getUnfinishedWire();
 				if (cp == null) {
 					// empty space clicked
 					wire.addPoint(rx, ry);
 				} else if (cp instanceof Pin) {
 					Pin pin = ((Pin) cp);
-					wire.to = pin;
-					pin.connect(wire);
-					// check for existing wire, if there is one, delete!
-//					if (pin.isConnected()) {
-//						for (Wire w : pin.wires) {
-//							w.clear();
-//						}
-//					}
-					wire.setTempPoint(null);
+					if (!expertMode && pin.isOutput())
+						return;
+					wire.setTo(pin);
+					wire.getTo().connect(wire);
+					wire.finish();
+					currentAction = ACTION_NONE;
 					fireCircuitChanged();
-					// now we have a finished wire, the wire stays active
-				} else if (cp instanceof WirePoint){
-					// if expert mode is on then we may finish the wire at another point or in air
-					if (LSProperties.MODE_EXPERT.equals(
-							LSProperties.getInstance().getProperty(LSProperties.MODE, LSProperties.MODE_NORMAL))) {
+				} else if (cp instanceof Wire) {
+					Wire clickedWire = (Wire) cp;
+					if (clickedWire.equals(wire))
+						return;
+					if (!expertMode)
+						return;
+					int pt = clickedWire.isAt(e.getX(), e.getY());
+					clickedWire.insertPointAfter(pt, rx, ry);
+					cp = clickedWire.findPartAt(rx, ry);
+					wire.setTo(cp);
+					wire.getTo().connect(wire);
+					wire.finish();
+					currentAction = ACTION_NONE;
+					fireCircuitChanged();
+				} else if (cp instanceof WirePoint) {
+					WirePoint clickedWP = (WirePoint) cp;
+					// check if the clicked point belongs to another wire
+					if (clickedWP.parent.equals(wire)) {
+						// the clicked wirepoint belongs to the editing wire...
 						// so check if we clicked the last point of the wire to finish it
 						WirePoint lp = wire.getLastPoint();
 						if (lp.getX() == rx && lp.getY() == ry) {
 							// it is the same point as the last one
 							wire.removeLastPoint();
-							wire.to = new WirePoint(rx, ry);
-							wire.to.connect(wire);
-							wire.setTempPoint(null);
+							wire.setTo(new WirePoint(rx, ry));
+							wire.getTo().connect(wire);
+							wire.finish();
+							currentAction = ACTION_NONE;
 							fireCircuitChanged();
 						} else {
+							// shorten the wire and delete circles
 							wire.addPoint(rx, ry);
 						}
-					} // if expert mode
+					} else {
+						// wirepoint belongs to another wire
+						if (!expertMode)
+							return;
+						wire.setTo(clickedWP);
+						wire.getTo().connect(wire);
+						wire.finish();
+						currentAction = ACTION_NONE;
+						fireCircuitChanged();
+					}
 				}
 				repaint();
 				return;
 			}
+
 			if (cp == null) {
 				// empty space has been clicked
 				circuit.deselectAll();
@@ -263,9 +311,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			// check if the part is a connector
 			if (cp instanceof Pin && !e.isAltDown()) {
 				Pin pin = ((Pin) cp);
-
-				// we cannot edit a Connector, but we can
-				// 1. set an input to inverted or high or low or revert to normal type
+				// modify input (inverted or high or low or revert to normal type)
 				if (pin.isInput()) {
 					if (currentAction == Pin.HIGH || currentAction == Pin.LOW || currentAction == Pin.INVERTED
 							|| currentAction == Pin.NORMAL) {
@@ -276,19 +322,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 						fireCircuitChanged();
 						return;
 					}
-				} else {
-					// is output
-					// 3. start a new wire
-					// output is clicked
-					Wire newWire = new Wire(pin, null);
-					if (circuit.addWire(newWire)) {
-						pin.connect(newWire);
-					}
-					fireStatusText(I18N.tr(Lang.EDITWIRE));
-					circuit.deselectAll();
-					newWire.select();
-					fireCircuitChanged();
-					return;
 				}
 			}
 			if (cp instanceof Gate) {
@@ -325,6 +358,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			// lastClicked = cp;
 			cp.mousePressed(new LSMouseEvent(e, currentAction, parts));
 			currentAction = ACTION_NONE;
+
 			repaint();
 		}
 
@@ -357,9 +391,12 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	}
 
 	static final short ACTION_NONE = 0;
+
 	static final short ACTION_ADDWIRE = 0x50;
-	static final short ACTION_ADDPOINT = 0x51;
-	static final short ACTION_DELPOINT = 0x52;
+	static final short ACTION_EDITWIRE = 0x51;
+
+	static final short ACTION_ADDPOINT = 0x52;
+	static final short ACTION_DELPOINT = 0x53;
 	static final short ACTION_SELECT = 1;
 
 	final static Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10,

@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,6 +31,9 @@ public class XMLCreator {
 
 	static final String INPUT = "input";
 	static final String OUTPUT = "output";
+	static final String TYPE_WIRE = "wire";
+	static final String TYPE_WIREPOINT = "point";
+	static final String TYPE_GATE = "gate";
 
 	public static String createXML(LogicSimFile f) throws RuntimeException {
 		DocumentBuilderFactory xmlFactory = DocumentBuilderFactory.newInstance();
@@ -196,40 +200,51 @@ public class XMLCreator {
 	private static Node createWireNode(Document doc, Wire w) {
 		if (w != null) {
 			Element n = doc.createElement("wire");
-			if (w.from != null) {
+			if (w.getFrom() != null) {
 				Element g = doc.createElement("from");
-				if (w.from instanceof Pin) {
-					Pin p = (Pin) w.from;
+				if (w.getFrom() instanceof Pin) {
+					Pin p = (Pin) w.getFrom();
 					g.setAttribute("type", "gate");
 					g.setAttribute("id", p.parent.getId());
 					g.setAttribute("number", String.valueOf(p.number));
-				} else if (w.from instanceof WirePoint) {
-					WirePoint wp = (WirePoint) w.from;
-					g.setAttribute("type", "point");
+				} else if (w.getFrom() instanceof WirePoint) {
+					WirePoint wp = (WirePoint) w.getFrom();
+					String type = "wire";
+					if (wp.parent == null || w.equals(wp.parent))
+						type = "point";
+					g.setAttribute("type", type);
 					g.setAttribute("x", String.valueOf(wp.getX()));
 					g.setAttribute("y", String.valueOf(wp.getY()));
 				}
 				n.appendChild(g);
 			}
 
-			if (w.to != null) {
+			if (w.getTo() != null) {
 				Element g = doc.createElement("to");
-				if (w.to instanceof Pin) {
-					Pin p = (Pin) w.to;
-					g.setAttribute("type", "gate");
+				if (w.getTo() instanceof Pin) {
+					Pin p = (Pin) w.getTo();
+					g.setAttribute("type", TYPE_GATE);
 					g.setAttribute("id", p.parent.getId());
 					g.setAttribute("number", String.valueOf(p.number));
-				} else if (w.from instanceof WirePoint) {
-					WirePoint wp = (WirePoint) w.to;
-					g.setAttribute("type", "point");
-					g.setAttribute("x", String.valueOf(wp.getX()));
-					g.setAttribute("y", String.valueOf(wp.getY()));
+				} else if (w.getTo() instanceof WirePoint) {
+					// distinguish between own wirepoint and foreign wirepoint
+					WirePoint wp = (WirePoint) w.getTo();
+					String type = TYPE_WIRE;
+					if (wp.parent == null || w.equals(wp.parent))
+						type = TYPE_WIREPOINT;
+					g.setAttribute("type", type);
+					if (TYPE_WIRE.equals(type)) {
+						g.setAttribute("id", wp.getId());
+					} else {
+						g.setAttribute("x", String.valueOf(wp.getX()));
+						g.setAttribute("y", String.valueOf(wp.getY()));
+					}
 				}
 				n.appendChild(g);
 			}
-
-			for (int i = 0; i < w.points.size(); i++) {
-				WirePoint wp = w.points.get(i);
+			Vector<WirePoint> pts = w.getPoints();
+			for (int i = 0; i < pts.size(); i++) {
+				WirePoint wp = pts.get(i);
 				Element point = doc.createElement("point");
 				point.setAttribute("number", String.valueOf(i));
 				point.setAttribute("x", String.valueOf(wp.getX()));

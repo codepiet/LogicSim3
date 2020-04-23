@@ -37,7 +37,7 @@ public class Circuit implements LSRepaintListener {
 		for (CircuitPart part : parts) {
 			if (part instanceof Wire) {
 				Wire w = (Wire) part;
-				if (w.to.equals(newWire.to) && w.from.equals(newWire.from)) {
+				if (w.getTo().equals(newWire.getTo()) && w.getFrom().equals(newWire.getFrom())) {
 					// don't add
 					return false;
 				}
@@ -152,7 +152,7 @@ public class Circuit implements LSRepaintListener {
 		for (Wire w : getWires()) {
 			if (w.selected)
 				selParts.add(w);
-			for (WirePoint pt : w.points)
+			for (WirePoint pt : w.getPoints())
 				if (pt.isSelected())
 					selParts.add(pt);
 		}
@@ -201,15 +201,15 @@ public class Circuit implements LSRepaintListener {
 			if (!(part instanceof Wire))
 				continue;
 			Wire w = (Wire) part;
-			if (w.to != null && w.to instanceof Pin) {
-				Pin p = (Pin) w.to;
+			if (w.getTo() != null && w.getTo() instanceof Pin) {
+				Pin p = (Pin) w.getTo();
 				if (p.parent == g) {
 					w.disconnect(null);
 					iter.remove();
 				}
 			}
-			if (w.from != null && w.from instanceof Pin) {
-				Pin p = (Pin) w.from;
+			if (w.getFrom() != null && w.getFrom() instanceof Pin) {
+				Pin p = (Pin) w.getFrom();
 				if (p.parent == g) {
 					w.disconnect(null);
 					iter.remove();
@@ -262,13 +262,13 @@ public class Circuit implements LSRepaintListener {
 		// check if there is at least one wire at any
 		// WirePoint-position
 		for (Wire w : getWires()) {
-			for (WirePoint wp : w.points) {
+			for (WirePoint wp : w.getPoints()) {
 				wp.show = false;
 			}
 		}
 
 		for (Wire w : getWires()) {
-			for (WirePoint wp : w.points) {
+			for (WirePoint wp : w.getPoints()) {
 				CircuitPart[] parts = findPartsAt(WirePoint.class, wp.getX(), wp.getY());
 				if (parts.length > 1) {
 					for (CircuitPart part : parts) {
@@ -325,6 +325,14 @@ public class Circuit implements LSRepaintListener {
 
 	public void remove(CircuitPart part) {
 		parts.remove(part);
+	}
+
+	public Wire getUnfinishedWire() {
+		for (CircuitPart part : parts) {
+			if (part instanceof Wire && ((Wire) part).isNotFinished())
+				return (Wire) part;
+		}
+		return null;
 	}
 
 }

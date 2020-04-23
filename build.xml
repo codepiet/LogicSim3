@@ -2,13 +2,12 @@
 
 	<tstamp />
 
-	<property name="version" value="3.1-${DSTAMP}" />
+	<property name="version" value="3.2-${DSTAMP}" />
 	<property name="main-class" value="logicsim.App" />
 
 	<property name="release.dir" value="release" />
 	<property name="dist.dir" value="dist" />
 	<property name="src.dir" value="src" />
-	<property name="help.dir" value="help" />
 	<property name="build.dir" value="build" />
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="jar.dir" value="${build.dir}/jar" />
@@ -58,7 +57,7 @@
 			<resources>
 				<file file="${jar.dir}/${ant.project.name}.jar" />
 				<file file="logicsim.cfg" />
-				<file file="gpl.txt" />
+				<file file="LICENSE.md" />
 				<file file="icon.png" />
 				<file file="modules" />
 				<file file="logicsim.bat" />
@@ -67,9 +66,6 @@
 		</copy>
 		<copy todir="${dist.dir}/modules">
 			<fileset dir="modules" />
-		</copy>
-		<copy todir="${dist.dir}/help">
-			<fileset dir="help" />
 		</copy>
 		<copy todir="${dist.dir}/circuits">
 			<fileset dir="circuits" />

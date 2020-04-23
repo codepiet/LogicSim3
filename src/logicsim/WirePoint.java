@@ -22,9 +22,9 @@ public class WirePoint extends CircuitPart {
 		super(x, y);
 	}
 
-	public WirePoint(int x, int y, boolean draw) {
+	public WirePoint(int x, int y, boolean show) {
 		this(x, y);
-		this.show = draw;
+		this.show = show;
 	}
 
 	@Override
@@ -85,5 +85,20 @@ public class WirePoint extends CircuitPart {
 			mousePos.y = mousePos.y + dy;
 			moveBy(dx, dy);
 		}
+	}
+
+	@Override
+	public void changedLevel(LSLevelEvent e) {
+		super.changedLevel(e);
+		fireChangedLevel(e);
+		if (parent != null)
+			parent.changedLevel(e);
+	}
+
+	@Override
+	public String getId() {
+		if (parent == null)
+			return super.getId();
+		return super.getId() + "@" + parent.getId();
 	}
 }

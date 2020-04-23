@@ -201,7 +201,19 @@ public class Pin extends CircuitPart {
 
 	@Override
 	public String toString() {
-		String s = getId() + " - " + (getLevel() ? "HIGH" : "LOW");
+		String it = "I";
+		if (ioType == Pin.OUTPUT)
+			it = "O";
+		String lt = "N";
+		if (levelType == Pin.HIGH)
+			lt = "H";
+		else if (levelType == Pin.LOW)
+			lt = "L";
+		else if (levelType == Pin.INVERTED)
+			lt = "I";
+		String s = it + number + it + "-" + lt + "-" + (text == null ? "" : "\"" + text + "\"") + getX() + ":" + getY()
+				+ "@" + parent.getId();
+		s += " - " + (getLevel() ? "HIGH" : "LOW");
 //		if (getListeners().size() > 0) {
 //			s += "\n send updates to\n";
 //			for (LSLevelListener l : getListeners())
@@ -230,18 +242,7 @@ public class Pin extends CircuitPart {
 
 	@Override
 	public String getId() {
-		String it = "I";
-		if (ioType == Pin.OUTPUT)
-			it = "O";
-		String lt = "N";
-		if (levelType == Pin.HIGH)
-			lt = "H";
-		else if (levelType == Pin.LOW)
-			lt = "L";
-		else if (levelType == Pin.INVERTED)
-			lt = "I";
-		return it + number + it + "-" + lt + "-" + (text == null ? "" : "\"" + text + "\"") + getX() + ":" + getY()
-				+ "@" + parent.getId();
+		return number + "@" + parent.getId();
 	}
 
 	@Override

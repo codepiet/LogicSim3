@@ -669,7 +669,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	private JMenuItem createMenuItem(Lang lang, int key, boolean isDialog) {
 		JMenuItem m = new JMenuItem(I18N.tr(lang) + (isDialog ? "..." : ""));
 		if (key != 0)
-			m.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK, false));
+			m.setAccelerator(KeyStroke.getKeyStroke(key, InputEvent.CTRL_DOWN_MASK, false));
 		m.setName(lang.toString());
 		return m;
 	}

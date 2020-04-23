@@ -44,9 +44,9 @@ public class HTMLHelp extends javax.swing.JFrame implements java.awt.event.Actio
 
 		try {
 			String url = null;
-			File f = new File("help");
+			File f = new File("docs");
 			File[] files = f.listFiles();
-			url = new File("help/en.html").getAbsolutePath();
+			url = new File("docs/en.html").getAbsolutePath();
 			// Anleitung in der eingestellten Sprache finden
 			for (int i = 0; i < files.length; i++) {
 				if (files[i].getName().startsWith(language) && files[i].getName().endsWith(".html")) {

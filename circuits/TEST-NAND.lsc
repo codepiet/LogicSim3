@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<logicsim version="3">
+    <info/>
+    <gates>
+        <gate type="nand" x="170" y="30"/>
+        <gate type="switch" x="20" y="30"/>
+        <gate type="led" x="320" y="40"/>
+        <gate type="nand" x="110" y="150"/>
+        <gate type="nand" x="240" y="150"/>
+        <gate type="switch" x="20" y="130"/>
+        <gate type="switch" x="20" y="170"/>
+        <gate type="led" x="320" y="160"/>
+        <gate type="label" x="170" y="20">
+            <properties>
+                <property key="text">NOT</property>
+            </properties>
+        </gate>
+        <gate type="label" x="170" y="130">
+            <properties>
+                <property key="text">AND</property>
+            </properties>
+        </gate>
+        <gate type="switch" x="20" y="260"/>
+        <gate type="switch" x="20" y="300"/>
+        <gate type="nand" x="240" y="280"/>
+        <gate type="nand" x="110" y="250"/>
+        <gate type="label" x="170" y="240">
+            <properties>
+                <property key="text">OR</property>
+            </properties>
+        </gate>
+        <gate type="nand" x="110" y="310"/>
+        <gate type="led" x="320" y="290"/>
+    </gates>
+    <wires>
+        <wire>
+            <from id="nand@170:30" number="1" type="gate"/>
+            <to id="nand@170:30" number="2" type="gate"/>
+            <point node="false" number="0" x="150" y="40"/>
+            <point node="true" number="1" x="150" y="60"/>
+            <point node="false" number="2" x="150" y="80"/>
+        </wire>
+        <wire>
+            <from id="switch@20:30" number="0" type="gate"/>
+            <to id="150:60@1@nand@170:30-2@nand@170:30" type="wire"/>
+        </wire>
+        <wire>
+            <from id="nand@170:30" number="0" type="gate"/>
+            <to id="led@320:40" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="nand@240:150" number="1" type="gate"/>
+            <to id="nand@240:150" number="2" type="gate"/>
+            <point node="false" number="0" x="210" y="160"/>
+            <point node="true" number="1" x="210" y="180"/>
+            <point node="false" number="2" x="210" y="200"/>
+        </wire>
+        <wire>
+            <from id="nand@110:150" number="0" type="gate"/>
+            <to id="210:180@1@nand@240:150-2@nand@240:150" type="wire"/>
+        </wire>
+        <wire>
+            <from id="switch@20:130" number="0" type="gate"/>
+            <to id="nand@110:150" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="switch@20:170" number="0" type="gate"/>
+            <to id="nand@110:150" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="nand@240:150" number="0" type="gate"/>
+            <to id="led@320:160" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="nand@110:250" number="1" type="gate"/>
+            <to id="nand@110:250" number="2" type="gate"/>
+            <point node="false" number="0" x="90" y="260"/>
+            <point node="true" number="1" x="90" y="290"/>
+            <point node="false" number="2" x="90" y="300"/>
+        </wire>
+        <wire>
+            <from id="nand@110:310" number="1" type="gate"/>
+            <to id="nand@110:310" number="2" type="gate"/>
+            <point node="false" number="0" x="90" y="320"/>
+            <point node="true" number="1" x="90" y="330"/>
+            <point node="false" number="2" x="90" y="360"/>
+        </wire>
+        <wire>
+            <from id="switch@20:300" number="0" type="gate"/>
+            <to id="90:330@1@nand@110:310-2@nand@110:310" type="wire"/>
+        </wire>
+        <wire>
+            <from id="switch@20:260" number="0" type="gate"/>
+            <to id="90:290@1@nand@110:250-2@nand@110:250" type="wire"/>
+        </wire>
+        <wire>
+            <from id="nand@110:250" number="0" type="gate"/>
+            <to id="nand@240:280" number="1" type="gate"/>
+            <point node="false" number="0" x="200" y="280"/>
+            <point node="false" number="1" x="200" y="290"/>
+        </wire>
+        <wire>
+            <from id="nand@110:310" number="0" type="gate"/>
+            <to id="nand@240:280" number="2" type="gate"/>
+            <point node="false" number="0" x="200" y="340"/>
+            <point node="false" number="1" x="200" y="330"/>
+        </wire>
+        <wire>
+            <from id="nand@240:280" number="0" type="gate"/>
+            <to id="led@320:290" number="0" type="gate"/>
+        </wire>
+    </wires>
+</logicsim>

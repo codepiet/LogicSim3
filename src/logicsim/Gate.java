@@ -323,7 +323,7 @@ public class Gate extends CircuitPart {
 
 	@Override
 	public String getId() {
-		return type + "@" + getX() + ":" + getY();
+		return type + "@" + super.getId();
 	}
 
 	public Vector<Pin> getInputs() {

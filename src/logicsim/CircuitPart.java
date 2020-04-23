@@ -342,4 +342,17 @@ public abstract class CircuitPart implements LSLevelListener {
 		return listeners;
 	}
 
+	public String toStringAll() {
+		String s = "-----------------------------\n";
+		s += toString();
+		s += "PARENT : " + parent + "\n";
+		s += "\n-- LISTENERS: \n";
+		for (LSLevelListener l : getListeners()) {
+			s += l.toString();
+			s += " with parent " + ((CircuitPart) l).parent;
+		}
+		s += "-----------------------------\n";
+		return s;
+	}
+
 }
