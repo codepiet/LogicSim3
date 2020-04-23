@@ -19,6 +19,7 @@ public class App {
 	public static final String APP_TITLE = "LogicSim";
 	public static final String CIRCUIT_FILE_SUFFIX = "lsc";
 	public static final String MODULE_FILE_SUFFIX = "lsm";
+	public static final String VERILOG_FILE_SUFFIX = "v";
 	public static final String GRAPHICS_FORMAT = "png";
 	public static boolean Running_From_Jar = false;
 
@@ -78,12 +79,8 @@ public class App {
 
 	private static void initializeGateCategories() {
 		Category cat = new Category("hidden");
-		Gate g = new MODIN();
-		g.loadLanguage();
-		cat.addGate(g);
-		g = new MODOUT();
-		g.loadLanguage();
-		cat.addGate(g);
+		cat.addGate(new MODIN());
+		cat.addGate(new MODOUT());
 		cats.add(cat);
 
 		cats.add(new Category("basic"));
@@ -188,6 +185,20 @@ public class App {
 		} else {
 			JOptionPane.showMessageDialog(null,
 					"Directory circuits not found.\nPlease run the program from its directory");
+			System.exit(0);
+		}
+		return "";
+	}
+	
+	public static String getVerilogPath() {
+		File f = new File("");
+		String fname = f.getAbsolutePath() + "/verilog/";
+		f = new File(fname);
+		if (f != null && f.exists() && f.isDirectory()) {
+			return new String(f.getAbsolutePath() + "/");
+		} else {
+			JOptionPane.showMessageDialog(null,
+					"Directory verilog not found.\nPlease run the program from its directory");
 			System.exit(0);
 		}
 		return "";

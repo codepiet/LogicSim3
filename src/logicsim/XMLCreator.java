@@ -28,9 +28,6 @@ import org.w3c.dom.Node;
  */
 public class XMLCreator {
 
-	static final String INPUT = "input";
-	static final String OUTPUT = "output";
-
 	public static String createXML(LogicSimFile f) throws RuntimeException {
 		DocumentBuilderFactory xmlFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder xmlBuilder;
@@ -128,33 +125,32 @@ public class XMLCreator {
 			node.setAttribute("inputs", String.valueOf(g.getNumInputs()));
 
 		// settings
-		Node snode = createSettingsNode(doc, g.getProperties());
+		Node snode = createSettingsNode(doc, g);
 		if (snode != null)
 			node.appendChild(snode);
 
 		for (Pin c : g.getInputs()) {
-			if ((g instanceof MODIN && c.getProperty(CircuitPart.TEXT) != null)
-					|| (c.ioType == Pin.INPUT && c.levelType != Pin.NORMAL)) {
-				node.appendChild(createPinNode(doc, c));
+			if ((g instanceof MODIN && c.label != null) || (c.ioType == Pin.INPUT && c.levelType != Pin.NORMAL) || (c.text != "<Label>")) {
+				node.appendChild(createInputNode(doc, c));
 			}
 		}
 		for (Pin c : g.getOutputs()) {
-			if ((g instanceof MODOUT && c.getProperty(CircuitPart.TEXT) != null)
-					|| (c.ioType == Pin.INPUT && c.levelType != Pin.NORMAL)) {
-				node.appendChild(createPinNode(doc, c));
+			if ((g instanceof MODOUT && c.label != null) || (c.ioType == Pin.INPUT && c.levelType != Pin.NORMAL) || (c.text != "<Label>")) {
+				node.appendChild(createOutputNode(doc, c));
 			}
 		}
 		return node;
 	}
 
-	private static Node createSettingsNode(Document doc, Properties ps) {
-		if (ps.size() > 0) {
+	private static Node createSettingsNode(Document doc, CircuitPart g) {
+		if (g.getProperties().size() > 0) {
 			Element node = doc.createElement("properties");
-			for (Object key : ps.keySet()) {
+			Properties properties = g.getProperties();
+			for (Object key : properties.keySet()) {
 				String keyS = (String) key;
 				Element n = doc.createElement("property");
 				n.setAttribute("key", keyS);
-				n.setTextContent(ps.getProperty(keyS));
+				n.setTextContent(properties.getProperty(keyS));
 				node.appendChild(n);
 			}
 			return node;
@@ -162,29 +158,46 @@ public class XMLCreator {
 		return null;
 	}
 
-	private static Node createPinNode(Document doc, Pin pin) {
-		Element node = doc.createElement("pin");
-		String ioType = INPUT;
-		if (pin.isOutput())
-			ioType = OUTPUT;
-		node.setAttribute("iotype", ioType);
-		node.setAttribute("number", String.valueOf(pin.number));
-		if (pin.isInput()) {
-			int inputType = pin.levelType;
-			if (inputType != Pin.NORMAL) {
-				String inpType = "";
-				if (inputType == Pin.HIGH)
-					inpType = "high";
-				else if (inputType == Pin.LOW)
-					inpType = "low";
-				else if (inputType == Pin.INVERTED)
-					inpType = "inv";
-				node.setAttribute("type", inpType);
-			}
+	private static Node createOutputNode(Document doc, Pin output) {
+		Element node = doc.createElement("io");
+		node.setAttribute("iotype", "output");
+		node.setAttribute("number", String.valueOf(output.number));
+
+		if (output.label != null)
+			node.setAttribute("label", output.label);
+		
+		// settings
+		Node snode = createSettingsNode(doc, output);
+		if (snode != null)
+			node.appendChild(snode);
+		
+		return node;
+	}
+
+	private static Node createInputNode(Document doc, Pin input) {
+		Element node = doc.createElement("io");
+		node.setAttribute("iotype", "input");
+		node.setAttribute("number", String.valueOf(input.number));
+		int inputType = input.levelType;
+		if (inputType != Pin.NORMAL) {
+			String inpType = "";
+			if (inputType == Pin.HIGH)
+				inpType = "high";
+			else if (inputType == Pin.LOW)
+				inpType = "low";
+			else if (inputType == Pin.INVERTED)
+				inpType = "inv";
+			node.setAttribute("type", inpType);
 		}
-		Node n = createSettingsNode(doc, pin.getProperties());
-		if (n != null)
-			node.appendChild(n);
+		if (input.label != null) {
+			node.setAttribute("label", input.label);
+		}
+
+		// settings
+		Node snode = createSettingsNode(doc, input);
+		if (snode != null)
+			node.appendChild(snode);
+		
 		return node;
 	}
 
@@ -220,7 +233,10 @@ public class XMLCreator {
 				point.setAttribute("y", String.valueOf(wp.getY()));
 				point.setAttribute("node", String.valueOf(wp.show));
 				n.appendChild(point);
-			}
+			}	
+			Node snode = createSettingsNode(doc, w);
+			if (snode != null)
+				n.appendChild(snode);
 			return n;
 		}
 		return null;

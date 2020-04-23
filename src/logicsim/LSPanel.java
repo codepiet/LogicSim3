@@ -55,10 +55,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 			draw(g2);
 
-			// redraw selected parts so that there are in the foreground
-			for (CircuitPart part : circuit.getSelected()) {
-				part.draw(g2);
-			}
+			// TODO redraw selected parts?
 
 			if (currentAction == ACTION_SELECT) {
 				g2.setStroke(dashed);
@@ -66,6 +63,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				if (selectRect != null)
 					g2.draw(selectRect);
 			}
+
 		}
 	}
 
@@ -182,6 +180,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 		@Override
 		public void mousePressed(MouseEvent e) {
+			
 			e = convertToWorld(e);
 			setPoint(e.getX(), e.getY());
 			if (currentAction == ACTION_SELECT) {
@@ -242,23 +241,21 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					// is output
 					// 3. start a new wire
 					// output is clicked
-					Wire newWire = new Wire(pin, null);
-					if (circuit.addWire(newWire)) {
-						pin.connect(newWire);
+
+					if (!e.isAltDown()) {
+						Wire newWire = new Wire(pin, null);
+						if (circuit.addWire(newWire)) {
+							pin.connect(newWire);
+						}
+						fireStatusText(I18N.tr(Lang.EDITWIRE));
+						circuit.deselectAll();
+						newWire.select();
+						fireCircuitChanged();
+						return;
 					}
-					fireStatusText(I18N.tr(Lang.EDITWIRE));
-					circuit.deselectAll();
-					newWire.select();
-					fireCircuitChanged();
-					return;
 				}
 			}
 			if (cp instanceof Gate) {
-				String type = ((Gate) cp).type;
-				if (cp instanceof Module)
-					fireStatusText(I18N.tr(Lang.MODULE) + ": " + type);
-				else
-					fireStatusText(I18N.getString(type, I18N.DESCRIPTION));
 				if (parts.length > 0) {
 					// check if we clicked a new gate
 					if (!cp.isSelected()) {
@@ -270,11 +267,6 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					}
 				}
 			} else if (cp instanceof Wire) {
-				String s = cp.getProperty(CircuitPart.TEXT);
-				String desc = I18N.tr(Lang.WIRE);
-				if (s != null)
-					desc += ": " + s;
-				fireStatusText(desc);
 				circuit.deselectAll();
 				cp.select();
 			} else if (cp instanceof WirePoint) {
@@ -318,12 +310,20 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		}
 	}
 
-	static final short ACTION_NONE = 0;
-	static final short ACTION_ADDWIRE = 0x50;
-	static final short ACTION_ADDPOINT = 0x51;
-	static final short ACTION_DELPOINT = 0x52;
-	static final short ACTION_SELECT = 1;
+	static final int ACTION_ADDPOINT = 16;
 
+	static final int ACTION_CONNECT = 14;
+
+	static final int ACTION_DELPOINT = 17;
+
+	static final int ACTION_DRAWWIRE = 15;
+
+	static final int ACTION_GATE = 1;
+
+	static final int ACTION_MODULE = 18;
+	static final int ACTION_NONE = 0;
+	static final int ACTION_SELECT = 19;
+	static final int ACTION_SIMULATION = 20;
 	final static Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10,
 			new float[] { 10 }, 0);
 	public static final Color gridColor = Color.black;
@@ -549,6 +549,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	}
 
 	public void setAction(CircuitPart g) {
+		currentAction = ACTION_GATE;
 		if (g != null) {
 			circuit.deselectAll();
 			// place new gate

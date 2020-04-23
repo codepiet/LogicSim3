@@ -2,11 +2,15 @@ package logicsim;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.Iterator;
+import java.util.Properties;
+
+import javax.swing.JOptionPane;
 
 public class Pin extends CircuitPart {
 
@@ -40,13 +44,43 @@ public class Pin extends CircuitPart {
 	 * type can be HIGH, LOW, INVERTED or NORMAL
 	 */
 	int levelType = NORMAL;
+	
+	public String label = null;
 	public Gate gate;
 
 	public Pin(int x, int y, Gate gate, int number) {
 		super(x, y);
+		this.type = "pin";
 		this.gate = gate;
 		this.number = number;
+		loadProperties();
 	}
+	
+	/*@Override
+	protected void loadProperties() {
+		text = getPropertyWithDefault(TEXT, TEXT_DEFAULT);
+	}
+	
+	@Override
+	public boolean hasPropertiesUI() {
+		return true;
+	}
+	
+	@Override
+	public boolean showPropertiesUI(Component frame) {
+		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, "ui.text"),
+				I18N.getString(type, "ui.title"), JOptionPane.QUESTION_MESSAGE, null, null, text);
+		if (h != null && h.length() > 0) {
+			text = h;
+			setProperty(TEXT, text);
+		}
+		return true;
+	}
+
+	@Override
+	public Properties getProperties() {
+		return this.properties;
+	}*/
 
 	/**
 	 * A connector can handle this event if there is one activePart and that part is
@@ -55,11 +89,16 @@ public class Pin extends CircuitPart {
 	 */
 	@Override
 	public void mousePressed(LSMouseEvent e) {
-		super.mousePressed(e);
+		if (e.isAltDown()) {
+			this.showPropertiesUI(null);
+		}
+		else {
+			super.mousePressed(e);
+		}
 	}
 
 	/**
-	 * draw pin label (inside gate frame)
+	 * draw connector label (inside gate frame)
 	 * 
 	 * @param g2
 	 */
@@ -68,44 +107,44 @@ public class Pin extends CircuitPart {
 		int y = getY();
 
 		g2.setFont(smallFont);
-		if (text != null) {
-			int lw = g2.getFontMetrics().stringWidth(text);
+		if (label != null) {
+			int lw = g2.getFontMetrics().stringWidth(label);
 			if (paintDirection == RIGHT) {
-				if (POS_EDGE_TRIG.equals(text)) {
+				if (POS_EDGE_TRIG.equals(label)) {
 					Polygon tr = new Polygon();
 					tr.addPoint(x + 1 + CONN_SIZE, y - 4);
 					tr.addPoint(x + 1 + CONN_SIZE, y + 4);
 					tr.addPoint(x + 1 + CONN_SIZE + 8, y);
 					g2.draw(tr);
 				} else
-					g2.drawString(text, x + CONN_SIZE + 3, y + 5);
+					g2.drawString(label, x + CONN_SIZE + 3, y + 5);
 			} else if (paintDirection == LEFT) {
-				if (POS_EDGE_TRIG.equals(text)) {
+				if (POS_EDGE_TRIG.equals(label)) {
 					Polygon tr = new Polygon();
 					tr.addPoint(x - 1 - CONN_SIZE, y - 4);
 					tr.addPoint(x - 1 - CONN_SIZE, y + 4);
 					tr.addPoint(x - 1 - CONN_SIZE - 8, y);
 					g2.draw(tr);
 				} else
-					g2.drawString(text, x - CONN_SIZE - lw - 2, y + 5);
+					g2.drawString(label, x - CONN_SIZE - lw - 2, y + 5);
 			} else if (paintDirection == UP) {
-				if (POS_EDGE_TRIG.equals(text)) {
+				if (POS_EDGE_TRIG.equals(label)) {
 					Polygon tr = new Polygon();
 					tr.addPoint(x - 4, y - 1 - CONN_SIZE);
 					tr.addPoint(x + 4, y - 1 - CONN_SIZE);
 					tr.addPoint(x, y - 1 - CONN_SIZE - 8);
 					g2.draw(tr);
 				} else
-					g2.drawString(text, x - lw / 2, y - CONN_SIZE - 3);
+					g2.drawString(label, x - lw / 2, y - CONN_SIZE - 3);
 			} else if (paintDirection == DOWN) {
-				if (POS_EDGE_TRIG.equals(text)) {
+				if (POS_EDGE_TRIG.equals(label)) {
 					Polygon tr = new Polygon();
 					tr.addPoint(x - 4, y + 1 + CONN_SIZE);
 					tr.addPoint(x + 4, y + 1 + CONN_SIZE);
 					tr.addPoint(x, y + 1 + CONN_SIZE + 8);
 					g2.draw(tr);
 				} else
-					g2.drawString(text, x - lw / 2, y + CONN_SIZE + 12);
+					g2.drawString(label, x - lw / 2, y + CONN_SIZE + 12);
 			}
 		}
 	}
@@ -159,6 +198,19 @@ public class Pin extends CircuitPart {
 				}
 				g2.fillRect(x - 1, y + offset, 3, CONN_SIZE + 1);
 			}
+		}
+		if (text != "<Label>") {
+			int tw = g2.getFontMetrics().stringWidth(text);
+			if (paintDirection == DOWN || paintDirection == RIGHT) {
+			    g2.drawString(text, getX() - tw - 1, getY());
+			}
+			else if (paintDirection == UP) {
+				g2.drawString(text, getX() + 3, getY() + 5);
+			}
+			else {
+				g2.drawString(text, getX() + 3, getY());
+			}
+			
 		}
 	}
 
@@ -241,7 +293,7 @@ public class Pin extends CircuitPart {
 			lt = "L";
 		else if (levelType == Pin.INVERTED)
 			lt = "I";
-		return it + number + it + "-" + lt + "-" + (text == null ? "" : "\"" + text + "\"") + getX() + ":" + getY()
+		return it + number + it + "-" + lt + "-" + (label == null ? "" : "\"" + label + "\"") + getX() + ":" + getY()
 				+ "@" + gate.getId();
 	}
 
