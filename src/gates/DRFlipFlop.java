@@ -70,8 +70,10 @@ public class DRFlipFlop extends Gate {
 
 	@Override
 	public void loadLanguage() {
-		I18N.addGate(I18N.ALL, type, I18N.TITLE, "DR flipfop");
-		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "D Flipflop with reset");
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "DR Flip-flop");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "D Flip-flop with reset");
+		I18N.addGate("de", type, I18N.TITLE, "DR Flipflop");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "D Flipflop mit Reset-Eingang");
 		I18N.addGate("es", type, I18N.TITLE, "FlipFlop DR");
 		I18N.addGate("fr", type, I18N.TITLE, "Bascule DR");
 
