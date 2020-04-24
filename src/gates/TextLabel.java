@@ -1,8 +1,8 @@
 package gates;
 
 import java.awt.Color;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 import logicsim.Gate;
 import logicsim.I18N;
@@ -40,13 +40,9 @@ public class TextLabel extends Gate {
 	@Override
 	protected void drawActiveFrame(Graphics2D g2) {
 		g2.setFont(bigFont);
-		FontMetrics fm = g2.getFontMetrics();
-		int stringWidth = fm.stringWidth(text);
-		int stringHeight = fm.getHeight();
-
-		width = stringWidth;
-		height = stringHeight;
-
+		Rectangle r = textDimensions(g2, text);
+		width = r.width;
+		height = r.height;
 		super.drawActiveFrame(g2);
 	}
 
@@ -59,16 +55,10 @@ public class TextLabel extends Gate {
 		super.draw(g2);
 		g2.setFont(bigFont);
 		g2.setColor(Color.black);
-
-		FontMetrics fm = g2.getFontMetrics();
-		int stringWidth = fm.stringWidth(text);
-		int stringHeight = fm.getHeight();
-
-		width = stringWidth;
-		height = stringHeight;
-
-		g2.drawString(text, getX() + getWidth() / 2 - width / 2, getY() + getHeight() / 2 + 4);
-
+		Rectangle r = textDimensions(g2, text);
+		width = r.width;
+		height = r.height;
+		drawString(g2, text, getX() + width / 2, getY() + height / 2, CENTER);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package logicsim;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -17,6 +18,11 @@ public abstract class CircuitPart implements LSLevelListener {
 	public static final int BOUNDING_SPACE = 6;
 	public static final boolean HIGH = true;
 	public static final boolean LOW = false;
+
+	public static final int CENTER = 1;
+	public static final int LEFT = 2;
+	public static final int RIGHT = 3;
+
 	private Collection<LSLevelListener> listeners;
 	private LSRepaintListener repListener;
 
@@ -353,6 +359,53 @@ public abstract class CircuitPart implements LSLevelListener {
 		}
 		s += "-----------------------------\n";
 		return s;
+	}
+
+	protected Rectangle textDimensions(Graphics2D g2, String text) {
+		FontMetrics fm = g2.getFontMetrics();
+		boolean overLine = false;
+		if (text.charAt(0) == '/') {
+			overLine = true;
+			text = text.substring(1);
+		}
+		int stringWidth = fm.stringWidth(text);
+		int stringHeight = fm.getHeight() + (overLine ? 2 : 0);
+		return new Rectangle(0, 0, stringWidth, stringHeight);
+	}
+
+	protected void drawString(Graphics2D g2, String text, int x, int y, int mode) {
+		int nx = x;
+		int ny = y;
+		Rectangle r = textDimensions(g2, text);
+		boolean overLine = false;
+		if (text.charAt(0) == '/') {
+			overLine = true;
+			text = text.substring(1);
+		}
+		if (mode == CENTER) {
+			nx = x - r.width / 2;
+			ny = y + r.height / 2;
+			if (overLine) {
+				g2.drawLine(nx, y - r.height / 2 + 2, nx + r.width, y - r.height / 2 + 2);
+				g2.drawString(text, nx, ny - 4);
+			} else {
+				g2.drawString(text, nx, ny - 2);
+			}
+		} else if (mode == LEFT) {
+			if (overLine) {
+				g2.drawLine(nx, y - r.height + 2, nx + r.width, y - r.height + 2);
+				g2.drawString(text, nx, ny - 2);
+			} else {
+				g2.drawString(text, nx, ny);
+			}
+		} else if (mode == RIGHT) {
+			if (overLine) {
+				g2.drawLine(nx-r.width, y - r.height + 3, nx, y - r.height + 3);
+				g2.drawString(text, nx-r.width, ny - 2);
+			} else {
+				g2.drawString(text, nx-r.width, ny);
+			}
+		}
 	}
 
 }

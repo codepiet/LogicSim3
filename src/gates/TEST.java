@@ -63,5 +63,6 @@ public class TEST extends Gate {
 	@Override
 	public void loadLanguage() {
 		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Test");
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Test Gate for experimenting with settings");
 	}
 }

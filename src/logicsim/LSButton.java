@@ -27,8 +27,7 @@ public class LSButton extends JButton {
 
 	private ImageIcon getIcon(String imgname) {
 		String filename = "images/" + imgname + ".png";
-		int is = LSProperties.getInstance().getPropertyInteger("iconsize", 48);
-		is = 36;
+		int is = LSProperties.getInstance().getPropertyInteger("iconsize", 36);
 		// return new ImageIcon(LSFrame.class.getResource(filename));
 		return new ImageIcon(new ImageIcon(getClass().getResource(filename)).getImage().getScaledInstance(is, is,
 				Image.SCALE_AREA_AVERAGING));
