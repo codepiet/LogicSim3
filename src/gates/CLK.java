@@ -15,6 +15,7 @@ import logicsim.LSLevelEvent;
 import logicsim.LSMouseEvent;
 import logicsim.Lang;
 import logicsim.Pin;
+import logicsim.Simulation;
 import logicsim.WidgetHelper;
 
 /**
@@ -32,7 +33,7 @@ public class CLK extends Gate implements Runnable {
 
 	static final int PAUSE = 0;
 	static final int RUNNING = 1;
-	static final int PULSE = 2;
+	static final int MANUAL = 2;
 
 	static final String HT = "hightime";
 	static final String LT = "lowtime";
@@ -72,12 +73,14 @@ public class CLK extends Gate implements Runnable {
 
 	@Override
 	public void interact() {
-		if (running) {
-			running = false;
+		if (currentMode == RUNNING) {
+			if (running && !Simulation.getInstance().isRunning())
+				running = false;
 			currentMode = PAUSE;
 		} else {
 			currentMode = RUNNING;
-			startClock();
+			if (!running)
+				startClock();
 		}
 	}
 
@@ -89,11 +92,8 @@ public class CLK extends Gate implements Runnable {
 		int dy = e.getY() - getY();
 
 		if (manual.contains(dx, dy) && currentMode != RUNNING) {
-			currentMode = PULSE;
-			getPin(0).changedLevel(new LSLevelEvent(this, HIGH));
+			getPin(0).changedLevel(new LSLevelEvent(this, !getPin(0).getLevel()));
 			lastTime = 0;
-			if (!running)
-				startClock();
 		} else if (auto.contains(dx, dy)) {
 			interact();
 		}
@@ -105,6 +105,9 @@ public class CLK extends Gate implements Runnable {
 		int x = getX();
 		int y = getY();
 
+		if (Simulation.getInstance().isRunning() && !this.running)
+			startClock();
+
 		g2.setPaint(Color.black);
 		g2.setFont(Pin.smallFont);
 		String s = "CLK";
@@ -113,23 +116,9 @@ public class CLK extends Gate implements Runnable {
 
 		g2.setStroke(new BasicStroke(1));
 		WidgetHelper.drawPushSwitch(g2, x + manual.x, y + manual.y, manual.width,
-				currentMode == PULSE ? Color.red : Color.LIGHT_GRAY, "1");
+				getPin(0).getLevel() ? Color.red : Color.LIGHT_GRAY, null);
 		Rectangle r = new Rectangle(auto.x + getX(), auto.y + getY(), auto.width, auto.height);
 		WidgetHelper.drawSwitchHorizontal(g2, r, currentMode == RUNNING, Color.RED, Color.LIGHT_GRAY);
-
-//		if (currentMode == PAUSE) {
-//			g2.setPaint(Color.blue);
-//			g2.fillRect(x + auto.x, y + auto.y, 6, auto.height);
-//			g2.fillRect(x + auto.x + 8, y + auto.y, 6, auto.height);
-//		} else {
-//			g2.setPaint(Color.red);
-//			Rectangle rect = auto;
-//			Polygon p = new Polygon();
-//			p.addPoint(x + rect.x + rect.width, y + rect.y + rect.height / 2);
-//			p.addPoint(x + rect.x, y + rect.y);
-//			p.addPoint(x + rect.x, y + rect.y + rect.height);
-//			g2.fill(p);
-//		}
 
 		// oszi
 		g2.setPaint(Color.DARK_GRAY);
@@ -202,6 +191,7 @@ public class CLK extends Gate implements Runnable {
 			if ((temp = new Date()).getTime() - lastMS > ms) {
 				pos++;
 				lastMS = temp.getTime();
+				fireRepaint();
 			}
 
 			// reset data array
@@ -220,11 +210,11 @@ public class CLK extends Gate implements Runnable {
 					cout.changedLevel(new LSLevelEvent(this, LOW));
 					lastTime = new Date().getTime();
 				}
-			} else if (currentMode == PULSE) {
-				if (out && new Date().getTime() - lastTime > highTime) {
-					cout.changedLevel(new LSLevelEvent(this, LOW));
-					currentMode = PAUSE;
-				}
+			} else if (currentMode == MANUAL) {
+				// if (out && new Date().getTime() - lastTime > highTime) {
+				// cout.changedLevel(new LSLevelEvent(this, LOW));
+				// currentMode = PAUSE;
+				// }
 			}
 			try {
 				Thread.sleep(8);
