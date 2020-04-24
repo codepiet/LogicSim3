@@ -78,8 +78,10 @@ public class TFlipFlop extends Gate {
 
 	@Override
 	public void loadLanguage() {
-		I18N.addGate(I18N.ALL, type, I18N.TITLE, "T FlipFlop");
-		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "T FlipFlop");
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "T Flip-flop");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "T Flip-flop");
+		I18N.addGate("de", type, I18N.TITLE, "T Flipflop");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "T Flipflop");
 		I18N.addGate("es", type, I18N.TITLE, "FlipFlop T");
 		I18N.addGate("es", type, I18N.DESCRIPTION, "FlipFlop T");
 		I18N.addGate("fr", type, I18N.TITLE, "Bascule T");

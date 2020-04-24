@@ -90,8 +90,10 @@ public class JKMSFlipFlop extends Gate {
 
 	@Override
 	public void loadLanguage() {
-		I18N.addGate(I18N.ALL, type, I18N.TITLE, "JKMS flipfop");
-		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "JKMS flipfop");
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "JKMS Flip-flop");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "JKMS Flip-flop");
+		I18N.addGate("de", type, I18N.TITLE, "JKMS Flipflop");
+		I18N.addGate("de", type, I18N.DESCRIPTION, "JKMS Flipflop");
 		I18N.addGate("es", type, I18N.TITLE, "FlipFlop JKMS");
 		I18N.addGate("es", type, I18N.DESCRIPTION, "FlipFlop JKMS");
 		I18N.addGate("fr", type, I18N.TITLE, "Bascule JKMS");

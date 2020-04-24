@@ -55,8 +55,9 @@ public class JKFlipFlop extends Gate {
 
 	@Override
 	public void loadLanguage() {
-		I18N.addGate(I18N.ALL, type, I18N.TITLE, "JK flipfop");
-		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "positive edge triggered JK Flipflop");
+		I18N.addGate(I18N.ALL, type, I18N.TITLE, "JK Flip-flop");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "positive edge triggered JK Flip-flop");
+		I18N.addGate("de", type, I18N.TITLE, "JK Flipflop");
 		I18N.addGate("de", type, I18N.DESCRIPTION, "positiv flankengesteuertes JK-Flipflop");
 		I18N.addGate("es", type, I18N.TITLE, "FlipFlop JK");
 		I18N.addGate("fr", type, I18N.TITLE, "Bascule JK");
