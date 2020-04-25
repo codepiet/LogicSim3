@@ -40,10 +40,12 @@ public class TextLabel extends Gate {
 	@Override
 	protected void drawActiveFrame(Graphics2D g2) {
 		g2.setFont(bigFont);
-		Rectangle r = textDimensions(g2, text);
-		width = r.width;
-		height = r.height;
-		super.drawActiveFrame(g2);
+		if (text != null) {
+			Rectangle r = textDimensions(g2, text);
+			width = r.width;
+			height = r.height;
+			super.drawActiveFrame(g2);
+		}
 	}
 
 	@Override
@@ -55,10 +57,12 @@ public class TextLabel extends Gate {
 		super.draw(g2);
 		g2.setFont(bigFont);
 		g2.setColor(Color.black);
-		Rectangle r = textDimensions(g2, text);
-		width = r.width;
-		height = r.height;
-		drawString(g2, text, getX() + width / 2, getY() + height / 2, CENTER);
+		if (text != null) {
+			Rectangle r = textDimensions(g2, text);
+			width = r.width;
+			height = r.height;
+			drawString(g2, text, getX() + width / 2, getY() + height / 2, CENTER);
+		}
 	}
 
 	@Override

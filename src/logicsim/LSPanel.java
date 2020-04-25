@@ -196,6 +196,11 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			CircuitPart[] parts = circuit.getSelected();
 			CircuitPart cp = circuit.findPartAt(e.getX(), e.getY());
 
+			if (currentAction == ACTION_DELPOINT && cp instanceof WirePoint && cp.parent instanceof Wire) {
+				cp.parent.mousePressed(new LSMouseEvent(e, ACTION_DELPOINT, null));
+			}
+			if (cp != null)
+				System.out.println(cp.toStringAll());
 			if (cp instanceof Pin && !e.isAltDown() && currentAction == ACTION_NONE) {
 				// we start a new wire if the pin we clicked is an output OR
 				// if we are in expert mode
@@ -371,6 +376,15 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 			if (currentAction == ACTION_SELECT) {
 				CircuitPart[] parts = circuit.findParts(selectRect);
+				for (CircuitPart part : parts) {
+					if (part instanceof Wire) {
+						Wire w = (Wire) part;
+						if (w.getTo() instanceof WirePoint)
+							w.getTo().select();
+						if (w.getFrom() instanceof WirePoint)
+							w.getFrom().select();
+					}
+				}
 				fireStatusText(String.format(I18N.tr(Lang.PARTSSELECTED), String.valueOf(parts.length)));
 				currentAction = ACTION_NONE;
 				selectRect = null;
@@ -380,6 +394,10 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			CircuitPart[] parts = circuit.getSelected();
 			for (CircuitPart part : parts) {
 				part.mouseReleased(x, y);
+				if (part instanceof WirePoint && part.parent == null) {
+					WirePoint wp = (WirePoint) part;
+					circuit.checkWirePoint(wp);
+				}
 			}
 		}
 
@@ -403,6 +421,9 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			new float[] { 10 }, 0);
 	public static final Color gridColor = Color.black;
 	private static final long serialVersionUID = -6414072156700139318L;
+
+	public static final String MSG_ABORTED = "MSG_DESELECT_BUTTONS";
+
 	CircuitChangedListener changeListener;
 	public Circuit circuit = new Circuit();
 
@@ -522,7 +543,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			return;
 
 		if (keyCode == KeyEvent.VK_ESCAPE) {
-			if (parts.length == 1 && parts[0] instanceof Wire) {
+			if (currentAction == ACTION_EDITWIRE) {
 				Wire w = (Wire) parts[0];
 				int pointsOfWire = w.removeLastPoint();
 				if (pointsOfWire == 0) {
@@ -534,6 +555,10 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					parts = null;
 					circuit.deselectAll();
 				}
+			} else if (currentAction == ACTION_ADDPOINT || currentAction == ACTION_DELPOINT
+					|| currentAction == ACTION_SELECT) {
+				currentAction = ACTION_NONE;
+				fireStatusText(MSG_ABORTED);
 			} else if (parts.length > 1) {
 				circuit.deselectAll();
 			}

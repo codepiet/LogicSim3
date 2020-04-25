@@ -129,14 +129,14 @@ public class XMLLoader {
 					int y = Integer.parseInt(gnode.string("y"));
 					from = new WirePoint(x, y);
 				} else if (XMLCreator.TYPE_WIRE.equals(type)) {
-					int x = Integer.parseInt(gnode.string("x"));
-					int y = Integer.parseInt(gnode.string("y"));
+					String id = gnode.string("id");
 					// search wire
 					for (Wire w : wires) {
-						CircuitPart cp = w.findPartAt(x, y);
-						if (cp instanceof WirePoint) {
-							// found
-							from = cp;
+						for (WirePoint wp : w.getPoints()) {
+							if (id.equals(wp.getId())) {
+								from = wp;
+								break;
+							}
 						}
 					}
 				}
@@ -161,14 +161,17 @@ public class XMLLoader {
 					// search wire
 					for (Wire w : wires) {
 						for (WirePoint wp : w.getPoints()) {
-							if (id.equals(wp.getId()))
+							if (id.equals(wp.getId())) {
 								to = wp;
+								break;
+							}
 						}
 					}
 				}
 
-				if (from == null || to == null)
+				if (from == null || to == null) {
 					throw new RuntimeException("wire cannot be connected");
+				}
 				Wire wire = new Wire(from, to);
 
 				// load points

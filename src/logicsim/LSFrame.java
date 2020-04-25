@@ -1130,16 +1130,17 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	@Override
 	public void changedStatusText(String text) {
 		// this is a hack - maybe it is ok...
-		if ("DESELECT_BUTTONS".contentEquals(text)) {
+		if (LSPanel.MSG_ABORTED.equals(text)) {
 			for (Component c : btnBar.getComponents()) {
 				if (c instanceof LSToggleButton) {
 					LSToggleButton b = (LSToggleButton) c;
 					b.setSelected(false);
 				}
 			}
+			setStatusText(I18N.tr(Lang.ABORTED));
 			repaint();
-		}
-		setStatusText(text);
+		} else
+			setStatusText(text);
 	}
 
 	@Override

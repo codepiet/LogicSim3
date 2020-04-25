@@ -15,6 +15,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
+import java.util.Iterator;
 import java.util.Vector;
 
 public class Wire extends CircuitPart implements Cloneable {
@@ -40,10 +41,10 @@ public class Wire extends CircuitPart implements Cloneable {
 	private boolean level;
 
 	/**
-	 * constructor specifying the gates and connector numbers
+	 * constructor specifying the origin and the end
 	 * 
-	 * @param g
-	 * @param fromOutput
+	 * @param fromPart
+	 * @param toPart
 	 */
 	public Wire(CircuitPart fromPart, CircuitPart toPart) {
 		this(0, 0);
@@ -141,6 +142,10 @@ public class Wire extends CircuitPart implements Cloneable {
 				}
 			}
 		}
+		if (getTo() instanceof WirePoint)
+			getTo().draw(g2);
+		if (getFrom() instanceof WirePoint)
+			getFrom().draw(g2);
 
 		if (getTo() == null && tempPoint != null) {
 			// add a small red circle
@@ -165,6 +170,14 @@ public class Wire extends CircuitPart implements Cloneable {
 	public CircuitPart findPartAt(int x, int y) {
 		int rx = round(x);
 		int ry = round(y);
+
+		if (getFrom() instanceof WirePoint)
+			if (((WirePoint) getFrom()).isAt(rx, ry))
+				return getFrom();
+
+		if (getTo() instanceof WirePoint)
+			if (((WirePoint) getTo()).isAt(rx, ry))
+				return getTo();
 
 		Vector<WirePoint> ps = getAllPoints();
 		for (int i = 0; i < ps.size() - 1; i++) {
@@ -229,16 +242,6 @@ public class Wire extends CircuitPart implements Cloneable {
 				return i;
 		}
 		return -1;
-	}
-
-	public WirePoint getPointAt(int x, int y) {
-		if (points.size() == 0)
-			return null;
-		for (WirePoint point : points) {
-			if (point.isAt(x, y))
-				return point;
-		}
-		return null;
 	}
 
 	WirePoint getPointFrom() {
@@ -332,7 +335,7 @@ public class Wire extends CircuitPart implements Cloneable {
 		} else if (e.lsAction == LSPanel.ACTION_DELPOINT) {
 			if (removePointAt(e.getX(), e.getY())) {
 				select();
-				notifyChanged();
+				fireRepaint();
 			}
 		} else {
 			select();
@@ -364,12 +367,12 @@ public class Wire extends CircuitPart implements Cloneable {
 		for (WirePoint wp : points) {
 			wp.moveBy(dx, dy);
 		}
-		if (getFrom() instanceof WirePoint) {
-			getFrom().moveBy(dx, dy);
-		}
-		if (getTo() instanceof WirePoint) {
-			getTo().moveBy(dx, dy);
-		}
+		// if (getFrom() instanceof WirePoint) {
+		// getFrom().moveBy(dx, dy);
+		// }
+		// if (getTo() instanceof WirePoint) {
+		// getTo().moveBy(dx, dy);
+		// }
 	}
 
 	/**
@@ -405,9 +408,12 @@ public class Wire extends CircuitPart implements Cloneable {
 	}
 
 	public boolean removePointAt(int x, int y) {
-		WirePoint wp = getPointAt(x, y);
-		if (wp != null) {
-			return points.remove(wp);
+		for (Iterator<WirePoint> iter = points.iterator(); iter.hasNext();) {
+			WirePoint wp = iter.next();
+			if (wp.isAt(x, y)) {
+				iter.remove();
+				return true;
+			}
 		}
 		return false;
 	}
@@ -415,12 +421,6 @@ public class Wire extends CircuitPart implements Cloneable {
 	public void setNodeIsDrawn(int i) {
 		WirePoint p = points.get(i);
 		p.show = true;
-	}
-
-	public void setPointAt(int n, int mx, int my) {
-		WirePoint wp = new WirePoint(mx, my, false);
-		wp.parent = this;
-		points.set(n, wp);
 	}
 
 	public void setTempPoint(Point point) {
@@ -476,7 +476,6 @@ public class Wire extends CircuitPart implements Cloneable {
 	public void changedLevel(LSLevelEvent e) {
 		// System.out.println(getId() + ": got event " + e);
 		// a wire can get a level change from a pin or another wire
-		// if (e.source instanceof Pin) {
 		if (level != e.level || e.force) {
 			level = e.level;
 			// forward to other listeners, event must not get back to the origin
@@ -486,7 +485,6 @@ public class Wire extends CircuitPart implements Cloneable {
 			}
 			fireRepaint();
 		}
-		// }
 	}
 
 	@Override
@@ -521,6 +519,12 @@ public class Wire extends CircuitPart implements Cloneable {
 	@Override
 	public void deselect() {
 		super.deselect();
+		if (getFrom() instanceof WirePoint)
+			getFrom().deselect();
+
+		if (getTo() instanceof WirePoint)
+			getTo().deselect();
+
 		for (WirePoint wp : points) {
 			wp.deselect();
 		}
@@ -571,5 +575,4 @@ public class Wire extends CircuitPart implements Cloneable {
 		this.to = to;
 		checkFromTo();
 	}
-
 }

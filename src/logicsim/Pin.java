@@ -67,7 +67,10 @@ public class Pin extends CircuitPart {
 		int y = getY();
 
 		g2.setFont(smallFont);
-		if (text != null) {
+		if (text != null && text.length() == 0) {
+			System.out.println("BAD: " + getId());
+		}
+		if (text != null && text.length() > 0) {
 			if (paintDirection == RIGHT) {
 				if (POS_EDGE_TRIG.equals(text)) {
 					Polygon tr = new Polygon();

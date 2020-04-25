@@ -297,7 +297,7 @@ public abstract class CircuitPart implements LSLevelListener {
 		busted = false;
 	}
 
-	public final void select() {
+	public void select() {
 		selected = true;
 	}
 
@@ -376,6 +376,8 @@ public abstract class CircuitPart implements LSLevelListener {
 	protected void drawString(Graphics2D g2, String text, int x, int y, int mode) {
 		int nx = x;
 		int ny = y;
+		if (text == null)
+			return;
 		Rectangle r = textDimensions(g2, text);
 		boolean overLine = false;
 		if (text.charAt(0) == '/') {
@@ -400,10 +402,10 @@ public abstract class CircuitPart implements LSLevelListener {
 			}
 		} else if (mode == RIGHT) {
 			if (overLine) {
-				g2.drawLine(nx-r.width, y - r.height + 3, nx, y - r.height + 3);
-				g2.drawString(text, nx-r.width, ny - 2);
+				g2.drawLine(nx - r.width, y - r.height + 3, nx, y - r.height + 3);
+				g2.drawString(text, nx - r.width, ny - 2);
 			} else {
-				g2.drawString(text, nx-r.width, ny);
+				g2.drawString(text, nx - r.width, ny);
 			}
 		}
 	}

@@ -48,24 +48,24 @@ public class Circuit implements LSRepaintListener {
 		return true;
 	}
 
-	private CircuitPart[] findPartsAt(Class<?> clazz, int x, int y) {
-		Vector<CircuitPart> findParts = new Vector<CircuitPart>();
-		for (CircuitPart part : parts) {
-			if (part instanceof Gate) {
-				Gate g = (Gate) part;
-				CircuitPart cp = g.findPartAt(x, y);
-				if (cp != null && (clazz == null || (clazz != null && cp.getClass().equals(clazz))))
-					findParts.add(cp);
-			}
-			if (part instanceof Wire) {
-				Wire w = (Wire) part;
-				CircuitPart cp = w.findPartAt(x, y);
-				if (cp != null && (clazz == null || (clazz != null && cp.getClass().equals(clazz))))
-					findParts.add(cp);
-			}
-		}
-		return findParts.toArray(new CircuitPart[findParts.size()]);
-	}
+//	private CircuitPart[] findPartsAt(Class<?> clazz, int x, int y) {
+//		Vector<CircuitPart> findParts = new Vector<CircuitPart>();
+//		for (CircuitPart part : parts) {
+//			if (part instanceof Gate) {
+//				Gate g = (Gate) part;
+//				CircuitPart cp = g.findPartAt(x, y);
+//				if (cp != null && (clazz == null || (clazz != null && cp.getClass().equals(clazz))))
+//					findParts.add(cp);
+//			}
+//			if (part instanceof Wire) {
+//				Wire w = (Wire) part;
+//				CircuitPart cp = w.findPartAt(x, y);
+//				if (cp != null && (clazz == null || (clazz != null && cp.getClass().equals(clazz))))
+//					findParts.add(cp);
+//			}
+//		}
+//		return findParts.toArray(new CircuitPart[findParts.size()]);
+//	}
 
 	public Vector<CircuitPart> getParts() {
 		return parts;
@@ -152,6 +152,12 @@ public class Circuit implements LSRepaintListener {
 		for (Wire w : getWires()) {
 			if (w.selected)
 				selParts.add(w);
+			if (w.getFrom() instanceof WirePoint)
+				if (w.getFrom().isSelected())
+					selParts.add(w.getFrom());
+			if (w.getTo() instanceof WirePoint)
+				if (w.getTo().isSelected())
+					selParts.add(w.getTo());
 			for (WirePoint pt : w.getPoints())
 				if (pt.isSelected())
 					selParts.add(pt);
@@ -166,7 +172,6 @@ public class Circuit implements LSRepaintListener {
 		for (CircuitPart part : parts) {
 			if (part instanceof Gate) {
 				Gate g = (Gate) part;
-				// remove outgoing wires
 				removeGate(g);
 			} else if (part instanceof Wire) {
 				Wire w = (Wire) part;
@@ -183,19 +188,28 @@ public class Circuit implements LSRepaintListener {
 		if (g.type.equals("modin") || g.type.equals("modout"))
 			return false;
 		// 1. check all wires if they are connected to that gate
-		for (Pin p : g.pins) {
-			if (p.isConnected()) {
-				for (LSLevelListener l : g.getListeners()) {
-					// must be a wire
-					if (l instanceof Wire) {
-						// 2. delete them
-						Wire w = (Wire) l;
-						w.disconnect(null);
-						parts.remove(w);
-					}
-				}
-			}
-		}
+//		for (Pin p : g.pins) {
+//			if (p.isConnected()) {
+//				for (LSLevelListener l : p.getListeners()) {
+//					// must be a wire
+//					if (l instanceof Wire) {
+//						// 2. delete wire OR put a wirepoint at its end
+//						Wire w = (Wire) l;
+//						WirePoint wp = new WirePoint(p.getX(), p.getY());
+//						p.removeLevelListener(w);
+//						w.removeLevelListener(p);
+//						if (p.equals(w.getTo())) {
+//							w.setTo(wp);
+//						} else {
+//							w.setFrom(wp);
+//						}
+//						w.connect(wp);
+//						// parts.remove(w);
+//
+//					}
+//				}
+//			}
+//		}
 		for (Iterator<CircuitPart> iter = parts.iterator(); iter.hasNext();) {
 			CircuitPart part = iter.next();
 			if (!(part instanceof Wire))
@@ -204,19 +218,29 @@ public class Circuit implements LSRepaintListener {
 			if (w.getTo() != null && w.getTo() instanceof Pin) {
 				Pin p = (Pin) w.getTo();
 				if (p.parent == g) {
-					w.disconnect(null);
-					iter.remove();
+					w.removeLevelListener(p);
+					p.removeLevelListener(w);
+					// w.disconnect(null);
+					// iter.remove();
+					WirePoint wp = new WirePoint(p.getX(), p.getY());
+					w.setTo(wp);
+					w.connect(wp);
 				}
 			}
 			if (w.getFrom() != null && w.getFrom() instanceof Pin) {
 				Pin p = (Pin) w.getFrom();
 				if (p.parent == g) {
-					w.disconnect(null);
-					iter.remove();
+					w.removeLevelListener(p);
+					p.removeLevelListener(w);
+					// w.disconnect(null);
+					// iter.remove();
+					WirePoint wp = new WirePoint(p.getX(), p.getY());
+					w.setFrom(wp);
+					w.connect(wp);
 				}
 			}
 		}
-		checkWires();
+		// checkWires();
 		parts.remove(g);
 		return true;
 	}
@@ -253,42 +277,45 @@ public class Circuit implements LSRepaintListener {
 		for (Wire wire : wires) {
 			addWire(wire);
 		}
-		checkWires();
+		// checkWires();
 
 		fireRepaint(null);
 	}
 
-	private void checkWires() {
-		// check if there is at least one wire at any
-		// WirePoint-position
-		for (Wire w : getWires()) {
-			for (WirePoint wp : w.getPoints()) {
-				wp.show = false;
-			}
-		}
-
-		for (Wire w : getWires()) {
-			for (WirePoint wp : w.getPoints()) {
-				CircuitPart[] parts = findPartsAt(WirePoint.class, wp.getX(), wp.getY());
-				if (parts.length > 1) {
-					for (CircuitPart part : parts) {
-						WirePoint wirepoint = (WirePoint) part;
-						wirepoint.show = true;
-					}
-				}
-				parts = findPartsAt(Wire.class, wp.getX(), wp.getY());
-				if (parts.length > 0) {
-					wp.show = true;
-					// add a wirepoint at that position in every part of parts
-					for (CircuitPart part : parts) {
-						Wire wire = (Wire) part;
-						wire.addPointFitting(wp.getX(), wp.getY());
-					}
-				}
-			}
-		}
-		this.needsRepaint(null);
-	}
+	/**
+	 * don't know for what that was...
+	 */
+//	private void checkWires() {
+//		// check if there is at least one wire at any
+//		// WirePoint-position
+//		for (Wire w : getWires()) {
+//			for (WirePoint wp : w.getPoints()) {
+//				wp.show = false;
+//			}
+//		}
+//
+//		for (Wire w : getWires()) {
+//			for (WirePoint wp : w.getPoints()) {
+//				CircuitPart[] parts = findPartsAt(WirePoint.class, wp.getX(), wp.getY());
+//				if (parts.length > 1) {
+//					for (CircuitPart part : parts) {
+//						WirePoint wirepoint = (WirePoint) part;
+//						wirepoint.show = true;
+//					}
+//				}
+//				parts = findPartsAt(Wire.class, wp.getX(), wp.getY());
+//				if (parts.length > 0) {
+//					wp.show = true;
+//					// add a wirepoint at that position in every part of parts
+//					for (CircuitPart part : parts) {
+//						Wire wire = (Wire) part;
+//						wire.addPointFitting(wp.getX(), wp.getY());
+//					}
+//				}
+//			}
+//		}
+//		this.needsRepaint(null);
+//	}
 
 	private void fireRepaint(CircuitPart source) {
 		if (repaintListener != null)
@@ -333,6 +360,41 @@ public class Circuit implements LSRepaintListener {
 				return (Wire) part;
 		}
 		return null;
+	}
+
+	/**
+	 * replace a wirepoint by a pin
+	 * 
+	 * @param wp
+	 */
+	public void checkWirePoint(WirePoint wp) {
+		// check for Pin
+		int px = wp.getX();
+		int py = wp.getY();
+		CircuitPart cp = findPartAt(px, py);
+		if (cp instanceof Pin) {
+			Pin p = (Pin) cp;
+			// wirepoint will be replaced by pin
+			// get corresponding wire
+			for (Wire w : getWires()) {
+				if (wp.equals(w.getFrom())) {
+					// found wire
+					wp.removeLevelListener(w);
+					w.removeLevelListener(wp);
+					w.setFrom(p);
+					w.connect(p);
+					return;
+				}
+				if (wp.equals(w.getTo())) {
+					// found wire
+					wp.removeLevelListener(w);
+					w.removeLevelListener(wp);
+					w.setTo(p);
+					w.connect(p);
+					return;
+				}
+			}
+		}
 	}
 
 }

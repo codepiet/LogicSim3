@@ -209,12 +209,16 @@ public class XMLCreator {
 					g.setAttribute("number", String.valueOf(p.number));
 				} else if (w.getFrom() instanceof WirePoint) {
 					WirePoint wp = (WirePoint) w.getFrom();
-					String type = "wire";
+					String type = TYPE_WIRE;
 					if (wp.parent == null || w.equals(wp.parent))
-						type = "point";
+						type = TYPE_WIREPOINT;
 					g.setAttribute("type", type);
-					g.setAttribute("x", String.valueOf(wp.getX()));
-					g.setAttribute("y", String.valueOf(wp.getY()));
+					if (TYPE_WIRE.equals(type)) {
+						g.setAttribute("id", wp.getId());
+					} else {
+						g.setAttribute("x", String.valueOf(wp.getX()));
+						g.setAttribute("y", String.valueOf(wp.getY()));
+					}
 				}
 				n.appendChild(g);
 			}
