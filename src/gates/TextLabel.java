@@ -61,7 +61,7 @@ public class TextLabel extends Gate {
 			Rectangle r = textDimensions(g2, text);
 			width = r.width;
 			height = r.height;
-			drawString(g2, text, getX() + width / 2, getY() + height / 2, CENTER);
+			drawString(g2, text, getX() + width / 2, getY() + height / 2, ALIGN_CENTER);
 		}
 	}
 

@@ -746,7 +746,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 	boolean showDiscardDialog(String title) {
 		if (lsFile.changed) {
-			int result = Dialogs.confirmDiscardDialog();
+			int result = Dialogs.confirmDiscardDialog(this);
 			return (result == JOptionPane.YES_OPTION);
 		}
 		return true;
@@ -790,12 +790,11 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		} catch (RuntimeException x) {
 			System.err.println(x);
 			x.printStackTrace(System.err);
-			JOptionPane.showMessageDialog(this, I18N.tr(Lang.READERROR) + " " + x.getMessage());
+			Dialogs.messageDialog(this, I18N.tr(Lang.READERROR) + " " + x.getMessage());
 		}
 		setAppTitle();
 		lspanel.clear();
-		lspanel.circuit.setGates(lsFile.getGates());
-		lspanel.circuit.setWires(lsFile.getWires());
+		lspanel.circuit = lsFile.circuit;
 		lspanel.circuit.reset();
 	}
 
@@ -847,7 +846,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		} catch (RuntimeException err) {
 			System.err.println(err);
 			err.printStackTrace(System.err);
-			JOptionPane.showMessageDialog(this, I18N.tr(Lang.SAVEERROR) + " " + err.getMessage());
+			Dialogs.messageDialog(this, I18N.tr(Lang.SAVEERROR) + " " + err.getMessage());
 		}
 
 		setAppTitle();
@@ -896,7 +895,21 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	 * @param e
 	 */
 	void actionCreateModule(ActionEvent e) {
-		lsFile = new LogicSimFile(defaultModuleFileName());
+		if (lsFile.circuit.isModule()) {
+			Dialogs.messageDialog(this, I18N.tr(Lang.ALREADYMODULE));
+			return;
+		}
+
+		if (!lsFile.circuit.isEmpty()) {
+			String filename = lsFile.extractFileName();
+			String fn = App.getModulePath();
+			fn += filename;
+			fn += "." + App.MODULE_FILE_SUFFIX;
+			lsFile.fileName = fn;
+			lsFile.changed = true;
+		} else {
+			lsFile = new LogicSimFile(defaultModuleFileName());
+		}
 
 		if (!FileInfoDialog.showFileInfo(this, lsFile))
 			return;
@@ -1111,7 +1124,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 				public void actionPerformed(ActionEvent e) {
 					LSProperties.getInstance().setProperty(LSProperties.LANGUAGE,
 							((JMenuItem) e.getSource()).getText());
-					JOptionPane.showMessageDialog(LSFrame.this, I18N.tr(Lang.LSRESTART));
+					Dialogs.messageDialog(LSFrame.this, I18N.tr(Lang.LSRESTART));
 				}
 			});
 			btnGroup.add(item);

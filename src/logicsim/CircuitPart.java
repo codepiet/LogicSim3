@@ -19,9 +19,9 @@ public abstract class CircuitPart implements LSLevelListener {
 	public static final boolean HIGH = true;
 	public static final boolean LOW = false;
 
-	public static final int CENTER = 1;
-	public static final int LEFT = 2;
-	public static final int RIGHT = 3;
+	public static final int ALIGN_CENTER = 1;
+	public static final int ALIGN_LEFT = 2;
+	public static final int ALIGN_RIGHT = 3;
 
 	private Collection<LSLevelListener> listeners;
 	private LSRepaintListener repListener;
@@ -323,14 +323,18 @@ public abstract class CircuitPart implements LSLevelListener {
 		// the event can have a different source (not itself)
 		// if so, just forward the event to the others except to the origin
 		if (e.source != this) {
-			LSLevelEvent evt = new LSLevelEvent(this, e.level);
 			for (LSLevelListener l : getListeners()) {
-				if (e.source != l)
-					l.changedLevel(evt);
+				if (e.source != l) {
+					LSLevelEvent evtL = new LSLevelEvent(this, e.level, e.force, l);
+					Simulation.getInstance().putEvent(evtL);
+					// l.changedLevel(evt);
+				}
 			}
 		} else {
 			for (LSLevelListener l : getListeners()) {
-				l.changedLevel(e);
+				LSLevelEvent evtL = new LSLevelEvent(this, e.level, e.force, l);
+				Simulation.getInstance().putEvent(evtL);
+				// l.changedLevel(e);
 			}
 		}
 	}
@@ -384,7 +388,7 @@ public abstract class CircuitPart implements LSLevelListener {
 			overLine = true;
 			text = text.substring(1);
 		}
-		if (mode == CENTER) {
+		if (mode == ALIGN_CENTER) {
 			nx = x - r.width / 2;
 			ny = y + r.height / 2;
 			if (overLine) {
@@ -393,14 +397,14 @@ public abstract class CircuitPart implements LSLevelListener {
 			} else {
 				g2.drawString(text, nx, ny - 2);
 			}
-		} else if (mode == LEFT) {
+		} else if (mode == ALIGN_LEFT) {
 			if (overLine) {
 				g2.drawLine(nx, y - r.height + 2, nx + r.width, y - r.height + 2);
 				g2.drawString(text, nx, ny - 2);
 			} else {
 				g2.drawString(text, nx, ny);
 			}
-		} else if (mode == RIGHT) {
+		} else if (mode == ALIGN_RIGHT) {
 			if (overLine) {
 				g2.drawLine(nx - r.width, y - r.height + 3, nx, y - r.height + 3);
 				g2.drawString(text, nx - r.width, ny - 2);
@@ -408,6 +412,14 @@ public abstract class CircuitPart implements LSLevelListener {
 				g2.drawString(text, nx - r.width, ny);
 			}
 		}
+	}
+
+	protected void clearListeners() {
+		listeners.clear();
+	}
+
+	public boolean getLevel() {
+		return false;
 	}
 
 }

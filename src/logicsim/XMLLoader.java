@@ -33,83 +33,19 @@ public class XMLLoader {
 		}
 
 		// gates part
-		Vector<Gate> gates = new Vector<Gate>();
 		node = doc.optChild("gates");
 		if (node != null) {
 			for (Xml gnode : node.children(XMLCreator.TYPE_GATE)) {
-				// acquire basic information
-				String type = gnode.string("type").toLowerCase();
-				int x = Integer.parseInt(gnode.string("x"));
-				int y = Integer.parseInt(gnode.string("y"));
-				String optRotate = gnode.optString("rotate");
-				String optMirror = gnode.optString("mirror");
-				String optInputs = gnode.optString("inputs");
-
-				Gate gate = null;
-				try {
-					Gate g = App.getGate(type);
-					if (g == null)
-						throw new RuntimeException("gate type '" + type + "' not there");
-					gate = GateLoaderHelper.create(g);
-				} catch (Exception e) {
-					throw new RuntimeException(e.getMessage());
-				}
-
-				if (optInputs != null)
-					gate.createDynamicInputs(Integer.parseInt(optInputs));
-				gate.moveTo(x, y);
-				if (optRotate != null) {
-					int rot = Integer.parseInt(optRotate) / 90;
-					if (gate.height != gate.width) {
-						gate.rotate();
-					} else {
-						for (int i = 0; i < rot; i++)
-							gate.rotate();
-					}
-				}
-				if (optMirror != null) {
-					if ("x".equals(optMirror))
-						gate.mirror();
-					else if ("y".equals(optMirror)) {
-						gate.mirror();
-						gate.mirror();
-					} else if ("xy".equals(optMirror)) {
-						gate.mirror();
-						gate.mirror();
-						gate.mirror();
-					}
-				}
-
-				// settings
-				Properties ps = getProperties(gnode);
-				for (Object k : ps.keySet()) {
-					String key = (String) k;
-					gate.setProperty(key, ps.getProperty(key));
-				}
-				gate.loadProperties();
-
-				// old
-				if (gnode.children("io").size() > 0)
-					loadPinsIO(gate, gnode);
-				else
-					loadPins(gate, gnode);
-
-				node = doc.optChild("properties");
-				if (node != null) {
-					for (Xml n : node.children("property")) {
-						gate.setProperty(n.name(), n.content());
-					}
-					gate.loadProperties();
-				}
+				Gate gate = loadGate(gnode);
 				gate.selected = false;
-				gates.add(gate);
+				ls.circuit.addGate(gate);
 			}
 		}
 
-		Vector<Wire> wires = new Vector<Wire>();
 		node = doc.optChild("wires");
 		if (node != null) {
 			for (Xml wnode : node.children(XMLCreator.TYPE_WIRE)) {
+				// Wire wire = loadWire(wnode);
 				CircuitPart from = null;
 				CircuitPart to = null;
 
@@ -120,7 +56,7 @@ public class XMLLoader {
 					String fromGateId = gnode.string("id");
 					int fromNumber = Integer.parseInt(gnode.string("number"));
 					// try to get the gate
-					Gate fromGate = findGateById(gates, fromGateId);
+					Gate fromGate = findGateById(ls.circuit.getGates(), fromGateId);
 					if (fromGate == null)
 						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": from gate is null");
 					from = fromGate.getPin(fromNumber);
@@ -131,7 +67,7 @@ public class XMLLoader {
 				} else if (XMLCreator.TYPE_WIRE.equals(type)) {
 					String id = gnode.string("id");
 					// search wire
-					for (Wire w : wires) {
+					for (Wire w : ls.circuit.getWires()) {
 						for (WirePoint wp : w.getPoints()) {
 							if (id.equals(wp.getId())) {
 								from = wp;
@@ -140,6 +76,8 @@ public class XMLLoader {
 						}
 					}
 				}
+				if (from == null)
+					System.out.println("from not found " + type);
 
 				// to node
 				gnode = wnode.child("to");
@@ -148,7 +86,7 @@ public class XMLLoader {
 					String toGateId = gnode.string("id");
 					int toNumber = Integer.parseInt(gnode.string("number"));
 
-					Gate toGate = findGateById(gates, toGateId);
+					Gate toGate = findGateById(ls.circuit.getGates(), toGateId);
 					if (toGate == null)
 						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": to gate is null");
 					to = toGate.getPin(toNumber);
@@ -159,7 +97,7 @@ public class XMLLoader {
 				} else if (XMLCreator.TYPE_WIRE.equals(type)) {
 					String id = gnode.string("id");
 					// search wire
-					for (Wire w : wires) {
+					for (Wire w : ls.circuit.getWires()) {
 						for (WirePoint wp : w.getPoints()) {
 							if (id.equals(wp.getId())) {
 								to = wp;
@@ -171,6 +109,7 @@ public class XMLLoader {
 
 				if (from == null || to == null) {
 					throw new RuntimeException("wire cannot be connected");
+					// continue;
 				}
 				Wire wire = new Wire(from, to);
 
@@ -193,15 +132,85 @@ public class XMLLoader {
 				wire.loadProperties();
 
 				wire.selected = false;
-				wires.add(wire);
+				ls.circuit.addWire(wire);
 				// connect wire to CircuitPart
 				from.connect(wire);
 				to.connect(wire);
+				// wire.reset();
+				if (from instanceof Pin) {
+					wire.changedLevel(new LSLevelEvent(from, from.getLevel()));
+				}
 			}
 		}
-		ls.setGates(gates);
-		ls.setWires(wires);
 		return ls;
+	}
+
+	private static Gate loadGate(Xml gnode) {
+		// acquire basic information
+		String type = gnode.string("type").toLowerCase();
+		int x = Integer.parseInt(gnode.string("x"));
+		int y = Integer.parseInt(gnode.string("y"));
+		String optRotate = gnode.optString("rotate");
+		String optMirror = gnode.optString("mirror");
+		String optInputs = gnode.optString("inputs");
+
+		Gate gate = null;
+		try {
+			Gate g = App.getGate(type);
+			if (g == null)
+				throw new RuntimeException("gate type '" + type + "' not there");
+			gate = GateLoaderHelper.create(g);
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage());
+		}
+
+		if (optInputs != null)
+			gate.createDynamicInputs(Integer.parseInt(optInputs));
+		gate.moveTo(x, y);
+		if (optRotate != null) {
+			int rot = Integer.parseInt(optRotate) / 90;
+			if (gate.height != gate.width) {
+				gate.rotate();
+			} else {
+				for (int i = 0; i < rot; i++)
+					gate.rotate();
+			}
+		}
+		if (optMirror != null) {
+			if ("x".equals(optMirror))
+				gate.mirror();
+			else if ("y".equals(optMirror)) {
+				gate.mirror();
+				gate.mirror();
+			} else if ("xy".equals(optMirror)) {
+				gate.mirror();
+				gate.mirror();
+				gate.mirror();
+			}
+		}
+
+		// settings
+		Properties ps = getProperties(gnode);
+		for (Object k : ps.keySet()) {
+			String key = (String) k;
+			gate.setProperty(key, ps.getProperty(key));
+		}
+		gate.loadProperties();
+
+		// old
+		if (gnode.children("io").size() > 0)
+			loadPinsIO(gate, gnode);
+		else
+			loadPins(gate, gnode);
+
+		Xml node = gnode.optChild("properties");
+		if (node != null) {
+			for (Xml n : node.children("property")) {
+				gate.setProperty(n.name(), n.content());
+			}
+			gate.loadProperties();
+		}
+		return gate;
 	}
 
 	private static Properties getProperties(Xml gnode) {

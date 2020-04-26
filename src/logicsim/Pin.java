@@ -6,7 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
-import java.util.Iterator;
+import java.util.ArrayList;
 
 public class Pin extends CircuitPart {
 
@@ -67,9 +67,6 @@ public class Pin extends CircuitPart {
 		int y = getY();
 
 		g2.setFont(smallFont);
-		if (text != null && text.length() == 0) {
-			System.out.println("BAD: " + getId());
-		}
 		if (text != null && text.length() > 0) {
 			if (paintDirection == RIGHT) {
 				if (POS_EDGE_TRIG.equals(text)) {
@@ -79,7 +76,7 @@ public class Pin extends CircuitPart {
 					tr.addPoint(x + 1 + CONN_SIZE + 8, y);
 					g2.draw(tr);
 				} else {
-					drawString(g2, text, x + CONN_SIZE + 3, y + 5, CircuitPart.LEFT);
+					drawString(g2, text, x + CONN_SIZE + 3, y + 5, CircuitPart.ALIGN_LEFT);
 					// g2.drawString(text, x + CONN_SIZE + 3, y + 5);
 				}
 			} else if (paintDirection == LEFT) {
@@ -90,7 +87,7 @@ public class Pin extends CircuitPart {
 					tr.addPoint(x - 1 - CONN_SIZE - 8, y);
 					g2.draw(tr);
 				} else {
-					drawString(g2, text, x - CONN_SIZE - 2, y + 5, CircuitPart.RIGHT);
+					drawString(g2, text, x - CONN_SIZE - 2, y + 5, CircuitPart.ALIGN_RIGHT);
 					// g2.drawString(text, x - CONN_SIZE - lw - 2, y + 5);
 				}
 			} else if (paintDirection == UP) {
@@ -101,7 +98,7 @@ public class Pin extends CircuitPart {
 					tr.addPoint(x, y - 1 - CONN_SIZE - 8);
 					g2.draw(tr);
 				} else {
-					drawString(g2, text, x, y - CONN_SIZE - 6, CircuitPart.CENTER);
+					drawString(g2, text, x, y - CONN_SIZE - 6, CircuitPart.ALIGN_CENTER);
 					// g2.drawString(text, x - lw / 2, y - CONN_SIZE - 3);
 				}
 			} else if (paintDirection == DOWN) {
@@ -112,9 +109,47 @@ public class Pin extends CircuitPart {
 					tr.addPoint(x, y + 1 + CONN_SIZE + 8);
 					g2.draw(tr);
 				} else {
-					drawString(g2, text, x, y + CONN_SIZE + 9, CircuitPart.CENTER);
+					drawString(g2, text, x, y + CONN_SIZE + 9, CircuitPart.ALIGN_CENTER);
 					// g2.drawString(text, x - lw / 2, y + CONN_SIZE + 12);
 				}
+			}
+		}
+	}
+
+	@Override
+	protected void drawString(Graphics2D g2, String text, int x, int y, int mode) {
+		int nx = x;
+		int ny = y;
+		if (text == null)
+			return;
+		Rectangle r = textDimensions(g2, text);
+		boolean overLine = false;
+		if (text.charAt(0) == '/') {
+			overLine = true;
+			text = text.substring(1);
+		}
+		if (mode == ALIGN_CENTER) {
+			nx = x - r.width / 2;
+			ny = y + r.height / 2;
+			if (overLine) {
+				g2.drawLine(nx, y - r.height / 2 + 4, nx + r.width, y - r.height / 2 + 4);
+				g2.drawString(text, nx, ny - 4);
+			} else {
+				g2.drawString(text, nx, ny - 2);
+			}
+		} else if (mode == ALIGN_LEFT) {
+			if (overLine) {
+				g2.drawLine(nx, y - r.height + 4, nx + r.width, y - r.height + 4);
+				g2.drawString(text, nx, ny - 2);
+			} else {
+				g2.drawString(text, nx, ny);
+			}
+		} else if (mode == ALIGN_RIGHT) {
+			if (overLine) {
+				g2.drawLine(nx - r.width, y - r.height + 4, nx, y - r.height + 4);
+				g2.drawString(text, nx - r.width, ny - 2);
+			} else {
+				g2.drawString(text, nx - r.width, ny);
 			}
 		}
 	}
@@ -150,26 +185,26 @@ public class Pin extends CircuitPart {
 			int xp = x + 2;
 			int yp = y - 2;
 			if (paintDirection == LEFT)
-				WidgetHelper.drawStringCentered(g2, "1", xp+2, yp);
+				WidgetHelper.drawStringCentered(g2, "1", xp + 2, yp);
 			else if (paintDirection == RIGHT)
-				WidgetHelper.drawStringCentered(g2, "1", xp-5, yp);
+				WidgetHelper.drawStringCentered(g2, "1", xp - 5, yp);
 			else if (paintDirection == DOWN)
-				WidgetHelper.drawStringCentered(g2, "1", xp-2, yp-6);
+				WidgetHelper.drawStringCentered(g2, "1", xp - 2, yp - 6);
 			else // UP
-				WidgetHelper.drawStringCentered(g2, "1", xp-2, yp+6);
+				WidgetHelper.drawStringCentered(g2, "1", xp - 2, yp + 6);
 		} else if (levelType == LOW) {
 			if (ioType == OUTPUT)
 				throw new RuntimeException("OUTPUT may not be set LOW");
 			int xp = x + 2;
 			int yp = y - 2;
 			if (paintDirection == LEFT)
-				WidgetHelper.drawStringCentered(g2, "0", xp+3, yp);
+				WidgetHelper.drawStringCentered(g2, "0", xp + 3, yp);
 			else if (paintDirection == RIGHT)
-				WidgetHelper.drawStringCentered(g2, "0", xp-6, yp);
+				WidgetHelper.drawStringCentered(g2, "0", xp - 6, yp);
 			else if (paintDirection == DOWN)
-				WidgetHelper.drawStringCentered(g2, "0", xp-2, yp-6);
+				WidgetHelper.drawStringCentered(g2, "0", xp - 2, yp - 6);
 			else // UP
-				WidgetHelper.drawStringCentered(g2, "0", xp-2, yp+6);
+				WidgetHelper.drawStringCentered(g2, "0", xp - 2, yp + 6);
 		}
 		if (levelType == HIGH || levelType == LOW || levelType == NORMAL) {
 			// normal
@@ -304,25 +339,27 @@ public class Pin extends CircuitPart {
 		return level;
 	}
 
-	@Override
-	public void connect(CircuitPart part) {
-		super.connect(part);
-		Wire wire = (Wire) part;
-		if (isInput()) {
-			changedLevel(new LSLevelEvent(wire, wire.getLevel(), true));
-		} else {
-			LSLevelEvent evt = new LSLevelEvent(this, getLevel(), true);
-			fireChangedLevel(evt);
-		}
-	}
+//	@Override
+//	public void connect(CircuitPart part) {
+//		super.connect(part);
+//		Wire wire = (Wire) part;
+//		if (isInput()) {
+//			//changedLevel(new LSLevelEvent(wire, wire.getLevel(), true));
+//			//changedLevel(new LSLevelEvent(wire, wire.getLevel(), true));
+//		} else {
+//			//LSLevelEvent evt = new LSLevelEvent(this, getLevel(), true);
+//			//fireChangedLevel(evt);
+//		}
+//	}
 
 	public void disconnect() {
-		for (Iterator<LSLevelListener> iterator = getListeners().iterator(); iterator.hasNext();) {
-			if (iterator instanceof Wire) {
-				Wire w = (Wire) iterator;
+		for (int i = 0; i < getListeners().size(); i++) {
+			LSLevelListener l = ((ArrayList<LSLevelListener>) getListeners()).get(i);
+			if (l instanceof Wire) {
+				Wire w = (Wire) l;
 				w.disconnect(null);
-				removeLevelListener(w);
-				iterator.remove();
+				w = null;
+				i--;
 			}
 		}
 	}

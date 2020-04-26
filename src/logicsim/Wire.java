@@ -479,11 +479,11 @@ public class Wire extends CircuitPart implements Cloneable {
 		if (level != e.level || e.force) {
 			level = e.level;
 			// forward to other listeners, event must not get back to the origin
+			fireRepaint();
 			fireChangedLevel(e);
 			for (WirePoint wp : points) {
 				wp.fireChangedLevel(e);
 			}
-			fireRepaint();
 		}
 	}
 
@@ -574,5 +574,25 @@ public class Wire extends CircuitPart implements Cloneable {
 	public void setTo(CircuitPart to) {
 		this.to = to;
 		checkFromTo();
+	}
+
+	@Override
+	public void reset() {
+		super.reset();
+		if (from != null) {
+			if (from instanceof Wire) {
+				Wire w = (Wire) from;
+				from.fireChangedLevel(new LSLevelEvent(from, w.getLevel()));
+			} else if (from instanceof Pin) {
+				Pin p = (Pin) from;
+				from.fireChangedLevel(new LSLevelEvent(from, p.getLevel()));
+			} else if (from instanceof WirePoint) {
+				WirePoint wp = (WirePoint) from;
+				if (wp.parent != null) {
+					Wire w = (Wire) wp.parent;
+					wp.parent.fireChangedLevel(new LSLevelEvent(wp.parent, w.getLevel()));
+				}
+			}
+		}
 	}
 }

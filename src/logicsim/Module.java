@@ -99,18 +99,18 @@ public class Module extends Gate {
 					}
 				}
 			}
-			// initialize height and reposition connectors
-			int numIn = getNumInputs();
-			int numOut = getNumOutputs();
-			int max = (numIn > numOut) ? numIn : numOut;
-			if (max > 5)
-				height = 10 * max * 10;
-			for (Pin c : getInputs()) {
-				c.setY(getY() + getConnectorPosition(c.number, numIn, Gate.VERTICAL));
-			}
-			for (Pin c : getOutputs()) {
-				c.setY(getY() + getConnectorPosition(c.number - 16, numOut, Gate.VERTICAL));
-			}
+		}
+		// initialize height and reposition connectors
+		int numIn = getNumInputs();
+		int numOut = getNumOutputs();
+		int max = (numIn > numOut) ? numIn : numOut;
+		if (max > 5)
+			height = 10 * max + 10;
+		for (Pin c : getInputs()) {
+			c.setY(getY() + getConnectorPosition(c.number, numIn, Gate.VERTICAL));
+		}
+		for (Pin c : getOutputs()) {
+			c.setY(getY() + getConnectorPosition(c.number - 16, numOut, Gate.VERTICAL));
 		}
 
 		if (moduleIn == null || moduleOut == null) {
@@ -128,19 +128,6 @@ public class Module extends Gate {
 				p.disconnect();
 				p.addLevelListener(this);
 			}
-		}
-
-	}
-
-	/**
-	 * wird aufgerufen, wenn auf das Gatter geklickt wird
-	 */
-	@Override
-	public void mousePressed(LSMouseEvent e) {
-		notifyMessage(type);
-		if (!Simulation.getInstance().isRunning()) {
-			select();
-			notifyRepaint();
 		}
 	}
 
@@ -180,7 +167,10 @@ public class Module extends Gate {
 
 	@Override
 	protected void drawLabel(Graphics2D g2, String lbl, Font font) {
-		super.drawLabel(g2, type, font);
+		//super.drawLabel(g2, type, font);
+		g2.setFont(bigFont);
+		int sw = g2.getFontMetrics().stringWidth(type);
+		drawRotate(g2, getX() + 36, getY() + height / 2 + sw / 2, -90, type);
 	}
 
 	@Override

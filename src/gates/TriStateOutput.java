@@ -1,5 +1,6 @@
 package gates;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
@@ -31,8 +32,8 @@ public class TriStateOutput extends Gate {
 		getPin(0).setDirection(Pin.DOWN);
 		getPin(1).moveTo(getX(), getY() + 20);
 		getPin(2).moveTo(getX() + 40, getY() + 20);
-		getPin(1).setProperty(TEXT, "I");
-		getPin(2).setProperty(TEXT, "O");
+		// getPin(1).setProperty(TEXT, "I");
+		// getPin(2).setProperty(TEXT, "O");
 
 		reset();
 	}
@@ -61,6 +62,10 @@ public class TriStateOutput extends Gate {
 	}
 
 	private void drawANSI(Graphics2D g2) {
+		g2.setStroke(new BasicStroke(3));
+		g2.setColor(getPin(0).getLevel() ? Color.red : Color.black);
+		g2.drawLine(getPin(0).getX(), getPin(0).getY() + 5, getPin(0).getX(), getPin(0).getY() + 10);
+
 		Path2D p = new Path2D.Double();
 		double yu = getY() + 3;
 		double xr = getX() + width - CONN_SIZE + 1;
@@ -73,12 +78,11 @@ public class TriStateOutput extends Gate {
 		p.lineTo(xl, yu);
 		p.closePath();
 
+		g2.setStroke(new BasicStroke(1));
 		g2.setPaint(Color.WHITE);
 		g2.fill(p);
 		g2.setPaint(Color.black);
 		g2.draw(p);
-
-		g2.drawLine(getPin(0).getX(), getPin(0).getY() + 5, getPin(0).getX(), getPin(0).getY() + 10);
 	}
 
 	@Override

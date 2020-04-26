@@ -1,3 +1,4 @@
+alreadymodule=The circuit is already a module. Abort!
 aborted=aborted
 about=About LogicSim
 addpoint.help=click on wire to add point

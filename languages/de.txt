@@ -1,3 +1,4 @@
+alreadymodule=Der Schaltkreis ist bereits ein Modul. Abbruch!
 aborted=abgebrochen
 about=\u00DCber LogicSim
 addpoint.help=Klicke auf ein Kabel um einen Punkt hinzuzuf\u00FCgen

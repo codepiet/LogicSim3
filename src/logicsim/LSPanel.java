@@ -199,8 +199,8 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			if (currentAction == ACTION_DELPOINT && cp instanceof WirePoint && cp.parent instanceof Wire) {
 				cp.parent.mousePressed(new LSMouseEvent(e, ACTION_DELPOINT, null));
 			}
-			if (cp != null)
-				System.out.println(cp.toStringAll());
+			// if (cp != null)
+			// System.out.println(cp.toStringAll());
 			if (cp instanceof Pin && !e.isAltDown() && currentAction == ACTION_NONE) {
 				// we start a new wire if the pin we clicked is an output OR
 				// if we are in expert mode
@@ -399,6 +399,9 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					circuit.checkWirePoint(wp);
 				}
 			}
+			CircuitPart cp = circuit.findPartAt(e.getX(), e.getY());
+			if (cp != null)
+				cp.mouseReleased(x, y);
 		}
 
 		@Override

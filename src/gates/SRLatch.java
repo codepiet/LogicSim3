@@ -54,8 +54,8 @@ public class SRLatch extends Gate {
 		nor2.getPin(0).addLevelListener(this);
 
 		// initial change level
-		nor1.getPin(0).changedLevel(new LSLevelEvent(nor1, HIGH));
-		nor2.getPin(0).changedLevel(new LSLevelEvent(nor2, HIGH));
+		//nor1.getPin(0).changedLevel(new LSLevelEvent(nor1, HIGH));
+		//nor2.getPin(0).changedLevel(new LSLevelEvent(nor2, HIGH));
 	}
 
 	@Override

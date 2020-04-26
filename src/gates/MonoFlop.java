@@ -51,7 +51,7 @@ public class MonoFlop extends Gate implements Runnable {
 			if (e.level == HIGH) {
 				LSLevelEvent evt = new LSLevelEvent(this, HIGH);
 				getPin(1).changedLevel(evt);
-
+				fireRepaint();
 				// rising edge detection of input
 				thread = new Thread(this);
 				thread.setPriority(Thread.MIN_PRIORITY);
@@ -68,6 +68,7 @@ public class MonoFlop extends Gate implements Runnable {
 		}
 		LSLevelEvent evt = new LSLevelEvent(this, LOW);
 		getPin(1).changedLevel(evt);
+		fireRepaint();
 	}
 
 	@Override

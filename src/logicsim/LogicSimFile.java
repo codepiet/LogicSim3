@@ -71,4 +71,14 @@ public class LogicSimFile {
 		return getKey("description");
 	}
 
+	@Override
+	public String toString() {
+		String s = "File: ";
+		if (fileName != null)
+			s += fileName;
+		if (circuit != null)
+			s += " circuit: " + circuit.parts.size() + " parts";
+		return s;
+	}
+
 }

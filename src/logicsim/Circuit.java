@@ -146,21 +146,21 @@ public class Circuit implements LSRepaintListener {
 	public CircuitPart[] getSelected() {
 		Vector<CircuitPart> selParts = new Vector<CircuitPart>();
 		for (Gate g : getGates()) {
-			if (g.selected)
+			if (g.selected && !selParts.contains(g))
 				selParts.add(g);
 		}
 		for (Wire w : getWires()) {
-			if (w.selected)
+			if (w.selected && !selParts.contains(w))
 				selParts.add(w);
 			if (w.getFrom() instanceof WirePoint)
-				if (w.getFrom().isSelected())
+				if (w.getFrom().isSelected() && !selParts.contains(w.getFrom()))
 					selParts.add(w.getFrom());
 			if (w.getTo() instanceof WirePoint)
-				if (w.getTo().isSelected())
+				if (w.getTo().isSelected() && !selParts.contains(w.getTo()))
 					selParts.add(w.getTo());
-			for (WirePoint pt : w.getPoints())
-				if (pt.isSelected())
-					selParts.add(pt);
+			for (WirePoint wp : w.getPoints())
+				if (wp.isSelected() && !selParts.contains(wp))
+					selParts.add(wp);
 		}
 		return selParts.toArray(new CircuitPart[selParts.size()]);
 	}
@@ -395,6 +395,10 @@ public class Circuit implements LSRepaintListener {
 				}
 			}
 		}
+	}
+
+	public boolean isEmpty() {
+		return parts.size() == 0;
 	}
 
 }

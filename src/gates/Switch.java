@@ -31,10 +31,7 @@ import logicsim.Pin;
 /**
  * Switch Component for LogicSim
  * 
- * Ein Klick-Button bleibt nur so lange an, wie der Nutzer den Mausknopf
- * gedr�ckt h�lt, aber mindestens 2 Simulations-Zyklen. Daf�r wird beim Klick
- * der Countdown auf 2 gesetzt und in jedem Zyklus heruntergez�hlt. Der Button
- * geht aus, wenn der Countdown auf 0 ist und die Maustaste losgelassen wurde.
+ * Simple Switch - can be configured as momentary or toggle button
  * 
  * @author Andreas Tetzl
  * @author Peter Gabriel
@@ -77,9 +74,7 @@ public class Switch extends Gate {
 
 	@Override
 	public void interact() {
-		if (!switchTypeMomentary) {
-			mousePressedSim(null);
-		}
+		getPin(0).changedLevel(new LSLevelEvent(this, !getPin(0).getLevel()));
 	}
 
 	@Override
@@ -89,6 +84,7 @@ public class Switch extends Gate {
 		if (switchTypeMomentary) {
 			// momentary-Button, will be deactivated if mouseReleased is called
 			getPin(0).changedLevel(new LSLevelEvent(this, HIGH));
+			fireRepaint();
 		} else {
 			// Toggle-Button
 			getPin(0).changedLevel(new LSLevelEvent(this, !getPin(0).getLevel()));
@@ -97,9 +93,10 @@ public class Switch extends Gate {
 
 	@Override
 	public void mouseReleased(int mx, int my) {
+		// deactivate momentary-Button
 		if (switchTypeMomentary) {
-			// momentary-Button, will deactivated if mouseReleased is called
 			getPin(0).changedLevel(new LSLevelEvent(this, LOW));
+			fireRepaint();
 		}
 	}
 

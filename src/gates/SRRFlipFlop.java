@@ -49,13 +49,12 @@ public class SRRFlipFlop extends Gate {
 		// clock: pin2
 		// s: pin0
 		// r: pin1
-		// mr: pin3 - master reset
+		// dr: pin3 - direct reset
 		if (e.source.equals(getPin(2)) && e.level == HIGH) {
 			// clock rising edge detection
 			boolean s = getPin(0).getLevel();
 			boolean r = getPin(1).getLevel();
-			boolean mr = getPin(3).getLevel();
-			if (r || mr) {
+			if (r) {
 				LSLevelEvent evt = new LSLevelEvent(this, LOW);
 				getPin(4).changedLevel(evt);
 				getPin(5).changedLevel(evt);
@@ -64,6 +63,11 @@ public class SRRFlipFlop extends Gate {
 				getPin(4).changedLevel(evt);
 				getPin(5).changedLevel(evt);
 			}
+		}
+		if (e.source.equals(getPin(3))) {
+			LSLevelEvent evt = new LSLevelEvent(this, LOW);
+			getPin(4).changedLevel(evt);
+			getPin(5).changedLevel(evt);
 		}
 	}
 

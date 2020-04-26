@@ -2,6 +2,7 @@ package logicsim;
 
 public class LSLevelEvent {
 	public CircuitPart source;
+	public LSLevelListener target;
 
 	public boolean level;
 
@@ -22,6 +23,11 @@ public class LSLevelEvent {
 	public LSLevelEvent(CircuitPart source, boolean level, boolean force) {
 		this(source, level);
 		this.force = force;
+	}
+
+	public LSLevelEvent(CircuitPart source, boolean level, boolean force, LSLevelListener target) {
+		this(source, level, force);
+		this.target = target;
 	}
 
 	public void setLevel(boolean level) {

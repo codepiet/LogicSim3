@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.swing.JOptionPane;
-
 public class App {
 
 	public static final String APP_TITLE = "LogicSim";
@@ -171,8 +169,7 @@ public class App {
 		if (f != null && f.exists() && f.isDirectory()) {
 			return new String(f.getAbsolutePath() + "/");
 		} else {
-			JOptionPane.showMessageDialog(null,
-					"Directory modules not found.\nPlease run the program from its directory");
+			Dialogs.messageDialog(null, "Directory 'modules' not found.\nPlease run the program from its directory");
 			System.exit(0);
 		}
 
@@ -186,8 +183,7 @@ public class App {
 		if (f != null && f.exists() && f.isDirectory()) {
 			return new String(f.getAbsolutePath() + "/");
 		} else {
-			JOptionPane.showMessageDialog(null,
-					"Directory circuits not found.\nPlease run the program from its directory");
+			Dialogs.messageDialog(null, "Directory 'circuits' not found.\nPlease run the program from its directory");
 			System.exit(0);
 		}
 		return "";

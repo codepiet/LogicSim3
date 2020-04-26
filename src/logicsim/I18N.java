@@ -17,8 +17,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Properties;
 
-import javax.swing.JOptionPane;
-
 /**
  *
  * @author atetzl
@@ -42,7 +40,7 @@ public class I18N {
 		if (prop.size() == 0 && !"en".equals(lang)) {
 			prop = load("en");
 			if (prop == null) {
-				JOptionPane.showMessageDialog(null,
+				Dialogs.messageDialog(null,
 						"Language file languages/en.txt not found.\nPlease run the program from its directory.");
 				System.exit(5);
 			}
