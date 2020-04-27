@@ -1,0 +1,839 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<logicsim version="3">
+    <info/>
+    <gates>
+        <gate type="switch" x="-70" y="10"/>
+        <gate type="switch" x="-70" y="90"/>
+        <gate type="label" x="-120" y="60">
+            <properties>
+                <property key="property">/SRCLR</property>
+                <property key="text">/SRCLR</property>
+            </properties>
+        </gate>
+        <gate type="label" x="-120" y="100">
+            <properties>
+                <property key="property">SER</property>
+                <property key="text">SER</property>
+            </properties>
+        </gate>
+        <gate type="label" x="-120" y="20">
+            <properties>
+                <property key="property">/OE</property>
+                <property key="text">/OE</property>
+            </properties>
+        </gate>
+        <gate type="label" x="-120" y="180">
+            <properties>
+                <property key="property">RCLK</property>
+                <property key="text">RCLK</property>
+            </properties>
+        </gate>
+        <gate type="label" x="-120" y="140">
+            <properties>
+                <property key="property">SRCLK</property>
+                <property key="text">SRCLK</property>
+            </properties>
+        </gate>
+        <gate type="not" x="120" y="10"/>
+        <gate type="drff" x="270" y="110">
+            <pin iotype="input" number="1" type="inv">
+                <properties>
+                    <property key="text">R</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srrff" x="270" y="600">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="3" type="inv">
+                <properties>
+                    <property key="text">R</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srrff" x="270" y="530">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="3" type="inv">
+                <properties>
+                    <property key="text">R</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srrff" x="270" y="460">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="3" type="inv">
+                <properties>
+                    <property key="text">R</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srrff" x="270" y="390">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="3" type="inv">
+                <properties>
+                    <property key="text">R</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srrff" x="270" y="320">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="3" type="inv">
+                <properties>
+                    <property key="text">R</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srrff" x="270" y="250">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="3" type="inv">
+                <properties>
+                    <property key="text">R</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srff" x="390" y="120">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srff" x="390" y="190">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srff" x="390" y="260">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srff" x="390" y="330">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srff" x="390" y="400">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srff" x="390" y="470">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srff" x="390" y="540">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srff" x="390" y="610">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="srrff" x="270" y="180">
+            <pin iotype="input" number="2" type="inv">
+                <properties>
+                    <property key="text">PosEdgeTrig</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="3" type="inv">
+                <properties>
+                    <property key="text">R</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="triout" x="470" y="140">
+            <pin iotype="input" number="1" type="inv"/>
+        </gate>
+        <gate type="triout" x="470" y="210">
+            <pin iotype="input" number="1" type="inv"/>
+        </gate>
+        <gate type="triout" x="470" y="280">
+            <pin iotype="input" number="1" type="inv"/>
+        </gate>
+        <gate type="triout" x="470" y="350">
+            <pin iotype="input" number="1" type="inv"/>
+        </gate>
+        <gate type="triout" x="470" y="420">
+            <pin iotype="input" number="1" type="inv"/>
+        </gate>
+        <gate type="triout" x="470" y="490">
+            <pin iotype="input" number="1" type="inv"/>
+        </gate>
+        <gate type="triout" x="470" y="560">
+            <pin iotype="input" number="1" type="inv"/>
+        </gate>
+        <gate type="triout" x="470" y="630">
+            <pin iotype="input" number="1" type="inv"/>
+        </gate>
+        <gate type="not" x="140" y="130"/>
+        <gate type="not" x="460" y="660"/>
+        <gate type="not" x="140" y="170"/>
+        <gate type="switch" x="-70" y="130">
+            <properties>
+                <property key="color">#99ff99</property>
+                <property key="property">momentary</property>
+                <property key="type">momentary</property>
+            </properties>
+        </gate>
+        <gate type="switch" x="-70" y="170">
+            <properties>
+                <property key="color">#00ff33</property>
+                <property key="property">momentary</property>
+                <property key="type">momentary</property>
+            </properties>
+        </gate>
+        <gate type="not" x="140" y="50">
+            <pin iotype="input" number="0" type="inv"/>
+        </gate>
+        <gate type="switch" x="-70" y="50"/>
+        <gate type="modin" x="20" y="30">
+            <pin iotype="input" number="0">
+                <properties>
+                    <property key="text">/OE</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="1">
+                <properties>
+                    <property key="text">/MR</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="2">
+                <properties>
+                    <property key="text">D</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="3">
+                <properties>
+                    <property key="text">S</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="4">
+                <properties>
+                    <property key="text">L</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="modout" x="640" y="30">
+            <pin iotype="output" number="16">
+                <properties>
+                    <property key="text">Q0</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="17">
+                <properties>
+                    <property key="text">Q1</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="18">
+                <properties>
+                    <property key="text">Q2</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="19">
+                <properties>
+                    <property key="text">Q3</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="20">
+                <properties>
+                    <property key="text">Q4</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="21">
+                <properties>
+                    <property key="text">Q5</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="22">
+                <properties>
+                    <property key="text">Q6</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="23">
+                <properties>
+                    <property key="text">Q7</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="24">
+                <properties>
+                    <property key="text">Q7S</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="led8" x="730" y="30"/>
+        <gate type="led" x="720" y="140"/>
+    </gates>
+    <wires>
+        <wire>
+            <from id="not@140:50" number="1" type="gate"/>
+            <to id="srrff@270:600" number="3" type="gate"/>
+            <point node="false" number="0" x="220" y="80"/>
+            <point node="true" number="1" x="220" y="140"/>
+            <point node="true" number="2" x="220" y="230"/>
+            <point node="true" number="3" x="220" y="300"/>
+            <point node="true" number="4" x="220" y="370"/>
+            <point node="true" number="5" x="220" y="440"/>
+            <point node="true" number="6" x="220" y="510"/>
+            <point node="true" number="7" x="220" y="580"/>
+            <point node="true" number="8" x="220" y="650"/>
+        </wire>
+        <wire>
+            <from id="220:140@1@not@140:50-3@srrff@270:600" type="wire"/>
+            <to id="drff@270:110" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:600" number="4" type="gate"/>
+            <to id="srff@390:610" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:600" number="5" type="gate"/>
+            <to id="srff@390:610" number="1" type="gate"/>
+            <point node="true" number="0" x="340" y="640"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:530" number="4" type="gate"/>
+            <to id="srff@390:540" number="0" type="gate"/>
+            <point node="true" number="0" x="350" y="550"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:530" number="5" type="gate"/>
+            <to id="srff@390:540" number="1" type="gate"/>
+            <point node="true" number="0" x="340" y="570"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:460" number="4" type="gate"/>
+            <to id="srff@390:470" number="0" type="gate"/>
+            <point node="true" number="0" x="350" y="480"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:460" number="5" type="gate"/>
+            <to id="srff@390:470" number="1" type="gate"/>
+            <point node="true" number="0" x="340" y="500"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:390" number="4" type="gate"/>
+            <to id="srff@390:400" number="0" type="gate"/>
+            <point node="true" number="0" x="350" y="410"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:390" number="5" type="gate"/>
+            <to id="srff@390:400" number="1" type="gate"/>
+            <point node="true" number="0" x="340" y="430"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:320" number="4" type="gate"/>
+            <to id="srff@390:330" number="0" type="gate"/>
+            <point node="true" number="0" x="350" y="340"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:320" number="5" type="gate"/>
+            <to id="srff@390:330" number="1" type="gate"/>
+            <point node="true" number="0" x="340" y="360"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:250" number="4" type="gate"/>
+            <to id="srff@390:260" number="0" type="gate"/>
+            <point node="true" number="0" x="350" y="270"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:250" number="5" type="gate"/>
+            <to id="srff@390:260" number="1" type="gate"/>
+            <point node="true" number="0" x="340" y="290"/>
+        </wire>
+        <wire>
+            <from id="drff@270:110" number="3" type="gate"/>
+            <to id="srff@390:120" number="0" type="gate"/>
+            <point node="true" number="0" x="350" y="130"/>
+        </wire>
+        <wire>
+            <from id="drff@270:110" number="4" type="gate"/>
+            <to id="srff@390:120" number="1" type="gate"/>
+            <point node="true" number="0" x="340" y="150"/>
+        </wire>
+        <wire>
+            <from id="220:300@1@not@140:50-3@srrff@270:600" type="wire"/>
+            <to id="srrff@270:250" number="3" type="gate"/>
+        </wire>
+        <wire>
+            <from id="220:370@1@not@140:50-3@srrff@270:600" type="wire"/>
+            <to id="srrff@270:320" number="3" type="gate"/>
+        </wire>
+        <wire>
+            <from id="220:440@1@not@140:50-3@srrff@270:600" type="wire"/>
+            <to id="srrff@270:390" number="3" type="gate"/>
+        </wire>
+        <wire>
+            <from id="220:510@1@not@140:50-3@srrff@270:600" type="wire"/>
+            <to id="srrff@270:460" number="3" type="gate"/>
+        </wire>
+        <wire>
+            <from id="220:580@1@not@140:50-3@srrff@270:600" type="wire"/>
+            <to id="srrff@270:530" number="3" type="gate"/>
+        </wire>
+        <wire>
+            <from id="220:230@1@not@140:50-3@srrff@270:600" type="wire"/>
+            <to id="srrff@270:180" number="3" type="gate"/>
+        </wire>
+        <wire>
+            <from id="not@140:130" number="1" type="gate"/>
+            <to id="srrff@270:600" number="2" type="gate"/>
+            <point node="true" number="0" x="240" y="160"/>
+            <point node="true" number="1" x="240" y="220"/>
+            <point node="true" number="2" x="240" y="290"/>
+            <point node="true" number="3" x="240" y="360"/>
+            <point node="true" number="4" x="240" y="430"/>
+            <point node="true" number="5" x="240" y="500"/>
+            <point node="true" number="6" x="240" y="570"/>
+            <point node="true" number="7" x="240" y="640"/>
+        </wire>
+        <wire>
+            <from id="240:220@1@not@140:130-2@srrff@270:600" type="wire"/>
+            <to id="srrff@270:180" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="240:290@1@not@140:130-2@srrff@270:600" type="wire"/>
+            <to id="srrff@270:250" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="240:360@1@not@140:130-2@srrff@270:600" type="wire"/>
+            <to id="srrff@270:320" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="240:430@1@not@140:130-2@srrff@270:600" type="wire"/>
+            <to id="srrff@270:390" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="240:500@1@not@140:130-2@srrff@270:600" type="wire"/>
+            <to id="srrff@270:460" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="240:570@1@not@140:130-2@srrff@270:600" type="wire"/>
+            <to id="srrff@270:530" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="340:150@4@drff@270:110-1@srff@390:120" type="wire"/>
+            <to id="srrff@270:180" number="1" type="gate"/>
+            <point node="false" number="0" x="340" y="170"/>
+            <point node="false" number="1" x="250" y="170"/>
+            <point node="false" number="2" x="250" y="200"/>
+        </wire>
+        <wire>
+            <from id="350:130@3@drff@270:110-0@srff@390:120" type="wire"/>
+            <to id="srrff@270:180" number="0" type="gate"/>
+            <point node="false" number="0" x="350" y="180"/>
+            <point node="false" number="1" x="260" y="180"/>
+            <point node="false" number="2" x="260" y="190"/>
+        </wire>
+        <wire>
+            <from id="350:270@4@srrff@270:250-0@srff@390:260" type="wire"/>
+            <to id="srrff@270:320" number="0" type="gate"/>
+            <point node="false" number="0" x="350" y="320"/>
+            <point node="false" number="1" x="260" y="320"/>
+            <point node="false" number="2" x="260" y="330"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:180" number="4" type="gate"/>
+            <to id="srff@390:190" number="0" type="gate"/>
+            <point node="true" number="0" x="350" y="200"/>
+        </wire>
+        <wire>
+            <from id="srrff@270:180" number="5" type="gate"/>
+            <to id="srff@390:190" number="1" type="gate"/>
+            <point node="true" number="0" x="340" y="220"/>
+        </wire>
+        <wire>
+            <from id="350:200@4@srrff@270:180-0@srff@390:190" type="wire"/>
+            <to id="srrff@270:250" number="0" type="gate"/>
+            <point node="false" number="0" x="350" y="250"/>
+            <point node="false" number="1" x="260" y="250"/>
+            <point node="false" number="2" x="260" y="260"/>
+        </wire>
+        <wire>
+            <from id="350:340@4@srrff@270:320-0@srff@390:330" type="wire"/>
+            <to id="srrff@270:390" number="0" type="gate"/>
+            <point node="false" number="0" x="350" y="390"/>
+            <point node="false" number="1" x="260" y="390"/>
+            <point node="false" number="2" x="260" y="400"/>
+        </wire>
+        <wire>
+            <from id="350:480@4@srrff@270:460-0@srff@390:470" type="wire"/>
+            <to id="srrff@270:530" number="0" type="gate"/>
+            <point node="false" number="0" x="350" y="530"/>
+            <point node="false" number="1" x="260" y="530"/>
+            <point node="false" number="2" x="260" y="540"/>
+        </wire>
+        <wire>
+            <from id="350:550@4@srrff@270:530-0@srff@390:540" type="wire"/>
+            <to id="srrff@270:600" number="0" type="gate"/>
+            <point node="false" number="0" x="350" y="600"/>
+            <point node="false" number="1" x="260" y="600"/>
+            <point node="false" number="2" x="260" y="610"/>
+        </wire>
+        <wire>
+            <from id="350:410@4@srrff@270:390-0@srff@390:400" type="wire"/>
+            <to id="srrff@270:460" number="0" type="gate"/>
+            <point node="false" number="0" x="350" y="460"/>
+            <point node="false" number="1" x="260" y="460"/>
+            <point node="false" number="2" x="260" y="470"/>
+        </wire>
+        <wire>
+            <from id="340:220@5@srrff@270:180-1@srff@390:190" type="wire"/>
+            <to id="srrff@270:250" number="1" type="gate"/>
+            <point node="false" number="0" x="340" y="240"/>
+            <point node="false" number="1" x="250" y="240"/>
+            <point node="false" number="2" x="250" y="270"/>
+        </wire>
+        <wire>
+            <from id="340:290@5@srrff@270:250-1@srff@390:260" type="wire"/>
+            <to id="srrff@270:320" number="1" type="gate"/>
+            <point node="false" number="0" x="340" y="310"/>
+            <point node="false" number="1" x="250" y="310"/>
+            <point node="false" number="2" x="250" y="340"/>
+        </wire>
+        <wire>
+            <from id="340:360@5@srrff@270:320-1@srff@390:330" type="wire"/>
+            <to id="srrff@270:390" number="1" type="gate"/>
+            <point node="false" number="0" x="340" y="380"/>
+            <point node="false" number="1" x="250" y="380"/>
+            <point node="false" number="2" x="250" y="410"/>
+        </wire>
+        <wire>
+            <from id="340:430@5@srrff@270:390-1@srff@390:400" type="wire"/>
+            <to id="srrff@270:460" number="1" type="gate"/>
+            <point node="false" number="0" x="340" y="450"/>
+            <point node="false" number="1" x="250" y="450"/>
+            <point node="false" number="2" x="250" y="480"/>
+        </wire>
+        <wire>
+            <from id="340:500@5@srrff@270:460-1@srff@390:470" type="wire"/>
+            <to id="srrff@270:530" number="1" type="gate"/>
+            <point node="false" number="0" x="340" y="520"/>
+            <point node="false" number="1" x="250" y="520"/>
+            <point node="false" number="2" x="250" y="550"/>
+        </wire>
+        <wire>
+            <from id="340:570@5@srrff@270:530-1@srff@390:540" type="wire"/>
+            <to id="srrff@270:600" number="1" type="gate"/>
+            <point node="false" number="0" x="340" y="590"/>
+            <point node="false" number="1" x="250" y="590"/>
+            <point node="false" number="2" x="250" y="620"/>
+        </wire>
+        <wire>
+            <from id="not@140:170" number="1" type="gate"/>
+            <to id="srff@390:610" number="2" type="gate"/>
+            <point node="false" number="0" x="210" y="200"/>
+            <point node="false" number="1" x="210" y="100"/>
+            <point node="false" number="2" x="370" y="100"/>
+            <point node="true" number="3" x="370" y="170"/>
+            <point node="true" number="4" x="370" y="240"/>
+            <point node="true" number="5" x="370" y="310"/>
+            <point node="true" number="6" x="370" y="380"/>
+            <point node="true" number="7" x="370" y="450"/>
+            <point node="true" number="8" x="370" y="520"/>
+            <point node="true" number="9" x="370" y="590"/>
+            <point node="false" number="10" x="370" y="660"/>
+        </wire>
+        <wire>
+            <from id="srff@390:610" number="4" type="gate"/>
+            <to id="triout@470:630" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="triout@470:630" number="2" type="gate"/>
+            <to id="modout@640:30" number="7" type="gate"/>
+            <point node="false" number="0" x="610" y="650"/>
+            <point node="false" number="1" x="610" y="110"/>
+        </wire>
+        <wire>
+            <from id="not@120:10" number="1" type="gate"/>
+            <to id="triout@470:630" number="0" type="gate"/>
+            <point node="false" number="0" x="520" y="40"/>
+            <point node="true" number="1" x="520" y="140"/>
+            <point node="true" number="2" x="520" y="210"/>
+            <point node="true" number="3" x="520" y="280"/>
+            <point node="true" number="4" x="520" y="350"/>
+            <point node="true" number="5" x="520" y="420"/>
+            <point node="true" number="6" x="520" y="490"/>
+            <point node="true" number="7" x="520" y="560"/>
+            <point node="true" number="8" x="520" y="630"/>
+        </wire>
+        <wire>
+            <from id="srff@390:540" number="4" type="gate"/>
+            <to id="triout@470:560" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="triout@470:560" number="2" type="gate"/>
+            <to id="modout@640:30" number="6" type="gate"/>
+            <point node="false" number="0" x="600" y="580"/>
+            <point node="false" number="1" x="600" y="100"/>
+        </wire>
+        <wire>
+            <from id="srff@390:470" number="4" type="gate"/>
+            <to id="triout@470:490" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="triout@470:490" number="2" type="gate"/>
+            <to id="modout@640:30" number="5" type="gate"/>
+            <point node="false" number="0" x="590" y="510"/>
+            <point node="false" number="1" x="590" y="90"/>
+        </wire>
+        <wire>
+            <from id="srff@390:400" number="4" type="gate"/>
+            <to id="triout@470:420" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="triout@470:420" number="2" type="gate"/>
+            <to id="modout@640:30" number="4" type="gate"/>
+            <point node="false" number="0" x="580" y="440"/>
+            <point node="false" number="1" x="580" y="80"/>
+        </wire>
+        <wire>
+            <from id="srff@390:330" number="4" type="gate"/>
+            <to id="triout@470:350" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="triout@470:350" number="2" type="gate"/>
+            <to id="modout@640:30" number="3" type="gate"/>
+            <point node="false" number="0" x="570" y="370"/>
+            <point node="false" number="1" x="570" y="70"/>
+        </wire>
+        <wire>
+            <from id="srff@390:260" number="4" type="gate"/>
+            <to id="triout@470:280" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="triout@470:280" number="2" type="gate"/>
+            <to id="modout@640:30" number="2" type="gate"/>
+            <point node="false" number="0" x="560" y="300"/>
+            <point node="false" number="1" x="560" y="60"/>
+        </wire>
+        <wire>
+            <from id="srff@390:190" number="4" type="gate"/>
+            <to id="triout@470:210" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="triout@470:210" number="2" type="gate"/>
+            <to id="modout@640:30" number="1" type="gate"/>
+            <point node="false" number="0" x="550" y="230"/>
+            <point node="false" number="1" x="550" y="50"/>
+        </wire>
+        <wire>
+            <from id="triout@470:140" number="2" type="gate"/>
+            <to id="modout@640:30" number="0" type="gate"/>
+            <point node="false" number="0" x="540" y="160"/>
+            <point node="false" number="1" x="540" y="40"/>
+        </wire>
+        <wire>
+            <from id="520:140@1@not@120:10-0@triout@470:630" type="wire"/>
+            <to id="triout@470:140" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="520:210@1@not@120:10-0@triout@470:630" type="wire"/>
+            <to id="triout@470:210" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="520:280@1@not@120:10-0@triout@470:630" type="wire"/>
+            <to id="triout@470:280" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="520:350@1@not@120:10-0@triout@470:630" type="wire"/>
+            <to id="triout@470:350" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="520:420@1@not@120:10-0@triout@470:630" type="wire"/>
+            <to id="triout@470:420" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="520:490@1@not@120:10-0@triout@470:630" type="wire"/>
+            <to id="triout@470:490" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="520:560@1@not@120:10-0@triout@470:630" type="wire"/>
+            <to id="triout@470:560" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="340:640@5@srrff@270:600-1@srff@390:610" type="wire"/>
+            <to id="not@460:660" number="0" type="gate"/>
+            <point node="false" number="0" x="340" y="690"/>
+        </wire>
+        <wire>
+            <from id="not@460:660" number="1" type="gate"/>
+            <to id="modout@640:30" number="8" type="gate"/>
+            <point node="false" number="0" x="620" y="690"/>
+            <point node="false" number="1" x="620" y="120"/>
+        </wire>
+        <wire>
+            <from id="240:160@1@not@140:130-2@srrff@270:600" type="wire"/>
+            <to id="drff@270:110" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="370:170@1@not@140:170-2@srff@390:610" type="wire"/>
+            <to id="srff@390:120" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="370:240@1@not@140:170-2@srff@390:610" type="wire"/>
+            <to id="srff@390:190" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="370:310@1@not@140:170-2@srff@390:610" type="wire"/>
+            <to id="srff@390:260" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="370:380@1@not@140:170-2@srff@390:610" type="wire"/>
+            <to id="srff@390:330" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="370:450@1@not@140:170-2@srff@390:610" type="wire"/>
+            <to id="srff@390:400" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="370:520@1@not@140:170-2@srff@390:610" type="wire"/>
+            <to id="srff@390:470" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="370:590@1@not@140:170-2@srff@390:610" type="wire"/>
+            <to id="srff@390:540" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="srff@390:120" number="4" type="gate"/>
+            <to id="triout@470:140" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modin@20:30" number="16" type="gate"/>
+            <to id="not@120:10" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modin@20:30" number="17" type="gate"/>
+            <to id="not@140:50" number="0" type="gate"/>
+            <point node="false" number="0" x="120" y="50"/>
+            <point node="false" number="1" x="120" y="80"/>
+        </wire>
+        <wire>
+            <from id="modin@20:30" number="18" type="gate"/>
+            <to id="drff@270:110" number="0" type="gate"/>
+            <point node="false" number="0" x="110" y="60"/>
+            <point node="false" number="1" x="110" y="120"/>
+        </wire>
+        <wire>
+            <from id="modin@20:30" number="19" type="gate"/>
+            <to id="not@140:130" number="0" type="gate"/>
+            <point node="false" number="0" x="100" y="70"/>
+            <point node="false" number="1" x="100" y="160"/>
+        </wire>
+        <wire>
+            <from id="modin@20:30" number="20" type="gate"/>
+            <to id="not@140:170" number="0" type="gate"/>
+            <point node="false" number="0" x="90" y="80"/>
+            <point node="false" number="1" x="90" y="200"/>
+        </wire>
+        <wire>
+            <from id="switch@-70:10" number="0" type="gate"/>
+            <to id="modin@20:30" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="switch@-70:50" number="0" type="gate"/>
+            <to id="modin@20:30" number="1" type="gate"/>
+            <point node="false" number="0" x="-20" y="80"/>
+            <point node="false" number="1" x="-20" y="50"/>
+        </wire>
+        <wire>
+            <from id="switch@-70:90" number="0" type="gate"/>
+            <to id="modin@20:30" number="2" type="gate"/>
+            <point node="false" number="0" x="-10" y="120"/>
+            <point node="false" number="1" x="-10" y="60"/>
+        </wire>
+        <wire>
+            <from id="switch@-70:130" number="0" type="gate"/>
+            <to id="modin@20:30" number="3" type="gate"/>
+            <point node="false" number="0" x="0" y="160"/>
+            <point node="false" number="1" x="0" y="70"/>
+        </wire>
+        <wire>
+            <from id="switch@-70:170" number="0" type="gate"/>
+            <to id="modin@20:30" number="4" type="gate"/>
+            <point node="false" number="0" x="10" y="200"/>
+            <point node="false" number="1" x="10" y="80"/>
+        </wire>
+        <wire>
+            <from id="modout@640:30" number="16" type="gate"/>
+            <to id="led8@730:30" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modout@640:30" number="17" type="gate"/>
+            <to id="led8@730:30" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modout@640:30" number="18" type="gate"/>
+            <to id="led8@730:30" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modout@640:30" number="19" type="gate"/>
+            <to id="led8@730:30" number="3" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modout@640:30" number="20" type="gate"/>
+            <to id="led8@730:30" number="4" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modout@640:30" number="21" type="gate"/>
+            <to id="led8@730:30" number="5" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modout@640:30" number="22" type="gate"/>
+            <to id="led8@730:30" number="6" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modout@640:30" number="23" type="gate"/>
+            <to id="led8@730:30" number="7" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modout@640:30" number="24" type="gate"/>
+            <to id="led@720:140" number="0" type="gate"/>
+        </wire>
+    </wires>
+</logicsim>

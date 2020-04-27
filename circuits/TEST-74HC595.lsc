@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<logicsim version="3">
+    <info/>
+    <gates>
+        <gate module="true" type="74HC595" x="240" y="130"/>
+        <gate module="true" type="74HC595" x="240" y="230"/>
+        <gate type="led8" x="330" y="130"/>
+        <gate type="led8" x="330" y="230"/>
+        <gate module="true" type="74HC595" x="240" y="330"/>
+        <gate type="switch" x="80" y="180">
+            <properties>
+                <property key="color">#66ff66</property>
+                <property key="text">74HC595</property>
+                <property key="type">momentary</property>
+            </properties>
+        </gate>
+        <gate type="switch" x="80" y="220">
+            <properties>
+                <property key="color">#99ff33</property>
+                <property key="text">LATCH</property>
+                <property key="type">momentary</property>
+            </properties>
+        </gate>
+        <gate type="switch" x="80" y="140"/>
+        <gate type="led8" x="330" y="330"/>
+        <gate type="not" x="120" y="40"/>
+        <gate type="switch" x="60" y="40"/>
+        <gate type="switch" x="60" y="80"/>
+    </gates>
+    <wires>
+        <wire>
+            <from id="74HC595@240:130" number="24" type="gate"/>
+            <to id="74HC595@240:230" number="2" type="gate"/>
+            <point node="false" number="0" x="310" y="220"/>
+            <point node="false" number="1" x="310" y="230"/>
+            <point node="false" number="2" x="230" y="230"/>
+            <point node="false" number="3" x="230" y="280"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:130" number="16" type="gate"/>
+            <to id="led8@330:130" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:130" number="17" type="gate"/>
+            <to id="led8@330:130" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:130" number="18" type="gate"/>
+            <to id="led8@330:130" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:130" number="19" type="gate"/>
+            <to id="led8@330:130" number="3" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:130" number="20" type="gate"/>
+            <to id="led8@330:130" number="4" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:130" number="21" type="gate"/>
+            <to id="led8@330:130" number="5" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:130" number="22" type="gate"/>
+            <to id="led8@330:130" number="6" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:130" number="23" type="gate"/>
+            <to id="led8@330:130" number="7" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:230" number="16" type="gate"/>
+            <to id="led8@330:230" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:230" number="17" type="gate"/>
+            <to id="led8@330:230" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:230" number="18" type="gate"/>
+            <to id="led8@330:230" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:230" number="19" type="gate"/>
+            <to id="led8@330:230" number="3" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:230" number="20" type="gate"/>
+            <to id="led8@330:230" number="4" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:230" number="21" type="gate"/>
+            <to id="led8@330:230" number="5" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:230" number="22" type="gate"/>
+            <to id="led8@330:230" number="6" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:230" number="23" type="gate"/>
+            <to id="led8@330:230" number="7" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:230" number="24" type="gate"/>
+            <to id="74HC595@240:330" number="2" type="gate"/>
+            <point node="false" number="0" x="310" y="320"/>
+            <point node="false" number="1" x="310" y="330"/>
+            <point node="false" number="2" x="230" y="330"/>
+            <point node="false" number="3" x="230" y="380"/>
+        </wire>
+        <wire>
+            <from id="switch@80:180" number="0" type="gate"/>
+            <to id="74HC595@240:130" number="3" type="gate"/>
+            <point node="true" number="0" x="200" y="210"/>
+        </wire>
+        <wire>
+            <from id="200:210@0@switch@80:180-3@74HC595@240:130" type="wire"/>
+            <to id="74HC595@240:230" number="3" type="gate"/>
+            <point node="true" number="0" x="200" y="310"/>
+        </wire>
+        <wire>
+            <from id="200:310@200:210@0@switch@80:180-3@74HC595@240:130-3@74HC595@240:230" type="wire"/>
+            <to id="74HC595@240:330" number="3" type="gate"/>
+            <point node="false" number="0" x="200" y="410"/>
+        </wire>
+        <wire>
+            <from id="switch@80:220" number="0" type="gate"/>
+            <to id="74HC595@240:130" number="4" type="gate"/>
+            <point node="true" number="0" x="190" y="250"/>74HC595
+            <point node="false" number="1" x="190" y="220"/>
+        </wire>
+        <wire>
+            <from id="190:250@0@switch@80:220-4@74HC595@240:130" type="wire"/>
+            <to id="74HC595@240:230" number="4" type="gate"/>
+            <point node="true" number="0" x="190" y="320"/>
+        </wire>
+        <wire>
+            <from id="190:320@190:250@0@switch@80:220-4@74HC595@240:130-4@74HC595@240:230" type="wire"/>
+            <to id="74HC595@240:330" number="4" type="gate"/>
+            <point node="false" number="0" x="190" y="420"/>
+        </wire>
+        <wire>
+            <from id="switch@80:140" number="0" type="gate"/>
+            <to id="74HC595@240:130" number="2" type="gate"/>
+            <point node="false" number="0" x="180" y="170"/>
+            <point node="false" number="1" x="180" y="180"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:330" number="16" type="gate"/>
+            <to id="led8@330:330" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:330" number="17" type="gate"/>
+            <to id="led8@330:330" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:330" number="18" type="gate"/>
+            <to id="led8@330:330" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:330" number="19" type="gate"/>
+            <to id="led8@330:330" number="3" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:330" number="20" type="gate"/>
+            <to id="led8@330:330" number="4" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:330" number="21" type="gate"/>
+            <to id="led8@330:330" number="5" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:330" number="22" type="gate"/>
+            <to id="led8@330:330" number="6" type="gate"/>
+        </wire>
+        <wire>
+            <from id="74HC595@240:330" number="23" type="gate"/>
+            <to id="led8@330:330" number="7" type="gate"/>
+        </wire>
+        <wire>
+            <from id="not@120:40" number="1" type="gate"/>
+            <to id="74HC595@240:330" number="1" type="gate"/>
+            <point node="false" number="0" x="220" y="70"/>
+            <point node="true" number="1" x="220" y="150"/>
+            <point node="true" number="2" x="220" y="250"/>
+            <point node="false" number="3" x="220" y="350"/>
+        </wire>
+        <wire>
+            <from id="220:250@1@not@120:40-1@74HC595@240:330" type="wire"/>
+            <to id="74HC595@240:230" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="220:150@1@not@120:40-1@74HC595@240:330" type="wire"/>
+            <to id="74HC595@240:130" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="switch@60:40" number="0" type="gate"/>
+            <to id="not@120:40" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="switch@60:80" number="0" type="gate"/>
+            <to id="74HC595@240:330" number="0" type="gate"/>
+            <point node="false" number="0" x="210" y="110"/>
+            <point node="true" number="1" x="210" y="140"/>
+            <point node="true" number="2" x="210" y="240"/>
+            <point node="false" number="3" x="210" y="340"/>
+        </wire>
+        <wire>
+            <from id="210:240@0@switch@60:80-0@74HC595@240:330" type="wire"/>
+            <to id="74HC595@240:230" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="210:140@0@switch@60:80-0@74HC595@240:330" type="wire"/>
+            <to id="74HC595@240:130" number="0" type="gate"/>
+        </wire>
+    </wires>
+</logicsim>
