@@ -20,6 +20,8 @@ import logicsim.Pin;
 public class AND extends Gate {
 	static final long serialVersionUID = 4521959944440523564L;
 
+	boolean force = false;
+
 	public AND() {
 		super("basic");
 		label = "&";
@@ -27,13 +29,11 @@ public class AND extends Gate {
 		createOutputs(1);
 		createInputs(2);
 		variableInputCountSupported = true;
-		reset();
 	}
 
 	@Override
 	public void simulate() {
 		super.simulate();
-		boolean oldLevel = getPin(0).getInternalLevel();
 		boolean newLevel = true;
 		for (Pin c : getInputs()) {
 			newLevel = newLevel && c.getLevel();
@@ -41,15 +41,19 @@ public class AND extends Gate {
 				break;
 		}
 		// call pin directly
-		if (newLevel != oldLevel)
-			getPin(0).changedLevel(new LSLevelEvent(this, newLevel));
+		getPin(0).changedLevel(new LSLevelEvent(this, newLevel, force));
+	}
+
+	@Override
+	public void reset() {
+		force = true;
+		simulate();
+		force = false;
 	}
 
 	@Override
 	public void changedLevel(LSLevelEvent e) {
 		super.changedLevel(e);
-		if (busted)
-			return;
 		simulate();
 	}
 

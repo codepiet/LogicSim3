@@ -19,6 +19,7 @@ public class SevenSegmentDriver extends Gate {
 	boolean out0 = false;
 	boolean lastClock = false;
 	int[] out;
+	boolean force = false;
 
 	public SevenSegmentDriver() {
 		super("output");
@@ -138,14 +139,16 @@ public class SevenSegmentDriver extends Gate {
 
 	private void setOutputs() {
 		for (int i = 0; i < 7; i++) {
-			LSLevelEvent evt = new LSLevelEvent(this, out[i] == 1);
+			LSLevelEvent evt = new LSLevelEvent(this, out[i] == 1, force);
 			getPin(i + 4).changedLevel(evt);
 		}
 	}
 
 	@Override
 	public void reset() {
+		force = true;
 		simulate();
+		force = false;
 	}
 
 	@Override

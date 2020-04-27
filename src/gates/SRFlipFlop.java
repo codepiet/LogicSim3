@@ -40,6 +40,14 @@ public class SRFlipFlop extends Gate {
 	}
 
 	@Override
+	public void reset() {
+		super.reset();
+		LSLevelEvent evt = new LSLevelEvent(this, LOW, true);
+		getPin(3).changedLevel(evt);
+		getPin(4).changedLevel(evt);
+	}
+	
+	@Override
 	protected void drawLabel(Graphics2D g2, String lbl, Font font) {
 		super.drawLabel(g2, "SRFF", Pin.smallFont);
 	}

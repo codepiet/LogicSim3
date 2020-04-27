@@ -62,7 +62,7 @@ public class Module extends Gate {
 
 		label = lsFile.getLabel();
 
-		// in der geladenen GateList nach MODIN und MODOUT Gattern suchen
+		// postprocessing: search for MODIN and MODOUT
 		for (CircuitPart g : lsFile.circuit.parts) {
 			if (g instanceof MODIN) {
 				moduleIn = (MODIN) g;
@@ -129,6 +129,8 @@ public class Module extends Gate {
 				p.addLevelListener(this);
 			}
 		}
+		//send initialization
+		lsFile.circuit.reset();
 	}
 
 	@Override

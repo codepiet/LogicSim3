@@ -137,9 +137,9 @@ public class XMLLoader {
 				from.connect(wire);
 				to.connect(wire);
 				// wire.reset();
-				if (from instanceof Pin) {
-					wire.changedLevel(new LSLevelEvent(from, from.getLevel()));
-				}
+				//if (from instanceof Pin) {
+				//	wire.changedLevel(new LSLevelEvent(from, from.getLevel()));
+				//}
 			}
 		}
 		return ls;

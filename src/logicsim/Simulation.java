@@ -47,7 +47,7 @@ public class Simulation implements Runnable {
 
 	public synchronized void putEvent(LSLevelEvent evt) {
 		queue.add(evt);
-		System.out.println(evt);
+		//System.out.println(evt);
 		notifyAll();
 	}
 
@@ -73,7 +73,6 @@ public class Simulation implements Runnable {
 							l.changedLevel(e);
 							stillpresent = true;
 							queue.remove(i);
-							// System.out.println("removed! size: " + queue.size());
 							i--;
 						}
 					}

@@ -18,7 +18,7 @@ public class NAND extends AND {
 		type = "nand";
 		getPin(0).setLevelType(Pin.INVERTED);
 	}
-
+	
 	@Override
 	public void loadLanguage() {
 		I18N.addGate(I18N.ALL, type, I18N.TITLE, "NAND");
