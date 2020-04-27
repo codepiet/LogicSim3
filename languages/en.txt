@@ -1,6 +1,6 @@
 alreadymodule=The circuit is already a module. Abort!
 aborted=aborted
-about=About LogicSim
+about=About LogicSim
 addpoint.help=click on wire to add point
 addpoint=Add Point to Wire
 autowire=Autowiring
@@ -34,7 +34,7 @@ inputnorm.help=click on input to reset to normal mode
 inputnorm=Normal Input
 inputs=Inputs
 language=Language
-lsrestart=LogicSim needs to be restartet.
+lsrestart=LogicSim needs to be restarted.
 mirror=Mirror 
 modulecreate=Create Module
 module=Module
