@@ -24,7 +24,6 @@ public class Buffer extends Gate {
 		type = "buffer";
 		createInputs(1);
 		createOutputs(1);
-		simulate();
 	}
 
 	public Buffer(String string) {
@@ -34,16 +33,13 @@ public class Buffer extends Gate {
 	@Override
 	public void simulate() {
 		super.simulate();
-		// boolean oldLevel = getPin(1).getInternalLevel();
 		// call pin directly
-		getPin(1).changedLevel(new LSLevelEvent(this, getPin(0).getLevel()));
+		getPin(1).changedLevel(new LSLevelEvent(this, getPin(0).getLevel(), true));
 	}
 
 	@Override
 	public void changedLevel(LSLevelEvent e) {
 		super.changedLevel(e);
-		if (busted)
-			return;
 		simulate();
 	}
 

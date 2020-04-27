@@ -480,9 +480,10 @@ public class Wire extends CircuitPart implements Cloneable {
 			level = e.level;
 			// forward to other listeners, event must not get back to the origin
 			fireRepaint();
+			LSLevelEvent evt = new LSLevelEvent(this, e.level, e.force);
 			fireChangedLevel(e);
 			for (WirePoint wp : points) {
-				wp.fireChangedLevel(e);
+				wp.changedLevel(evt);
 			}
 		}
 	}
@@ -550,7 +551,7 @@ public class Wire extends CircuitPart implements Cloneable {
 			}
 		}
 		wp.parent = this;
-		wp.connect(this);
+		//wp.connect(this);
 		points.add(wp);
 	}
 

@@ -74,6 +74,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 
 		lsFile = new LogicSimFile(defaultCircuitFileName());
+		lsFile.circuit.setRepaintListener(lspanel);
 		lspanel.setChangeListener(this);
 
 		try {
@@ -238,10 +239,10 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		mnu.addSeparator();
 
-		m = createMenuItem(Lang.NEWWIRE, KeyEvent.VK_W, false);
+		m = createMenuItem(Lang.WIRENEW, KeyEvent.VK_W, false);
 		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				getButtonWidget(Lang.NEWWIRE).doClick();
+				getButtonWidget(Lang.WIRENEW).doClick();
 			}
 		});
 		m.setEnabled(LSProperties.MODE_EXPERT.equals(mode));
@@ -615,12 +616,12 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		btnBar.add(getMenuGap());
 
-		btnLS = new LSButton("newwire", Lang.NEWWIRE);
-		btnLS.setEnabled(getMenuWidget(Lang.NEWWIRE).isEnabled());
+		btnLS = new LSButton("newwire", Lang.WIRENEW);
+		btnLS.setEnabled(getMenuWidget(Lang.WIRENEW).isEnabled());
 		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(LSPanel.ACTION_ADDWIRE);
-				setStatusText(I18N.tr(Lang.NEWWIRE_HELP));
+				setStatusText(I18N.tr(Lang.WIRENEW_HELP));
 				lspanel.requestFocusInWindow();
 			}
 		});
@@ -761,6 +762,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		if (showDiscardDialog(I18N.tr(Lang.NEW)) == false)
 			return;
 		lsFile = new LogicSimFile(defaultCircuitFileName());
+		lsFile.circuit.setRepaintListener(lspanel);
 		setAppTitle();
 		lspanel.clear();
 	}
@@ -795,6 +797,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		setAppTitle();
 		lspanel.clear();
 		lspanel.circuit = lsFile.circuit;
+		lspanel.circuit.setRepaintListener(lspanel);
 		lspanel.circuit.reset();
 	}
 
@@ -909,6 +912,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			lsFile.changed = true;
 		} else {
 			lsFile = new LogicSimFile(defaultModuleFileName());
+			lsFile.circuit.setRepaintListener(lspanel);
 		}
 
 		if (!FileInfoDialog.showFileInfo(this, lsFile))
@@ -923,6 +927,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		g.moveTo(650, 100);
 		lsFile.circuit.addGate(g);
 		lspanel.circuit = lsFile.circuit;
+		lspanel.circuit.setRepaintListener(lspanel);
 		lspanel.repaint();
 	}
 
@@ -1066,8 +1071,8 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		LSProperties.getInstance().setProperty(LSProperties.MODE, mode);
 
 		// activate widgets
-		getMenuWidget(Lang.NEWWIRE).setEnabled(LSProperties.MODE_EXPERT.equals(mode));
-		getButtonWidget(Lang.NEWWIRE).setEnabled(LSProperties.MODE_EXPERT.equals(mode));
+		getMenuWidget(Lang.WIRENEW).setEnabled(LSProperties.MODE_EXPERT.equals(mode));
+		getButtonWidget(Lang.WIRENEW).setEnabled(LSProperties.MODE_EXPERT.equals(mode));
 
 		this.lspanel.repaint();
 	}

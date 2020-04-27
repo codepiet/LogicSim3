@@ -45,7 +45,6 @@ public class DRFlipFlop extends Gate {
 		// clock: pin2
 		// d: pin0
 		// r: pin1
-
 		if (e.source.equals(getPin(2)) && e.level == HIGH) {
 			// clock rising edge detection
 			boolean d = getPin(0).getLevel();
@@ -63,6 +62,14 @@ public class DRFlipFlop extends Gate {
 		}
 	}
 
+	@Override
+	public void reset() {
+		super.reset();
+		LSLevelEvent evt = new LSLevelEvent(this, LOW, true);
+		getPin(3).changedLevel(evt);
+		getPin(4).changedLevel(evt);
+	}
+	
 	@Override
 	public void draw(Graphics2D g2) {
 		super.draw(g2);

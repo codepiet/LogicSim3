@@ -44,6 +44,21 @@ public class SRRFlipFlop extends Gate {
 		super.drawLabel(g2, "SRFF", Pin.smallFont);
 	}
 
+	/**
+	 * generate events for srr flipflop
+	 * 
+	 * easy task, cause the flip-flop will switch at rising edge
+	 * this cannot be detected over time only, so resetting means
+	 * setting the output to LOW (and the inverted output to HIGH)
+	 */
+	@Override
+	public void reset() {
+		super.reset();
+		LSLevelEvent evt = new LSLevelEvent(this, LOW, true);
+		getPin(4).changedLevel(evt);
+		getPin(5).changedLevel(evt);
+	}
+
 	@Override
 	public void changedLevel(LSLevelEvent e) {
 		// clock: pin2

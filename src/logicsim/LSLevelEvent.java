@@ -36,6 +36,9 @@ public class LSLevelEvent {
 
 	@Override
 	public String toString() {
-		return "LevelEvt: " + source.getId() + " is " + (level ? "HIGH" : "LOW") + " force: " + force;
+		String s = "LevelEvt: " + source.getId() + " is " + (level ? "HIGH" : "LOW") + " force: " + force;
+		if (target != null)
+			s += " --> " + ((CircuitPart) target).getId();
+		return s;
 	}
 }

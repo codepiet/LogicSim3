@@ -19,7 +19,6 @@ public class NOT extends Buffer {
 		createInputs(1);
 		createOutputs(1);
 		getPin(1).setLevelType(Pin.INVERTED);
-		simulate();
 	}
 
 	@Override

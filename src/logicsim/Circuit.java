@@ -346,7 +346,7 @@ public class Circuit implements LSRepaintListener {
 	}
 
 	public void reset() {
-		for (CircuitPart p : parts)
+		for (CircuitPart p : getGates())
 			p.reset();
 	}
 

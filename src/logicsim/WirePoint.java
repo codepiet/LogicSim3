@@ -91,7 +91,7 @@ public class WirePoint extends CircuitPart {
 	public void changedLevel(LSLevelEvent e) {
 		super.changedLevel(e);
 		fireChangedLevel(e);
-		if (parent != null)
+		if (parent != null && !e.source.equals(parent))
 			parent.changedLevel(e);
 	}
 

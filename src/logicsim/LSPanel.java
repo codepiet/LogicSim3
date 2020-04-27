@@ -236,7 +236,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 						wp.connect(newWire);
 					}
 				}
-				fireStatusText(I18N.tr(Lang.EDITWIRE));
+				fireStatusText(I18N.tr(Lang.WIREEDIT));
 				circuit.deselectAll();
 				newWire.select();
 				fireCircuitChanged();
@@ -316,6 +316,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			// check if the part is a connector
 			if (cp instanceof Pin && !e.isAltDown()) {
 				Pin pin = ((Pin) cp);
+				fireStatusText(I18N.tr(Lang.PIN) + " (" + cp.getId() + ")");
 				// modify input (inverted or high or low or revert to normal type)
 				if (pin.isInput()) {
 					if (currentAction == Pin.HIGH || currentAction == Pin.LOW || currentAction == Pin.INVERTED
@@ -332,9 +333,9 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			if (cp instanceof Gate) {
 				String type = ((Gate) cp).type;
 				if (cp instanceof Module)
-					fireStatusText(I18N.tr(Lang.MODULE) + ": " + type);
+					fireStatusText(I18N.tr(Lang.MODULE) + " (" + cp.getId() + ")");
 				else
-					fireStatusText(I18N.getString(type, I18N.DESCRIPTION));
+					fireStatusText(I18N.getString(type, I18N.DESCRIPTION) + " (" + cp.getId() + ")");
 				if (parts.length > 0) {
 					// check if we clicked a new gate
 					if (!cp.isSelected()) {
@@ -350,17 +351,16 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				String desc = I18N.tr(Lang.WIRE);
 				if (s != null)
 					desc += ": " + s;
+				desc += " (" + cp.getId() + ")";
 				fireStatusText(desc);
 				circuit.deselectAll();
 				cp.select();
 			} else if (cp instanceof WirePoint) {
+				fireStatusText(I18N.tr(Lang.WIREPOINT) + " (" + cp.getId() + ")");
 				circuit.deselectAll();
 				cp.select();
 			}
 
-			// if (lastClicked != null && lastClicked != cp)
-			// lastClicked.deselect();
-			// lastClicked = cp;
 			cp.mousePressed(new LSMouseEvent(e, currentAction, parts));
 			currentAction = ACTION_NONE;
 

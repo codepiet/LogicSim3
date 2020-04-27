@@ -20,7 +20,7 @@ public class Module extends Gate {
 
 	private MODIN moduleIn = null;
 	private MODOUT moduleOut = null;
-	transient LogicSimFile lsFile = new LogicSimFile(null);
+	LogicSimFile lsFile = new LogicSimFile(null);
 
 	private boolean embedded = true;
 

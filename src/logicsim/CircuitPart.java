@@ -322,7 +322,7 @@ public abstract class CircuitPart implements LSLevelListener {
 		// Log.getInstance().print("fireChangedLevel " + e);
 		// the event can have a different source (not itself)
 		// if so, just forward the event to the others except to the origin
-		if (e.source != this) {
+		if (!this.equals(e.source)) {
 			for (LSLevelListener l : getListeners()) {
 				if (e.source != l) {
 					LSLevelEvent evtL = new LSLevelEvent(this, e.level, e.force, l);

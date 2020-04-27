@@ -597,10 +597,6 @@ public class Gate extends CircuitPart {
 		}
 	}
 
-	/**
-	 * Über Context-Menü aufgerufen
-	 */
-
 	public void simulate() {
 	}
 

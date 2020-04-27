@@ -15,12 +15,6 @@ public class LogicSimFile {
 		this.fileName = fileName;
 	}
 
-	public LogicSimFile(String fileName, Map<String, String> info, Vector<Gate> gates, Vector<Wire> wires) {
-		this(fileName);
-		this.info = info;
-		this.circuit.setGates(gates);
-	}
-
 	/**
 	 * extract the pure file name from an absolute path
 	 * 
