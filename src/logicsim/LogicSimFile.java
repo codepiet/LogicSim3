@@ -10,6 +10,7 @@ public class LogicSimFile {
 	Map<String, String> info = new HashMap<String, String>();
 	String fileName;
 	public boolean changed = false;
+	private Vector<String> errors = new Vector<String>();
 
 	public LogicSimFile(String fileName) {
 		this.fileName = fileName;
@@ -72,6 +73,19 @@ public class LogicSimFile {
 			s += fileName;
 		if (circuit != null)
 			s += " circuit: " + circuit.parts.size() + " parts";
+		return s;
+	}
+
+	public void addError(String s) {
+		errors.add(s);
+	}
+
+	public String getErrorString() {
+		if (errors.size() == 0)
+			return null;
+		String s = "";
+		for (String err : errors)
+			s += " " + err;
 		return s;
 	}
 

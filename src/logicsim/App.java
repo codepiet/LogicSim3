@@ -126,7 +126,7 @@ public class App {
 		// list of filenames in modules dir
 		String[] list = mods.list();
 		Arrays.sort(list, String.CASE_INSENSITIVE_ORDER);
-		// prepare empty list of loaded
+		// prepare list for all loaded modules
 		ArrayList<String> loadedModules = new ArrayList<String>();
 		// prepare list of modules with sublist of needed modules
 		Map<String, ArrayList<String>> modules = new HashMap<String, ArrayList<String>>();
@@ -137,10 +137,10 @@ public class App {
 				String filename = list[i];
 				String type = new File(filename).getName();
 				type = type.substring(0, type.lastIndexOf("."));
+				//type = type.toLowerCase();
 				modules.put(type, XMLLoader.getModuleListFromFile(App.getModulePath() + "/" + filename));
 			}
 		}
-
 		int maxtries = modules.keySet().size();
 		int tries = 0;
 		while (tries < maxtries && maxtries != loadedModules.size()) {
@@ -152,13 +152,14 @@ public class App {
 						break;
 					}
 				}
-				if (load) {
+				if (load && !loadedModules.contains(modname.toLowerCase())) {
 					Module mod = new Module(modname);
 					mod.category = "module";
 					addToCategory(mod);
 					loadedModules.add(modname.toLowerCase());
 				}
 			}
+			tries++;
 		}
 	}
 

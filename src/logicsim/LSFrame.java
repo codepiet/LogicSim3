@@ -141,7 +141,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		m = createMenuItem(Lang.SAVE, KeyEvent.VK_S, true);
 		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				actionSave(e);
+				actionSave(e, false);
 			}
 		});
 		mnu.add(m);
@@ -149,7 +149,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		m = createMenuItem(Lang.SAVEAS, 0, true);
 		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				actionSave(e);
+				actionSave(e, true);
 			}
 		});
 		mnu.add(m);
@@ -500,7 +500,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnLS = new LSButton("save", Lang.SAVE);
 		btnLS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				actionSave(e);
+				actionSave(e, false);
 			}
 		});
 		btnBar.add(btnLS);
@@ -794,6 +794,9 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			x.printStackTrace(System.err);
 			Dialogs.messageDialog(this, I18N.tr(Lang.READERROR) + " " + x.getMessage());
 		}
+		if (lsFile.getErrorString() != null) {
+			Dialogs.messageDialog(this, lsFile.getErrorString());
+		}
 		setAppTitle();
 		lspanel.clear();
 		lspanel.circuit = lsFile.circuit;
@@ -831,7 +834,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	 * 
 	 * @param e
 	 */
-	void actionSave(ActionEvent e) {
+	void actionSave(ActionEvent e, boolean saveAs) {
 		String fileName = lsFile.fileName;
 		boolean unnamed = false;
 		if (lsFile.extractFileName().equals(I18N.tr(Lang.UNNAMED))) {
@@ -839,6 +842,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		}
 		boolean showDialog = fileName == null || fileName.length() == 0;
 		showDialog = showDialog || unnamed;
+		showDialog = showDialog || saveAs;
 
 		if (showDialog)
 			if (showSaveDialog() == false)

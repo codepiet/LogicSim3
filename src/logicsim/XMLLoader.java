@@ -108,8 +108,14 @@ public class XMLLoader {
 				}
 
 				if (from == null || to == null) {
-					throw new RuntimeException("wire cannot be connected");
-					// continue;
+					String s = "wire cannot be connected ";
+					if (from != null)
+						s += " " + from.getId();
+					if (to != null)
+						s += " " + to.getId();
+					//throw new RuntimeException("wire cannot be connected");
+					ls.addError(s);
+					continue;
 				}
 				Wire wire = new Wire(from, to);
 
