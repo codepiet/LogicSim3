@@ -69,14 +69,15 @@ public class Module extends Gate {
 		for (CircuitPart g : lsFile.circuit.parts) {
 			if (g instanceof MODIN) {
 				moduleIn = (MODIN) g;
+				int numberOfInputs = moduleIn.getInputs().size();
 				for (Pin c : moduleIn.getOutputs()) {
 					// add MODIN's input-connectors to module:
 					// check if MODIN's outputs are connected
 					if (c.isConnected()) {
-						Pin newIn = new Pin(getX(), getY() + 10 + (c.number - 16) * 10, this, c.number - 16);
+						Pin newIn = new Pin(getX(), getY() + 10 + (c.number - numberOfInputs) * 10, this, c.number - numberOfInputs);
 						newIn.ioType = Pin.INPUT;
 						newIn.levelType = Pin.NORMAL;
-						Pin in = moduleIn.getPin(c.number - 16);
+						Pin in = moduleIn.getPin(c.number - numberOfInputs);
 						if (in.getProperty(TEXT) != null)
 							newIn.setProperty(TEXT, in.getProperty(TEXT));
 						pins.add(newIn);
@@ -87,15 +88,16 @@ public class Module extends Gate {
 		for (CircuitPart g : lsFile.circuit.parts) {
 			if (g instanceof MODOUT) {
 				moduleOut = (MODOUT) g;
+				int numberOfInputs = moduleOut.getInputs().size();
 				// add MODOUT's output-connectors to module:
 				// check if MODOUT's inputs have a wire
 				for (Pin c : moduleOut.getInputs()) {
 					if (c.isConnected()) {
-						Pin newOut = new Pin(getX() + getWidth(), getY() + 10 + c.number * 10, this, c.number + 16);
+						Pin newOut = new Pin(getX() + getWidth(), getY() + 10 + c.number * 10, this, c.number + numberOfInputs);
 						newOut.ioType = Pin.OUTPUT;
 						newOut.paintDirection = Pin.LEFT;
 						newOut.levelType = Pin.NORMAL;
-						Pin out = moduleOut.getPin(c.number + 16);
+						Pin out = moduleOut.getPin(c.number + numberOfInputs);
 						if (out.getProperty(TEXT) != null)
 							newOut.setProperty(TEXT, out.getProperty(TEXT));
 						pins.add(newOut);
@@ -106,6 +108,7 @@ public class Module extends Gate {
 		// initialize height and reposition connectors
 		int numIn = getNumInputs();
 		int numOut = getNumOutputs();
+		int modoutNumOut = moduleOut.getNumInputs();
 		int max = (numIn > numOut) ? numIn : numOut;
 		if (max > 5)
 			height = 10 * max + 10;
@@ -113,7 +116,7 @@ public class Module extends Gate {
 			c.setY(getY() + getConnectorPosition(c.number, numIn, Gate.VERTICAL));
 		}
 		for (Pin c : getOutputs()) {
-			c.setY(getY() + getConnectorPosition(c.number - 16, numOut, Gate.VERTICAL));
+			c.setY(getY() + getConnectorPosition(c.number - modoutNumOut, numOut, Gate.VERTICAL));
 		}
 
 		if (moduleIn == null || moduleOut == null) {

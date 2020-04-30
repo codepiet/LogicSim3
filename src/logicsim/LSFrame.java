@@ -926,9 +926,11 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		Gate g = new MODIN();
 		g.moveTo(150, 100);
+		g.loadProperties();
 		lsFile.circuit.addGate(g);
 		g = new MODOUT();
 		g.moveTo(650, 100);
+		g.loadProperties();
 		lsFile.circuit.addGate(g);
 		lspanel.circuit = lsFile.circuit;
 		lspanel.circuit.setRepaintListener(lspanel);

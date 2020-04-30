@@ -18,6 +18,9 @@ import java.awt.Rectangle;
 public class MODOUT extends Gate {
 	static final long serialVersionUID = 1824440628969344103L;
 	private static final String INPUT_LABEL = "inputlabel";
+	private int pincount;
+	private static final String PINCOUNT = "pincount";
+	private static final int PINCOUNT_DEFAULT = 16;
 
 	public MODOUT() {
 		super();
@@ -33,9 +36,10 @@ public class MODOUT extends Gate {
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
 		g2.setColor(Color.GREEN);
-		// draw klick areas if pin is connected
+		int numberOfInputs = getInputs().size();
+		// draw click areas if pin is connected
 		for (Pin p : getOutputs()) {
-			Pin pin = getPin(p.number - 16);
+			Pin pin = getPin(p.number - numberOfInputs);
 			if (pin.isConnected() && p.getProperty(TEXT) == null)
 				g2.fill(new Rectangle(getX() + width - CONN_SIZE - 9, p.getY() - 4, 8, 8));
 		}
@@ -54,6 +58,22 @@ public class MODOUT extends Gate {
 		int target = p.number + getNumInputs();
 		LSLevelEvent evt = new LSLevelEvent(this, p.getLevel());
 		getPin(target).changedLevel(evt);
+	}
+
+	@Override
+	protected void loadProperties() {
+		pincount = getPropertyIntWithDefault(PINCOUNT, PINCOUNT_DEFAULT);
+		int inputcount = getInputs().size();
+		if (pincount != inputcount) {
+			if (pincount < inputcount) {
+				//disconnect wires
+				for (int i = inputcount; i > pincount; i--) {
+					//disconnect all parts from input and output pin
+					getPin(i+inputcount).disconnect();
+					getPin(i).disconnect();
+				}
+			}			
+		}
 	}
 
 	@Override

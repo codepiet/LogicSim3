@@ -84,6 +84,14 @@ public abstract class CircuitPart implements LSLevelListener {
 		return Integer.parseInt(getProperty(string));
 	}
 
+	protected int getPropertyIntWithDefault(String string, int idefault) {
+		String value = getProperty(string);
+		if (value == null)
+			return idefault;
+		else
+			return Integer.parseInt(value);
+	}
+
 	protected String getPropertyWithDefault(String key, String sdefault) {
 		String s = getProperty(key);
 		if (s == null)

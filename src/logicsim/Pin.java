@@ -28,7 +28,7 @@ public class Pin extends CircuitPart {
 	public static final String POS_EDGE_TRIG = "PosEdgeTrig";
 	public static final String NEG_EDGE_TRIG = "NegEdgeTrig";
 
-	public final int number;
+	public int number;
 
 	protected boolean level = false;
 	public int paintDirection = RIGHT;
@@ -275,7 +275,7 @@ public class Pin extends CircuitPart {
 			lt = "L";
 		else if (levelType == Pin.INVERTED)
 			lt = "I";
-		String s = it + number + it + "-" + lt + "-" + (text == null ? "" : "\"" + text + "\"") + getX() + ":" + getY()
+		String s = number + it + lt + "-" + (text == null ? "" : "\"" + text + "\"") + getX() + ":" + getY()
 				+ "@" + parent.getId();
 		s += " - " + (getLevel() ? "HIGH" : "LOW");
 //		if (getListeners().size() > 0) {
