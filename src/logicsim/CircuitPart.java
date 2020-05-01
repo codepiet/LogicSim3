@@ -266,9 +266,9 @@ public abstract class CircuitPart implements LSLevelListener {
 	public void moveBy(int dx, int dy) {
 		if (dx == 0 && dy == 0)
 			return;
-		checkXY(x + dx, y + dy);
 		x = x + dx;
 		y = y + dy;
+		checkXY(x, y);
 	}
 
 	public void moveTo(int x, int y) {

@@ -56,6 +56,9 @@ public class Gate extends CircuitPart {
 
 	protected int labelOffsetY;
 
+	protected int origx = 0;
+	protected int origy = 0;
+
 	/**
 	 * mirroring of part.
 	 * 
@@ -79,9 +82,9 @@ public class Gate extends CircuitPart {
 
 	protected int width = 60;
 
-	protected double xc;
+	protected int xc = -1;
 
-	protected double yc;
+	protected int yc = -1;
 
 	public Gate() {
 		this(0, 0);
@@ -175,9 +178,8 @@ public class Gate extends CircuitPart {
 
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
+		drawFrame(g2);
 		AffineTransform old = null;
-		xc = getX() + width / 2;
-		yc = getY() + height / 2;
 		if (rotate90 != 0) {
 			old = g2.getTransform();
 			g2.rotate(Math.toRadians(rotate90 * 90), xc, yc);
@@ -185,11 +187,14 @@ public class Gate extends CircuitPart {
 		g2.setStroke(new BasicStroke(1));
 		// drawBounds(g2);
 		g2.setPaint(Color.black);
-		drawFrame(g2);
+		drawRotated(g2);
 		if (rotate90 != 0) {
 			g2.setTransform(old);
 		}
 		drawIO(g2);
+	}
+
+	protected void drawRotated(Graphics2D g2) {
 	}
 
 	protected void drawFrame(Graphics2D g2) {
@@ -511,12 +516,20 @@ public class Gate extends CircuitPart {
 
 	@Override
 	public void moveBy(int dx, int dy) {
+		if (xc == -1) {
+			xc = getX() + width / 2;
+			yc = getY() + height / 2;
+		}
 		if (dx == 0 && dy == 0)
 			return;
 		super.moveBy(dx, dy);
 		for (Pin conn : pins) {
 			conn.moveBy(dx, dy);
 		}
+		xc += dx;
+		yc += dy;
+		origx += dx;
+		origy += dy;
 	}
 
 	@Override
@@ -546,54 +559,40 @@ public class Gate extends CircuitPart {
 	}
 
 	public void rotate() {
-		if (height != width) {
-			rotate90 += 2;
-			if (rotate90 > 3)
-				rotate90 = 0;
+		rotate90 = (rotate90 + 1) % 4;
+		rotatePins();
+		// set rotation center
+		Point center = new Point((int) xc, (int) yc);
+		// compute new position and width, height
+		Point newPos = WidgetHelper.rotatePoint90(getX(), getY() + height, center);
+		this.setX(newPos.x);
+		this.setY(newPos.y);
+		// switch width and height
+		width = width + height;
+		height = width - height;
+		width = width - height;
+		// maybe correct the rotation
+		int dx = 0;
+		int dy = 0;
+		if (Math.abs(getX() % 10) == 5)
+			dx = -5;
+		if (Math.abs(getY() % 10) == 5)
+			dy = -5;
+		if (dx != 0 || dy != 0)
+			moveBy(dx, dy);
+	}
 
-			for (Pin c : pins) {
-				if (c.paintDirection == Pin.RIGHT) {
-					c.paintDirection = Pin.LEFT;
-					c.setY(2 * getY() + height - c.getY());
-					c.setX(getX() + width);
-				} else if (c.paintDirection == Pin.DOWN) {
-					c.paintDirection = Pin.UP;
-					c.setY(getY() + height);
-					c.setX(2 * getX() + width - c.getX());
-				} else if (c.paintDirection == Pin.LEFT) {
-					c.paintDirection = Pin.RIGHT;
-					c.setX(getX());
-					c.setY(2 * getY() + height - c.getY());
-				} else {
-					c.paintDirection = Pin.DOWN;
-					c.setY(getY());
-					c.setX(2 * getX() + width - c.getX());
-				}
-			}
-		} else {
-			rotate90++;
-			if (rotate90 > 3)
-				rotate90 = 0;
-
-			for (Pin c : pins) {
-				if (c.paintDirection == Pin.RIGHT) {
-					c.paintDirection = Pin.DOWN;
-					c.setX(getX() + width - (c.getY() - getY()));
-					c.setY(getY());
-				} else if (c.paintDirection == Pin.DOWN) {
-					c.paintDirection = Pin.LEFT;
-					c.setY(getY() + (c.getX() - getX()));
-					c.setX(getX() + width);
-				} else if (c.paintDirection == Pin.LEFT) {
-					c.paintDirection = Pin.UP;
-					c.setX(getX() + width - (c.getY() - getY()));
-					c.setY(getY() + height);
-				} else {
-					c.paintDirection = Pin.RIGHT;
-					c.setY(getY() + c.getX() - getX());
-					c.setX(getX());
-				}
-			}
+	protected void rotatePins() {
+		// set rotation center
+		Point center = new Point((int) xc, (int) yc);
+		// rotate everything around the center
+		for (Pin c : pins) {
+			c.paintDirection++;
+			if (c.paintDirection > Pin.UP)
+				c.paintDirection = Pin.RIGHT;
+			Point newPinPos = WidgetHelper.rotatePoint90(c.getX(), c.getY(), center);
+			c.setX(newPinPos.x);
+			c.setY(newPinPos.y);
 		}
 	}
 
@@ -632,4 +631,5 @@ public class Gate extends CircuitPart {
 	 */
 	public void interact() {
 	}
+
 }

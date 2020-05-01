@@ -3,6 +3,7 @@ package gates;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 import logicsim.Gate;
@@ -40,7 +41,6 @@ public class Switch4 extends Gate {
 
 		reset();
 		areaRect = new Rectangle[4];
-
 		Rectangle r;
 		for (int i = 0; i < 4; i++) {
 			Pin conn = getPin(i);
@@ -66,10 +66,12 @@ public class Switch4 extends Gate {
 	@Override
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
-
 		g2.setStroke(new BasicStroke(1));
 		for (int i = 0; i < areaRect.length; i++) {
-			WidgetHelper.drawSwitchVertical(g2, areaRect[i], getPin(i).getLevel(), Color.red, Color.LIGHT_GRAY);
+			if (areaRect[i].width < areaRect[i].height)
+				WidgetHelper.drawSwitchVertical(g2, areaRect[i], getPin(i).getLevel(), Color.red, Color.LIGHT_GRAY);
+			else
+				WidgetHelper.drawSwitchHorizontal(g2, areaRect[i], getPin(i).getLevel(), Color.red, Color.LIGHT_GRAY);
 		}
 	}
 
@@ -83,26 +85,13 @@ public class Switch4 extends Gate {
 	}
 
 	@Override
-	public void moveTo(int x, int y) {
-		int dx = x - getX();
-		int dy = y - getY();
-		moveBy(dx, dy);
-	}
-
-	@Override
 	public void rotate() {
-		if (rotate90 == 0) {
-			rotate90 = 2;
-			for (Pin c : getOutputs()) {
-				c.setY(getY());
-				c.paintDirection = Pin.DOWN;
-			}
-		} else {
-			rotate90 = 0;
-			for (Pin c : getOutputs()) {
-				c.setY(getY() + height);
-				c.paintDirection = Pin.UP;
-			}
+		super.rotate();
+		Point ctr = new Point(xc, yc);
+		for (int i = 0; i < 4; i++) {
+			Rectangle r = areaRect[i];
+			r = WidgetHelper.rotateRectangle(r, ctr);
+			areaRect[i] = r;
 		}
 	}
 

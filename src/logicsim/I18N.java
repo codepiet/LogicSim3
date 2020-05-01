@@ -152,4 +152,11 @@ public class I18N {
 			return;
 		prop.setProperty("gate." + type + "." + key, value);
 	}
+
+	public static void add(String slang, String key, String value) {
+		if (!slang.equals(lang) && !slang.equals(ALL))
+			return;
+		prop.setProperty(key, value);
+	}
+
 }

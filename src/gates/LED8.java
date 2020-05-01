@@ -32,10 +32,23 @@ public class LED8 extends Gate {
 	public LED8() {
 		super("output");
 		type = "led8";
-		width = 20;
-		height = 90;
+		setWidth(20);
+		setHeight(90);
 		createInputs(8);
 		loadProperties();
+	}
+
+	protected void setHeight(int i) {
+		height = i;
+		if (yc == -1)
+			yc = getY() + height / 2;
+	}
+
+	protected void setWidth(int i) {
+		width = i;
+		if (xc == -1) {
+			xc = getX() + width / 2;
+		}
 	}
 
 	@Override
@@ -50,17 +63,13 @@ public class LED8 extends Gate {
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
-		super.draw(g);
-		int x = getX();
-		int y = getY();
-
+	public void drawRotated(Graphics2D g2) {
 		for (int i = 0; i < 8; i++) {
 			Color c = getPin(i).getLevel() ? color : Color.LIGHT_GRAY;
-			g.setPaint(c);
-			g.fillOval(x + CONN_SIZE - 1, y+i * 10 + 6, OVAL_RADIUS, OVAL_RADIUS);
-			g.setPaint(Color.BLACK);
-			g.drawOval(x + CONN_SIZE - 1, y+i * 10 + 6, OVAL_RADIUS, OVAL_RADIUS);
+			g2.setPaint(c);
+			g2.fillOval(origx + CONN_SIZE - 1, origy + i * 10 + 6, OVAL_RADIUS, OVAL_RADIUS);
+			g2.setPaint(Color.BLACK);
+			g2.drawOval(origx + CONN_SIZE - 1, origy + i * 10 + 6, OVAL_RADIUS, OVAL_RADIUS);
 		}
 	}
 

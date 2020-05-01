@@ -115,7 +115,7 @@ public class App {
 			e.printStackTrace();
 		}
 
-		loadModules();
+		//loadModules();
 	}
 
 	private static void loadModules() {

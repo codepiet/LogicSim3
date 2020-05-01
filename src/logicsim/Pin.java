@@ -33,7 +33,7 @@ public class Pin extends CircuitPart {
 	protected boolean level = false;
 	public int paintDirection = RIGHT;
 
-	public static Font smallFont = new Font(Font.SANS_SERIF, Font.PLAIN, 10);
+	public static Font smallFont = new Font(Font.SANS_SERIF, Font.PLAIN, 9);
 
 	public int ioType = INPUT;
 	/**
@@ -73,10 +73,10 @@ public class Pin extends CircuitPart {
 					Polygon tr = new Polygon();
 					tr.addPoint(x + 1 + CONN_SIZE, y - 4);
 					tr.addPoint(x + 1 + CONN_SIZE, y + 4);
-					tr.addPoint(x + 1 + CONN_SIZE + 8, y);
+					tr.addPoint(x + 1 + CONN_SIZE + 9, y);
 					g2.draw(tr);
 				} else {
-					drawString(g2, text, x + CONN_SIZE + 3, y + 5, CircuitPart.ALIGN_LEFT);
+					drawString(g2, text, x + CONN_SIZE + 3, y + 4, CircuitPart.ALIGN_LEFT);
 					// g2.drawString(text, x + CONN_SIZE + 3, y + 5);
 				}
 			} else if (paintDirection == LEFT) {
@@ -84,10 +84,10 @@ public class Pin extends CircuitPart {
 					Polygon tr = new Polygon();
 					tr.addPoint(x - 1 - CONN_SIZE, y - 4);
 					tr.addPoint(x - 1 - CONN_SIZE, y + 4);
-					tr.addPoint(x - 1 - CONN_SIZE - 8, y);
+					tr.addPoint(x - 1 - CONN_SIZE - 9, y);
 					g2.draw(tr);
 				} else {
-					drawString(g2, text, x - CONN_SIZE - 2, y + 5, CircuitPart.ALIGN_RIGHT);
+					drawString(g2, text, x - CONN_SIZE - 2, y + 4, CircuitPart.ALIGN_RIGHT);
 					// g2.drawString(text, x - CONN_SIZE - lw - 2, y + 5);
 				}
 			} else if (paintDirection == UP) {
@@ -132,22 +132,22 @@ public class Pin extends CircuitPart {
 			nx = x - r.width / 2;
 			ny = y + r.height / 2;
 			if (overLine) {
-				g2.drawLine(nx, y - r.height / 2 + 4, nx + r.width, y - r.height / 2 + 4);
-				g2.drawString(text, nx, ny - 4);
+				g2.drawLine(nx, y - r.height / 2 + 5, nx + r.width, y - r.height / 2 + 5);
+				g2.drawString(text, nx, ny - 3);
 			} else {
-				g2.drawString(text, nx, ny - 2);
+				g2.drawString(text, nx, ny - 1);
 			}
 		} else if (mode == ALIGN_LEFT) {
 			if (overLine) {
-				g2.drawLine(nx, y - r.height + 4, nx + r.width, y - r.height + 4);
-				g2.drawString(text, nx, ny - 2);
+				g2.drawLine(nx, y - r.height + 5, nx + r.width, y - r.height + 5);
+				g2.drawString(text, nx, ny - 1);
 			} else {
-				g2.drawString(text, nx, ny);
+				g2.drawString(text, nx, ny - 1);
 			}
 		} else if (mode == ALIGN_RIGHT) {
 			if (overLine) {
-				g2.drawLine(nx - r.width, y - r.height + 4, nx, y - r.height + 4);
-				g2.drawString(text, nx - r.width, ny - 2);
+				g2.drawLine(nx - r.width, y - r.height + 5, nx, y - r.height + 5);
+				g2.drawString(text, nx - r.width, ny - 1);
 			} else {
 				g2.drawString(text, nx - r.width, ny);
 			}

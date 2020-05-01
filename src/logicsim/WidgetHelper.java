@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
@@ -31,6 +32,10 @@ public class WidgetHelper {
 		g2.setPaint(Color.BLACK);
 		g2.draw(switchRect);
 		revert(g2);
+	}
+
+	public static void drawPoint(Graphics2D g2, Point pt) {
+		g2.drawOval(pt.x - 1, pt.y - 1, 3, 3);
 	}
 
 	public static void drawSwitchVertical(Graphics2D g2, Rectangle rect, boolean on, Color onColor, Color offColor) {
@@ -83,6 +88,35 @@ public class WidgetHelper {
 		FontMetrics fm = g2.getFontMetrics();
 		Rectangle2D rect = fm.getStringBounds(text, g2);
 		g2.drawString(text, cX - (int) (rect.getWidth() / 2), (int) (cY + rect.getHeight() / 2 + 1));
+	}
+
+	public static Rectangle rotateRectangle(Rectangle r, Point ctr) {
+		Point p1 = rotatePoint90(r.x, r.y, ctr);
+		Point p2 = rotatePoint90(r.x + r.width, r.y + r.height, ctr);
+		r = new Rectangle(p2.x, p1.y, p1.x - p2.x, p2.y - p1.y);
+		return r;
+	}
+
+	public static Point rotatePoint90(int x, int y, Point center) {
+		int degrees = -90;
+		double sin = Math.sin(Math.toRadians(degrees));
+		double cos = Math.cos(Math.toRadians(degrees));
+		// translate to origin
+		x -= center.x;
+		y -= center.y;
+		// transform coordinate system (y grows south)
+		y = -y;
+		// rotate point
+		double rx = x * cos - y * sin;
+		double ry = x * sin + y * cos;
+		x = (int) Math.round(rx);
+		y = (int) Math.round(ry);
+		// transform coordinate system
+		y = -y;
+		// translate back
+		x += center.x;
+		y += center.y;
+		return new Point(x, y);
 	}
 
 }

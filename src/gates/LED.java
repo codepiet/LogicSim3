@@ -3,6 +3,7 @@ package gates;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.JColorChooser;
 
@@ -51,8 +52,8 @@ public class LED extends Gate {
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
-		super.draw(g);
+	public void draw(Graphics2D g2) {
+		super.draw(g2);
 		int x = getX();
 		int y = getY();
 
@@ -62,10 +63,20 @@ public class LED extends Gate {
 		int y1 = ovalCenterY - ovalRadius;
 
 		Color c = getPin(0).getLevel() ? color : Color.LIGHT_GRAY;
-		g.setPaint(c);
-		g.fillOval(x + CONN_SIZE - 1, y1, ovalRadius * 2, ovalRadius * 2);
-		g.setPaint(Color.BLACK);
-		g.drawOval(x + CONN_SIZE - 1, y1, ovalRadius * 2, ovalRadius * 2);
+		g2.setPaint(c);
+
+		AffineTransform old = null;
+		if (rotate90 != 0) {
+			old = g2.getTransform();
+			g2.rotate(Math.toRadians(rotate90 * 90), xc, yc);
+		}
+		g2.fillOval(x + CONN_SIZE - 1, y1, ovalRadius * 2, ovalRadius * 2);
+		g2.setPaint(Color.BLACK);
+		g2.drawOval(x + CONN_SIZE - 1, y1, ovalRadius * 2, ovalRadius * 2);
+		if (rotate90 != 0) {
+			g2.setTransform(old);
+		}
+
 	}
 
 	@Override

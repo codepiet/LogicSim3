@@ -1,5 +1,6 @@
 package gates;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import logicsim.Gate;
@@ -33,13 +34,12 @@ public class DFlipFlop extends Gate {
 		getPin(1).moveBy(0, -10);
 		getPin(2).moveBy(0, 10);
 		getPin(3).moveBy(0, -10);
-
-		reset();
 	}
 
 	@Override
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
+		g2.setColor(Color.black);
 		drawLabel(g2, "D-FF", Pin.smallFont);
 	}
 
