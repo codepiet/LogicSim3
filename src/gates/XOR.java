@@ -6,6 +6,7 @@ import java.awt.geom.Path2D;
 
 import logicsim.I18N;
 import logicsim.LSLevelEvent;
+import logicsim.LSProperties;
 import logicsim.Pin;
 
 /**
@@ -41,6 +42,20 @@ public class XOR extends OR {
 		if (busted)
 			return;
 		simulate();
+	}
+
+	@Override
+	protected void drawFrame(Graphics2D g2) {
+		String gateType = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN, LSProperties.GATEDESIGN_IEC);
+		if (gateType.equals(LSProperties.GATEDESIGN_IEC))
+			super.drawFrame(g2);
+	}
+
+	@Override
+	protected void drawRotated(Graphics2D g2) {
+		String gateType = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN, LSProperties.GATEDESIGN_IEC);
+		if (gateType.equals(LSProperties.GATEDESIGN_ANSI))
+			drawANSI(g2);
 	}
 
 	@Override

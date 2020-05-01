@@ -44,6 +44,13 @@ public class Buffer extends Gate {
 	}
 
 	@Override
+	protected void drawRotated(Graphics2D g2) {
+		String gateType = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN, LSProperties.GATEDESIGN_IEC);
+		if (gateType.equals(LSProperties.GATEDESIGN_ANSI))
+			drawANSI(g2);
+	}
+
+	@Override
 	protected void drawFrame(Graphics2D g2) {
 		String gateType = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN, LSProperties.GATEDESIGN_IEC);
 		if (gateType.equals(LSProperties.GATEDESIGN_IEC)) {
@@ -52,8 +59,7 @@ public class Buffer extends Gate {
 				getPin(1).setX(getPin(1).getX() + 10);
 			}
 			super.drawFrame(g2);
-		} else
-			drawANSI(g2);
+		}
 	}
 
 	private void drawANSI(Graphics2D g2) {

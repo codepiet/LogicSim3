@@ -42,8 +42,8 @@ public class TextLabel extends Gate {
 		g2.setFont(bigFont);
 		if (text != null) {
 			Rectangle r = textDimensions(g2, text);
-			width = r.width;
-			height = r.height;
+			width = r.width / 10 * 10 + 10;
+			height = r.height / 10 * 10 + 10;
 			super.drawActiveFrame(g2);
 		}
 	}
@@ -53,14 +53,14 @@ public class TextLabel extends Gate {
 	}
 
 	@Override
-	public void draw(Graphics2D g2) {
-		super.draw(g2);
+	public void drawRotated(Graphics2D g2) {
 		g2.setFont(bigFont);
 		g2.setColor(Color.black);
 		if (text != null) {
 			Rectangle r = textDimensions(g2, text);
 			width = r.width;
 			height = r.height;
+			//g2.drawString(text, getX(), getY());
 			drawString(g2, text, getX() + width / 2, getY() + height / 2, ALIGN_CENTER);
 		}
 	}
