@@ -25,13 +25,14 @@
         <wire>
             <from id="switch@20:20" number="0" type="gate"/>
             <to id="and@400:40" number="1" type="gate"/>
-            <point node="true" number="0" x="150" y="50"/>
+            <point node="true" number="0" x="310" y="50"/>
         </wire>
         <wire>
             <from id="switch@20:60" number="0" type="gate"/>
             <to id="and@400:40" number="2" type="gate"/>
             <point node="false" number="0" x="240" y="90"/>
-            <point node="false" number="1" x="280" y="90"/>
+            <point node="true" number="1" x="270" y="90"/>
+            <point node="false" number="2" x="280" y="90"/>
         </wire>
         <wire>
             <from id="and@400:40" number="0" type="gate"/>
@@ -66,65 +67,64 @@
             <to id="led@490:470" number="0" type="gate"/>
         </wire>
         <wire>
-            <from type="wire" x="150" y="50"/>
-            <to id="equ@400:460" number="1" type="gate"/>
-            <point node="false" number="0" x="150" y="110"/>
-            <point node="false" number="1" x="150" y="170"/>
-            <point node="false" number="2" x="150" y="230"/>
-            <point node="false" number="3" x="150" y="410"/>
-            <point node="false" number="4" x="150" y="470"/>
-        </wire>
-        <wire>
-            <from type="wire" x="240" y="90"/>
-            <to id="equ@400:460" number="2" type="gate"/>
-            <point node="false" number="0" x="240" y="150"/>
-            <point node="false" number="1" x="240" y="210"/>
-            <point node="false" number="2" x="240" y="270"/>
-            <point node="false" number="3" x="240" y="310"/>
-            <point node="false" number="4" x="240" y="450"/>
-            <point node="false" number="5" x="240" y="510"/>
-        </wire>
-        <wire>
-            <from type="wire" x="240" y="150"/>
-            <to id="nand@400:100" number="2" type="gate"/>
-        </wire>
-        <wire>
-            <from type="wire" x="240" y="210"/>
-            <to id="or@400:160" number="2" type="gate"/>
-        </wire>
-        <wire>
-            <from type="wire" x="240" y="310"/>
-            <to id="buffer@400:280" number="0" type="gate"/>
-            <point node="false" number="0" x="380" y="310"/>
-        </wire>
-        <wire>
-            <from type="wire" x="380" y="310"/>
-            <to id="not@400:340" number="0" type="gate"/>
-            <point node="false" number="0" x="380" y="370"/>
-        </wire>
-        <wire>
-            <from type="wire" x="240" y="450"/>
-            <to id="xor@400:400" number="2" type="gate"/>
-        </wire>
-        <wire>
-            <from type="wire" x="150" y="410"/>
-            <to id="xor@400:400" number="1" type="gate"/>
-        </wire>
-        <wire>
-            <from type="wire" x="150" y="230"/>
-            <to id="nor@400:220" number="1" type="gate"/>
-        </wire>
-        <wire>
-            <from type="wire" x="240" y="270"/>
-            <to id="nor@400:220" number="2" type="gate"/>
-        </wire>
-        <wire>
-            <from type="wire" x="150" y="110"/>
+            <from id="310:50@0@switch@20:20-1@and@400:40" type="wire"/>
             <to id="nand@400:100" number="1" type="gate"/>
+            <point node="true" number="0" x="310" y="110"/>
         </wire>
         <wire>
-            <from type="wire" x="150" y="170"/>
+            <from id="310:110@310:50@0@switch@20:20-1@and@400:40-1@nand@400:100" type="wire"/>
             <to id="or@400:160" number="1" type="gate"/>
+            <point node="true" number="0" x="310" y="170"/>
+        </wire>
+        <wire>
+            <from id="310:170@310:110@310:50@0@switch@20:20-1@and@400:40-1@nand@400:100-1@or@400:160" type="wire"/>
+            <to id="nor@400:220" number="1" type="gate"/>
+            <point node="true" number="0" x="310" y="230"/>
+        </wire>
+        <wire>
+            <from id="310:230@310:170@310:110@310:50@0@switch@20:20-1@and@400:40-1@nand@400:100-1@or@400:160-1@nor@400:220" type="wire"/>
+            <to id="buffer@400:280" number="0" type="gate"/>
+            <point node="true" number="0" x="310" y="310"/>
+        </wire>
+        <wire>
+            <from id="310:310@310:230@310:170@310:110@310:50@0@switch@20:20-1@and@400:40-1@nand@400:100-1@or@400:160-1@nor@400:220-0@buffer@400:280" type="wire"/>
+            <to id="not@400:340" number="0" type="gate"/>
+            <point node="true" number="0" x="310" y="370"/>
+        </wire>
+        <wire>
+            <from id="310:370@310:310@310:230@310:170@310:110@310:50@0@switch@20:20-1@and@400:40-1@nand@400:100-1@or@400:160-1@nor@400:220-0@buffer@400:280-0@not@400:340" type="wire"/>
+            <to id="xor@400:400" number="1" type="gate"/>
+            <point node="true" number="0" x="310" y="410"/>
+        </wire>
+        <wire>
+            <from id="310:410@310:370@310:310@310:230@310:170@310:110@310:50@0@switch@20:20-1@and@400:40-1@nand@400:100-1@or@400:160-1@nor@400:220-0@buffer@400:280-0@not@400:340-1@xor@400:400" type="wire"/>
+            <to id="equ@400:460" number="1" type="gate"/>
+            <point node="false" number="0" x="310" y="470"/>
+        </wire>
+        <wire>
+            <from id="270:90@0@switch@20:60-2@and@400:40" type="wire"/>
+            <to id="nand@400:100" number="2" type="gate"/>
+            <point node="true" number="0" x="270" y="150"/>
+        </wire>
+        <wire>
+            <from id="270:150@270:90@0@switch@20:60-2@and@400:40-2@nand@400:100" type="wire"/>
+            <to id="or@400:160" number="2" type="gate"/>
+            <point node="true" number="0" x="270" y="210"/>
+        </wire>
+        <wire>
+            <from id="270:210@270:150@270:90@0@switch@20:60-2@and@400:40-2@nand@400:100-2@or@400:160" type="wire"/>
+            <to id="nor@400:220" number="2" type="gate"/>
+            <point node="true" number="0" x="270" y="270"/>
+        </wire>
+        <wire>
+            <from id="270:270@270:210@270:150@270:90@0@switch@20:60-2@and@400:40-2@nand@400:100-2@or@400:160-2@nor@400:220" type="wire"/>
+            <to id="xor@400:400" number="2" type="gate"/>
+            <point node="true" number="0" x="270" y="450"/>
+        </wire>
+        <wire>
+            <from id="270:450@270:270@270:210@270:150@270:90@0@switch@20:60-2@and@400:40-2@nand@400:100-2@or@400:160-2@nor@400:220-2@xor@400:400" type="wire"/>
+            <to id="equ@400:460" number="2" type="gate"/>
+            <point node="false" number="0" x="270" y="510"/>
         </wire>
     </wires>
 </logicsim>
