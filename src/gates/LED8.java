@@ -38,19 +38,6 @@ public class LED8 extends Gate {
 		loadProperties();
 	}
 
-	protected void setHeight(int i) {
-		height = i;
-		if (yc == -1)
-			yc = getY() + height / 2;
-	}
-
-	protected void setWidth(int i) {
-		width = i;
-		if (xc == -1) {
-			xc = getX() + width / 2;
-		}
-	}
-
 	@Override
 	public void changedLevel(LSLevelEvent e) {
 		super.changedLevel(e);

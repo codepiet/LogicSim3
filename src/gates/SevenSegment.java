@@ -22,6 +22,7 @@ public class SevenSegment extends Gate {
 		super("output");
 		type = "sevenseg";
 		height = 80;
+		width = 80;
 		createInputs(7);
 		for (int i = 0; i < 7; i++)
 			getPin(i).setProperty(TEXT, String.valueOf((char) (((int) 'a') + i)));
@@ -31,8 +32,8 @@ public class SevenSegment extends Gate {
 	@Override
 	public void draw(Graphics2D g) {
 		super.draw(g);
-		int xoffset = getX() + 19;
-		int yoffset = getY() + 11;
+		int xoffset = getX() + 29;
+		int yoffset = getY() + 16;
 		g.setStroke(new BasicStroke(1));
 		for (int i = 0; i < getNumInputs(); i++) {
 			g.setColor(getPin(i).getLevel() ? Color.red : new Color(0xE0, 0xE0, 0xE0));

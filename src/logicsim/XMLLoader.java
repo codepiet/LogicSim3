@@ -58,7 +58,7 @@ public class XMLLoader {
 					// try to get the gate
 					Gate fromGate = findGateById(ls.circuit.getGates(), fromGateId);
 					if (fromGate == null)
-						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": cannot fing gate " + fromGateId);
+						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": cannot find gate " + fromGateId);
 					from = fromGate.getPin(fromNumber);
 				} else if (XMLCreator.TYPE_WIREPOINT.equals(type)) {
 					int x = Integer.parseInt(gnode.string("x"));
@@ -88,7 +88,7 @@ public class XMLLoader {
 
 					Gate toGate = findGateById(ls.circuit.getGates(), toGateId);
 					if (toGate == null)
-						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": cannot fing gate " + toGateId);
+						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": cannot find gate " + toGateId);
 					to = toGate.getPin(toNumber);
 				} else if (XMLCreator.TYPE_WIREPOINT.equals(type)) {
 					int x = Integer.parseInt(gnode.string("x"));
@@ -172,7 +172,6 @@ public class XMLLoader {
 
 		if (optInputs != null)
 			gate.createDynamicInputs(Integer.parseInt(optInputs));
-		gate.moveTo(x, y);
 		if (optRotate != null) {
 			int rot = Integer.parseInt(optRotate) / 90;
 			for (int i = 0; i < rot; i++)
@@ -190,6 +189,7 @@ public class XMLLoader {
 				gate.mirror();
 			}
 		}
+		gate.moveTo(x, y);
 
 		// settings
 		Properties ps = getProperties(gnode);

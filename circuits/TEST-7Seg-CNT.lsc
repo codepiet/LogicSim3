@@ -8,126 +8,131 @@
         <gate type="clock" x="50" y="120">
             <properties>
                 <property key="hightime">150</property>
+                <property key="property">150</property>
                 <property key="lowtime">150</property>
             </properties>
         </gate>
         <gate type="sevendrv" x="250" y="110"/>
-        <gate type="sevenseg" x="340" y="110"/>
+        <gate type="sevenseg" x="320" y="110"/>
     </gates>
     <wires>
         <wire>
-            <from id="sevendrv@250:40" number="4"/>
-            <to id="sevenseg@390:110" number="0"/>
-            <point node="false" number="0" x="520" y="50"/>
-            <point node="false" number="1" x="520" y="180"/>
+            <from id="sevendrv@250:40" number="4" type="gate"/>
+            <to id="sevenseg@390:110" number="0" type="gate"/>
+            <point node="false" number="0" x="540" y="50"/>
+            <point node="false" number="1" x="540" y="180"/>
         </wire>
         <wire>
-            <from id="sevendrv@250:40" number="5"/>
-            <to id="sevenseg@390:110" number="1"/>
-            <point node="false" number="0" x="510" y="60"/>
-            <point node="false" number="1" x="510" y="170"/>
+            <from id="sevendrv@250:40" number="5" type="gate"/>
+            <to id="sevenseg@390:110" number="1" type="gate"/>
+            <point node="false" number="0" x="530" y="60"/>
+            <point node="false" number="1" x="530" y="170"/>
         </wire>
         <wire>
-            <from id="sevendrv@250:40" number="6"/>
-            <to id="sevenseg@390:110" number="2"/>
-            <point node="false" number="0" x="500" y="70"/>
-            <point node="false" number="1" x="500" y="160"/>
+            <from id="sevendrv@250:40" number="6" type="gate"/>
+            <to id="sevenseg@390:110" number="2" type="gate"/>
+            <point node="false" number="0" x="520" y="70"/>
+            <point node="false" number="1" x="520" y="160"/>
         </wire>
         <wire>
-            <from id="sevendrv@250:40" number="7"/>
-            <to id="sevenseg@390:110" number="3"/>
-            <point node="false" number="0" x="490" y="80"/>
-            <point node="false" number="1" x="490" y="150"/>
+            <from id="sevendrv@250:40" number="7" type="gate"/>
+            <to id="sevenseg@390:110" number="3" type="gate"/>
+            <point node="false" number="0" x="510" y="80"/>
+            <point node="false" number="1" x="510" y="150"/>
         </wire>
         <wire>
-            <from id="sevendrv@250:40" number="8"/>
-            <to id="sevenseg@390:110" number="4"/>
-            <point node="false" number="0" x="480" y="90"/>
-            <point node="false" number="1" x="480" y="140"/>
+            <from id="sevendrv@250:40" number="8" type="gate"/>
+            <to id="sevenseg@390:110" number="4" type="gate"/>
+            <point node="false" number="0" x="500" y="90"/>
+            <point node="false" number="1" x="500" y="140"/>
         </wire>
         <wire>
-            <from id="sevendrv@250:40" number="9"/>
-            <to id="sevenseg@390:110" number="5"/>
-            <point node="false" number="0" x="470" y="100"/>
-            <point node="false" number="1" x="470" y="130"/>
+            <from id="sevendrv@250:40" number="9" type="gate"/>
+            <to id="sevenseg@390:110" number="5" type="gate"/>
+            <point node="false" number="0" x="490" y="100"/>
+            <point node="false" number="1" x="490" y="130"/>
         </wire>
         <wire>
-            <from id="sevendrv@250:40" number="10"/>
-            <to id="sevenseg@390:110" number="6"/>
-            <point node="false" number="0" x="460" y="110"/>
-            <point node="false" number="1" x="460" y="120"/>
+            <from id="sevendrv@250:40" number="10" type="gate"/>
+            <to id="sevenseg@390:110" number="6" type="gate"/>
+            <point node="false" number="0" x="480" y="110"/>
+            <point node="false" number="1" x="480" y="120"/>
         </wire>
         <wire>
-            <from id="counter@130:40" number="1"/>
-            <to id="sevendrv@250:40" number="0"/>
+            <from id="counter@130:40" number="1" type="gate"/>
+            <to id="sevendrv@250:40" number="0" type="gate"/>
         </wire>
         <wire>
-            <from id="counter@130:40" number="2"/>
-            <to id="sevendrv@250:40" number="1"/>
+            <from id="counter@130:40" number="2" type="gate"/>
+            <to id="sevendrv@250:40" number="1" type="gate"/>
         </wire>
         <wire>
-            <from id="counter@130:40" number="3"/>
-            <to id="sevendrv@250:40" number="2"/>
+            <from id="counter@130:40" number="3" type="gate"/>
+            <to id="sevendrv@250:40" number="2" type="gate"/>
         </wire>
         <wire>
-            <from id="counter@130:40" number="4"/>
-            <to id="sevendrv@250:40" number="3"/>
+            <from id="counter@130:40" number="4" type="gate"/>
+            <to id="sevendrv@250:40" number="3" type="gate"/>
         </wire>
         <wire>
-            <from id="counter@130:40" number="5"/>
-            <to id="sevendrv@250:110" number="0"/>
+            <from id="counter@130:40" number="5" type="gate"/>
+            <to id="sevendrv@250:110" number="0" type="gate"/>
             <point node="false" number="0" x="240" y="90"/>
             <point node="false" number="1" x="240" y="120"/>
         </wire>
         <wire>
-            <from id="counter@130:40" number="6"/>
-            <to id="sevendrv@250:110" number="1"/>
+            <from id="counter@130:40" number="6" type="gate"/>
+            <to id="sevendrv@250:110" number="1" type="gate"/>
             <point node="false" number="0" x="230" y="100"/>
             <point node="false" number="1" x="230" y="130"/>
         </wire>
         <wire>
-            <from id="counter@130:40" number="7"/>
-            <to id="sevendrv@250:110" number="2"/>
+            <from id="counter@130:40" number="7" type="gate"/>
+            <to id="sevendrv@250:110" number="2" type="gate"/>
             <point node="false" number="0" x="220" y="110"/>
             <point node="false" number="1" x="220" y="140"/>
         </wire>
         <wire>
-            <from id="counter@130:40" number="8"/>
-            <to id="sevendrv@250:110" number="3"/>
+            <from id="counter@130:40" number="8" type="gate"/>
+            <to id="sevendrv@250:110" number="3" type="gate"/>
             <point node="false" number="0" x="210" y="120"/>
             <point node="false" number="1" x="210" y="150"/>
         </wire>
         <wire>
-            <from id="clock@50:120" number="0"/>
-            <to id="counter@130:40" number="0"/>
+            <from id="clock@50:120" number="0" type="gate"/>
+            <to id="counter@130:40" number="0" type="gate"/>
         </wire>
         <wire>
-            <from id="sevendrv@250:110" number="4"/>
-            <to id="sevenseg@340:110" number="0"/>
+            <from id="sevendrv@250:110" number="4" type="gate"/>
+            <to id="sevenseg@320:110" number="0" type="gate"/>
         </wire>
         <wire>
-            <from id="sevendrv@250:110" number="5"/>
-            <to id="sevenseg@340:110" number="1"/>
+            <from id="sevendrv@250:110" number="5" type="gate"/>
+            <to id="sevenseg@320:110" number="1" type="gate"/>
         </wire>
         <wire>
-            <from id="sevendrv@250:110" number="6"/>
-            <to id="sevenseg@340:110" number="2"/>
+            <from id="sevendrv@250:110" number="6" type="gate"/>
+            <to id="sevenseg@320:110" number="2" type="gate"/>
         </wire>
         <wire>
-            <from id="sevendrv@250:110" number="7"/>
-            <to id="sevenseg@340:110" number="3"/>
+            <from id="sevendrv@250:110" number="7" type="gate"/>
+            <to id="sevenseg@320:110" number="3" type="gate"/>
         </wire>
         <wire>
-            <from id="sevendrv@250:110" number="8"/>
-            <to id="sevenseg@340:110" number="4"/>
+            <from id="sevendrv@250:110" number="8" type="gate"/>
+            <to id="sevenseg@320:110" number="4" type="gate"/>
         </wire>
         <wire>
-            <from id="sevendrv@250:110" number="9"/>
-            <to id="sevenseg@340:110" number="5"/>
+            <from id="sevendrv@250:110" number="9" type="gate"/>
+            <to id="sevenseg@320:110" number="5" type="gate"/>
         </wire>
         <wire>
-            <from id="sevendrv@250:110" number="10"/>
-            <to id="sevenseg@340:110" number="6"/>
+            <from id="sevendrv@250:110" number="10" type="gate"/>
+            <to id="sevenseg@320:110" number="6" type="gate"/>
+        </wire>
+        <wire>
+            <from id="sevenseg@390:110" number="6" type="gate"/>
+            <to id="sevenseg@390:110" number="6" type="gate"/>
         </wire>
     </wires>
 </logicsim>

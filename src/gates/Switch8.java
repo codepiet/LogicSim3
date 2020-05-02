@@ -27,8 +27,8 @@ public class Switch8 extends Gate {
 	public Switch8() {
 		super("input");
 		type = "switch8";
-		width = 20;
-		height = 90;
+		setWidth(20);
+		setHeight(90);
 		createOutputs(8);
 		loadProperties();
 	}

@@ -634,4 +634,16 @@ public class Gate extends CircuitPart {
 	public void interact() {
 	}
 
+	protected void setHeight(int i) {
+		height = i;
+		if (yc == -1)
+			yc = getY() + height / 2;
+	}
+
+	protected void setWidth(int i) {
+		width = i;
+		if (xc == -1) {
+			xc = getX() + width / 2;
+		}
+	}
 }
