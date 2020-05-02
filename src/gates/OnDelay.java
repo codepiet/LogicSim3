@@ -49,9 +49,9 @@ public class OnDelay extends Gate implements Runnable {
 				thread.setPriority(Thread.MIN_PRIORITY);
 				thread.start();
 			} else {
-				//low let through
+				// low let through
 				LSLevelEvent evt = new LSLevelEvent(this, LOW);
-				getPin(1).changedLevel(evt);				
+				getPin(1).changedLevel(evt);
 			}
 		}
 	}
@@ -79,19 +79,16 @@ public class OnDelay extends Gate implements Runnable {
 	}
 
 	@Override
-	protected void drawFrame(Graphics2D g2) {
-		super.drawFrame(g2);
-		int cX = width / 2 + getX();
-		int cY = height / 2 + getY();
+	protected void drawRotated(Graphics2D g2) {
 		int cd = 15;
-		g2.drawOval(cX - cd / 2, cY - cd / 2 + 5, cd, cd);
+		g2.drawOval(xc - cd / 2, yc - cd / 2 + 5, cd, cd);
 		g2.drawLine(getX() + cd, getY() + cd, getX() + width - cd, getY() + cd);
 		g2.drawString("0", getX() + cd, getY() + cd + 12);
 		g2.drawString("1", getX() + width - cd - 6, getY() + cd + 12);
 		Path2D ptr = new Path2D.Double();
-		ptr.moveTo(cX, cY);
-		ptr.lineTo(cX, cY + 5);
-		ptr.lineTo(cX + 3, cY + 5);
+		ptr.moveTo(xc, yc);
+		ptr.lineTo(xc, yc + 5);
+		ptr.lineTo(xc + 3, yc + 5);
 		g2.draw(ptr);
 	}
 

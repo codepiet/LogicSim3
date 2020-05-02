@@ -58,7 +58,7 @@ public class XMLLoader {
 					// try to get the gate
 					Gate fromGate = findGateById(ls.circuit.getGates(), fromGateId);
 					if (fromGate == null)
-						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": from gate is null");
+						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": cannot fing gate " + fromGateId);
 					from = fromGate.getPin(fromNumber);
 				} else if (XMLCreator.TYPE_WIREPOINT.equals(type)) {
 					int x = Integer.parseInt(gnode.string("x"));
@@ -88,7 +88,7 @@ public class XMLLoader {
 
 					Gate toGate = findGateById(ls.circuit.getGates(), toGateId);
 					if (toGate == null)
-						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": to gate is null");
+						throw new RuntimeException(I18N.tr(Lang.READERROR) + ": cannot fing gate " + toGateId);
 					to = toGate.getPin(toNumber);
 				} else if (XMLCreator.TYPE_WIREPOINT.equals(type)) {
 					int x = Integer.parseInt(gnode.string("x"));
@@ -113,7 +113,7 @@ public class XMLLoader {
 						s += " " + from.getId();
 					if (to != null)
 						s += " " + to.getId();
-					//throw new RuntimeException("wire cannot be connected");
+					// throw new RuntimeException("wire cannot be connected");
 					ls.addError(s);
 					continue;
 				}
@@ -143,9 +143,9 @@ public class XMLLoader {
 				from.connect(wire);
 				to.connect(wire);
 				// wire.reset();
-				//if (from instanceof Pin) {
-				//	wire.changedLevel(new LSLevelEvent(from, from.getLevel()));
-				//}
+				// if (from instanceof Pin) {
+				// wire.changedLevel(new LSLevelEvent(from, from.getLevel()));
+				// }
 			}
 		}
 		return ls;
@@ -175,12 +175,8 @@ public class XMLLoader {
 		gate.moveTo(x, y);
 		if (optRotate != null) {
 			int rot = Integer.parseInt(optRotate) / 90;
-			if (gate.height != gate.width) {
+			for (int i = 0; i < rot; i++)
 				gate.rotate();
-			} else {
-				for (int i = 0; i < rot; i++)
-					gate.rotate();
-			}
 		}
 		if (optMirror != null) {
 			if ("x".equals(optMirror))

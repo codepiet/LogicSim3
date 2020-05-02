@@ -39,12 +39,45 @@ public class Switch8 extends Gate {
 
 		int mx = e.getX();
 		int my = e.getY();
-		if (mx > getX() + CONN_SIZE - 1 && mx < getX() + CONN_SIZE - 1 + OVAL_RADIUS) {
-			my = my - getY() - 5;
-			my = my / 10;
-			if (my >= 0 && my <= 7) {
-				getPin(my).changedLevel(new LSLevelEvent(this, !getPin(my).getLevel()));
+		int pinnr = -1;
+		if (rotate90 == 0 || rotate90 == 2) {
+			if (mx > getX() + CONN_SIZE - 1 && mx < getX() + CONN_SIZE - 1 + OVAL_RADIUS) {
+				my = my - getY() - 5;
+				my = my / 10;
+				if (my >= 0 && my <= 7) {
+					pinnr = my;
+					if (rotate90 > 1)
+						pinnr = 7 - pinnr;
+				}
 			}
+		} else {
+			// rotate is 1 or 3
+			if (my > getY() + CONN_SIZE - 1 && my < getY() + CONN_SIZE - 1 + OVAL_RADIUS) {
+				mx = mx - getX() - 5;
+				mx = mx / 10;
+				if (mx >= 0 && mx <= 7) {
+					pinnr = mx;
+					if (rotate90 < 2)
+						pinnr = 7 - pinnr;
+				}
+			}
+		}
+		if (pinnr > -1) {
+			getPin(pinnr).changedLevel(new LSLevelEvent(this, !getPin(pinnr).getLevel()));
+		}
+	}
+
+	@Override
+	public void interact() {
+		int value = 0;
+		for (int i = 0; i < 8; i++) {
+			value = value + ((int) Math.pow(2, i) * (getPin(i).getLevel() ? 1 : 0));
+		}
+		value++;
+		for (int i = 0; i < 8; i++) {
+			int pow = (int) Math.pow(2, i);
+			LSLevelEvent evt = new LSLevelEvent(this, (value & pow) == pow);
+			getPin(i).changedLevel(evt);
 		}
 	}
 

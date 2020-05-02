@@ -44,9 +44,9 @@ public class CLK extends Gate implements Runnable {
 	private Thread thread;
 	private boolean running = false;
 
-	Rectangle auto = new Rectangle(39, 44, 30, 15);
-	Rectangle manual = new Rectangle(11, 44, 15, 15);
-	Rectangle oszi = new Rectangle(11, 20, 59, 21);
+	Rectangle auto = new Rectangle(39, 53, 30, 15);
+	Rectangle manual = new Rectangle(11, 53, 15, 15);
+	Rectangle oszi = new Rectangle(11, 20, 59, 30);
 
 	boolean[] osz = new boolean[oszi.width + 1];
 
@@ -60,7 +60,7 @@ public class CLK extends Gate implements Runnable {
 		super("input");
 		type = "clock";
 		width = 80;
-		height = 70;
+		height = 80;
 		createOutputs(1);
 		loadProperties();
 	}
@@ -128,10 +128,12 @@ public class CLK extends Gate implements Runnable {
 		g2.setStroke(new BasicStroke(1));
 		boolean level1 = osz[0];
 		boolean level2;
+		int offset = 6;
 		for (int i = 1; i < pos; i++) {
 			level2 = osz[i];
-			g2.drawLine(x + oszi.x + i, y + oszi.y + 3 + 12 * (level1 ? 0 : 1), x + oszi.x + i,
-					y + oszi.y + 3 + 12 * (level2 ? 0 : 1));
+
+			g2.drawLine(x + oszi.x + i, y + oszi.y + offset + (oszi.height - 2*offset) * (level1 ? 0 : 1), x + oszi.x + i,
+					y + oszi.y + offset + (oszi.height - 2*offset) * (level2 ? 0 : 1));
 			level1 = level2;
 		}
 	}
@@ -157,12 +159,14 @@ public class CLK extends Gate implements Runnable {
 	@Override
 	public void loadLanguage() {
 		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Clock");
-		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Clock with configurable low and high time - press SPACE to start the Clock");
+		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION,
+				"Clock with configurable low and high time - press SPACE to start the Clock");
 		I18N.addGate(I18N.ALL, type, ENTERHIGH, "Time High-Level (ms)");
 		I18N.addGate(I18N.ALL, type, ENTERLOW, "Time Low-Level (ms)");
 
 		I18N.addGate("de", type, I18N.TITLE, "Taktgeber");
-		I18N.addGate("de", type, I18N.DESCRIPTION, "Taktgeber (Clock) mit einstellbaren LOW- und HIGH-Zeiten - Leertaste drücken zum Starten");
+		I18N.addGate("de", type, I18N.DESCRIPTION,
+				"Taktgeber (Clock) mit einstellbaren LOW- und HIGH-Zeiten - Leertaste drücken zum Starten");
 		I18N.addGate("de", type, ENTERHIGH, "Dauer High-Pegel (ms)");
 		I18N.addGate("de", type, ENTERLOW, "Dauer Low-Pegel (ms)");
 

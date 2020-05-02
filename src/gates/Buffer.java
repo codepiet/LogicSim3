@@ -34,7 +34,7 @@ public class Buffer extends Gate {
 	public void simulate() {
 		super.simulate();
 		// call pin directly
-		getPin(1).changedLevel(new LSLevelEvent(this, getPin(0).getLevel(), true));
+		getPin(1).changedLevel(new LSLevelEvent(this, getPin(0).getLevel(), force));
 	}
 
 	@Override
@@ -46,8 +46,29 @@ public class Buffer extends Gate {
 	@Override
 	protected void drawRotated(Graphics2D g2) {
 		String gateType = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN, LSProperties.GATEDESIGN_IEC);
-		if (gateType.equals(LSProperties.GATEDESIGN_ANSI))
-			drawANSI(g2);
+		if (gateType.equals(LSProperties.GATEDESIGN_ANSI)) {
+			Path2D p = new Path2D.Double();
+			double yu = getY() + CONN_SIZE + 6;
+			double xr = getX() + width - 10 - CONN_SIZE + 1;
+			double yb = getY() + height - CONN_SIZE - 6;
+			double xl = getX() + 10 + CONN_SIZE;
+			// check coordinates of pins, x coordinates shoud be a little more inwards
+			if (getPin(0).getX() == getX()) {
+				getPin(0).setX(getPin(0).getX() + 10);
+				getPin(1).setX(getPin(1).getX() - 10);
+			}
+
+			p.moveTo(xl, yc);
+			p.lineTo(xl, yb);
+			p.lineTo(xr, yc);
+			p.lineTo(xl, yu);
+			p.closePath();
+
+			g2.setPaint(Color.WHITE);
+			g2.fill(p);
+			g2.setPaint(Color.black);
+			g2.draw(p);
+		}
 	}
 
 	@Override
@@ -60,30 +81,6 @@ public class Buffer extends Gate {
 			}
 			super.drawFrame(g2);
 		}
-	}
-
-	private void drawANSI(Graphics2D g2) {
-		Path2D p = new Path2D.Double();
-		double yu = getY() + CONN_SIZE + 6;
-		double xr = getX() + width - 10 - CONN_SIZE + 1;
-		double yb = getY() + height - CONN_SIZE - 6;
-		double xl = getX() + 10 + CONN_SIZE;
-		// check coordinates of pins, x coordinates shoud be a little more inwards
-		if (getPin(0).getX() == getX()) {
-			getPin(0).setX(getPin(0).getX() + 10);
-			getPin(1).setX(getPin(1).getX() - 10);
-		}
-
-		p.moveTo(xl, yc);
-		p.lineTo(xl, yb);
-		p.lineTo(xr, yc);
-		p.lineTo(xl, yu);
-		p.closePath();
-
-		g2.setPaint(Color.WHITE);
-		g2.fill(p);
-		g2.setPaint(Color.black);
-		g2.draw(p);
 	}
 
 	@Override

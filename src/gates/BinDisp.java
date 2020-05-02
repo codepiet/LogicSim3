@@ -17,6 +17,7 @@ import javax.swing.border.TitledBorder;
 import logicsim.Gate;
 import logicsim.I18N;
 import logicsim.Lang;
+import logicsim.WidgetHelper;
 
 /**
  * Binary Display for LogicSim
@@ -38,9 +39,9 @@ public class BinDisp extends Gate {
 
 	public BinDisp() {
 		super("output");
-		label = "HEX";
 		type = "bindisp";
 		height = 90;
+		backgroundColor = Color.LIGHT_GRAY;
 		createInputs(8);
 		loadProperties();
 	}
@@ -51,8 +52,17 @@ public class BinDisp extends Gate {
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
-		super.draw(g);
+	protected void drawRotated(Graphics2D g2) {
+		Rectangle r = new Rectangle(xc-15, yc-15, 30, 30);
+		g2.setColor(Color.white);
+		g2.fill(r);
+		g2.setColor(Color.black);
+		g2.draw(r);
+	}
+
+	@Override
+	public void draw(Graphics2D g2) {
+		super.draw(g2);
 
 		int value = 0;
 		for (int i = 0; i < 8; i++) {
@@ -60,20 +70,22 @@ public class BinDisp extends Gate {
 				value += (1 << i);
 		}
 
-		String sval = "";
-		if (DISPLAY_TYPE_DEC.equals(displayType)) {
-			sval = Integer.toString(value);
-		} else
-			sval = Integer.toHexString(value);
+		String sval = displayType.toUpperCase();
+		g2.setFont(smallFont);
+		WidgetHelper.drawString(g2, sval, xc, yc + 10, WidgetHelper.ALIGN_CENTER);
 
+		g2.setFont(hugeFont);
+		if (DISPLAY_TYPE_DEC.equals(displayType))
+			sval = Integer.toString(value);
+		else
+			sval = Integer.toHexString(value);
+		// draw display's value
 		if (sval.length() == 0)
 			sval = "00";
 		if (sval.length() == 1)
 			sval = "0" + sval;
 		sval = sval.toUpperCase();
-		g.setFont(bigFont);
-		int sw = g.getFontMetrics().stringWidth(sval);
-		g.drawString(sval, getX() + getWidth() / 2 - sw / 2, getY() + getHeight() - 20);
+		WidgetHelper.drawString(g2, sval, xc, yc - 7, WidgetHelper.ALIGN_CENTER);
 	}
 
 	@Override
@@ -132,7 +144,7 @@ public class BinDisp extends Gate {
 		I18N.addGate(I18N.ALL, type, DISPLAY_TYPE_DEC, "Decimal (00..255)");
 		I18N.addGate(I18N.ALL, type, DISPLAY_TYPE_HEX, "Hexadecimal (00..FF)");
 		I18N.addGate(I18N.ALL, type, UI_TYPE, "Type");
-		
+
 		I18N.addGate("de", type, I18N.TITLE, "Binärdisplay");
 		I18N.addGate("de", type, I18N.DESCRIPTION, "Binärdisplay (Hex und Binär)");
 	}

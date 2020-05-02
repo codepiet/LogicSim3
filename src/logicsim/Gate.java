@@ -41,10 +41,9 @@ public class Gate extends CircuitPart {
 		g2.translate(-(float) x, -(float) y);
 	}
 
+	protected boolean force = false;
 	protected int actionid = 0;
 	protected Color backgroundColor = Color.white;
-
-	protected Font bigFont = new Font(Font.SANS_SERIF, Font.PLAIN, 13);
 
 	public String category;
 
@@ -328,6 +327,7 @@ public class Gate extends CircuitPart {
 
 	@Override
 	public String getId() {
+		// return type + "@" + origx + ":" + origy;
 		return type + "@" + super.getId();
 	}
 
@@ -554,7 +554,9 @@ public class Gate extends CircuitPart {
 	@Override
 	public void reset() {
 		busted = false;
+		force = true;
 		simulate();
+		force = false;
 		fireRepaint();
 	}
 
@@ -575,9 +577,9 @@ public class Gate extends CircuitPart {
 		int dx = 0;
 		int dy = 0;
 		if (Math.abs(getX() % 10) == 5)
-			dx = -5;
+			dx = (rotate90 > 1) ? -5 : +5;
 		if (Math.abs(getY() % 10) == 5)
-			dy = -5;
+			dy = (rotate90 > 1) ? -5 : +5;
 		if (dx != 0 || dy != 0)
 			moveBy(dx, dy);
 	}

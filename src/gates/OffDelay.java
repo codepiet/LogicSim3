@@ -81,19 +81,16 @@ public class OffDelay extends Gate implements Runnable {
 	}
 
 	@Override
-	public void drawFrame(Graphics2D g2) {
-		super.drawFrame(g2);
-		int cX = width / 2 + getX();
-		int cY = height / 2 + getY();
+	public void drawRotated(Graphics2D g2) {
 		int cd = 15;
-		g2.drawOval(cX - cd / 2, cY - cd / 2 + 5, cd, cd);
+		g2.drawOval(xc - cd / 2, yc - cd / 2 + 5, cd, cd);
 		g2.drawLine(getX() + cd, getY() + cd, getX() + width - cd, getY() + cd);
 		g2.drawString("1", getX() + cd, getY() + cd + 12);
 		g2.drawString("0", getX() + width - cd - 6, getY() + cd + 12);
 		Path2D ptr = new Path2D.Double();
-		ptr.moveTo(cX, cY);
-		ptr.lineTo(cX, cY + 5);
-		ptr.lineTo(cX + 3, cY + 5);
+		ptr.moveTo(xc, yc);
+		ptr.lineTo(xc, yc + 5);
+		ptr.lineTo(xc + 3, yc + 5);
 		g2.draw(ptr);
 	}
 

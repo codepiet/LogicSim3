@@ -20,8 +20,6 @@ import logicsim.Pin;
 public class AND extends Gate {
 	static final long serialVersionUID = 4521959944440523564L;
 
-	boolean force = false;
-
 	public AND() {
 		super("basic");
 		label = "&";
@@ -45,13 +43,6 @@ public class AND extends Gate {
 	}
 
 	@Override
-	public void reset() {
-		force = true;
-		simulate();
-		force = false;
-	}
-
-	@Override
 	public void changedLevel(LSLevelEvent e) {
 		super.changedLevel(e);
 		simulate();
@@ -60,8 +51,20 @@ public class AND extends Gate {
 	@Override
 	protected void drawRotated(Graphics2D g2) {
 		String gateType = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN, LSProperties.GATEDESIGN_IEC);
-		if (gateType.equals(LSProperties.GATEDESIGN_ANSI))
-			drawANSI(g2);
+		if (gateType.equals(LSProperties.GATEDESIGN_ANSI)) {
+			Path2D p = new Path2D.Double();
+			p.moveTo(getX() + CONN_SIZE, getY() + CONN_SIZE);
+			p.lineTo(getX() + width - 4 * CONN_SIZE, getY() + CONN_SIZE);
+			double x1 = getX() + width + 1.4f;
+			p.curveTo(x1, getY() + CONN_SIZE, x1, getY() + height - CONN_SIZE, getX() + width - 4 * CONN_SIZE,
+					getY() + height - CONN_SIZE);
+			p.lineTo(getX() + CONN_SIZE, getY() + height - CONN_SIZE);
+			p.closePath();
+			g2.setPaint(Color.WHITE);
+			g2.fill(p);
+			g2.setPaint(Color.black);
+			g2.draw(p);
+		}
 	}
 
 	@Override
@@ -69,21 +72,6 @@ public class AND extends Gate {
 		String gateType = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN, LSProperties.GATEDESIGN_IEC);
 		if (gateType.equals(LSProperties.GATEDESIGN_IEC))
 			super.drawFrame(g2);
-	}
-
-	private void drawANSI(Graphics2D g2) {
-		Path2D p = new Path2D.Double();
-		p.moveTo(getX() + CONN_SIZE, getY() + CONN_SIZE);
-		p.lineTo(getX() + width - 4 * CONN_SIZE, getY() + CONN_SIZE);
-		double x1 = getX() + width + 1.4f;
-		p.curveTo(x1, getY() + CONN_SIZE, x1, getY() + height - CONN_SIZE, getX() + width - 4 * CONN_SIZE,
-				getY() + height - CONN_SIZE);
-		p.lineTo(getX() + CONN_SIZE, getY() + height - CONN_SIZE);
-		p.closePath();
-		g2.setPaint(Color.WHITE);
-		g2.fill(p);
-		g2.setPaint(Color.black);
-		g2.draw(p);
 	}
 
 	@Override

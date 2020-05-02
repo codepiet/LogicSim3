@@ -72,8 +72,7 @@ public class MonoFlop extends Gate implements Runnable {
 	}
 
 	@Override
-	public void draw(Graphics2D g2) {
-		super.draw(g2);
+	public void drawRotated(Graphics2D g2) {
 		g2.setPaint(Color.black);
 		int middleX = getX() + getWidth() / 2;
 		int middleY = getY() + getHeight() / 2;

@@ -32,10 +32,6 @@ public class TriStateOutput extends Gate {
 		getPin(0).setDirection(Pin.DOWN);
 		getPin(1).moveTo(getX(), getY() + 20);
 		getPin(2).moveTo(getX() + 40, getY() + 20);
-		// getPin(1).setProperty(TEXT, "I");
-		// getPin(2).setProperty(TEXT, "O");
-
-		reset();
 	}
 
 	@Override
@@ -57,32 +53,36 @@ public class TriStateOutput extends Gate {
 		String gateType = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN, LSProperties.GATEDESIGN_IEC);
 		if (gateType.equals(LSProperties.GATEDESIGN_IEC))
 			super.drawFrame(g2);
-		else
-			drawANSI(g2);
 	}
 
-	private void drawANSI(Graphics2D g2) {
-		g2.setStroke(new BasicStroke(3));
-		g2.setColor(getPin(0).getLevel() ? Color.red : Color.black);
-		g2.drawLine(getPin(0).getX(), getPin(0).getY() + 5, getPin(0).getX(), getPin(0).getY() + 10);
+	@Override
+	protected void drawRotated(Graphics2D g2) {
+		String gateType = LSProperties.getInstance().getProperty(LSProperties.GATEDESIGN, LSProperties.GATEDESIGN_IEC);
+		if (gateType.equals(LSProperties.GATEDESIGN_ANSI)) {
+			g2.setStroke(new BasicStroke(3));
+			g2.setColor(getPin(0).getLevel() ? Color.red : Color.black);
+			g2.drawLine(xc, yc-15, xc, yc-10);
+			// g2.drawLine(getPin(0).getX(), getPin(0).getY() + 5, getPin(0).getX(),
+			// getPin(0).getY() + 10);
 
-		Path2D p = new Path2D.Double();
-		double yu = getY() + 3;
-		double xr = getX() + width - CONN_SIZE + 1;
-		double yb = getY() + height - 3;
-		double xl = getX() + CONN_SIZE;
+			Path2D p = new Path2D.Double();
+			double yu = getY() + 3;
+			double xr = getX() + width - CONN_SIZE + 1;
+			double yb = getY() + height - 3;
+			double xl = getX() + CONN_SIZE;
 
-		p.moveTo(xl, yc);
-		p.lineTo(xl, yb);
-		p.lineTo(xr, yc);
-		p.lineTo(xl, yu);
-		p.closePath();
+			p.moveTo(xl, yc);
+			p.lineTo(xl, yb);
+			p.lineTo(xr, yc);
+			p.lineTo(xl, yu);
+			p.closePath();
 
-		g2.setStroke(new BasicStroke(1));
-		g2.setPaint(Color.WHITE);
-		g2.fill(p);
-		g2.setPaint(Color.black);
-		g2.draw(p);
+			g2.setStroke(new BasicStroke(1));
+			g2.setPaint(Color.WHITE);
+			g2.fill(p);
+			g2.setPaint(Color.black);
+			g2.draw(p);
+		}
 	}
 
 	@Override

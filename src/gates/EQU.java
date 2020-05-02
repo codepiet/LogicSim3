@@ -32,7 +32,7 @@ public class EQU extends Gate {
 				n++;
 		}
 		// if n is even, set true
-		LSLevelEvent evt = new LSLevelEvent(this, n % 2 == 0);
+		LSLevelEvent evt = new LSLevelEvent(this, n % 2 == 0, force);
 		getPin(0).changedLevel(evt);
 	}
 

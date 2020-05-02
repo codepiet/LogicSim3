@@ -41,15 +41,16 @@ public class BinIn extends Gate {
 
 	String displayType;
 
-	Rectangle rect1 = new Rectangle(12, 32, 15, 15);
-	Rectangle rect2 = new Rectangle(32, 32, 15, 15);
-	Rectangle rect3 = new Rectangle(12, 67, 15, 15);
-	Rectangle rect4 = new Rectangle(32, 67, 15, 15);
+	Rectangle rect1 = new Rectangle(27, 32, 15, 15);
+	Rectangle rect2 = new Rectangle(47, 32, 15, 15);
+	Rectangle rect3 = new Rectangle(27, 67, 15, 15);
+	Rectangle rect4 = new Rectangle(47, 67, 15, 15);
 
 	public BinIn() {
 		super("input");
 		type = "binin";
 		height = 90;
+		width=90;
 		createOutputs(8);
 		loadProperties();
 	}

@@ -3,7 +3,7 @@ package logicsim;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.FontMetrics;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -19,9 +19,9 @@ public abstract class CircuitPart implements LSLevelListener {
 	public static final boolean HIGH = true;
 	public static final boolean LOW = false;
 
-	public static final int ALIGN_CENTER = 1;
-	public static final int ALIGN_LEFT = 2;
-	public static final int ALIGN_RIGHT = 3;
+	protected Font hugeFont = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
+	protected Font bigFont = new Font(Font.SANS_SERIF, Font.PLAIN, 13);
+	public static Font smallFont = new Font(Font.SANS_SERIF, Font.PLAIN, 9);
 
 	private Collection<LSLevelListener> listeners;
 	private LSRepaintListener repListener;
@@ -371,55 +371,6 @@ public abstract class CircuitPart implements LSLevelListener {
 		}
 		s += "-----------------------------\n";
 		return s;
-	}
-
-	protected Rectangle textDimensions(Graphics2D g2, String text) {
-		FontMetrics fm = g2.getFontMetrics();
-		boolean overLine = false;
-		if (text.charAt(0) == '/') {
-			overLine = true;
-			text = text.substring(1);
-		}
-		int stringWidth = fm.stringWidth(text);
-		int stringHeight = fm.getHeight() + (overLine ? 2 : 0);
-		return new Rectangle(0, 0, stringWidth, stringHeight);
-	}
-
-	protected void drawString(Graphics2D g2, String text, int x, int y, int mode) {
-		int nx = x;
-		int ny = y;
-		if (text == null)
-			return;
-		Rectangle r = textDimensions(g2, text);
-		boolean overLine = false;
-		if (text.charAt(0) == '/') {
-			overLine = true;
-			text = text.substring(1);
-		}
-		if (mode == ALIGN_CENTER) {
-			nx = x - r.width / 2;
-			ny = y + r.height / 2;
-			if (overLine) {
-				g2.drawLine(nx, y - r.height / 2 + 2, nx + r.width, y - r.height / 2 + 2);
-				g2.drawString(text, nx, ny - 4);
-			} else {
-				g2.drawString(text, nx, ny - 2);
-			}
-		} else if (mode == ALIGN_LEFT) {
-			if (overLine) {
-				g2.drawLine(nx, y - r.height + 2, nx + r.width, y - r.height + 2);
-				g2.drawString(text, nx, ny - 2);
-			} else {
-				g2.drawString(text, nx, ny);
-			}
-		} else if (mode == ALIGN_RIGHT) {
-			if (overLine) {
-				g2.drawLine(nx - r.width, y - r.height + 3, nx, y - r.height + 3);
-				g2.drawString(text, nx - r.width, ny - 2);
-			} else {
-				g2.drawString(text, nx - r.width, ny);
-			}
-		}
 	}
 
 	protected void clearListeners() {

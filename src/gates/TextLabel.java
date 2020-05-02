@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 import logicsim.Gate;
 import logicsim.I18N;
+import logicsim.WidgetHelper;
 
 /**
  * Text Label component for LogicSim
@@ -41,7 +42,7 @@ public class TextLabel extends Gate {
 	protected void drawActiveFrame(Graphics2D g2) {
 		g2.setFont(bigFont);
 		if (text != null) {
-			Rectangle r = textDimensions(g2, text);
+			Rectangle r = WidgetHelper.textDimensions(g2, text);
 			width = r.width / 10 * 10 + 10;
 			height = r.height / 10 * 10 + 10;
 			super.drawActiveFrame(g2);
@@ -57,11 +58,12 @@ public class TextLabel extends Gate {
 		g2.setFont(bigFont);
 		g2.setColor(Color.black);
 		if (text != null) {
-			Rectangle r = textDimensions(g2, text);
+			Rectangle r = WidgetHelper.textDimensions(g2, text);
 			width = r.width;
+			width = width / 10 * 10 + 10;
 			height = r.height;
-			//g2.drawString(text, getX(), getY());
-			drawString(g2, text, getX() + width / 2, getY() + height / 2, ALIGN_CENTER);
+			height = height / 10 * 10 + 10;
+			WidgetHelper.drawString(g2, text, xc, yc, WidgetHelper.ALIGN_CENTER);
 		}
 	}
 
