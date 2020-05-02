@@ -29,6 +29,13 @@ public class Register8 extends Gate {
 		createInputs(11);
 		createOutputs(16);
 
+		// 0 to 7 for BUS INPUTS
+		// 8 is OE-Signal (INPUT)
+		// 9 is LOAD (INPUT)
+		// 10 is CLOCK (INPUT)
+
+		// 11-18 are TRI-STATE BUS OUTPUTS
+
 		for (int i = 0; i < 8; i++) {
 			getPin(i).setProperty(TEXT, "I" + i);
 			getPin(i).setY(getY() + (i + 2) * 10);
@@ -39,9 +46,11 @@ public class Register8 extends Gate {
 		getPin(8).setProperty(TEXT, "/OE");
 		getPin(9).setProperty(TEXT, "/LD");
 		getPin(10).setProperty(TEXT, Pin.POS_EDGE_TRIG);
+
 		for (int i = 11; i < 19; i++) {
 			getPin(i).setProperty(TEXT, "O" + (i - 11));
 			getPin(i).setY(getY() + (i - 9) * 10);
+			getPin(i).ioType = Pin.HIGHIMP;
 		}
 
 		// internal outputs (e.g. for ALU)
@@ -98,6 +107,7 @@ public class Register8 extends Gate {
 		// if output enable is low, send content to bus
 		if (getPin(8).getLevel() == LOW) {
 			for (int i = 0; i < 8; i++) {
+				getPin(i + 11).ioType = Pin.OUTPUT;
 				int pot = (int) Math.pow(2, i);
 				LSLevelEvent evt = new LSLevelEvent(this, (content & pot) == pot);
 				getPin(i + 11).changedLevel(evt);
@@ -105,6 +115,7 @@ public class Register8 extends Gate {
 		}
 		if (getPin(8).getLevel() == HIGH) {
 			for (int i = 0; i < 8; i++) {
+				getPin(i + 11).ioType = Pin.HIGHIMP;
 				LSLevelEvent evt = new LSLevelEvent(this, LOW);
 				getPin(i + 11).changedLevel(evt);
 			}

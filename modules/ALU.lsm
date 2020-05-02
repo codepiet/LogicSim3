@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<logicsim version="3">
+    <info/>
+    <gates>
+        <gate module="true" type="4bitAdd" x="450" y="70"/>
+        <gate module="true" type="4bitAdd" x="450" y="170"/>
+        <gate type="modin" x="100" y="80">
+            <properties>
+                <property key="pincount">18</property>
+            </properties>
+            <pin iotype="input" number="0">
+                <properties>
+                    <property key="text">a0</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="1">
+                <properties>
+                    <property key="text">a1</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="2">
+                <properties>
+                    <property key="text">a2</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="3">
+                <properties>
+                    <property key="text">a3</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="4">
+                <properties>
+                    <property key="text">a4</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="5">
+                <properties>
+                    <property key="text">a5</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="6">
+                <properties>
+                    <property key="text">a6</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="7">
+                <properties>
+                    <property key="text">a7</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="8">
+                <properties>
+                    <property key="text">b0</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="9">
+                <properties>
+                    <property key="text">b1</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="10">
+                <properties>
+                    <property key="text">b2</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="11">
+                <properties>
+                    <property key="text">b3</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="12">
+                <properties>
+                    <property key="text">b4</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="13">
+                <properties>
+                    <property key="text">b5</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="14">
+                <properties>
+                    <property key="text">b6</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="15">
+                <properties>
+                    <property key="text">b7</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="16">
+                <properties>
+                    <property key="text">SU</property>
+                </properties>
+            </pin>
+            <pin iotype="input" number="17">
+                <properties>
+                    <property key="text">EN</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="modout" x="760" y="70">
+            <pin iotype="output" number="16">
+                <properties>
+                    <property key="text">s0</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="17">
+                <properties>
+                    <property key="text">s1</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="18">
+                <properties>
+                    <property key="text">s2</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="19">
+                <properties>
+                    <property key="text">s3</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="20">
+                <properties>
+                    <property key="text">s4</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="21">
+                <properties>
+                    <property key="text">s5</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="22">
+                <properties>
+                    <property key="text">s6</property>
+                </properties>
+            </pin>
+            <pin iotype="output" number="23">
+                <properties>
+                    <property key="text">s7</property>
+                </properties>
+            </pin>
+        </gate>
+        <gate type="xor" x="300" y="580"/>
+        <gate type="xor" x="300" y="530"/>
+        <gate type="xor" x="300" y="230"/>
+        <gate type="xor" x="300" y="480"/>
+        <gate type="xor" x="300" y="280"/>
+        <gate type="xor" x="300" y="330"/>
+        <gate type="xor" x="300" y="380"/>
+        <gate type="xor" x="300" y="430"/>
+        <gate type="triout" x="590" y="60"/>
+        <gate type="triout" x="590" y="100"/>
+        <gate type="triout" x="590" y="140"/>
+        <gate type="triout" x="590" y="180"/>
+        <gate type="triout" x="590" y="220"/>
+        <gate type="triout" x="590" y="260"/>
+        <gate type="triout" x="590" y="300"/>
+        <gate type="triout" x="590" y="340"/>
+    </gates>
+    <wires>
+        <wire>
+            <from id="4bitAdd@450:70" number="20" type="gate"/>
+            <to id="4bitAdd@450:170" number="0" type="gate"/>
+            <point node="false" number="0" x="510" y="170"/>
+            <point node="false" number="1" x="450" y="170"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="33" type="gate"/>
+            <to id="xor@300:580" number="1" type="gate"/>
+            <point node="false" number="0" x="210" y="240"/>
+            <point node="false" number="1" x="210" y="590"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="26" type="gate"/>
+            <to id="xor@300:230" number="1" type="gate"/>
+            <point node="false" number="0" x="280" y="170"/>
+            <point node="false" number="1" x="280" y="240"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="32" type="gate"/>
+            <to id="xor@300:530" number="1" type="gate"/>
+            <point node="false" number="0" x="220" y="230"/>
+            <point node="false" number="1" x="220" y="540"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="31" type="gate"/>
+            <to id="xor@300:480" number="1" type="gate"/>
+            <point node="false" number="0" x="230" y="220"/>
+            <point node="false" number="1" x="230" y="490"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="30" type="gate"/>
+            <to id="xor@300:430" number="1" type="gate"/>
+            <point node="false" number="0" x="240" y="210"/>
+            <point node="false" number="1" x="240" y="440"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="29" type="gate"/>
+            <to id="xor@300:380" number="1" type="gate"/>
+            <point node="false" number="0" x="250" y="200"/>
+            <point node="false" number="1" x="250" y="390"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="28" type="gate"/>
+            <to id="xor@300:330" number="1" type="gate"/>
+            <point node="false" number="0" x="260" y="190"/>
+            <point node="false" number="1" x="260" y="340"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="27" type="gate"/>
+            <to id="xor@300:280" number="1" type="gate"/>
+            <point node="false" number="0" x="270" y="180"/>
+            <point node="false" number="1" x="270" y="290"/>
+        </wire>
+        <wire>
+            <from id="xor@300:580" number="0" type="gate"/>
+            <to id="4bitAdd@450:170" number="8" type="gate"/>
+            <point node="false" number="0" x="450" y="610"/>
+        </wire>
+        <wire>
+            <from id="4bitAdd@450:70" number="16" type="gate"/>
+            <to id="triout@590:60" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="4bitAdd@450:70" number="17" type="gate"/>
+            <to id="triout@590:100" number="1" type="gate"/>
+            <point node="false" number="0" x="580" y="90"/>
+            <point node="false" number="1" x="580" y="120"/>
+        </wire>
+        <wire>
+            <from id="4bitAdd@450:70" number="18" type="gate"/>
+            <to id="triout@590:140" number="1" type="gate"/>
+            <point node="false" number="0" x="570" y="120"/>
+            <point node="false" number="1" x="570" y="160"/>
+        </wire>
+        <wire>
+            <from id="4bitAdd@450:70" number="19" type="gate"/>
+            <to id="triout@590:180" number="1" type="gate"/>
+            <point node="false" number="0" x="560" y="150"/>
+            <point node="false" number="1" x="560" y="200"/>
+        </wire>
+        <wire>
+            <from id="4bitAdd@450:170" number="16" type="gate"/>
+            <to id="triout@590:220" number="1" type="gate"/>
+            <point node="false" number="0" x="550" y="180"/>
+            <point node="false" number="1" x="550" y="240"/>
+        </wire>
+        <wire>
+            <from id="4bitAdd@450:170" number="17" type="gate"/>
+            <to id="triout@590:260" number="1" type="gate"/>
+            <point node="false" number="0" x="540" y="190"/>
+            <point node="false" number="1" x="540" y="280"/>
+        </wire>
+        <wire>
+            <from id="4bitAdd@450:170" number="18" type="gate"/>
+            <to id="triout@590:300" number="1" type="gate"/>
+            <point node="false" number="0" x="530" y="220"/>
+            <point node="false" number="1" x="530" y="320"/>
+        </wire>
+        <wire>
+            <from id="4bitAdd@450:170" number="19" type="gate"/>
+            <to id="triout@590:340" number="1" type="gate"/>
+            <point node="false" number="0" x="520" y="250"/>
+            <point node="false" number="1" x="520" y="360"/>
+        </wire>
+        <wire>
+            <from id="triout@590:60" number="2" type="gate"/>
+            <to id="modout@760:70" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="triout@590:100" number="2" type="gate"/>
+            <to id="modout@760:70" number="1" type="gate"/>
+            <point node="false" number="0" x="660" y="120"/>
+            <point node="false" number="1" x="660" y="90"/>
+        </wire>
+        <wire>
+            <from id="triout@590:140" number="2" type="gate"/>
+            <to id="modout@760:70" number="2" type="gate"/>
+            <point node="false" number="0" x="670" y="160"/>
+            <point node="false" number="1" x="670" y="100"/>
+        </wire>
+        <wire>
+            <from id="triout@590:180" number="2" type="gate"/>
+            <to id="modout@760:70" number="3" type="gate"/>
+            <point node="false" number="0" x="680" y="200"/>
+            <point node="false" number="1" x="680" y="110"/>
+        </wire>
+        <wire>
+            <from id="triout@590:220" number="2" type="gate"/>
+            <to id="modout@760:70" number="4" type="gate"/>
+            <point node="false" number="0" x="690" y="240"/>
+            <point node="false" number="1" x="690" y="120"/>
+        </wire>
+        <wire>
+            <from id="triout@590:260" number="2" type="gate"/>
+            <to id="modout@760:70" number="5" type="gate"/>
+            <point node="false" number="0" x="700" y="280"/>
+            <point node="false" number="1" x="700" y="130"/>
+        </wire>
+        <wire>
+            <from id="triout@590:300" number="2" type="gate"/>
+            <to id="modout@760:70" number="6" type="gate"/>
+            <point node="false" number="0" x="710" y="320"/>
+            <point node="false" number="1" x="710" y="140"/>
+        </wire>
+        <wire>
+            <from id="triout@590:340" number="2" type="gate"/>
+            <to id="modout@760:70" number="7" type="gate"/>
+            <point node="false" number="0" x="720" y="360"/>
+            <point node="false" number="1" x="720" y="150"/>
+        </wire>
+        <wire>
+            <from id="xor@300:530" number="0" type="gate"/>
+            <to id="4bitAdd@450:170" number="7" type="gate"/>
+            <point node="false" number="0" x="440" y="560"/>
+            <point node="false" number="1" x="440" y="250"/>
+        </wire>
+        <wire>
+            <from id="xor@300:480" number="0" type="gate"/>
+            <to id="4bitAdd@450:170" number="6" type="gate"/>
+            <point node="false" number="0" x="430" y="510"/>
+            <point node="false" number="1" x="430" y="240"/>
+        </wire>
+        <wire>
+            <from id="xor@300:430" number="0" type="gate"/>
+            <to id="4bitAdd@450:170" number="5" type="gate"/>
+            <point node="false" number="0" x="420" y="460"/>
+            <point node="false" number="1" x="420" y="230"/>
+        </wire>
+        <wire>
+            <from id="xor@300:380" number="0" type="gate"/>
+            <to id="4bitAdd@450:70" number="8" type="gate"/>
+            <point node="false" number="0" x="410" y="410"/>
+            <point node="false" number="1" x="410" y="160"/>
+        </wire>
+        <wire>
+            <from id="xor@300:330" number="0" type="gate"/>
+            <to id="4bitAdd@450:70" number="7" type="gate"/>
+            <point node="false" number="0" x="400" y="360"/>
+            <point node="false" number="1" x="400" y="150"/>
+        </wire>
+        <wire>
+            <from id="xor@300:280" number="0" type="gate"/>
+            <to id="4bitAdd@450:70" number="6" type="gate"/>
+            <point node="false" number="0" x="390" y="310"/>
+            <point node="false" number="1" x="390" y="140"/>
+        </wire>
+        <wire>
+            <from id="xor@300:230" number="0" type="gate"/>
+            <to id="4bitAdd@450:70" number="5" type="gate"/>
+            <point node="false" number="0" x="380" y="260"/>
+            <point node="false" number="1" x="380" y="130"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="25" type="gate"/>
+            <to id="4bitAdd@450:170" number="4" type="gate"/>
+            <point node="false" number="0" x="320" y="160"/>
+            <point node="false" number="1" x="320" y="220"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="24" type="gate"/>
+            <to id="4bitAdd@450:170" number="3" type="gate"/>
+            <point node="false" number="0" x="330" y="150"/>
+            <point node="false" number="1" x="330" y="210"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="23" type="gate"/>
+            <to id="4bitAdd@450:170" number="2" type="gate"/>
+            <point node="false" number="0" x="340" y="140"/>
+            <point node="false" number="1" x="340" y="200"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="22" type="gate"/>
+            <to id="4bitAdd@450:170" number="1" type="gate"/>
+            <point node="false" number="0" x="350" y="130"/>
+            <point node="false" number="1" x="350" y="190"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="21" type="gate"/>
+            <to id="4bitAdd@450:70" number="4" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="20" type="gate"/>
+            <to id="4bitAdd@450:70" number="3" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="19" type="gate"/>
+            <to id="4bitAdd@450:70" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="18" type="gate"/>
+            <to id="4bitAdd@450:70" number="1" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="34" type="gate"/>
+            <to id="xor@300:580" number="2" type="gate"/>
+            <point node="false" number="0" x="190" y="250"/>
+            <point node="false" number="1" x="190" y="80"/>
+            <point node="true" number="2" x="290" y="80"/>
+            <point node="true" number="3" x="290" y="280"/>
+            <point node="true" number="4" x="290" y="330"/>
+            <point node="true" number="5" x="290" y="380"/>
+            <point node="true" number="6" x="290" y="430"/>
+            <point node="true" number="7" x="290" y="480"/>
+            <point node="true" number="8" x="290" y="530"/>
+            <point node="true" number="9" x="290" y="580"/>
+            <point node="false" number="10" x="290" y="630"/>
+        </wire>
+        <wire>
+            <from id="290:80@34@modin@100:80-2@xor@300:580" type="wire"/>
+            <to id="4bitAdd@450:70" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="290:280@34@modin@100:80-2@xor@300:580" type="wire"/>
+            <to id="xor@300:230" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="290:330@34@modin@100:80-2@xor@300:580" type="wire"/>
+            <to id="xor@300:280" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="290:380@34@modin@100:80-2@xor@300:580" type="wire"/>
+            <to id="xor@300:330" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="290:430@34@modin@100:80-2@xor@300:580" type="wire"/>
+            <to id="xor@300:380" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="290:480@34@modin@100:80-2@xor@300:580" type="wire"/>
+            <to id="xor@300:430" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="290:530@34@modin@100:80-2@xor@300:580" type="wire"/>
+            <to id="xor@300:480" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="290:580@34@modin@100:80-2@xor@300:580" type="wire"/>
+            <to id="xor@300:530" number="2" type="gate"/>
+        </wire>
+        <wire>
+            <from id="modin@100:80" number="35" type="gate"/>
+            <to id="triout@590:340" number="0" type="gate"/>
+            <point node="false" number="0" x="200" y="260"/>
+            <point node="false" number="1" x="200" y="50"/>
+            <point node="false" number="2" x="640" y="50"/>
+            <point node="true" number="3" x="640" y="60"/>
+            <point node="true" number="4" x="640" y="100"/>
+            <point node="true" number="5" x="640" y="140"/>
+            <point node="true" number="6" x="640" y="180"/>
+            <point node="true" number="7" x="640" y="220"/>
+            <point node="true" number="8" x="640" y="260"/>
+            <point node="true" number="9" x="640" y="300"/>
+            <point node="false" number="10" x="640" y="340"/>
+        </wire>
+        <wire>
+            <from id="640:60@35@modin@100:80-0@triout@590:340" type="wire"/>
+            <to id="triout@590:60" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="640:100@35@modin@100:80-0@triout@590:340" type="wire"/>
+            <to id="triout@590:100" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="640:140@35@modin@100:80-0@triout@590:340" type="wire"/>
+            <to id="triout@590:140" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="640:180@35@modin@100:80-0@triout@590:340" type="wire"/>
+            <to id="triout@590:180" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="640:220@35@modin@100:80-0@triout@590:340" type="wire"/>
+            <to id="triout@590:220" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="640:260@35@modin@100:80-0@triout@590:340" type="wire"/>
+            <to id="triout@590:260" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="640:300@35@modin@100:80-0@triout@590:340" type="wire"/>
+            <to id="triout@590:300" number="0" type="gate"/>
+        </wire>
+    </wires>
+</logicsim>

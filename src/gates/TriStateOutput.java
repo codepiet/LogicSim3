@@ -36,15 +36,21 @@ public class TriStateOutput extends Gate {
 
 	@Override
 	public void changedLevel(LSLevelEvent e) {
-		// pin 0 - switching
+		// pin 0 - switching pin - switches between output and highimp
 		// pin 1 - input
 		// pin 2 - output
-
-		boolean b0 = getPin(0).getLevel();
-		if (b0 == LOW) {
-			getPin(2).changedLevel(new LSLevelEvent(this, LOW));
-		} else {
-			getPin(2).changedLevel(new LSLevelEvent(this, getPin(1).getLevel()));
+		if (e.source == getPin(0)) {
+			if (e.level == HIGH) {
+				getPin(2).ioType = Pin.OUTPUT;
+				getPin(2).changedLevel(new LSLevelEvent(this, getPin(1).getLevel(), true));
+			} else {
+				// level of switching pin is low -> send low
+				getPin(2).ioType = Pin.HIGHIMP;
+				getPin(2).changedLevel(new LSLevelEvent(this, LOW));
+			}
+		} else if (e.source == getPin(1)) {
+			if (getPin(2).isOutput())
+				getPin(2).changedLevel(new LSLevelEvent(this, getPin(1).getLevel()));
 		}
 	}
 
@@ -61,7 +67,7 @@ public class TriStateOutput extends Gate {
 		if (gateType.equals(LSProperties.GATEDESIGN_ANSI)) {
 			g2.setStroke(new BasicStroke(3));
 			g2.setColor(getPin(0).getLevel() ? Color.red : Color.black);
-			g2.drawLine(xc, yc-15, xc, yc-10);
+			g2.drawLine(xc, yc - 15, xc, yc - 10);
 			// g2.drawLine(getPin(0).getX(), getPin(0).getY() + 5, getPin(0).getX(),
 			// getPin(0).getY() + 10);
 

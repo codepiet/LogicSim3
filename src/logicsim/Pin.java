@@ -11,6 +11,7 @@ public class Pin extends CircuitPart {
 
 	public static final int INPUT = 1;
 	public static final int OUTPUT = 2;
+	public static final int HIGHIMP = 3;
 
 	public static final int NORMAL = 10;
 	public static final int INVERTED = 11;
@@ -274,12 +275,6 @@ public class Pin extends CircuitPart {
 		String s = number + it + lt + "-" + (text == null ? "" : "\"" + text + "\"") + getX() + ":" + getY() + "@"
 				+ parent.getId();
 		s += " - " + (getLevel() ? "HIGH" : "LOW");
-//		if (getListeners().size() > 0) {
-//			s += "\n send updates to\n";
-//			for (LSLevelListener l : getListeners())
-//				s += indent(((CircuitPart) l).getId(), 3) + "\n";
-//		}
-//		s += "-----------------";
 		return s;
 	}
 
@@ -317,6 +312,9 @@ public class Pin extends CircuitPart {
 				}
 			}
 		} else if (e.source instanceof Wire) {
+			// if the pin is in high imp state, don't do anything
+			if (this.ioType == Pin.HIGHIMP)
+				return;
 			// signal is from outside, propagate this to gate
 			// call gate directly
 			if (level != e.level || e.force) {
@@ -334,19 +332,6 @@ public class Pin extends CircuitPart {
 	public boolean getInternalLevel() {
 		return level;
 	}
-
-//	@Override
-//	public void connect(CircuitPart part) {
-//		super.connect(part);
-//		Wire wire = (Wire) part;
-//		if (isInput()) {
-//			//changedLevel(new LSLevelEvent(wire, wire.getLevel(), true));
-//			//changedLevel(new LSLevelEvent(wire, wire.getLevel(), true));
-//		} else {
-//			//LSLevelEvent evt = new LSLevelEvent(this, getLevel(), true);
-//			//fireChangedLevel(evt);
-//		}
-//	}
 
 	public void disconnect() {
 		for (int i = 0; i < getListeners().size(); i++) {
