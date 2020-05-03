@@ -74,8 +74,7 @@ public class Pin extends CircuitPart {
 					tr.addPoint(x + 1 + CONN_SIZE + 9, y);
 					g2.draw(tr);
 				} else {
-					drawString(g2, text, x + CONN_SIZE + 3, y + 4, WidgetHelper.ALIGN_LEFT);
-					// g2.drawString(text, x + CONN_SIZE + 3, y + 5);
+					WidgetHelper.drawString(g2, text, x + CONN_SIZE + 3, y + 4, WidgetHelper.ALIGN_LEFT);
 				}
 			} else if (paintDirection == LEFT) {
 				if (POS_EDGE_TRIG.equals(text)) {
@@ -85,8 +84,7 @@ public class Pin extends CircuitPart {
 					tr.addPoint(x - 1 - CONN_SIZE - 9, y);
 					g2.draw(tr);
 				} else {
-					drawString(g2, text, x - CONN_SIZE - 2, y + 4, WidgetHelper.ALIGN_RIGHT);
-					// g2.drawString(text, x - CONN_SIZE - lw - 2, y + 5);
+					WidgetHelper.drawString(g2, text, x - CONN_SIZE - 2, y + 4, WidgetHelper.ALIGN_RIGHT);
 				}
 			} else if (paintDirection == UP) {
 				if (POS_EDGE_TRIG.equals(text)) {
@@ -96,8 +94,7 @@ public class Pin extends CircuitPart {
 					tr.addPoint(x, y - 1 - CONN_SIZE - 8);
 					g2.draw(tr);
 				} else {
-					drawString(g2, text, x, y - CONN_SIZE - 6, WidgetHelper.ALIGN_CENTER);
-					// g2.drawString(text, x - lw / 2, y - CONN_SIZE - 3);
+					WidgetHelper.drawString(g2, text, x, y - CONN_SIZE - 3, WidgetHelper.ALIGN_CENTER);
 				}
 			} else if (paintDirection == DOWN) {
 				if (POS_EDGE_TRIG.equals(text)) {
@@ -107,46 +104,8 @@ public class Pin extends CircuitPart {
 					tr.addPoint(x, y + 1 + CONN_SIZE + 8);
 					g2.draw(tr);
 				} else {
-					drawString(g2, text, x, y + CONN_SIZE + 9, WidgetHelper.ALIGN_CENTER);
-					// g2.drawString(text, x - lw / 2, y + CONN_SIZE + 12);
+					WidgetHelper.drawString(g2, text, x, y + CONN_SIZE + 10, WidgetHelper.ALIGN_CENTER);
 				}
-			}
-		}
-	}
-
-	protected void drawString(Graphics2D g2, String text, int x, int y, int mode) {
-		int nx = x;
-		int ny = y;
-		if (text == null)
-			return;
-		Rectangle r = WidgetHelper.textDimensions(g2, text);
-		boolean overLine = false;
-		if (text.charAt(0) == '/') {
-			overLine = true;
-			text = text.substring(1);
-		}
-		if (mode == WidgetHelper.ALIGN_CENTER) {
-			nx = x - r.width / 2;
-			ny = y + r.height / 2;
-			if (overLine) {
-				g2.drawLine(nx, y - r.height / 2 + 5, nx + r.width, y - r.height / 2 + 5);
-				g2.drawString(text, nx, ny - 3);
-			} else {
-				g2.drawString(text, nx, ny - 1);
-			}
-		} else if (mode == WidgetHelper.ALIGN_LEFT) {
-			if (overLine) {
-				g2.drawLine(nx, y - r.height + 5, nx + r.width, y - r.height + 5);
-				g2.drawString(text, nx, ny - 1);
-			} else {
-				g2.drawString(text, nx, ny - 1);
-			}
-		} else if (mode == WidgetHelper.ALIGN_RIGHT) {
-			if (overLine) {
-				g2.drawLine(nx - r.width, y - r.height + 5, nx, y - r.height + 5);
-				g2.drawString(text, nx - r.width, ny - 1);
-			} else {
-				g2.drawString(text, nx - r.width, ny);
 			}
 		}
 	}

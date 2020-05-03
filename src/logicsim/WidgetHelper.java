@@ -148,27 +148,20 @@ public class WidgetHelper {
 		}
 		if (mode == ALIGN_CENTER) {
 			nx = x - r.width / 2;
-			ny = y + r.height / 2;
 			if (overLine) {
-				g2.drawLine(nx, y - r.height / 2 + 2, nx + r.width, y - r.height / 2 + 2);
-				g2.drawString(text, nx, ny - 4);
-			} else {
-				g2.drawString(text, nx, ny - 2);
+				g2.drawLine(nx, y - r.height + 5, nx + r.width, y - r.height + 5);
 			}
+			g2.drawString(text, nx, ny);
 		} else if (mode == ALIGN_LEFT) {
 			if (overLine) {
-				g2.drawLine(nx, y - r.height + 2, nx + r.width, y - r.height + 2);
-				g2.drawString(text, nx, ny - 2);
-			} else {
-				g2.drawString(text, nx, ny);
+				g2.drawLine(nx, y - r.height + 5, nx + r.width, y - r.height + 5);
 			}
+			g2.drawString(text, nx, ny);
 		} else if (mode == ALIGN_RIGHT) {
 			if (overLine) {
-				g2.drawLine(nx - r.width, y - r.height + 3, nx, y - r.height + 3);
-				g2.drawString(text, nx - r.width, ny - 2);
-			} else {
-				g2.drawString(text, nx - r.width, ny);
+				g2.drawLine(nx - r.width, y - r.height + 5, nx, y - r.height + 5);
 			}
+			g2.drawString(text, nx - r.width, ny);
 		}
 	}
 

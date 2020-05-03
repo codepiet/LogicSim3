@@ -21,7 +21,7 @@ public abstract class CircuitPart implements LSLevelListener {
 
 	protected Font hugeFont = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
 	protected Font bigFont = new Font(Font.SANS_SERIF, Font.PLAIN, 13);
-	public static Font smallFont = new Font(Font.SANS_SERIF, Font.PLAIN, 9);
+	public static Font smallFont = new Font(Font.SANS_SERIF, Font.PLAIN, 8);
 
 	private Collection<LSLevelListener> listeners;
 	private LSRepaintListener repListener;
