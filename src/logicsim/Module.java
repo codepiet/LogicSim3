@@ -75,7 +75,7 @@ public class Module extends Gate {
 					// check if MODIN's outputs are connected
 					if (c.isConnected()) {
 						Pin newIn = new Pin(getX(), getY() + 10 + (c.number - numberOfInputs) * 10, this, c.number - numberOfInputs);
-						newIn.ioType = Pin.INPUT;
+						newIn.setIoType(Pin.INPUT);
 						newIn.levelType = Pin.NORMAL;
 						Pin in = moduleIn.getPin(c.number - numberOfInputs);
 						if (in.getProperty(TEXT) != null)
@@ -94,7 +94,7 @@ public class Module extends Gate {
 				for (Pin c : moduleOut.getInputs()) {
 					if (c.isConnected()) {
 						Pin newOut = new Pin(getX() + getWidth(), getY() + 10 + c.number * 10, this, c.number + numberOfInputs);
-						newOut.ioType = Pin.OUTPUT;
+						newOut.setIoType(Pin.OUTPUT);
 						newOut.paintDirection = Pin.LEFT;
 						newOut.levelType = Pin.NORMAL;
 						Pin out = moduleOut.getPin(c.number + numberOfInputs);

@@ -42,7 +42,7 @@ public class ALU8 extends Gate {
 
 		for (int i = 0; i < 8; i++) {
 			getPin(i).paintDirection = Pin.RIGHT;
-			getPin(i).ioType = Pin.HIGHIMP;
+			getPin(i).setIoType(Pin.HIGHIMP);
 			getPin(i).setX(getX());
 			getPin(i).setY(getY() + (i + 2) * 10);
 			getPin(i).setProperty(TEXT, String.valueOf(i));

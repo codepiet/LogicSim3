@@ -26,14 +26,27 @@ public class Pin extends CircuitPart {
 	public static final int BOUNDING_SPACE = 5;
 	public static final int CONN_SIZE = 5;
 	public static final String POS_EDGE_TRIG = "PosEdgeTrig";
-	public static final String NEG_EDGE_TRIG = "NegEdgeTrig";
 
 	public int number;
 
 	protected boolean level = false;
 	public int paintDirection = RIGHT;
 
-	public int ioType = INPUT;
+	private int ioType = INPUT;
+
+	public int getIoType() {
+		return ioType;
+	}
+
+	public void setIoType(int ioType) {
+		if (ioType == Pin.HIGHIMP && this.ioType != Pin.HIGHIMP) {
+			parent.changedLevel(new LSLevelEvent(this, CircuitPart.LOW));
+		} else if (ioType != Pin.HIGHIMP && this.ioType == Pin.HIGHIMP) {
+
+		}
+		this.ioType = ioType;
+	}
+
 	/**
 	 * type can be HIGH, LOW, INVERTED or NORMAL
 	 */
@@ -123,10 +136,8 @@ public class Pin extends CircuitPart {
 
 		int offset = 0;
 
-		g2.setPaint(getLevel() ? Color.red : Color.black);
 		if (levelType == INVERTED) {
 			int ovalSize = CONN_SIZE;
-			// g2.setPaint(!getLevel() ? Color.red : Color.black);
 			if (paintDirection == LEFT)
 				g2.drawOval(x + offset - ovalSize - 1, y - 1 - ovalSize / 2, ovalSize + 1, ovalSize + 1);
 			else if (paintDirection == RIGHT)
@@ -171,12 +182,42 @@ public class Pin extends CircuitPart {
 				} else {
 					offset = -1;
 				}
-				g2.fillRect(x + offset + 1, y - 1, CONN_SIZE + 1, 3);
+				if (ioType == HIGHIMP) {
+					if (paintDirection == LEFT) {
+						g2.setPaint(level ? Color.red : Color.black);
+						g2.fillRect(x + offset + 1 + 4, y - 1, CONN_SIZE + 1 - 4, 3);
+						g2.setColor(Color.black);
+						g2.fillRect(x + offset + 1, y - 1, 2, 3);
+					} else {
+						g2.setPaint(level ? Color.red : Color.black);
+						g2.fillRect(x + offset + 1, y - 1, 2, 3);
+						g2.setColor(Color.black);
+						g2.fillRect(x + offset + 1 + 4, y - 1, CONN_SIZE + 1 - 4, 3);
+					}
+				} else {
+					g2.setPaint(getLevel() ? Color.red : Color.black);
+					g2.fillRect(x + offset + 1, y - 1, CONN_SIZE + 1, 3);
+				}
 			} else {
 				if (paintDirection == UP) {
 					offset = -CONN_SIZE;
 				}
-				g2.fillRect(x - 1, y + offset, 3, CONN_SIZE + 1);
+				if (ioType == HIGHIMP) {
+					if (paintDirection == UP) {
+						g2.setPaint(level ? Color.red : Color.black);
+						g2.fillRect(x - 1, y + offset + 4, 3, CONN_SIZE + 1 - 4);
+						g2.setColor(Color.black);
+						g2.fillRect(x - 1, y + offset, 3, 2);
+					} else {
+						g2.setPaint(level ? Color.red : Color.black);
+						g2.fillRect(x - 1, y + offset, 3, 2);
+						g2.setColor(Color.black);
+						g2.fillRect(x - 1, y + offset + 4, 3, CONN_SIZE + 1 - 4);
+					}
+				} else {
+					g2.setPaint(getLevel() ? Color.red : Color.black);
+					g2.fillRect(x - 1, y + offset, 3, CONN_SIZE + 1);
+				}
 			}
 		}
 	}
@@ -188,6 +229,8 @@ public class Pin extends CircuitPart {
 	}
 
 	public boolean getLevel() {
+		if (ioType == HIGHIMP)
+			return false;
 		if (levelType == NORMAL)
 			return level;
 		if (levelType == INVERTED)
@@ -271,21 +314,24 @@ public class Pin extends CircuitPart {
 				}
 			}
 		} else if (e.source instanceof Wire) {
-			// if the pin is in high imp state, don't do anything
-			if (this.ioType == Pin.HIGHIMP)
-				return;
-			// signal is from outside, propagate this to gate
-			// call gate directly
-			if (level != e.level || e.force) {
+			// if the pin is in high imp state, update level but don't push it
+			if (this.ioType == Pin.HIGHIMP) {
 				level = e.level;
-				parent.changedLevel(new LSLevelEvent(this, getLevel(), e.force));
+			} else {
+				// signal is from outside, propagate this to gate
+				// call gate directly
+				if (level != e.level || e.force) {
+					level = e.level;
+					parent.changedLevel(new LSLevelEvent(this, getLevel(), e.force));
 
-				// and call all other wires which are connected to the pin
-				fireChangedLevel(e);
+					// and call all other wires which are connected to the pin
+					fireChangedLevel(e);
+				}
 			}
 		} else
 			throw new RuntimeException("pins communicate with gates or wires only! source is " + e.source.getId()
 					+ ", target is " + getId());
+
 	}
 
 	public boolean getInternalLevel() {

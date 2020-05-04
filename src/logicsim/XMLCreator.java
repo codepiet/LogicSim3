@@ -138,13 +138,13 @@ public class XMLCreator {
 
 		for (Pin c : g.getInputs()) {
 			if ((g instanceof MODIN && c.getProperty(CircuitPart.TEXT) != null)
-					|| (c.ioType == Pin.INPUT && c.levelType != Pin.NORMAL)) {
+					|| (c.getIoType() == Pin.INPUT && c.levelType != Pin.NORMAL)) {
 				node.appendChild(createPinNode(doc, c));
 			}
 		}
 		for (Pin c : g.getOutputs()) {
 			if ((g instanceof MODOUT && c.getProperty(CircuitPart.TEXT) != null)
-					|| (c.ioType == Pin.INPUT && c.levelType != Pin.NORMAL)) {
+					|| (c.getIoType() == Pin.INPUT && c.levelType != Pin.NORMAL)) {
 				node.appendChild(createPinNode(doc, c));
 			}
 		}

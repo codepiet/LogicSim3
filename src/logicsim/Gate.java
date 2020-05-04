@@ -135,7 +135,7 @@ public class Gate extends CircuitPart {
 			int ioType = Pin.INPUT;
 			Pin c = new Pin(pos, 0, this, num);
 			c.paintDirection = ioType == Pin.INPUT ? Pin.RIGHT : Pin.LEFT;
-			c.ioType = ioType;
+			c.setIoType(ioType);
 			pins.add(c);
 		}
 
@@ -170,7 +170,7 @@ public class Gate extends CircuitPart {
 				pos += width;
 			Pin c = new Pin(pos, getY() + getConnectorPosition(i, total, VERTICAL), this, num);
 			c.paintDirection = ioType == Pin.INPUT ? Pin.RIGHT : Pin.LEFT;
-			c.ioType = ioType;
+			c.setIoType(ioType);
 			pins.add(c);
 		}
 	}

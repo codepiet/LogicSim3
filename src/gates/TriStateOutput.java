@@ -41,11 +41,11 @@ public class TriStateOutput extends Gate {
 		// pin 2 - output
 		if (e.source == getPin(0)) {
 			if (e.level == HIGH) {
-				getPin(2).ioType = Pin.OUTPUT;
+				getPin(2).setIoType(Pin.OUTPUT);
 				getPin(2).changedLevel(new LSLevelEvent(this, getPin(1).getLevel(), true));
 			} else {
 				// level of switching pin is low -> send low
-				getPin(2).ioType = Pin.HIGHIMP;
+				getPin(2).setIoType(Pin.HIGHIMP);
 				getPin(2).changedLevel(new LSLevelEvent(this, LOW));
 			}
 		} else if (e.source == getPin(1)) {

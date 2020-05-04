@@ -22,6 +22,8 @@ import logicsim.Pin;
  */
 public class Memory128 extends Gate {
 
+	private static final String STATE = "state";
+
 	byte[] mem = new byte[16];
 	private int address;
 	private static final int WE = 4;
@@ -45,7 +47,7 @@ public class Memory128 extends Gate {
 
 		// outputs
 		for (int i = OUT; i < OUT + 8; i++) {
-			getPin(i).ioType = Pin.HIGHIMP;
+			getPin(i).setIoType(Pin.HIGHIMP);
 			getPin(i).setProperty(TEXT, "O" + (i - 14));
 			getPin(i).setY(getY() + (i - 12) * 10);
 			getPin(i).setX(getX());
@@ -110,6 +112,13 @@ public class Memory128 extends Gate {
 	}
 
 	@Override
+	protected void loadProperties() {
+		for (int i = 0; i < mem.length; i++) {
+			mem[i] = (byte) getPropertyIntWithDefault(STATE + i, 0);
+		}
+	}
+
+	@Override
 	public void changedLevel(LSLevelEvent e) {
 		super.changedLevel(e);
 
@@ -121,7 +130,7 @@ public class Memory128 extends Gate {
 					LSLevelEvent evt = new LSLevelEvent(this, LOW);
 					getPin(i).changedLevel(evt);
 				}
-				getPin(i).ioType = ioType;
+				getPin(i).setIoType(ioType);
 			}
 		}
 
@@ -140,6 +149,7 @@ public class Memory128 extends Gate {
 					value += pow;
 			}
 			mem[address] = value;
+			setPropertyInt(STATE + address, value);
 		}
 
 		if (getPin(OE).getLevel() == LOW) {

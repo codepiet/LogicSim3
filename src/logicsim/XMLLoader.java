@@ -204,14 +204,6 @@ public class XMLLoader {
 			loadPinsIO(gate, gnode);
 		else
 			loadPins(gate, gnode);
-
-		Xml node = gnode.optChild("properties");
-		if (node != null) {
-			for (Xml n : node.children("property")) {
-				gate.setProperty(n.name(), n.content());
-			}
-			gate.loadProperties();
-		}
 		return gate;
 	}
 

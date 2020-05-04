@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import logicsim.Gate;
 import logicsim.I18N;
 import logicsim.LSLevelEvent;
+import logicsim.LSMouseEvent;
 import logicsim.Pin;
 
 /**
@@ -19,7 +20,14 @@ import logicsim.Pin;
  */
 public class Register8 extends Gate {
 
+	private static final String STATE = "state";
+
 	int content = 0;
+	private static final int DATA = 0;
+	private static final int OE = 8;
+	private static final int LOAD = 9;
+	private static final int CLOCK = 10;
+	private static final int INTOUT = 11;
 
 	public Register8() {
 		super("cpu");
@@ -27,38 +35,30 @@ public class Register8 extends Gate {
 		height = 130;
 		width = 110;
 		createInputs(11);
-		createOutputs(16);
+		createOutputs(8);
 
 		// 0 to 7 for BUS INPUTS
 		// 8 is OE-Signal (INPUT)
 		// 9 is LOAD (INPUT)
 		// 10 is CLOCK (INPUT)
-
-		// 11-18 are TRI-STATE BUS OUTPUTS
-
-		for (int i = 0; i < 8; i++) {
-			getPin(i).setProperty(TEXT, "I" + i);
+		for (int i = DATA; i < DATA + 8; i++) {
+			getPin(i).setIoType(Pin.HIGHIMP);
+			getPin(i).setProperty(TEXT, String.valueOf(i));
 			getPin(i).setY(getY() + (i + 2) * 10);
 		}
-		for (int i = 8; i < 11; i++) {
+		for (int i = OE; i < INTOUT; i++) {
 			getPin(i).setY(getY() + (i + 2) * 10);
 		}
 		getPin(8).setProperty(TEXT, "/OE");
 		getPin(9).setProperty(TEXT, "/LD");
 		getPin(10).setProperty(TEXT, Pin.POS_EDGE_TRIG);
 
-		for (int i = 11; i < 19; i++) {
-			getPin(i).setProperty(TEXT, "O" + (i - 11));
-			getPin(i).setY(getY() + (i - 9) * 10);
-			getPin(i).ioType = Pin.HIGHIMP;
-		}
-
 		// internal outputs (e.g. for ALU)
-		for (int i = 19; i < 27; i++) {
+		for (int i = INTOUT; i < INTOUT + 8; i++) {
 			getPin(i).setDirection(Pin.DOWN);
 			getPin(i).setY(getY());
-			getPin(i).setX(getX() + (10 * (i - 17)));
-			getPin(i).setProperty(TEXT, String.valueOf(i - 19));
+			getPin(i).setX(getX() + (10 * (i - INTOUT + 2)));
+			getPin(i).setProperty(TEXT, "i" + String.valueOf(i - INTOUT));
 		}
 
 	}
@@ -71,53 +71,109 @@ public class Register8 extends Gate {
 			int b = content & pot;
 			Color fillColor = (b == pot) ? Color.red : Color.LIGHT_GRAY;
 			g2.setColor(fillColor);
-			g2.fillOval(getX() + 50, getY() + 20 + i * 10 + 6, 8, 8);
+			int OVAL_SIZE = 9;
+			g2.fillOval(xc - OVAL_SIZE / 2, getY() + 16 + i * 10, OVAL_SIZE, OVAL_SIZE);
 			g2.setColor(Color.black);
-			g2.drawOval(getX() + 50, getY() + 20 + i * 10 + 6, 8, 8);
+			g2.drawOval(xc - OVAL_SIZE / 2, getY() + 16 + i * 10, OVAL_SIZE, OVAL_SIZE);
+		}
+	}
+
+	@Override
+	protected void loadProperties() {
+		content = getPropertyIntWithDefault(STATE, 0);
+		updateInternalOutputs();
+	}
+
+	private void updateInternalOutputs() {
+		for (int i = 0; i < 8; i++) {
+			int pow = (int) Math.pow(2, i);
+			boolean b = (content & pow) == pow;
+			LSLevelEvent evt = new LSLevelEvent(this, b, force);
+			getPin(i + INTOUT).changedLevel(evt);
+		}
+	}
+
+	@Override
+	public void reset() {
+		force = true;
+		updateInternalOutputs();
+		force = false;
+	}
+	
+	@Override
+	public void mousePressedSim(LSMouseEvent e) {
+		super.mousePressedSim(e);
+		int mx = e.getX();
+		int my = e.getY();
+		if (mx > xc - 5 && mx < xc + 5) {
+			my -= getY();
+			my -= 16;
+			my /= 10;
+			if (my >= 0 && my <= 7) {
+				int pow = (int) Math.pow(2, my);
+				if ((pow & content) > 0) {
+					content -= pow;
+				} else {
+					content += pow;
+				}
+				updateInternalOutputs();
+			}
 		}
 	}
 
 	@Override
 	public void changedLevel(LSLevelEvent e) {
 		super.changedLevel(e);
-		int newContent = content;
 
-		// rising edge detection
-		if (e.source.equals(getPin(10)) && e.level == HIGH) {
-			// only set register if load is low
-			if (getPin(9).getLevel() == LOW) {
-				int b1 = getPin(0).getLevel() ? 1 : 0;
-				int b2 = getPin(1).getLevel() ? 1 : 0;
-				int b4 = getPin(2).getLevel() ? 1 : 0;
-				int b8 = getPin(3).getLevel() ? 1 : 0;
-				int b16 = getPin(4).getLevel() ? 1 : 0;
-				int b32 = getPin(5).getLevel() ? 1 : 0;
-				int b64 = getPin(6).getLevel() ? 1 : 0;
-				int b128 = getPin(7).getLevel() ? 1 : 0;
-				newContent = b1 + (b2 << 1) + (b4 << 2) + (b8 << 3) + (b16 << 4) + (b32 << 5) + (b64 << 6)
-						+ (b128 << 7);
-				content = newContent;
-				for (int i = 0; i < 8; i++) {
-					int pot = (int) Math.pow(2, i);
-					LSLevelEvent evt = new LSLevelEvent(this, (content & pot) == pot);
-					getPin(i + 19).changedLevel(evt);
+		// LOAD edge detection
+		if (e.source.equals(getPin(LOAD))) {
+			if (e.level == LOW) {
+				for (int i = DATA; i < DATA + 8; i++) {
+					getPin(i).setIoType(Pin.INPUT);
+				}
+			} else {
+				for (int i = DATA; i < DATA + 8; i++) {
+					getPin(i).setIoType((getPin(OE).getLevel() == LOW) ? Pin.OUTPUT : Pin.HIGHIMP);
 				}
 			}
 		}
-		// if output enable is low, send content to bus
-		if (getPin(8).getLevel() == LOW) {
-			for (int i = 0; i < 8; i++) {
-				getPin(i + 11).ioType = Pin.OUTPUT;
-				int pot = (int) Math.pow(2, i);
-				LSLevelEvent evt = new LSLevelEvent(this, (content & pot) == pot);
-				getPin(i + 11).changedLevel(evt);
+		if (e.source.equals(getPin(OE)) && getPin(LOAD).getLevel() == HIGH) {
+			if (e.level == LOW) {
+				for (int i = DATA; i < DATA + 8; i++) {
+					getPin(i).setIoType(Pin.OUTPUT);
+				}
+			} else {
+				for (int i = DATA; i < DATA + 8; i++) {
+					getPin(i).setIoType(Pin.HIGHIMP);
+				}
 			}
 		}
-		if (getPin(8).getLevel() == HIGH) {
+
+		// clk rising edge detection
+		if (e.source.equals(getPin(CLOCK)) && e.level == HIGH) {
+			// only set register if load is low
+			if (getPin(LOAD).getLevel() == LOW) {
+				content = 0;
+				for (int i = 0; i < 8; i++) {
+					boolean b = getPin(DATA + i).getLevel();
+					if (b) {
+						int pow = (int) Math.pow(2, i + DATA);
+						content = content + pow;
+					}
+					LSLevelEvent evt = new LSLevelEvent(this, b);
+					getPin(i + DATA + INTOUT).changedLevel(evt);
+				}
+				setPropertyInt(STATE, content);
+				fireRepaint();
+			}
+		}
+		// if output enable is low, send content to bus
+		if (getPin(OE).getLevel() == LOW && getPin(LOAD).getLevel() == HIGH) {
 			for (int i = 0; i < 8; i++) {
-				getPin(i + 11).ioType = Pin.HIGHIMP;
-				LSLevelEvent evt = new LSLevelEvent(this, LOW);
-				getPin(i + 11).changedLevel(evt);
+				LSLevelEvent evt = null;
+				int pot = (int) Math.pow(2, i);
+				evt = new LSLevelEvent(this, (content & pot) == pot);
+				getPin(i + DATA).changedLevel(evt);
 			}
 		}
 	}

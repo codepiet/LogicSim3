@@ -100,7 +100,7 @@ public class MODIN extends Gate {
 				for (int i = inputcount; i < pincount; i++) {
 					Pin p = new Pin(getX(), 0, this, i);
 					p.paintDirection = Pin.RIGHT;
-					p.ioType = Pin.INPUT;
+					p.setIoType(Pin.INPUT);
 					pins.insertElementAt(p, i);
 				}
 				for (int i = pincount; i < pins.size(); i++) {
@@ -110,7 +110,7 @@ public class MODIN extends Gate {
 				for (int i = inputcount + pincount; i < pincount * 2; i++) {
 					Pin p = new Pin(getX() + width, 0, this, i);
 					p.paintDirection = Pin.LEFT;
-					p.ioType = Pin.OUTPUT;
+					p.setIoType(Pin.OUTPUT);
 					pins.insertElementAt(p, i);
 				}
 			}

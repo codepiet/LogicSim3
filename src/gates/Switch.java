@@ -41,6 +41,7 @@ public class Switch extends Gate {
 	static final long serialVersionUID = 2459367526586913840L;
 
 	private static final String SWITCH_TYPE = "type";
+	private static final String STATE = "state";
 	private static final String TOGGLE = "toggle";
 	private static final String MOMENTARY = "momentary";
 	private static final String DEFAULT_SWITCH_TYPE = TOGGLE;
@@ -70,11 +71,17 @@ public class Switch extends Gate {
 	protected void loadProperties() {
 		color = ColorFactory.web(getPropertyWithDefault(COLOR, DEFAULT_COLOR));
 		switchTypeMomentary = getPropertyWithDefault(SWITCH_TYPE, DEFAULT_SWITCH_TYPE).equals(TOGGLE) ? false : true;
+		int state = getPropertyIntWithDefault(STATE, 0);
+		if (state == 1) {
+			getPin(0).changedLevel(new LSLevelEvent(this, HIGH));
+		}
 	}
 
 	@Override
 	public void interact() {
 		getPin(0).changedLevel(new LSLevelEvent(this, !getPin(0).getLevel()));
+		// save state in property
+		setPropertyInt(STATE, getPin(0).getLevel() ? 1 : 0);
 	}
 
 	@Override
@@ -88,6 +95,8 @@ public class Switch extends Gate {
 		} else {
 			// Toggle-Button
 			getPin(0).changedLevel(new LSLevelEvent(this, !getPin(0).getLevel()));
+			// save state in property
+			setPropertyInt(STATE, getPin(0).getLevel() ? 1 : 0);
 		}
 	}
 
@@ -145,6 +154,12 @@ public class Switch extends Gate {
 		}
 	}
 
+	@Override
+	public void reset() {
+		super.reset();
+		getPin(0).changedLevel(new LSLevelEvent(this, getPin(0).getLevel(), true));
+	}
+	
 	@Override
 	public void rotate() {
 		super.rotate();
