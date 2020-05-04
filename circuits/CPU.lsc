@@ -4,16 +4,48 @@
     <gates>
         <gate rotate="270" type="led8" x="290" y="-250"/>
         <gate type="alu8" x="510" y="80"/>
-        <gate type="register8" x="510" y="210"/>
-        <gate mirror="y" type="register8" x="510" y="-70"/>
+        <gate type="register8" x="510" y="210">
+            <properties>
+                <property key="state">16</property>
+            </properties>
+        </gate>
+        <gate mirror="y" type="register8" x="510" y="-70">
+            <properties>
+                <property key="state">42</property>
+            </properties>
+        </gate>
         <gate rotate="270" type="switch8" x="290" y="420"/>
-        <gate type="switch" x="130" y="10"/>
-        <gate rotate="180" type="switch" x="640" y="80"/>
-        <gate rotate="180" type="switch" x="640" y="130"/>
-        <gate type="switch" x="170" y="0"/>
+        <gate type="switch" x="130" y="10">
+            <properties>
+                <property key="state">1</property>
+            </properties>
+        </gate>
+        <gate rotate="180" type="switch" x="640" y="80">
+            <properties>
+                <property key="state">1</property>
+            </properties>
+        </gate>
+        <gate rotate="180" type="switch" x="640" y="130">
+            <properties>
+                <property key="state">0</property>
+            </properties>
+        </gate>
+        <gate type="switch" x="170" y="0">
+            <properties>
+                <property key="state">1</property>
+            </properties>
+        </gate>
         <gate rotate="180" type="clock" x="420" y="-250"/>
-        <gate type="switch" x="140" y="290"/>
-        <gate type="switch" x="180" y="280"/>
+        <gate type="switch" x="140" y="290">
+            <properties>
+                <property key="state">0</property>
+            </properties>
+        </gate>
+        <gate type="switch" x="180" y="280">
+            <properties>
+                <property key="state">1</property>
+            </properties>
+        </gate>
     </gates>
     <wires>
         <wire>
@@ -71,230 +103,6 @@
             <point node="true" number="0" x="360" y="-40"/>
             <point node="true" number="1" x="360" y="110"/>
             <point node="true" number="2" x="360" y="240"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="19" type="gate"/>
-            <to id="alu8@510:80" number="16" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="20" type="gate"/>
-            <to id="alu8@510:80" number="17" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="21" type="gate"/>
-            <to id="alu8@510:80" number="18" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="22" type="gate"/>
-            <to id="alu8@510:80" number="19" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="23" type="gate"/>
-            <to id="alu8@510:80" number="20" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="24" type="gate"/>
-            <to id="alu8@510:80" number="21" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="25" type="gate"/>
-            <to id="alu8@510:80" number="22" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="26" type="gate"/>
-            <to id="alu8@510:80" number="23" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="19" type="gate"/>
-            <to id="alu8@510:80" number="8" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="20" type="gate"/>
-            <to id="alu8@510:80" number="9" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="21" type="gate"/>
-            <to id="alu8@510:80" number="10" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="22" type="gate"/>
-            <to id="alu8@510:80" number="11" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="23" type="gate"/>
-            <to id="alu8@510:80" number="12" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="24" type="gate"/>
-            <to id="alu8@510:80" number="13" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="25" type="gate"/>
-            <to id="alu8@510:80" number="14" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="26" type="gate"/>
-            <to id="alu8@510:80" number="15" type="gate"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="18" type="gate"/>
-            <to id="register8@510:210" number="7" type="gate"/>
-            <point node="false" number="0" x="630" y="300"/>
-            <point node="false" number="1" x="630" y="350"/>
-            <point node="false" number="2" x="500" y="350"/>
-            <point node="true" number="3" x="500" y="300"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="17" type="gate"/>
-            <to id="register8@510:210" number="6" type="gate"/>
-            <point node="false" number="0" x="640" y="290"/>
-            <point node="false" number="1" x="640" y="360"/>
-            <point node="false" number="2" x="490" y="360"/>
-            <point node="true" number="3" x="490" y="290"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="16" type="gate"/>
-            <to id="register8@510:210" number="5" type="gate"/>
-            <point node="false" number="0" x="650" y="280"/>
-            <point node="false" number="1" x="650" y="370"/>
-            <point node="false" number="2" x="480" y="370"/>
-            <point node="true" number="3" x="480" y="280"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="15" type="gate"/>
-            <to id="register8@510:210" number="4" type="gate"/>
-            <point node="false" number="0" x="660" y="270"/>
-            <point node="false" number="1" x="660" y="380"/>
-            <point node="false" number="2" x="470" y="380"/>
-            <point node="true" number="3" x="470" y="270"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="14" type="gate"/>
-            <to id="register8@510:210" number="3" type="gate"/>
-            <point node="false" number="0" x="670" y="260"/>
-            <point node="false" number="1" x="670" y="390"/>
-            <point node="false" number="2" x="460" y="390"/>
-            <point node="true" number="3" x="460" y="260"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="13" type="gate"/>
-            <to id="register8@510:210" number="2" type="gate"/>
-            <point node="false" number="0" x="680" y="250"/>
-            <point node="false" number="1" x="680" y="400"/>
-            <point node="false" number="2" x="450" y="400"/>
-            <point node="true" number="3" x="450" y="250"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="12" type="gate"/>
-            <to id="register8@510:210" number="1" type="gate"/>
-            <point node="false" number="0" x="690" y="240"/>
-            <point node="false" number="1" x="690" y="410"/>
-            <point node="false" number="2" x="440" y="410"/>
-            <point node="true" number="3" x="440" y="240"/>
-        </wire>
-        <wire>
-            <from id="register8@510:210" number="11" type="gate"/>
-            <to id="register8@510:210" number="0" type="gate"/>
-            <point node="false" number="0" x="700" y="230"/>
-            <point node="false" number="1" x="700" y="420"/>
-            <point node="false" number="2" x="430" y="420"/>
-            <point node="true" number="3" x="430" y="230"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="11" type="gate"/>
-            <to id="register8@510:-70" number="0" type="gate"/>
-            <point node="false" number="0" x="630" y="-50"/>
-            <point node="false" number="1" x="630" y="-70"/>
-            <point node="false" number="2" x="500" y="-70"/>
-            <point node="true" number="3" x="500" y="-50"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="13" type="gate"/>
-            <to id="register8@510:-70" number="2" type="gate"/>
-            <point node="false" number="0" x="650" y="-30"/>
-            <point node="false" number="1" x="650" y="-90"/>
-            <point node="false" number="2" x="480" y="-90"/>
-            <point node="true" number="3" x="480" y="-30"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="12" type="gate"/>
-            <to id="register8@510:-70" number="1" type="gate"/>
-            <point node="false" number="0" x="640" y="-40"/>
-            <point node="false" number="1" x="640" y="-80"/>
-            <point node="false" number="2" x="490" y="-80"/>
-            <point node="true" number="3" x="490" y="-40"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="14" type="gate"/>
-            <to id="register8@510:-70" number="3" type="gate"/>
-            <point node="false" number="0" x="660" y="-20"/>
-            <point node="false" number="1" x="660" y="-100"/>
-            <point node="false" number="2" x="470" y="-100"/>
-            <point node="true" number="3" x="470" y="-20"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="15" type="gate"/>
-            <to id="register8@510:-70" number="4" type="gate"/>
-            <point node="false" number="0" x="670" y="-10"/>
-            <point node="false" number="1" x="670" y="-110"/>
-            <point node="false" number="2" x="460" y="-110"/>
-            <point node="true" number="3" x="460" y="-10"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="16" type="gate"/>
-            <to id="register8@510:-70" number="5" type="gate"/>
-            <point node="false" number="0" x="680" y="0"/>
-            <point node="false" number="1" x="680" y="-120"/>
-            <point node="false" number="2" x="450" y="-120"/>
-            <point node="true" number="3" x="450" y="0"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="17" type="gate"/>
-            <to id="register8@510:-70" number="6" type="gate"/>
-            <point node="false" number="0" x="690" y="10"/>
-            <point node="false" number="1" x="690" y="-130"/>
-            <point node="false" number="2" x="440" y="-130"/>
-            <point node="true" number="3" x="440" y="10"/>
-        </wire>
-        <wire>
-            <from id="register8@510:-70" number="18" type="gate"/>
-            <to id="register8@510:-70" number="7" type="gate"/>
-            <point node="false" number="0" x="700" y="20"/>
-            <point node="false" number="1" x="700" y="-140"/>
-            <point node="false" number="2" x="430" y="-140"/>
-            <point node="true" number="3" x="430" y="20"/>
-        </wire>
-        <wire>
-            <from id="370:-50@7@led8@290:-250-7@switch8@290:420" type="wire"/>
-            <to id="500:-50@11@register8@510:-70-0@register8@510:-70" type="wire"/>
-        </wire>
-        <wire>
-            <from id="360:-40@6@led8@290:-250-6@switch8@290:420" type="wire"/>
-            <to id="490:-40@12@register8@510:-70-1@register8@510:-70" type="wire"/>
-        </wire>
-        <wire>
-            <from id="350:-30@5@led8@290:-250-5@switch8@290:420" type="wire"/>
-            <to id="480:-30@13@register8@510:-70-2@register8@510:-70" type="wire"/>
-        </wire>
-        <wire>
-            <from id="340:-20@4@led8@290:-250-4@switch8@290:420" type="wire"/>
-            <to id="470:-20@14@register8@510:-70-3@register8@510:-70" type="wire"/>
-        </wire>
-        <wire>
-            <from id="330:-10@3@led8@290:-250-3@switch8@290:420" type="wire"/>
-            <to id="460:-10@15@register8@510:-70-4@register8@510:-70" type="wire"/>
-        </wire>
-        <wire>
-            <from id="320:0@2@led8@290:-250-2@switch8@290:420" type="wire"/>
-            <to id="450:0@16@register8@510:-70-5@register8@510:-70" type="wire"/>
-        </wire>
-        <wire>
-            <from id="310:10@1@led8@290:-250-1@switch8@290:420" type="wire"/>
-            <to id="440:10@17@register8@510:-70-6@register8@510:-70" type="wire"/>
-        </wire>
-        <wire>
-            <from id="300:20@0@led8@290:-250-0@switch8@290:420" type="wire"/>
-            <to id="430:20@18@register8@510:-70-7@register8@510:-70" type="wire"/>
         </wire>
         <wire>
             <from id="switch@640:80" number="0" type="gate"/>
@@ -368,36 +176,164 @@
             <to id="300:170@0@led8@290:-250-0@switch8@290:420" type="wire"/>
         </wire>
         <wire>
+            <from id="register8@510:210" number="11" type="gate"/>
+            <to id="register8@510:210" number="11" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="12" type="gate"/>
+            <to id="register8@510:210" number="12" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="13" type="gate"/>
+            <to id="register8@510:210" number="13" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="14" type="gate"/>
+            <to id="register8@510:210" number="14" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="15" type="gate"/>
+            <to id="register8@510:210" number="15" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="16" type="gate"/>
+            <to id="register8@510:210" number="16" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="17" type="gate"/>
+            <to id="register8@510:210" number="17" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="18" type="gate"/>
+            <to id="register8@510:210" number="18" type="gate"/>
+        </wire>
+        <wire>
             <from id="370:230@7@led8@290:-250-7@switch8@290:420" type="wire"/>
-            <to id="430:230@11@register8@510:210-0@register8@510:210" type="wire"/>
+            <to id="register8@510:210" number="0" type="gate"/>
         </wire>
         <wire>
             <from id="360:240@6@led8@290:-250-6@switch8@290:420" type="wire"/>
-            <to id="440:240@12@register8@510:210-1@register8@510:210" type="wire"/>
+            <to id="register8@510:210" number="1" type="gate"/>
         </wire>
         <wire>
             <from id="350:250@5@led8@290:-250-5@switch8@290:420" type="wire"/>
-            <to id="450:250@13@register8@510:210-2@register8@510:210" type="wire"/>
+            <to id="register8@510:210" number="2" type="gate"/>
         </wire>
         <wire>
             <from id="340:260@4@led8@290:-250-4@switch8@290:420" type="wire"/>
-            <to id="460:260@14@register8@510:210-3@register8@510:210" type="wire"/>
+            <to id="register8@510:210" number="3" type="gate"/>
         </wire>
         <wire>
             <from id="330:270@3@led8@290:-250-3@switch8@290:420" type="wire"/>
-            <to id="470:270@15@register8@510:210-4@register8@510:210" type="wire"/>
+            <to id="register8@510:210" number="4" type="gate"/>
         </wire>
         <wire>
             <from id="320:280@2@led8@290:-250-2@switch8@290:420" type="wire"/>
-            <to id="480:280@16@register8@510:210-5@register8@510:210" type="wire"/>
+            <to id="register8@510:210" number="5" type="gate"/>
         </wire>
         <wire>
             <from id="310:290@1@led8@290:-250-1@switch8@290:420" type="wire"/>
-            <to id="490:290@17@register8@510:210-6@register8@510:210" type="wire"/>
+            <to id="register8@510:210" number="6" type="gate"/>
         </wire>
         <wire>
             <from id="300:300@0@led8@290:-250-0@switch8@290:420" type="wire"/>
-            <to id="500:300@18@register8@510:210-7@register8@510:210" type="wire"/>
+            <to id="register8@510:210" number="7" type="gate"/>
+        </wire>
+        <wire>
+            <from id="370:-50@7@led8@290:-250-7@switch8@290:420" type="wire"/>
+            <to id="register8@510:-70" number="0" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="2" type="gate"/>
+            <to id="350:-30@5@led8@290:-250-5@switch8@290:420" type="wire"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="1" type="gate"/>
+            <to id="360:-40@6@led8@290:-250-6@switch8@290:420" type="wire"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="3" type="gate"/>
+            <to id="340:-20@4@led8@290:-250-4@switch8@290:420" type="wire"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="4" type="gate"/>
+            <to id="330:-10@3@led8@290:-250-3@switch8@290:420" type="wire"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="5" type="gate"/>
+            <to id="320:0@2@led8@290:-250-2@switch8@290:420" type="wire"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="6" type="gate"/>
+            <to id="310:10@1@led8@290:-250-1@switch8@290:420" type="wire"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="7" type="gate"/>
+            <to id="300:20@0@led8@290:-250-0@switch8@290:420" type="wire"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="11" type="gate"/>
+            <to id="alu8@510:80" number="8" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="12" type="gate"/>
+            <to id="alu8@510:80" number="9" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="13" type="gate"/>
+            <to id="alu8@510:80" number="10" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="14" type="gate"/>
+            <to id="alu8@510:80" number="11" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="15" type="gate"/>
+            <to id="alu8@510:80" number="12" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="16" type="gate"/>
+            <to id="alu8@510:80" number="13" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="17" type="gate"/>
+            <to id="alu8@510:80" number="14" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:-70" number="18" type="gate"/>
+            <to id="alu8@510:80" number="15" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="11" type="gate"/>
+            <to id="alu8@510:80" number="16" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="12" type="gate"/>
+            <to id="alu8@510:80" number="17" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="13" type="gate"/>
+            <to id="alu8@510:80" number="18" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="14" type="gate"/>
+            <to id="alu8@510:80" number="19" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="15" type="gate"/>
+            <to id="alu8@510:80" number="20" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="16" type="gate"/>
+            <to id="alu8@510:80" number="21" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="17" type="gate"/>
+            <to id="alu8@510:80" number="22" type="gate"/>
+        </wire>
+        <wire>
+            <from id="register8@510:210" number="18" type="gate"/>
+            <to id="alu8@510:80" number="23" type="gate"/>
         </wire>
     </wires>
 </logicsim>
