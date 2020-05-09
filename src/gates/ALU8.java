@@ -25,6 +25,12 @@ public class ALU8 extends Gate {
 	int result = 0;
 	int wordA = 0;
 	int wordB = 0;
+	private static final int WORD1 = 8;
+	private static final int WORD2 = 16;
+	private static final int OE = 24;
+	private static final int SU = 25;
+	private static final int CF = 26;
+	private static final int ZF = 27;
 
 	public ALU8() {
 		super("cpu");
@@ -33,7 +39,7 @@ public class ALU8 extends Gate {
 		width = 110;
 		createOutputs(8);
 		createInputs(18);
-
+		createOutputs(2);
 		// outputs from 0-7
 		// word 1 from pin 8-15
 		// word 2 from pin 16-23
@@ -46,29 +52,43 @@ public class ALU8 extends Gate {
 			getPin(i).setX(getX());
 			getPin(i).setY(getY() + (i + 2) * 10);
 			getPin(i).setProperty(TEXT, String.valueOf(i));
-		}
-		for (int i = 8; i < 16; i++) {
-			getPin(i).paintDirection = Pin.DOWN;
-			getPin(i).setX(getX() + (i - 6) * 10);
-			getPin(i).setY(getY());
-			getPin(i).setProperty(TEXT, String.valueOf(i - 8));
-		}
-		for (int i = 16; i < 24; i++) {
-			getPin(i).paintDirection = Pin.UP;
-			getPin(i).setX(getX() + (i - 14) * 10);
-			getPin(i).setY(getY() + height);
-			getPin(i).setProperty(TEXT, String.valueOf(i - 16));
-		}
 
-		getPin(24).setProperty(TEXT, "/OE");
-		getPin(24).paintDirection = Pin.LEFT;
-		getPin(24).setX(getX() + width);
-		getPin(24).setY(getY() + 30);
+			getPin(i + WORD1).paintDirection = Pin.DOWN;
+			getPin(i + WORD1).setX(getX() + (7 - i + 2) * 10);
+			getPin(i + WORD1).setY(getY());
+			getPin(i + WORD1).setProperty(TEXT, String.valueOf(i));
 
-		getPin(25).setProperty(TEXT, "/SU");
-		getPin(25).paintDirection = Pin.LEFT;
-		getPin(25).setX(getX() + width);
-		getPin(25).setY(getY() + height - 30);
+			getPin(i + WORD2).paintDirection = Pin.UP;
+			getPin(i + WORD2).setX(getX() + (7 - i + 2) * 10);
+			getPin(i + WORD2).setY(getY() + height);
+			getPin(i + WORD2).setProperty(TEXT, String.valueOf(i));
+		}
+		getPin(OE).setProperty(TEXT, "/OE");
+		getPin(OE).paintDirection = Pin.LEFT;
+		getPin(OE).setX(getX() + width);
+		getPin(OE).setY(getY() + 20);
+
+		getPin(SU).setProperty(TEXT, "/SU");
+		getPin(SU).paintDirection = Pin.LEFT;
+		getPin(SU).setX(getX() + width);
+		getPin(SU).setY(getY() + 40);
+
+		getPin(CF).setIoType(Pin.OUTPUT);
+		getPin(CF).setProperty(TEXT, "CF");
+		getPin(CF).paintDirection = Pin.LEFT;
+		getPin(CF).setX(getX() + width);
+		getPin(CF).setY(getY() + height - 40);
+
+		getPin(ZF).setIoType(Pin.OUTPUT);
+		getPin(ZF).setProperty(TEXT, "ZF");
+		getPin(ZF).paintDirection = Pin.LEFT;
+		getPin(ZF).setX(getX() + width);
+		getPin(ZF).setY(getY() + height - 20);
+
+	}
+
+	@Override
+	public void reset() {
 	}
 
 	@Override
@@ -79,9 +99,9 @@ public class ALU8 extends Gate {
 			int b = result & pot;
 			Color fillColor = (b == pot) ? Color.red : Color.LIGHT_GRAY;
 			g2.setColor(fillColor);
-			g2.fillOval(getX() + 50, getY() + 15 + i * 9 + 6, 8, 8);
+			g2.fillOval(getX() + 15 + i * 9 + 6, yc, 8, 8);
 			g2.setColor(Color.black);
-			g2.drawOval(getX() + 50, getY() + 15 + i * 9 + 6, 8, 8);
+			g2.drawOval(getX() + 15 + i * 9 + 6, yc, 8, 8);
 		}
 	}
 
@@ -90,17 +110,19 @@ public class ALU8 extends Gate {
 		super.changedLevel(e);
 
 		// output
-		if (e.source.equals(getPin(24))) {
+		if (e.source.equals(getPin(OE))) {
 			if (e.level == LOW) {
 				// enabled
 				for (int i = 0; i < 8; i++) {
 					int pow = (int) Math.pow(2, i);
+					getPin(i).setIoType(Pin.OUTPUT);
 					LSLevelEvent evt = new LSLevelEvent(this, (result & pow) == pow);
 					getPin(i).changedLevel(evt);
 				}
 			} else {
 				// disabled
 				for (int i = 0; i < 8; i++) {
+					getPin(i).setIoType(Pin.HIGHIMP);
 					LSLevelEvent evt = new LSLevelEvent(this, LOW);
 					getPin(i).changedLevel(evt);
 				}
@@ -122,7 +144,7 @@ public class ALU8 extends Gate {
 			}
 
 			// compute result
-			result = getPin(25).getLevel() ? wordA + wordB : wordA - wordB;
+			result = getPin(SU).getLevel() ? wordA + wordB : wordA - wordB;
 			// check the result
 			if (result > 255)
 				result = result - 256;
@@ -130,7 +152,7 @@ public class ALU8 extends Gate {
 				result = result + 256;
 
 			// output on the bus if enabled
-			if (getPin(24).getLevel() == LOW) {
+			if (getPin(OE).getLevel() == LOW) {
 				// enabled
 				for (int i = 0; i < 8; i++) {
 					int pow = (int) Math.pow(2, i);

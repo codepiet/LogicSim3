@@ -148,8 +148,9 @@ public class WidgetHelper {
 		}
 		if (mode == ALIGN_CENTER) {
 			nx = x - r.width / 2;
+			ny = ny + r.height / 3;
 			if (overLine) {
-				g2.drawLine(nx, y - r.height + 5, nx + r.width, y - r.height + 5);
+				g2.drawLine(nx, y - r.height + 4, nx + r.width, y - r.height + 5);
 			}
 			g2.drawString(text, nx, ny);
 		} else if (mode == ALIGN_LEFT) {
@@ -163,6 +164,14 @@ public class WidgetHelper {
 			}
 			g2.drawString(text, nx - r.width, ny);
 		}
+	}
+
+	public static void drawStringRotated(Graphics2D g2, String text, int x, int y, int mode, int angle) {
+		g2.translate((float) x, (float) y);
+		g2.rotate(Math.toRadians(angle));
+		drawString(g2, text, 0, 0, mode);
+		g2.rotate(-Math.toRadians(angle));
+		g2.translate(-(float) x, -(float) y);
 	}
 
 }

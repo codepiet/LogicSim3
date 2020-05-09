@@ -21,7 +21,7 @@ public abstract class CircuitPart implements LSLevelListener {
 
 	protected Font hugeFont = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
 	protected Font bigFont = new Font(Font.SANS_SERIF, Font.PLAIN, 13);
-	public static Font smallFont = new Font(Font.SANS_SERIF, Font.PLAIN, 8);
+	public static Font smallFont = new Font(Font.SANS_SERIF, Font.PLAIN, 7);
 
 	private Collection<LSLevelListener> listeners;
 	private LSRepaintListener repListener;
@@ -134,9 +134,9 @@ public abstract class CircuitPart implements LSLevelListener {
 
 	private void checkXY(int x2, int y2) {
 		if (x2 % 10 != 0)
-			throw new RuntimeException("only move by 10s! tried x=" + x2);
+			throw new RuntimeException("only move by 10s! tried x=" + x2 + " in part " + this.getId());
 		if (y2 % 10 != 0)
-			throw new RuntimeException("only move by 10s! tried y=" + y2);
+			throw new RuntimeException("only move by 10s! tried y=" + y2 + " in part " + this.getId());
 	}
 
 	public void addLevelListener(LSLevelListener l) {

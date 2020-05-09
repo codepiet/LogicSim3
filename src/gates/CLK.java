@@ -41,6 +41,8 @@ public class CLK extends Gate implements Runnable {
 	static final String HT_DEFAULT = "500";
 	static final String LT_DEFAULT = "500";
 
+	private static final int SIGNAL_HALT = 2;
+
 	private Thread thread;
 	private boolean running = false;
 
@@ -61,8 +63,11 @@ public class CLK extends Gate implements Runnable {
 		type = "clock";
 		width = 80;
 		height = 80;
-		createOutputs(1);
+		createOutputs(2);
+		createInputs(1);
 		loadProperties();
+		getPin(1).setLevelType(Pin.INVERTED);
+		getPin(SIGNAL_HALT).setProperty(TEXT, "H");
 	}
 
 	@Override
@@ -85,6 +90,17 @@ public class CLK extends Gate implements Runnable {
 	}
 
 	@Override
+	public void changedLevel(LSLevelEvent e) {
+		if (e.source.equals(getPin(SIGNAL_HALT))) {
+			if (e.level == HIGH) {
+				currentMode = PAUSE;
+			} else {
+				currentMode = RUNNING;
+			}
+		}
+	}
+
+	@Override
 	public void mousePressedSim(LSMouseEvent e) {
 		super.mousePressedSim(e);
 
@@ -92,6 +108,7 @@ public class CLK extends Gate implements Runnable {
 		int dy = e.getY() - getY();
 
 		if (manual.contains(dx, dy) && currentMode != RUNNING) {
+			getPin(1).changedLevel(new LSLevelEvent(this, !getPin(1).getLevel()));
 			getPin(0).changedLevel(new LSLevelEvent(this, !getPin(0).getLevel()));
 			lastTime = 0;
 		} else if (auto.contains(dx, dy)) {
@@ -132,8 +149,8 @@ public class CLK extends Gate implements Runnable {
 		for (int i = 1; i < pos; i++) {
 			level2 = osz[i];
 
-			g2.drawLine(x + oszi.x + i, y + oszi.y + offset + (oszi.height - 2*offset) * (level1 ? 0 : 1), x + oszi.x + i,
-					y + oszi.y + offset + (oszi.height - 2*offset) * (level2 ? 0 : 1));
+			g2.drawLine(x + oszi.x + i, y + oszi.y + offset + (oszi.height - 2 * offset) * (level1 ? 0 : 1),
+					x + oszi.x + i, y + oszi.y + offset + (oszi.height - 2 * offset) * (level2 ? 0 : 1));
 			level1 = level2;
 		}
 	}
@@ -208,9 +225,11 @@ public class CLK extends Gate implements Runnable {
 			boolean out = cout.getLevel();
 			if (currentMode == RUNNING) {
 				if (!out && new Date().getTime() - lastTime > lowTime) {
+					getPin(1).changedLevel(new LSLevelEvent(this, HIGH));
 					cout.changedLevel(new LSLevelEvent(this, HIGH));
 					lastTime = new Date().getTime();
 				} else if (out && new Date().getTime() - lastTime > highTime) {
+					getPin(1).changedLevel(new LSLevelEvent(this, LOW));
 					cout.changedLevel(new LSLevelEvent(this, LOW));
 					lastTime = new Date().getTime();
 				}

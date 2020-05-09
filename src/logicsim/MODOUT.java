@@ -48,8 +48,7 @@ public class MODOUT extends Gate {
 	@Override
 	protected void drawLabel(Graphics2D g2, String lbl, Font font) {
 		g2.setFont(bigFont);
-		int sw = g2.getFontMetrics().stringWidth(label);
-		drawRotate(g2, getX() + 36, getY() + height / 2 + sw / 2, -90, label);
+		WidgetHelper.drawStringRotated(g2, label, xc, yc, WidgetHelper.ALIGN_CENTER, -90);
 	}
 
 	@Override
@@ -66,13 +65,13 @@ public class MODOUT extends Gate {
 		int inputcount = getInputs().size();
 		if (pincount != inputcount) {
 			if (pincount < inputcount) {
-				//disconnect wires
+				// disconnect wires
 				for (int i = inputcount; i > pincount; i--) {
-					//disconnect all parts from input and output pin
-					getPin(i+inputcount).disconnect();
+					// disconnect all parts from input and output pin
+					getPin(i + inputcount).disconnect();
 					getPin(i).disconnect();
 				}
-			}			
+			}
 		}
 	}
 

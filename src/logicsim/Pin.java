@@ -107,7 +107,9 @@ public class Pin extends CircuitPart {
 					tr.addPoint(x, y - 1 - CONN_SIZE - 8);
 					g2.draw(tr);
 				} else {
-					WidgetHelper.drawString(g2, text, x, y - CONN_SIZE - 3, WidgetHelper.ALIGN_CENTER);
+					// WidgetHelper.drawString(g2, text, x, y - CONN_SIZE - 3,
+					// WidgetHelper.ALIGN_CENTER);
+					WidgetHelper.drawStringRotated(g2, text, x + 3, y - CONN_SIZE - 3, WidgetHelper.ALIGN_LEFT, -90);
 				}
 			} else if (paintDirection == DOWN) {
 				if (POS_EDGE_TRIG.equals(text)) {
@@ -117,7 +119,9 @@ public class Pin extends CircuitPart {
 					tr.addPoint(x, y + 1 + CONN_SIZE + 8);
 					g2.draw(tr);
 				} else {
-					WidgetHelper.drawString(g2, text, x, y + CONN_SIZE + 10, WidgetHelper.ALIGN_CENTER);
+					// WidgetHelper.drawString(g2, text, x, y + CONN_SIZE + 10,
+					// WidgetHelper.ALIGN_CENTER);
+					WidgetHelper.drawStringRotated(g2, text, x + 3, y + CONN_SIZE + 3, WidgetHelper.ALIGN_RIGHT, -90);
 				}
 			}
 		}

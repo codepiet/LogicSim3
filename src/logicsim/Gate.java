@@ -33,14 +33,6 @@ public class Gate extends CircuitPart {
 	public static final int XAXIS = 1;
 	public static final int YAXIS = 2;
 
-	protected static void drawRotate(Graphics2D g2, double x, double y, int angle, String text) {
-		g2.translate((float) x, (float) y);
-		g2.rotate(Math.toRadians(angle));
-		g2.drawString(text, 0, 0);
-		g2.rotate(-Math.toRadians(angle));
-		g2.translate(-(float) x, -(float) y);
-	}
-
 	protected boolean force = false;
 	protected int actionid = 0;
 	protected Color backgroundColor = Color.white;

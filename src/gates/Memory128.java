@@ -26,59 +26,54 @@ public class Memory128 extends Gate {
 
 	byte[] mem = new byte[16];
 	private int address;
-	private static final int WE = 4;
-	private static final int OE = 5;
-	private static final int DATA = 6;
-	private static final int OUT = 14;
-	private static final int ADD = 0;
+	private static final int WE = 12;
+	private static final int OE = 13;
+	private static final int DATA = 0;
+	private static final int ADD = 8;
+	private static final int CLK = 14;
 
 	public Memory128() {
 		super("cpu");
 		type = "memory128";
 		height = 110;
 		width = 110;
-		// 4 inputs for address encoding
-		// output enable
-		// write enable
-		// 8 inputs for data
-		// 8 tri-state outputs for data
-		createInputs(14);
+		// 8 tri-state in/outputs for data
 		createOutputs(8);
+		// 4 inputs for address encoding
+		// write enable
+		// output enable
+		createInputs(7);
 
-		// outputs
-		for (int i = OUT; i < OUT + 8; i++) {
+		// DATA Bus IO
+		for (int i = 0; i < 8; i++) {
 			getPin(i).setIoType(Pin.HIGHIMP);
-			getPin(i).setProperty(TEXT, "O" + (i - 14));
-			getPin(i).setY(getY() + (i - 12) * 10);
-			getPin(i).setX(getX());
-			getPin(i).paintDirection = Pin.RIGHT;
-		}
-
-		// encoded address
-		for (int i = ADD; i < ADD + 4; i++) {
-			getPin(i).paintDirection = Pin.UP;
-			getPin(i).setY(getY() + height);
-			getPin(i).setX(getX() + (i + 2) * 10);
 			getPin(i).setProperty(TEXT, String.valueOf(i));
+			getPin(i).setX(getX() + width);
+			getPin(i).setY(getY() + (i + 2) * 10);
+			getPin(i).paintDirection = Pin.LEFT;
+		}
+		// encoded address
+		for (int i = 0; i < 4; i++) {
+			getPin(ADD+i).paintDirection = Pin.DOWN;
+			getPin(ADD+i).setX(getX() + (4 - i + 3) * 10);
+			getPin(ADD+i).setY(getY());
+			getPin(ADD+i).setProperty(TEXT, "a" + String.valueOf(i));
 		}
 
 		getPin(WE).setProperty(TEXT, "/WE");
-		getPin(WE).setX(getX() + 80);
-		getPin(WE).setY(getY() + height);
-		getPin(WE).paintDirection = Pin.UP;
+		getPin(WE).setX(getX());
+		getPin(WE).setY(getY() + 30);
+		getPin(WE).paintDirection = Pin.RIGHT;
 
 		getPin(OE).setProperty(TEXT, "/OE");
-		getPin(OE).setX(getX() + 70);
-		getPin(OE).setY(getY() + height);
-		getPin(OE).paintDirection = Pin.UP;
+		getPin(OE).setX(getX());
+		getPin(OE).setY(getY() + 50);
+		getPin(OE).paintDirection = Pin.RIGHT;
 
-		// data inputs
-		for (int i = DATA; i < DATA + 8; i++) {
-			getPin(i).paintDirection = Pin.DOWN;
-			getPin(i).setProperty(TEXT, "I" + (i - 6));
-			getPin(i).setY(getY());
-			getPin(i).setX(getX() + 10 + 80 - (i - DATA) * 10);
-		}
+		getPin(CLK).setProperty(TEXT, Pin.POS_EDGE_TRIG);
+		getPin(CLK).setX(getX());
+		getPin(CLK).setY(getY() + 70);
+		getPin(CLK).paintDirection = Pin.RIGHT;
 
 	}
 
@@ -125,12 +120,12 @@ public class Memory128 extends Gate {
 		// edge detection for output enable
 		if (e.source.equals(getPin(OE))) {
 			int ioType = e.level ? Pin.HIGHIMP : Pin.OUTPUT;
-			for (int i = OUT; i < OUT + 8; i++) {
+			for (int i = 0; i < 8; i++) {
 				if (ioType == Pin.HIGHIMP) {
 					LSLevelEvent evt = new LSLevelEvent(this, LOW);
-					getPin(i).changedLevel(evt);
+					getPin(i + DATA).changedLevel(evt);
 				}
-				getPin(i).setIoType(ioType);
+				getPin(i + DATA).setIoType(ioType);
 			}
 		}
 
@@ -150,14 +145,6 @@ public class Memory128 extends Gate {
 			}
 			mem[address] = value;
 			setPropertyInt(STATE + address, value);
-		}
-
-		if (getPin(OE).getLevel() == LOW) {
-			for (int i = OUT; i < OUT + 8; i++) {
-				int pow = (int) Math.pow(2, i - OUT);
-				LSLevelEvent evt = new LSLevelEvent(this, (mem[address] & pow) == pow);
-				getPin(i).changedLevel(evt);
-			}
 		}
 	}
 

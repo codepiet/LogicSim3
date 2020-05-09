@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import logicsim.Gate;
 import logicsim.I18N;
 import logicsim.LSLevelEvent;
+import logicsim.WidgetHelper;
 
 /**
  * Segment Segment Driver for LogicSim
@@ -48,7 +49,8 @@ public class SevenSegmentDriver extends Gate {
 		super.draw(g2);
 		String lbl = "7S-D";
 		int sw = g2.getFontMetrics().stringWidth(lbl);
-		drawRotate(g2, getX() + getWidth() / 2 - 3, getY() + getHeight() / 2 - sw / 2, 90, "7S-D");
+		WidgetHelper.drawStringRotated(g2, lbl, getX() + getWidth() / 2 - 3, getY() + getHeight() / 2 - sw / 2,
+				WidgetHelper.ALIGN_CENTER, 90);
 	}
 
 	/**

@@ -178,7 +178,7 @@ public class Module extends Gate {
 		//super.drawLabel(g2, type, font);
 		g2.setFont(bigFont);
 		int sw = g2.getFontMetrics().stringWidth(type);
-		drawRotate(g2, getX() + 36, getY() + height / 2 + sw / 2, -90, type);
+		WidgetHelper.drawStringRotated(g2, type, getX() + 36, getY() + height / 2 + sw / 2, WidgetHelper.ALIGN_CENTER, -90);
 	}
 
 	@Override

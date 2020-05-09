@@ -53,7 +53,7 @@ public class BinDisp extends Gate {
 
 	@Override
 	protected void drawRotated(Graphics2D g2) {
-		Rectangle r = new Rectangle(xc-15, yc-15, 30, 30);
+		Rectangle r = new Rectangle(xc - 15, yc - 15, 30, 30);
 		g2.setColor(Color.white);
 		g2.fill(r);
 		g2.setColor(Color.black);
@@ -85,7 +85,7 @@ public class BinDisp extends Gate {
 		if (sval.length() == 1)
 			sval = "0" + sval;
 		sval = sval.toUpperCase();
-		WidgetHelper.drawString(g2, sval, xc, yc - 7, WidgetHelper.ALIGN_CENTER);
+		WidgetHelper.drawString(g2, sval, xc, yc + 3, WidgetHelper.ALIGN_CENTER);
 	}
 
 	@Override
