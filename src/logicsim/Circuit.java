@@ -1,5 +1,6 @@
 package logicsim;
 
+import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 import java.util.Vector;
@@ -399,6 +400,18 @@ public class Circuit implements LSRepaintListener {
 
 	public boolean isEmpty() {
 		return parts.size() == 0;
+	}
+
+	public Rectangle getBoundingBox() {
+		Rectangle2D r2d = null;
+		for (CircuitPart part : parts) {
+			Rectangle r2 = part.getBoundingBox();
+			Rectangle2D r22d = new Rectangle2D.Double(r2.x, r2.y, r2.width, r2.height);
+			if (r2d == null)
+				r2d = (Rectangle2D) r22d.clone();
+			r2d.add(r22d);
+		}
+		return new Rectangle((int) r2d.getX(), (int) r2d.getY(), (int) r2d.getWidth(), (int) r2d.getHeight());
 	}
 
 }

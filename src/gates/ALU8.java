@@ -29,8 +29,9 @@ public class ALU8 extends Gate {
 	private static final int WORD2 = 16;
 	private static final int OE = 24;
 	private static final int SU = 25;
-	private static final int CF = 26;
-	private static final int ZF = 27;
+	private static final int CL = 26;
+	private static final int CF = 27;
+	private static final int ZF = 28;
 
 	public ALU8() {
 		super("cpu");
@@ -38,7 +39,7 @@ public class ALU8 extends Gate {
 		height = 110;
 		width = 110;
 		createOutputs(8);
-		createInputs(18);
+		createInputs(19);
 		createOutputs(2);
 		// outputs from 0-7
 		// word 1 from pin 8-15
@@ -68,10 +69,15 @@ public class ALU8 extends Gate {
 		getPin(OE).setX(getX() + width);
 		getPin(OE).setY(getY() + 20);
 
-		getPin(SU).setProperty(TEXT, "/SU");
+		getPin(SU).setProperty(TEXT, "SU");
 		getPin(SU).paintDirection = Pin.LEFT;
 		getPin(SU).setX(getX() + width);
 		getPin(SU).setY(getY() + 40);
+
+		getPin(CL).setProperty(TEXT, "CL");
+		getPin(CL).paintDirection = Pin.LEFT;
+		getPin(CL).setX(getX() + width);
+		getPin(CL).setY(getY() + 50);
 
 		getPin(CF).setIoType(Pin.OUTPUT);
 		getPin(CF).setProperty(TEXT, "CF");
@@ -99,9 +105,9 @@ public class ALU8 extends Gate {
 			int b = result & pot;
 			Color fillColor = (b == pot) ? Color.red : Color.LIGHT_GRAY;
 			g2.setColor(fillColor);
-			g2.fillOval(getX() + 15 + i * 9 + 6, yc, 8, 8);
+			g2.fillOval(getX() + 21 + (7-i) * 9, yc, 8, 8);
 			g2.setColor(Color.black);
-			g2.drawOval(getX() + 15 + i * 9 + 6, yc, 8, 8);
+			g2.drawOval(getX() + 21 + (7-i) * 9, yc, 8, 8);
 		}
 	}
 
@@ -127,24 +133,25 @@ public class ALU8 extends Gate {
 					getPin(i).changedLevel(evt);
 				}
 			}
+			fireRepaint();
 		} else {
 			// just compute everything when an event occurs
 
 			// compute wordA
 			wordA = 0;
-			for (int i = 8; i < 16; i++) {
+			for (int i = WORD1; i < WORD1 + 8; i++) {
 				int pot = (int) Math.pow(2, (i - 8));
 				wordA += getPin(i).getLevel() ? pot : 0;
 			}
 			// compute wordB
 			wordB = 0;
-			for (int i = 16; i < 24; i++) {
+			for (int i = WORD2; i < WORD2 + 8; i++) {
 				int pot = (int) Math.pow(2, (i - 16));
 				wordB += getPin(i).getLevel() ? pot : 0;
 			}
 
 			// compute result
-			result = getPin(SU).getLevel() ? wordA + wordB : wordA - wordB;
+			result = getPin(SU).getLevel() ? wordA - wordB : wordA + wordB;
 			// check the result
 			if (result > 255)
 				result = result - 256;

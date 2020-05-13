@@ -52,12 +52,23 @@ public class Buffer extends Gate {
 			double xr = getX() + width - 10 - CONN_SIZE + 1;
 			double yb = getY() + height - CONN_SIZE - 6;
 			double xl = getX() + 10 + CONN_SIZE;
-			// check coordinates of pins, x coordinates shoud be a little more inwards
+			// check coordinates of pins, x coordinates should be a little more inwards
 			if (getPin(0).getX() == getX()) {
 				getPin(0).setX(getPin(0).getX() + 10);
 				getPin(1).setX(getPin(1).getX() - 10);
 			}
-
+			if (getPin(0).getX() == getX() + width) {
+				getPin(0).setX(getPin(0).getX() - 10);
+				getPin(1).setX(getPin(1).getX() + 10);
+			}
+			if (getPin(0).getY() == getY()) {
+				getPin(0).setY(getPin(0).getY() + 10);
+				getPin(1).setY(getPin(1).getY() - 10);
+			}
+			if (getPin(0).getY() == getY() + height) {
+				getPin(0).setY(getPin(0).getY() - 10);
+				getPin(1).setY(getPin(1).getY() + 10);
+			}
 			p.moveTo(xl, yc);
 			p.lineTo(xl, yb);
 			p.lineTo(xr, yc);

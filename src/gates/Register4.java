@@ -27,20 +27,21 @@ public class Register4 extends Gate {
 	private static final int OE = 4;
 	private static final int LOAD = 5;
 	private static final int CLOCK = 6;
-	private static final int INTOUT = 7;
+	private static final int CLEAR = 7;
+	private static final int INTOUT = 8;
 
 	public Register4() {
 		super("cpu");
 		type = "register4";
 		height = 70;
 		width = 70;
-		createInputs(7);
+		createInputs(8);
 		createOutputs(4);
 
 		for (int i = DATA; i < DATA + 4; i++) {
 			getPin(i).setIoType(Pin.HIGHIMP);
 			getPin(i).setProperty(TEXT, String.valueOf(i));
-			getPin(i).setX(getX() + (4-i + 1) * 10);
+			getPin(i).setX(getX() + (4 - i + 1) * 10);
 			getPin(i).setY(getY());
 			getPin(i).paintDirection = Pin.DOWN;
 		}
@@ -51,6 +52,7 @@ public class Register4 extends Gate {
 		}
 		getPin(OE).setProperty(TEXT, "/OE");
 		getPin(LOAD).setProperty(TEXT, "/LD");
+		getPin(CLEAR).setProperty(TEXT, "CL");
 		getPin(CLOCK).setProperty(TEXT, Pin.POS_EDGE_TRIG);
 
 		// internal outputs
@@ -106,9 +108,7 @@ public class Register4 extends Gate {
 		int mx = e.getX();
 		int my = e.getY();
 		if (my > yc - 5 && my < yc + 5) {
-			mx -= getX();
-			mx -= 16;
-			mx /= 10;
+			mx = (mx - getX() - 16) / 10;
 			mx = 3 - mx;
 			if (mx >= 0 && mx <= 3) {
 				int pow = (int) Math.pow(2, mx);
@@ -177,6 +177,20 @@ public class Register4 extends Gate {
 				getPin(i + DATA).changedLevel(evt);
 			}
 		}
+
+		if (e.source.equals(getPin(CLEAR)) && e.level == HIGH) {
+			content = 0;
+			for (int i = 0; i < 4; i++) {
+				LSLevelEvent evt = new LSLevelEvent(this, LOW);
+				getPin(i + INTOUT).changedLevel(evt);
+			}
+			if (getPin(OE).getLevel() == LOW)
+				for (int i = 0; i < 4; i++) {
+					LSLevelEvent evt = new LSLevelEvent(this, LOW);
+					getPin(i + DATA).changedLevel(evt);
+				}
+		}
+
 	}
 
 	@Override

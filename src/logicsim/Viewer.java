@@ -262,7 +262,7 @@ public class Viewer extends JPanel {
 	 * @param y      The y-coordinate of the zooming center
 	 * @param amount The zooming amount
 	 */
-	protected void zoom(int x, int y, double amount) {
+	protected void zoomBy(int x, int y, double amount) {
 		// check if scaleX and Y would be outside bounds
 		double testX = scaleX + amount * scaleX;
 		double testY = scaleY + amount * scaleY;
@@ -277,6 +277,24 @@ public class Viewer extends JPanel {
 
 		scaleX = testX;
 		scaleY = testY;
+		offsetX += x / scaleX;
+		offsetY += y / scaleY;
+		repaint();
+	}
+
+	protected void zoomTo(int x, int y, double amount) {
+		// check if scaleX and Y would be outside bounds
+
+		if (amount > maxZoom)
+			return;
+		if (amount < minZoom)
+			return;
+
+		offsetX -= x / scaleX;
+		offsetY -= y / scaleY;
+
+		scaleX = amount;
+		scaleY = amount;
 		offsetX += x / scaleX;
 		offsetY += y / scaleY;
 		repaint();

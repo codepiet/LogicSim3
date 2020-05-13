@@ -77,6 +77,7 @@ simulate=Simulieren
 test=Test
 unnamed=Unbenannt
 yes=Ja
+zoomall=alles zoomen
 zoomin=Hereinzoomen
 zoomout=Herauszoomen
 mode=Modus

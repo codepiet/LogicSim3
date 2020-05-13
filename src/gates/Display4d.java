@@ -36,20 +36,21 @@ public class Display4d extends Gate {
 
 	// signed - active low - when low then value is signed
 	private static final int SI = 9;
-	private static final int CL = 10;
+	private static final int CLK = 10;
+	private static final int CLR = 11;
 
 	public Display4d() {
 		super("cpu");
 		type = "disp4d";
 		height = 90;
 		width = 150;
-		createInputs(11);
+		createInputs(12);
 		
 		for (int i = 0; i < 8; i++) {
 			getPin(i).setProperty(TEXT, String.valueOf(i));
 		}
 		
-		getPin(WE).setProperty(TEXT, "/WE");
+		getPin(WE).setProperty(TEXT, "WE");
 		getPin(WE).paintDirection = Pin.LEFT;
 		getPin(WE).setX(getX() + width);
 		getPin(WE).setY(getY() + 30);
@@ -57,10 +58,14 @@ public class Display4d extends Gate {
 		getPin(SI).paintDirection = Pin.LEFT;
 		getPin(SI).setX(getX() + width);
 		getPin(SI).setY(getY() + 50);
-		getPin(CL).setProperty(TEXT, Pin.POS_EDGE_TRIG);
-		getPin(CL).paintDirection = Pin.LEFT;
-		getPin(CL).setX(getX() + width);
-		getPin(CL).setY(getY() + 70);
+		getPin(CLK).setProperty(TEXT, Pin.POS_EDGE_TRIG);
+		getPin(CLK).paintDirection = Pin.LEFT;
+		getPin(CLK).setX(getX() + width);
+		getPin(CLK).setY(getY() + 70);
+		getPin(CLR).setProperty(TEXT, "/CL");
+		getPin(CLR).paintDirection = Pin.LEFT;
+		getPin(CLR).setX(getX() + width);
+		getPin(CLR).setY(getY() + 10);
 		value = BLANK;
 	}
 
@@ -102,10 +107,15 @@ public class Display4d extends Gate {
 	@Override
 	public void changedLevel(LSLevelEvent e) {
 		// edge detection
-		if (e.source.equals(getPin(CL)) && e.level == HIGH) {
-			if (getPin(WE).getLevel() == LOW) {
+		if (e.source.equals(getPin(CLK)) && e.level == HIGH) {
+			if (getPin(WE).getLevel() == HIGH) {
 				computeValue();
 				display();
+			}
+		}
+		if (e.source.equals(getPin(CLR)) && e.level == LOW) {
+			for (int i = 0; i < digit.length; i++) {
+				digit[i] = BLANK;
 			}
 		}
 	}

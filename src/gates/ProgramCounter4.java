@@ -23,11 +23,11 @@ public class ProgramCounter4 extends Gate {
 
 	int content = 0;
 	private static final int DATA = 0;
-	private static final int OE = 4;
-	private static final int LOAD = 5;
+	private static final int CO = 4;
+	private static final int JUMP = 5;
 	private static final int CLOCK = 6;
 	private static final int CLEAR = 7;
-	private static final int JUMP = 8;
+	private static final int CE = 8;
 	private static final int INTOUT = 9;
 
 	public ProgramCounter4() {
@@ -45,15 +45,15 @@ public class ProgramCounter4 extends Gate {
 			getPin(i).setY(getY() + (i + 2) * 10);
 			getPin(i).paintDirection = Pin.RIGHT;
 		}
-		for (int i = OE; i < INTOUT; i++) {
+		for (int i = CO; i < INTOUT; i++) {
 			getPin(i).paintDirection = Pin.LEFT;
 			getPin(i).setX(getX() + width);
-			getPin(i).setY(getY() + (i - OE) * 10 + 20);
+			getPin(i).setY(getY() + (i - CO) * 10 + 20);
 		}
-		getPin(OE).setProperty(TEXT, "/OE");
-		getPin(LOAD).setProperty(TEXT, "/LD");
-		getPin(CLEAR).setProperty(TEXT, "/CL");
+		getPin(CO).setProperty(TEXT, "/OE");
 		getPin(JUMP).setProperty(TEXT, "/J");
+		getPin(CLEAR).setProperty(TEXT, "/CL");
+		getPin(CE).setProperty(TEXT, "CE");
 		getPin(CLOCK).setProperty(TEXT, Pin.POS_EDGE_TRIG);
 
 		// internal outputs
@@ -130,18 +130,18 @@ public class ProgramCounter4 extends Gate {
 		super.changedLevel(e);
 
 		// LOAD edge detection
-		if (e.source.equals(getPin(LOAD))) {
+		if (e.source.equals(getPin(JUMP))) {
 			if (e.level == LOW) {
 				for (int i = DATA; i < DATA + 4; i++) {
 					getPin(i).setIoType(Pin.INPUT);
 				}
 			} else {
 				for (int i = DATA; i < DATA + 4; i++) {
-					getPin(i).setIoType((getPin(OE).getLevel() == LOW) ? Pin.OUTPUT : Pin.HIGHIMP);
+					getPin(i).setIoType((getPin(CO).getLevel() == LOW) ? Pin.OUTPUT : Pin.HIGHIMP);
 				}
 			}
 		}
-		if (e.source.equals(getPin(OE)) && getPin(LOAD).getLevel() == HIGH) {
+		if (e.source.equals(getPin(CO)) && getPin(JUMP).getLevel() == HIGH) {
 			if (e.level == LOW) {
 				for (int i = DATA; i < DATA + 4; i++) {
 					getPin(i).setIoType(Pin.OUTPUT);
@@ -156,7 +156,7 @@ public class ProgramCounter4 extends Gate {
 		// clk rising edge detection
 		if (e.source.equals(getPin(CLOCK)) && e.level == HIGH) {
 			// only set register if load is low
-			if (getPin(LOAD).getLevel() == LOW) {
+			if (getPin(JUMP).getLevel() == LOW) {
 				content = 0;
 				for (int i = 0; i < 4; i++) {
 					boolean b = getPin(DATA + i).getLevel();
@@ -170,14 +170,31 @@ public class ProgramCounter4 extends Gate {
 				setPropertyInt(STATE, content);
 				fireRepaint();
 			}
+			if (getPin(CE).getLevel() == HIGH) {
+				content++;
+				fireRepaint();
+			}
 		}
 		// if output enable is low, send content to bus
-		if (getPin(OE).getLevel() == LOW && getPin(LOAD).getLevel() == HIGH) {
+		if (getPin(CO).getLevel() == LOW && getPin(JUMP).getLevel() == HIGH) {
 			for (int i = 0; i < 4; i++) {
 				LSLevelEvent evt = null;
 				int pot = (int) Math.pow(2, i);
 				evt = new LSLevelEvent(this, (content & pot) == pot);
 				getPin(i + DATA).changedLevel(evt);
+			}
+		}
+
+		if (e.source.equals(getPin(CLEAR)) && e.level == LOW) {
+			content = 0;
+			LSLevelEvent evt = new LSLevelEvent(this, LOW);
+			for (int i = 0; i < 4; i++) {
+				getPin(i + INTOUT).changedLevel(evt);
+			}
+			if (getPin(CO).getLevel() == LOW) {
+				for (int i = 0; i < 4; i++) {
+					getPin(i + DATA).changedLevel(evt);
+				}
 			}
 		}
 	}

@@ -27,14 +27,15 @@ public class Register8 extends Gate {
 	private static final int OE = 8;
 	private static final int LOAD = 9;
 	private static final int CLOCK = 10;
-	private static final int INTOUT = 11;
+	private static final int CLEAR = 11;
+	private static final int INTOUT = 12;
 
 	public Register8() {
 		super("cpu");
 		type = "register8";
 		height = 110;
 		width = 110;
-		createInputs(11);
+		createInputs(12);
 		createOutputs(8);
 
 		// 0 to 7 for BUS INPUTS
@@ -53,6 +54,7 @@ public class Register8 extends Gate {
 		}
 		getPin(8).setProperty(TEXT, "/OE");
 		getPin(9).setProperty(TEXT, "/LD");
+		getPin(CLEAR).setProperty(TEXT, "CL");
 		getPin(10).setProperty(TEXT, Pin.POS_EDGE_TRIG);
 
 		// internal outputs (e.g. for ALU)
@@ -164,7 +166,7 @@ public class Register8 extends Gate {
 						content = content + pow;
 					}
 					LSLevelEvent evt = new LSLevelEvent(this, b);
-					getPin(i + DATA + INTOUT).changedLevel(evt);
+					getPin(i + INTOUT).changedLevel(evt);
 				}
 				setPropertyInt(STATE, content);
 				fireRepaint();
@@ -178,6 +180,19 @@ public class Register8 extends Gate {
 				evt = new LSLevelEvent(this, (content & pot) == pot);
 				getPin(i + DATA).changedLevel(evt);
 			}
+		}
+
+		if (e.source.equals(getPin(CLEAR)) && e.level == HIGH) {
+			content = 0;
+			for (int i = 0; i < 8; i++) {
+				LSLevelEvent evt = new LSLevelEvent(this, LOW);
+				getPin(i + INTOUT).changedLevel(evt);
+			}
+			if (getPin(OE).getLevel() == LOW)
+				for (int i = 0; i < 8; i++) {
+					LSLevelEvent evt = new LSLevelEvent(this, LOW);
+					getPin(i + DATA).changedLevel(evt);
+				}
 		}
 	}
 

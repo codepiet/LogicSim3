@@ -8,6 +8,7 @@ import java.awt.geom.Path2D;
 import logicsim.Gate;
 import logicsim.I18N;
 import logicsim.LSLevelEvent;
+import logicsim.LSMouseEvent;
 import logicsim.Pin;
 
 /**
@@ -54,13 +55,13 @@ public class Memory128 extends Gate {
 		}
 		// encoded address
 		for (int i = 0; i < 4; i++) {
-			getPin(ADD+i).paintDirection = Pin.DOWN;
-			getPin(ADD+i).setX(getX() + (4 - i + 3) * 10);
-			getPin(ADD+i).setY(getY());
-			getPin(ADD+i).setProperty(TEXT, "a" + String.valueOf(i));
+			getPin(ADD + i).paintDirection = Pin.DOWN;
+			getPin(ADD + i).setX(getX() + (4 - i + 3) * 10);
+			getPin(ADD + i).setY(getY());
+			getPin(ADD + i).setProperty(TEXT, "a" + String.valueOf(i));
 		}
 
-		getPin(WE).setProperty(TEXT, "/WE");
+		getPin(WE).setProperty(TEXT, "WE");
 		getPin(WE).setX(getX());
 		getPin(WE).setY(getY() + 30);
 		getPin(WE).paintDirection = Pin.RIGHT;
@@ -78,12 +79,37 @@ public class Memory128 extends Gate {
 	}
 
 	@Override
+	public void mousePressedSim(LSMouseEvent e) {
+		super.mousePressedSim(e);
+		int mx = e.getX();
+		int my = e.getY();
+		if (mx > getX() + 34 && mx < getX() + 76) {
+			if (my > getY() + 14 && my < getY() + 95) {
+				mx = mx - getX() - 34;
+				mx = mx / 5;
+				mx = 7 - mx;
+				my = my - getY() - 14;
+				my = my / 5;
+				my = 15 - my;
+				if (my >= 0 && my <= 15) {
+					int pow = (int) Math.pow(2, mx);
+					if ((mem[my] & pow) == pow)
+						mem[my] -= pow;
+					else
+						mem[my] += pow;
+					setPropertyInt(STATE + my, mem[my]);
+				}
+			}
+		}
+	}
+
+	@Override
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
 		for (int i = 0; i < 8; i++) {
 			int pow = (int) Math.pow(2, i);
-			for (int r = 0; r < 16; r++) {
-				short b = (short) (mem[15 - r] & pow);
+			for (int r = 0; r < mem.length; r++) {
+				short b = (short) (mem[mem.length - 1 - r] & pow);
 				Color fillColor = (b == pow) ? Color.red : Color.LIGHT_GRAY;
 				g2.setColor(fillColor);
 				g2.fillOval(getX() + 30 + 40 - (i * 5), getY() + 15 + r * 5, 5, 5);
@@ -121,11 +147,18 @@ public class Memory128 extends Gate {
 		if (e.source.equals(getPin(OE))) {
 			int ioType = e.level ? Pin.HIGHIMP : Pin.OUTPUT;
 			for (int i = 0; i < 8; i++) {
+				byte value = mem[address];
+				int pow = (int) Math.pow(2, i);
 				if (ioType == Pin.HIGHIMP) {
 					LSLevelEvent evt = new LSLevelEvent(this, LOW);
 					getPin(i + DATA).changedLevel(evt);
+					getPin(i + DATA).setIoType(ioType);
+				} else {
+					getPin(i + DATA).setIoType(ioType);
+					boolean b = (value & pow) == pow;
+					LSLevelEvent evt = new LSLevelEvent(this, b);
+					getPin(i + DATA).changedLevel(evt);
 				}
-				getPin(i + DATA).setIoType(ioType);
 			}
 		}
 
@@ -135,16 +168,18 @@ public class Memory128 extends Gate {
 			address += (getPin(i).getLevel() ? 1 : 0) * pow;
 		}
 
-		if (getPin(WE).getLevel() == LOW) {
-			// write memory
-			byte value = 0;
-			for (int i = DATA; i < DATA + 8; i++) {
-				int pow = (int) Math.pow(2, i - DATA);
-				if (getPin(i).getLevel())
-					value += pow;
+		if (e.source.equals(getPin(CLK)) && e.level == HIGH) {
+			if (getPin(WE).getLevel() == HIGH) {
+				// write memory
+				byte value = 0;
+				for (int i = DATA; i < DATA + 8; i++) {
+					int pow = (int) Math.pow(2, i - DATA);
+					if (getPin(i).getLevel())
+						value += pow;
+				}
+				mem[address] = value;
+				setPropertyInt(STATE + address, value);
 			}
-			mem[address] = value;
-			setPropertyInt(STATE + address, value);
 		}
 	}
 

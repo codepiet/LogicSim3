@@ -41,8 +41,6 @@ public class CLK extends Gate implements Runnable {
 	static final String HT_DEFAULT = "500";
 	static final String LT_DEFAULT = "500";
 
-	private static final int SIGNAL_HALT = 2;
-
 	private Thread thread;
 	private boolean running = false;
 
@@ -58,6 +56,10 @@ public class CLK extends Gate implements Runnable {
 	int lowTime = 500;
 	int pos = 0;
 
+	private static final int OUT = 0;
+	private static final int NOUT = 1;
+	private static final int HLT = 2;
+
 	public CLK() {
 		super("input");
 		type = "clock";
@@ -67,7 +69,13 @@ public class CLK extends Gate implements Runnable {
 		createInputs(1);
 		loadProperties();
 		getPin(1).setLevelType(Pin.INVERTED);
-		getPin(SIGNAL_HALT).setProperty(TEXT, "H");
+		getPin(HLT).setProperty(TEXT, "H");
+	}
+
+	@Override
+	public void reset() {
+		getPin(OUT).changedLevel(new LSLevelEvent(this, false, true));
+		getPin(NOUT).changedLevel(new LSLevelEvent(this, true, true));
 	}
 
 	@Override
@@ -91,7 +99,7 @@ public class CLK extends Gate implements Runnable {
 
 	@Override
 	public void changedLevel(LSLevelEvent e) {
-		if (e.source.equals(getPin(SIGNAL_HALT))) {
+		if (e.source.equals(getPin(HLT))) {
 			if (e.level == HIGH) {
 				currentMode = PAUSE;
 			} else {
@@ -108,8 +116,8 @@ public class CLK extends Gate implements Runnable {
 		int dy = e.getY() - getY();
 
 		if (manual.contains(dx, dy) && currentMode != RUNNING) {
-			getPin(1).changedLevel(new LSLevelEvent(this, !getPin(1).getLevel()));
-			getPin(0).changedLevel(new LSLevelEvent(this, !getPin(0).getLevel()));
+			getPin(OUT).changedLevel(new LSLevelEvent(this, !getPin(OUT).getLevel()));
+			getPin(NOUT).changedLevel(new LSLevelEvent(this, getPin(OUT).getLevel()));
 			lastTime = 0;
 		} else if (auto.contains(dx, dy)) {
 			interact();
