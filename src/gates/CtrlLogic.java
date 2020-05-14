@@ -40,22 +40,22 @@ public class CtrlLogic extends Gate {
 	private static final int J1 = 23;
 	private static final int FI1 = 24;
 
-	private static final int HLT = 0b1000000000000000;
-	private static final int MI = 0b0100000000000000;
-	private static final int RI = 0b0010000000000000;
-	private static final int RO = 0b0001000000000000;
-	private static final int IO = 0b0000100000000000;
-	private static final int II = 0b0000010000000000;
-	private static final int AI = 0b0000001000000000;
-	private static final int AO = 0b0000000100000000;
-	private static final int EO = 0b0000000010000000;
-	private static final int SU = 0b0000000001000000;
-	private static final int BI = 0b0000000000100000;
-	private static final int OI = 0b0000000000010000;
-	private static final int CE = 0b0000000000001000;
-	private static final int CO = 0b0000000000000100;
-	private static final int J = 0b0000000000000010;
-	private static final int FI = 0b0000000000000001;
+	private static final int HLT = 0b1000000000000000; // Halt clock
+	private static final int MI = 0b0100000000000000;// Memory address register in
+	private static final int RI = 0b0010000000000000;// RAM data in
+	private static final int RO = 0b0001000000000000; // RAM data out
+	private static final int IO = 0b0000100000000000;// Instruction register out
+	private static final int II = 0b0000010000000000;// Instruction register in
+	private static final int AI = 0b0000001000000000;// A register in
+	private static final int AO = 0b0000000100000000;// A register out
+	private static final int EO = 0b0000000010000000;// ALU out
+	private static final int SU = 0b0000000001000000;// ALU subtract
+	private static final int BI = 0b0000000000100000;// B register in
+	private static final int OI = 0b0000000000010000;// Output register in
+	private static final int CE = 0b0000000000001000;// Program counter enable
+	private static final int CO = 0b0000000000000100;// Program counter out
+	private static final int J = 0b0000000000000010;// Jump (program counter in)
+	private static final int FI = 0b0000000000000001;// Flags in
 
 	private int mstep = 0;
 	private int[] mem;
@@ -175,22 +175,23 @@ public class CtrlLogic extends Gate {
 		mstep = 0;
 		getPin(CLR1).changedLevel(new LSLevelEvent(this, LOW, force));
 		getPin(NCLR1).changedLevel(new LSLevelEvent(this, LOW, force));
+
+		for (int i = HLT1; i <= FI1; i++) {
+			getPin(i).changedLevel(new LSLevelEvent(this, LOW, force));
+		}
 		force = false;
-	}
-	
-	@Override
-	public void mousePressedSim(LSMouseEvent e) {
-		super.mousePressedSim(e);
-		getPin(CLR1).changedLevel(new LSLevelEvent(this, HIGH));
-		getPin(NCLR1).changedLevel(new LSLevelEvent(this, HIGH));
-		mstep = 0;
 	}
 
 	@Override
-	public void mouseReleased(int mx, int my) {
-		super.mouseReleased(mx, my);
-		getPin(CLR1).changedLevel(new LSLevelEvent(this, LOW));
-		getPin(NCLR1).changedLevel(new LSLevelEvent(this, LOW));
+	public void mousePressedSim(LSMouseEvent e) {
+		super.mousePressedSim(e);
+		reset();
+	}
+
+	@Override
+	public void interact() {
+		super.interact();
+		reset();
 	}
 
 	@Override
@@ -207,7 +208,14 @@ public class CtrlLogic extends Gate {
 			}
 			int data = mem[(instruction << 3) + mstep];
 			mstep = (mstep + 1) % 6;
-
+			// switch all outputs off before updating
+			for (int i = HLT; i <= FI; i++)
+				getPin(i).changedLevel(new LSLevelEvent(this, LOW));
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 			// update outputs
 			checkValue(data, HLT, HLT1);
 			checkValue(data, MI, MI1);

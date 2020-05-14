@@ -94,10 +94,6 @@ public class ALU8 extends Gate {
 	}
 
 	@Override
-	public void reset() {
-	}
-
-	@Override
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
 		for (int i = 0; i < 8; i++) {
@@ -105,10 +101,14 @@ public class ALU8 extends Gate {
 			int b = result & pot;
 			Color fillColor = (b == pot) ? Color.red : Color.LIGHT_GRAY;
 			g2.setColor(fillColor);
-			g2.fillOval(getX() + 21 + (7-i) * 9, yc, 8, 8);
+			g2.fillOval(getX() + 21 + (7 - i) * 9, yc, 8, 8);
 			g2.setColor(Color.black);
-			g2.drawOval(getX() + 21 + (7-i) * 9, yc, 8, 8);
+			g2.drawOval(getX() + 21 + (7 - i) * 9, yc, 8, 8);
 		}
+	}
+
+	@Override
+	public void simulate() {
 	}
 
 	@Override
@@ -117,21 +117,9 @@ public class ALU8 extends Gate {
 
 		// output
 		if (e.source.equals(getPin(OE))) {
-			if (e.level == LOW) {
-				// enabled
-				for (int i = 0; i < 8; i++) {
-					int pow = (int) Math.pow(2, i);
-					getPin(i).setIoType(Pin.OUTPUT);
-					LSLevelEvent evt = new LSLevelEvent(this, (result & pow) == pow);
-					getPin(i).changedLevel(evt);
-				}
-			} else {
-				// disabled
-				for (int i = 0; i < 8; i++) {
-					getPin(i).setIoType(Pin.HIGHIMP);
-					LSLevelEvent evt = new LSLevelEvent(this, LOW);
-					getPin(i).changedLevel(evt);
-				}
+			int ioType = e.level ? Pin.HIGHIMP : Pin.OUTPUT;
+			for (int i = 0; i < 8; i++) {
+				getPin(i).setIoType(ioType);
 			}
 			fireRepaint();
 		} else {
@@ -158,14 +146,11 @@ public class ALU8 extends Gate {
 			if (result < 0)
 				result = result + 256;
 
-			// output on the bus if enabled
-			if (getPin(OE).getLevel() == LOW) {
-				// enabled
-				for (int i = 0; i < 8; i++) {
-					int pow = (int) Math.pow(2, i);
-					LSLevelEvent evt = new LSLevelEvent(this, (result & pow) == pow);
-					getPin(i).changedLevel(evt);
-				}
+			// enabled
+			for (int i = 0; i < 8; i++) {
+				int pow = (int) Math.pow(2, i);
+				LSLevelEvent evt = new LSLevelEvent(this, (result & pow) == pow);
+				getPin(i).changedLevel(evt);
 			}
 		}
 	}

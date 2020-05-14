@@ -9,48 +9,48 @@ import java.util.ArrayList;
 
 public class Pin extends CircuitPart {
 
-	public static final int INPUT = 1;
-	public static final int OUTPUT = 2;
-	public static final int HIGHIMP = 3;
-
-	public static final int NORMAL = 10;
-	public static final int INVERTED = 11;
-	public static final int HIGH = 12;
-	public static final int LOW = 13;
-
-	public static final int RIGHT = 0xa0;
-	public static final int DOWN = 0xa1;
-	public static final int LEFT = 0xa2;
-	public static final int UP = 0xa3;
-
 	public static final int BOUNDING_SPACE = 5;
 	public static final int CONN_SIZE = 5;
+	public static final int DOWN = 0xa1;
+
+	public static final int HIGH = 12;
+	public static final int HIGHIMP = 3;
+	public static final int INPUT = 1;
+	public static final int INVERTED = 11;
+
+	public static final int LEFT = 0xa2;
+	public static final int LOW = 13;
+	public static final int NORMAL = 10;
+	public static final int OUTPUT = 2;
+
 	public static final String POS_EDGE_TRIG = "PosEdgeTrig";
+	public static final int RIGHT = 0xa0;
+	public static final int UP = 0xa3;
 
-	public int number;
+	public static String actionToString(int id) {
+		if (id == HIGH)
+			return "HIGH";
+		if (id == LOW)
+			return "LOW";
+		if (id == INVERTED)
+			return "INVERTED";
+		if (id == NORMAL)
+			return "NORMAL";
 
-	protected boolean level = false;
-	public int paintDirection = RIGHT;
+		return null;
+	}
 
 	private int ioType = INPUT;
-
-	public int getIoType() {
-		return ioType;
-	}
-
-	public void setIoType(int ioType) {
-		if (ioType == Pin.HIGHIMP && this.ioType != Pin.HIGHIMP) {
-			parent.changedLevel(new LSLevelEvent(this, CircuitPart.LOW));
-		} else if (ioType != Pin.HIGHIMP && this.ioType == Pin.HIGHIMP) {
-
-		}
-		this.ioType = ioType;
-	}
+	protected boolean level = false;
 
 	/**
 	 * type can be HIGH, LOW, INVERTED or NORMAL
 	 */
 	int levelType = NORMAL;
+
+	public int number;
+
+	public int paintDirection = RIGHT;
 
 	public Pin(int x, int y, Gate gate, int number) {
 		super(x, y);
@@ -58,71 +58,48 @@ public class Pin extends CircuitPart {
 		this.number = number;
 	}
 
-	/**
-	 * A connector can handle this event if there is one activePart and that part is
-	 * a wire in other cases we can start a wire if this is an output
-	 * 
-	 */
 	@Override
-	public void mousePressed(LSMouseEvent e) {
-		super.mousePressed(e);
+	public void changedLevel(LSLevelEvent e) {
+		// source has to be a Gate or a Wire
+		if (e.source instanceof Gate) {
+			if (isOutput()) {
+				if (level != e.level || e.force) {
+					level = e.level;
+					// propagate this to the outside
+					fireChangedLevel(new LSLevelEvent(this, getLevel(), e.force));
+				}
+			} else if (this.ioType == Pin.HIGHIMP) {
+				level = e.level;
+			}
+		} else if (e.source instanceof Wire) {
+			// if the pin is in high imp state, update level but don't push it
+			if (this.ioType == Pin.HIGHIMP) {
+				level = e.level;
+			} else {
+				// signal is from outside, propagate this to gate
+				// call gate directly
+				if (level != e.level || e.force) {
+					level = e.level;
+					parent.changedLevel(new LSLevelEvent(this, getLevel(), e.force));
+
+					// and call all other wires which are connected to the pin
+					fireChangedLevel(e);
+				}
+			}
+		} else
+			throw new RuntimeException("pins communicate with gates or wires only! source is " + e.source.getId()
+					+ ", target is " + getId());
+
 	}
 
-	/**
-	 * draw pin label (inside gate frame)
-	 * 
-	 * @param g2
-	 */
-	private void drawLabel(Graphics2D g2) {
-		int x = getX();
-		int y = getY();
-
-		g2.setFont(smallFont);
-		if (text != null && text.length() > 0) {
-			if (paintDirection == RIGHT) {
-				if (POS_EDGE_TRIG.equals(text)) {
-					Polygon tr = new Polygon();
-					tr.addPoint(x + 1 + CONN_SIZE, y - 4);
-					tr.addPoint(x + 1 + CONN_SIZE, y + 4);
-					tr.addPoint(x + 1 + CONN_SIZE + 9, y);
-					g2.draw(tr);
-				} else {
-					WidgetHelper.drawString(g2, text, x + CONN_SIZE + 3, y + 4, WidgetHelper.ALIGN_LEFT);
-				}
-			} else if (paintDirection == LEFT) {
-				if (POS_EDGE_TRIG.equals(text)) {
-					Polygon tr = new Polygon();
-					tr.addPoint(x - 1 - CONN_SIZE, y - 4);
-					tr.addPoint(x - 1 - CONN_SIZE, y + 4);
-					tr.addPoint(x - 1 - CONN_SIZE - 9, y);
-					g2.draw(tr);
-				} else {
-					WidgetHelper.drawString(g2, text, x - CONN_SIZE - 2, y + 4, WidgetHelper.ALIGN_RIGHT);
-				}
-			} else if (paintDirection == UP) {
-				if (POS_EDGE_TRIG.equals(text)) {
-					Polygon tr = new Polygon();
-					tr.addPoint(x - 4, y - 1 - CONN_SIZE);
-					tr.addPoint(x + 4, y - 1 - CONN_SIZE);
-					tr.addPoint(x, y - 1 - CONN_SIZE - 8);
-					g2.draw(tr);
-				} else {
-					// WidgetHelper.drawString(g2, text, x, y - CONN_SIZE - 3,
-					// WidgetHelper.ALIGN_CENTER);
-					WidgetHelper.drawStringRotated(g2, text, x + 3, y - CONN_SIZE - 3, WidgetHelper.ALIGN_LEFT, -90);
-				}
-			} else if (paintDirection == DOWN) {
-				if (POS_EDGE_TRIG.equals(text)) {
-					Polygon tr = new Polygon();
-					tr.addPoint(x - 4, y + 1 + CONN_SIZE);
-					tr.addPoint(x + 4, y + 1 + CONN_SIZE);
-					tr.addPoint(x, y + 1 + CONN_SIZE + 8);
-					g2.draw(tr);
-				} else {
-					// WidgetHelper.drawString(g2, text, x, y + CONN_SIZE + 10,
-					// WidgetHelper.ALIGN_CENTER);
-					WidgetHelper.drawStringRotated(g2, text, x + 3, y + CONN_SIZE + 3, WidgetHelper.ALIGN_RIGHT, -90);
-				}
+	public void disconnect() {
+		for (int i = 0; i < getListeners().size(); i++) {
+			LSLevelListener l = ((ArrayList<LSLevelListener>) getListeners()).get(i);
+			if (l instanceof Wire) {
+				Wire w = (Wire) l;
+				w.disconnect(null);
+				w = null;
+				i--;
 			}
 		}
 	}
@@ -189,18 +166,23 @@ public class Pin extends CircuitPart {
 				if (ioType == HIGHIMP) {
 					if (paintDirection == LEFT) {
 						g2.setPaint(level ? Color.red : Color.black);
-						g2.fillRect(x + offset + 1 + 4, y - 1, CONN_SIZE + 1 - 4, 3);
-						g2.setColor(Color.black);
 						g2.fillRect(x + offset + 1, y - 1, 2, 3);
+						g2.setColor(Color.black);
+						g2.fillRect(x + offset + 5, y - 1, 2, 3);
 					} else {
 						g2.setPaint(level ? Color.red : Color.black);
 						g2.fillRect(x + offset + 1, y - 1, 2, 3);
 						g2.setColor(Color.black);
-						g2.fillRect(x + offset + 1 + 4, y - 1, CONN_SIZE + 1 - 4, 3);
+						g2.fillRect(x + offset + 1 + 4, y - 1, 2, 3);
 					}
 				} else {
 					g2.setPaint(getLevel() ? Color.red : Color.black);
 					g2.fillRect(x + offset + 1, y - 1, CONN_SIZE + 1, 3);
+					if (ioType == OUTPUT) {
+						g2.drawString("O", x, y);
+					} else {
+						g2.drawString("I", x, y);
+					}
 				}
 			} else {
 				if (paintDirection == UP) {
@@ -209,14 +191,14 @@ public class Pin extends CircuitPart {
 				if (ioType == HIGHIMP) {
 					if (paintDirection == UP) {
 						g2.setPaint(level ? Color.red : Color.black);
-						g2.fillRect(x - 1, y + offset + 4, 3, CONN_SIZE + 1 - 4);
+						g2.fillRect(x - 1, y + offset + 4, 3, 2);
 						g2.setColor(Color.black);
 						g2.fillRect(x - 1, y + offset, 3, 2);
 					} else {
 						g2.setPaint(level ? Color.red : Color.black);
 						g2.fillRect(x - 1, y + offset, 3, 2);
 						g2.setColor(Color.black);
-						g2.fillRect(x - 1, y + offset + 4, 3, CONN_SIZE + 1 - 4);
+						g2.fillRect(x - 1, y + offset + 4, 3, 2);
 					}
 				} else {
 					g2.setPaint(getLevel() ? Color.red : Color.black);
@@ -226,10 +208,81 @@ public class Pin extends CircuitPart {
 		}
 	}
 
-	public void setLevelType(int levelType) {
-		// TODO if we set a level type of type HIGH or LOW we have to remove the wire
-		// completely
-		this.levelType = levelType;
+	/**
+	 * draw pin label (inside gate frame)
+	 * 
+	 * @param g2
+	 */
+	private void drawLabel(Graphics2D g2) {
+		int x = getX();
+		int y = getY();
+
+		g2.setFont(smallFont);
+		if (text != null && text.length() > 0) {
+			if (paintDirection == RIGHT) {
+				if (POS_EDGE_TRIG.equals(text)) {
+					Polygon tr = new Polygon();
+					tr.addPoint(x + 1 + CONN_SIZE, y - 4);
+					tr.addPoint(x + 1 + CONN_SIZE, y + 4);
+					tr.addPoint(x + 1 + CONN_SIZE + 9, y);
+					g2.draw(tr);
+				} else {
+					WidgetHelper.drawString(g2, text, x + CONN_SIZE + 3, y + 4, WidgetHelper.ALIGN_LEFT);
+				}
+			} else if (paintDirection == LEFT) {
+				if (POS_EDGE_TRIG.equals(text)) {
+					Polygon tr = new Polygon();
+					tr.addPoint(x - 1 - CONN_SIZE, y - 4);
+					tr.addPoint(x - 1 - CONN_SIZE, y + 4);
+					tr.addPoint(x - 1 - CONN_SIZE - 9, y);
+					g2.draw(tr);
+				} else {
+					WidgetHelper.drawString(g2, text, x - CONN_SIZE - 2, y + 4, WidgetHelper.ALIGN_RIGHT);
+				}
+			} else if (paintDirection == UP) {
+				if (POS_EDGE_TRIG.equals(text)) {
+					Polygon tr = new Polygon();
+					tr.addPoint(x - 4, y - 1 - CONN_SIZE);
+					tr.addPoint(x + 4, y - 1 - CONN_SIZE);
+					tr.addPoint(x, y - 1 - CONN_SIZE - 8);
+					g2.draw(tr);
+				} else {
+					// WidgetHelper.drawString(g2, text, x, y - CONN_SIZE - 3,
+					// WidgetHelper.ALIGN_CENTER);
+					WidgetHelper.drawStringRotated(g2, text, x + 3, y - CONN_SIZE - 3, WidgetHelper.ALIGN_LEFT, -90);
+				}
+			} else if (paintDirection == DOWN) {
+				if (POS_EDGE_TRIG.equals(text)) {
+					Polygon tr = new Polygon();
+					tr.addPoint(x - 4, y + 1 + CONN_SIZE);
+					tr.addPoint(x + 4, y + 1 + CONN_SIZE);
+					tr.addPoint(x, y + 1 + CONN_SIZE + 8);
+					g2.draw(tr);
+				} else {
+					// WidgetHelper.drawString(g2, text, x, y + CONN_SIZE + 10,
+					// WidgetHelper.ALIGN_CENTER);
+					WidgetHelper.drawStringRotated(g2, text, x + 3, y + CONN_SIZE + 3, WidgetHelper.ALIGN_RIGHT, -90);
+				}
+			}
+		}
+	}
+
+	@Override
+	public Rectangle getBoundingBox() {
+		return new Rectangle(getX() - BOUNDING_SPACE / 2, getY() - BOUNDING_SPACE / 2, BOUNDING_SPACE, BOUNDING_SPACE);
+	}
+
+	@Override
+	public String getId() {
+		return number + "@" + parent.getId();
+	}
+
+	public boolean getInternalLevel() {
+		return level;
+	}
+
+	public int getIoType() {
+		return ioType;
 	}
 
 	public boolean getLevel() {
@@ -245,17 +298,8 @@ public class Pin extends CircuitPart {
 		return false;
 	}
 
-	@Override
-	public Rectangle getBoundingBox() {
-		return new Rectangle(getX() - BOUNDING_SPACE / 2, getY() - BOUNDING_SPACE / 2, BOUNDING_SPACE, BOUNDING_SPACE);
-	}
-
 	public boolean isAt(int atX, int atY) {
 		return (atX > getX() - 5 && atX < getX() + 5 && atY > getY() - 5 && atY < getY() + 5);
-	}
-
-	public void setDirection(int dir) {
-		paintDirection = dir;
 	}
 
 	public boolean isInput() {
@@ -264,6 +308,47 @@ public class Pin extends CircuitPart {
 
 	public boolean isOutput() {
 		return ioType == Pin.OUTPUT;
+	}
+
+	/**
+	 * A connector can handle this event if there is one activePart and that part is
+	 * a wire in other cases we can start a wire if this is an output
+	 * 
+	 */
+	@Override
+	public void mousePressed(LSMouseEvent e) {
+		super.mousePressed(e);
+	}
+
+	public void setDirection(int dir) {
+		paintDirection = dir;
+	}
+
+	public void setIoType(int ioType) {
+		if (ioType == Pin.HIGHIMP && this.ioType != Pin.HIGHIMP) {
+			//if (this.ioType == OUTPUT)
+			//	fireChangedLevel(new LSLevelEvent(this, CircuitPart.LOW));
+			parent.changedLevel(new LSLevelEvent(this, CircuitPart.LOW));
+			this.ioType = ioType;
+		} else if (ioType == Pin.INPUT && this.ioType != Pin.INPUT) {
+			this.ioType = ioType;
+			if (parent != null)
+				parent.changedLevel(new LSLevelEvent(this, getLevel()));
+		} else if (ioType == Pin.OUTPUT && this.ioType != Pin.OUTPUT) {
+			this.ioType = ioType;
+			System.out.println("fired " + this.getLevel());
+			fireChangedLevel(new LSLevelEvent(this, this.getLevel()));
+		}
+	}
+
+	public void setLevel(boolean b) {
+		level = b;
+	}
+
+	public void setLevelType(int levelType) {
+		// TODO if we set a level type of type HIGH or LOW we have to remove the wire
+		// completely
+		this.levelType = levelType;
 	}
 
 	@Override
@@ -282,76 +367,6 @@ public class Pin extends CircuitPart {
 				+ parent.getId();
 		s += " - " + (getLevel() ? "HIGH" : "LOW");
 		return s;
-	}
-
-	public void setLevel(boolean b) {
-		level = b;
-	}
-
-	public static String actionToString(int id) {
-		if (id == HIGH)
-			return "HIGH";
-		if (id == LOW)
-			return "LOW";
-		if (id == INVERTED)
-			return "INVERTED";
-		if (id == NORMAL)
-			return "NORMAL";
-
-		return null;
-	}
-
-	@Override
-	public String getId() {
-		return number + "@" + parent.getId();
-	}
-
-	@Override
-	public void changedLevel(LSLevelEvent e) {
-		// source has to be a Gate or a Wire
-		if (e.source instanceof Gate) {
-			if (isOutput()) {
-				if (level != e.level || e.force) {
-					level = e.level;
-					// propagate this to the outside
-					fireChangedLevel(new LSLevelEvent(this, getLevel(), e.force));
-				}
-			}
-		} else if (e.source instanceof Wire) {
-			// if the pin is in high imp state, update level but don't push it
-			if (this.ioType == Pin.HIGHIMP) {
-				level = e.level;
-			} else {
-				// signal is from outside, propagate this to gate
-				// call gate directly
-				if (level != e.level || e.force) {
-					level = e.level;
-					parent.changedLevel(new LSLevelEvent(this, getLevel(), e.force));
-
-					// and call all other wires which are connected to the pin
-					fireChangedLevel(e);
-				}
-			}
-		} else
-			throw new RuntimeException("pins communicate with gates or wires only! source is " + e.source.getId()
-					+ ", target is " + getId());
-
-	}
-
-	public boolean getInternalLevel() {
-		return level;
-	}
-
-	public void disconnect() {
-		for (int i = 0; i < getListeners().size(); i++) {
-			LSLevelListener l = ((ArrayList<LSLevelListener>) getListeners()).get(i);
-			if (l instanceof Wire) {
-				Wire w = (Wire) l;
-				w.disconnect(null);
-				w = null;
-				i--;
-			}
-		}
 	}
 
 }

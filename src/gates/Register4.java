@@ -97,6 +97,7 @@ public class Register4 extends Gate {
 
 	@Override
 	public void reset() {
+		super.reset();
 		force = true;
 		updateInternalOutputs();
 		force = false;
@@ -128,25 +129,16 @@ public class Register4 extends Gate {
 
 		// LOAD edge detection
 		if (e.source.equals(getPin(LOAD))) {
-			if (e.level == LOW) {
-				for (int i = DATA; i < DATA + 4; i++) {
-					getPin(i).setIoType(Pin.INPUT);
-				}
-			} else {
-				for (int i = DATA; i < DATA + 4; i++) {
-					getPin(i).setIoType((getPin(OE).getLevel() == LOW) ? Pin.OUTPUT : Pin.HIGHIMP);
-				}
+			int ioType = e.level ? Pin.HIGHIMP : Pin.INPUT;
+			for (int i = DATA; i < DATA + 4; i++) {
+				getPin(i).setIoType(ioType);
 			}
 		}
+
 		if (e.source.equals(getPin(OE)) && getPin(LOAD).getLevel() == HIGH) {
-			if (e.level == LOW) {
-				for (int i = DATA; i < DATA + 4; i++) {
-					getPin(i).setIoType(Pin.OUTPUT);
-				}
-			} else {
-				for (int i = DATA; i < DATA + 4; i++) {
-					getPin(i).setIoType(Pin.HIGHIMP);
-				}
+			int ioType = e.level ? Pin.HIGHIMP : Pin.OUTPUT;
+			for (int i = DATA; i < DATA + 4; i++) {
+				getPin(i).setIoType(ioType);
 			}
 		}
 

@@ -31,9 +31,10 @@ public class CLK extends Gate implements Runnable {
 	private static final String ENTERLOW = "enterlow";
 	private static final String ENTERHIGH = "enterhigh";
 
-	static final int PAUSE = 0;
+	static final int STOPPED = 0;
 	static final int RUNNING = 1;
 	static final int MANUAL = 2;
+	static final int PAUSE = 3;
 
 	static final String HT = "hightime";
 	static final String LT = "lowtime";
@@ -50,7 +51,7 @@ public class CLK extends Gate implements Runnable {
 
 	boolean[] osz = new boolean[oszi.width + 1];
 
-	int currentMode = PAUSE;
+	int currentMode = STOPPED;
 	long lastTime;
 	int highTime = 500;
 	int lowTime = 500;
@@ -89,7 +90,7 @@ public class CLK extends Gate implements Runnable {
 		if (currentMode == RUNNING) {
 			if (running && !Simulation.getInstance().isRunning())
 				running = false;
-			currentMode = PAUSE;
+			currentMode = STOPPED;
 		} else {
 			currentMode = RUNNING;
 			if (!running)
@@ -101,9 +102,11 @@ public class CLK extends Gate implements Runnable {
 	public void changedLevel(LSLevelEvent e) {
 		if (e.source.equals(getPin(HLT))) {
 			if (e.level == HIGH) {
-				currentMode = PAUSE;
+				if (currentMode == RUNNING)
+					currentMode = PAUSE;
 			} else {
-				currentMode = RUNNING;
+				if (currentMode == PAUSE)
+					currentMode = RUNNING;
 			}
 		}
 	}

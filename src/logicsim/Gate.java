@@ -615,7 +615,8 @@ public class Gate extends CircuitPart {
 		Pin p = (Pin) e.source;
 		if (p.isOutput() && e.level == HIGH) {
 			// if the level change comes from an output, this will crash the part
-			busted = true;
+			//TODO
+			//busted = true;
 		}
 	}
 

@@ -99,6 +99,7 @@ public class Register8 extends Gate {
 
 	@Override
 	public void reset() {
+		super.reset();
 		force = true;
 		updateInternalOutputs();
 		force = false;

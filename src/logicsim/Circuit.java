@@ -320,7 +320,7 @@ public class Circuit implements LSRepaintListener {
 
 	private void fireRepaint(CircuitPart source) {
 		if (repaintListener != null)
-			repaintListener.needsRepaint(source);
+			repaintListener.needsRepaint(source);		
 	}
 
 	@Override
@@ -349,6 +349,7 @@ public class Circuit implements LSRepaintListener {
 	public void reset() {
 		for (CircuitPart p : getGates())
 			p.reset();
+		fireRepaint(null);
 	}
 
 	public void remove(CircuitPart part) {
