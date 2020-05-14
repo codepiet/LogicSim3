@@ -1,6 +1,7 @@
 build/
 dist/
 bin/
+tests/
 icons/
 logicsim.cfg
 .settings/
