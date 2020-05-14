@@ -133,6 +133,9 @@ public class CLK extends Gate implements Runnable {
 		if (Simulation.getInstance().isRunning() && !this.running)
 			startClock();
 
+		if (!Simulation.getInstance().isRunning())
+			running = false;
+		
 		g2.setPaint(Color.black);
 		g2.setFont(Pin.smallFont);
 		String s = "CLK";

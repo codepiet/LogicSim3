@@ -21,6 +21,10 @@ import java.util.Vector;
 public class Wire extends CircuitPart implements Cloneable {
 	static final long serialVersionUID = -7554728800898882892L;
 
+	public static float SEL_WIDTH = 3f;
+
+	public static float WIDTH = 1.0f;
+
 	/**
 	 * Pin/Wire/WirePoint from which this wire is originating
 	 */
@@ -127,9 +131,9 @@ public class Wire extends CircuitPart implements Cloneable {
 		}
 
 		if (selected) {
-			g2.setStroke(new BasicStroke(4, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+			g2.setStroke(new BasicStroke(SEL_WIDTH, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		} else {
-			g2.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+			g2.setStroke(new BasicStroke(WIDTH, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		}
 
 		g2.draw(convertPointsToPath());
@@ -551,7 +555,7 @@ public class Wire extends CircuitPart implements Cloneable {
 			}
 		}
 		wp.parent = this;
-		//wp.connect(this);
+		// wp.connect(this);
 		points.add(wp);
 	}
 

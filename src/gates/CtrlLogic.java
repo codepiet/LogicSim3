@@ -17,11 +17,23 @@ import logicsim.Pin;
  */
 public class CtrlLogic extends Gate {
 
-	private static final int INS1 = 0;
-	private static final int CLK1 = 4;
-	private static final int ZF1 = 5;
-	private static final int CF1 = 6;
-	private static final int CLR1 = 7;
+	public static final int cNOP = 0;
+	public static final int cLDA = 1;
+	public static final int cADD = 2;
+	public static final int cSUB = 3;
+	public static final int cSTA = 4;
+	public static final int cLDI = 5;
+	public static final int cJMP = 6;
+	public static final int cJC = 7;
+	public static final int cJZ = 8;
+	public static final int cOUT = 14;
+	public static final int cHLT = 15;
+
+	private static final int pINS = 0;
+	private static final int pCLK = 4;
+	private static final int pZF = 5;
+	private static final int pCF = 6;
+	private static final int pCLR = 7;
 	private static final int NCLR1 = 8;
 	private static final int HLT1 = 9;
 	private static final int MI1 = 10;
@@ -58,7 +70,7 @@ public class CtrlLogic extends Gate {
 	private static final int FI = 0b0000000000000001;
 
 	private int mstep = 0;
-	private int[] mem;
+	private int[][] mem;
 	private int instruction = 0;
 
 	public CtrlLogic() {
@@ -74,18 +86,18 @@ public class CtrlLogic extends Gate {
 			getPin(i).setY(getY());
 			getPin(i).paintDirection = Pin.DOWN;
 		}
-		for (int i = INS1; i < INS1 + 4; i++) {
+		for (int i = pINS; i < pINS + 4; i++) {
 			getPin(i).setX(getX() + i * 10 + 10);
 			getPin(i).setProperty(TEXT, String.valueOf(i + 4));
 		}
-		getPin(CLK1).setProperty(TEXT, "/CLK");
-		getPin(CLK1).setX(getX() + 110);
-		getPin(ZF1).setProperty(TEXT, "ZF");
-		getPin(ZF1).setX(getX() + 150);
-		getPin(CF1).setProperty(TEXT, "CF");
-		getPin(CF1).setX(getX() + 160);
-		getPin(CLR1).setProperty(TEXT, "CLR");
-		getPin(CLR1).setX(getX() + 120);
+		getPin(pCLK).setProperty(TEXT, "/CLK");
+		getPin(pCLK).setX(getX() + 110);
+		getPin(pZF).setProperty(TEXT, "ZF");
+		getPin(pZF).setX(getX() + 150);
+		getPin(pCF).setProperty(TEXT, "CF");
+		getPin(pCF).setX(getX() + 160);
+		getPin(pCLR).setProperty(TEXT, "CLR");
+		getPin(pCLR).setX(getX() + 120);
 		getPin(NCLR1).setProperty(TEXT, "/CLR");
 		getPin(NCLR1).setLevelType(Pin.INVERTED);
 		getPin(NCLR1).setX(getX() + 130);
@@ -116,22 +128,22 @@ public class CtrlLogic extends Gate {
 	}
 
 	private void setupMemory() {
-		mem = new int[] { MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0, // 0000 - NOP
-				MI | CO, RO | II | CE, IO | MI, RO | AI, 0, 0, 0, 0, // 0001 - LDA
-				MI | CO, RO | II | CE, IO | MI, RO | BI, EO | AI, 0, 0, 0, // 0010 - ADD
-				MI | CO, RO | II | CE, IO | MI, RO | BI, EO | AI | SU, 0, 0, 0, // 0011 - SUB
-				MI | CO, RO | II | CE, IO | MI, AO | RI, 0, 0, 0, 0, // 0100 - STA
-				MI | CO, RO | II | CE, IO | AI, 0, 0, 0, 0, 0, // 0101 - LDI
-				MI | CO, RO | II | CE, IO | J, 0, 0, 0, 0, 0, // 0110 - JMP
-				MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0, // 0111
-				MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0, // 1000
-				MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0, // 1001
-				MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0, // 1010
-				MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0, // 1011
-				MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0, // 1100
-				MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0, // 1101
-				MI | CO, RO | II | CE, AO | OI, 0, 0, 0, 0, 0, // 1110 - OUT
-				MI | CO, RO | II | CE, HLT, 0, 0, 0, 0, 0, // 1111 - HLT
+		mem = new int[][] { { MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0 }, // 0000 - NOP
+				{ MI | CO, RO | II | CE, IO | MI, RO | AI, 0, 0, 0, 0 }, // 0001 - LDA
+				{ MI | CO, RO | II | CE, IO | MI, RO | BI, EO | AI | FI, 0, 0, 0 }, // 0010 - ADD
+				{ MI | CO, RO | II | CE, IO | MI, RO | BI, EO | AI | SU | FI, 0, 0, 0 }, // 0011 - SUB
+				{ MI | CO, RO | II | CE, IO | MI, AO | RI, 0, 0, 0, 0 }, // 0100 - STA
+				{ MI | CO, RO | II | CE, IO | AI, 0, 0, 0, 0, 0 }, // 0101 - LDI
+				{ MI | CO, RO | II | CE, IO | J, 0, 0, 0, 0, 0 }, // 0110 - JMP
+				{ MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0 }, // 0111 - JC
+				{ MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0 }, // 1000 - JZ
+				{ MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0 }, // 1001
+				{ MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0 }, // 1010
+				{ MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0 }, // 1011
+				{ MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0 }, // 1100
+				{ MI | CO, RO | II | CE, 0, 0, 0, 0, 0, 0 }, // 1101
+				{ MI | CO, RO | II | CE, AO | OI, 0, 0, 0, 0, 0 }, // 1110 - OUT
+				{ MI | CO, RO | II | CE, HLT, 0, 0, 0, 0, 0 }, // 1111 - HLT
 		};
 	}
 
@@ -142,23 +154,25 @@ public class CtrlLogic extends Gate {
 
 	private String insToMn(int instruction2) {
 		switch (instruction) {
-		case 0:
+		case cNOP:
 			return "NOP";
-		case 1:
+		case cLDA:
 			return "LDA";
-		case 2:
+		case cADD:
 			return "ADD";
-		case 3:
+		case cSUB:
 			return "SUB";
-		case 4:
-			return "LDA";
-		case 5:
+		case cSTA:
 			return "STA";
-		case 6:
+		case cLDI:
 			return "LDI";
-		case 7:
+		case cJMP:
 			return "JMP";
-		case 14:
+		case cJC:
+			return "JC";
+		case cJZ:
+			return "JZ";
+		case cOUT:
 			return "OUT";
 		default:
 			return "HLT";
@@ -170,44 +184,51 @@ public class CtrlLogic extends Gate {
 		super.reset();
 		// reset
 		force = true;
-		getPin(CLR1).changedLevel(new LSLevelEvent(this, HIGH, force));
+		getPin(pCLR).changedLevel(new LSLevelEvent(this, HIGH, force));
 		getPin(NCLR1).changedLevel(new LSLevelEvent(this, HIGH, force));
 		mstep = 0;
-		getPin(CLR1).changedLevel(new LSLevelEvent(this, LOW, force));
+		getPin(pCLR).changedLevel(new LSLevelEvent(this, LOW, force));
 		getPin(NCLR1).changedLevel(new LSLevelEvent(this, LOW, force));
 		force = false;
 	}
-	
+
 	@Override
 	public void mousePressedSim(LSMouseEvent e) {
 		super.mousePressedSim(e);
-		getPin(CLR1).changedLevel(new LSLevelEvent(this, HIGH));
-		getPin(NCLR1).changedLevel(new LSLevelEvent(this, HIGH));
-		mstep = 0;
+		reset();
 	}
 
 	@Override
-	public void mouseReleased(int mx, int my) {
-		super.mouseReleased(mx, my);
-		getPin(CLR1).changedLevel(new LSLevelEvent(this, LOW));
-		getPin(NCLR1).changedLevel(new LSLevelEvent(this, LOW));
+	public void interact() {
+		reset();
 	}
-
+	
 	@Override
 	public void changedLevel(LSLevelEvent e) {
 		super.changedLevel(e);
 
 		// rising edge detection for negative clock
-		if (e.source.equals(getPin(CLK1)) && e.level == HIGH) {
+		if (e.source.equals(getPin(pCLK)) && e.level == HIGH) {
 			instruction = 0;
-			for (int i = INS1; i < INS1 + 4; i++) {
+			for (int i = pINS; i < pINS + 4; i++) {
 				int pow = (int) Math.pow(2, i);
 				if (getPin(i).getLevel() == HIGH)
 					instruction += pow;
 			}
-			int data = mem[(instruction << 3) + mstep];
+			int data = mem[instruction][mstep];
+
+			if (instruction == cJC && mstep == 2 && getPin(pCF).getLevel()) {
+				// exception: JC and C-Flag
+				data = IO | J;
+			} else if (instruction == cJZ && mstep == 2 && getPin(pZF).getLevel()) {
+				// exception: JZ and Z-Flag
+				data = IO | J;
+			}
+
 			mstep = (mstep + 1) % 6;
 
+			for (int i = HLT1; i < FI1; i++)
+				getPin(i).changedLevel(new LSLevelEvent(this, LOW));
 			// update outputs
 			checkValue(data, HLT, HLT1);
 			checkValue(data, MI, MI1);

@@ -94,10 +94,6 @@ public class ALU8 extends Gate {
 	}
 
 	@Override
-	public void reset() {
-	}
-
-	@Override
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
 		for (int i = 0; i < 8; i++) {
@@ -105,9 +101,9 @@ public class ALU8 extends Gate {
 			int b = result & pot;
 			Color fillColor = (b == pot) ? Color.red : Color.LIGHT_GRAY;
 			g2.setColor(fillColor);
-			g2.fillOval(getX() + 21 + (7-i) * 9, yc, 8, 8);
+			g2.fillOval(getX() + 21 + (7 - i) * 9, yc, 8, 8);
 			g2.setColor(Color.black);
-			g2.drawOval(getX() + 21 + (7-i) * 9, yc, 8, 8);
+			g2.drawOval(getX() + 21 + (7 - i) * 9, yc, 8, 8);
 		}
 	}
 
@@ -151,12 +147,23 @@ public class ALU8 extends Gate {
 			}
 
 			// compute result
-			result = getPin(SU).getLevel() ? wordA - wordB : wordA + wordB;
+			if (getPin(SU).getLevel()) {
+				wordB = 256 - wordB;
+			}
+			result = wordA + wordB;
+
 			// check the result
-			if (result > 255)
+			boolean carry = false;
+			if (result > 255) {
 				result = result - 256;
-			if (result < 0)
+				carry = true;
+			}
+			if (result < 0) {
 				result = result + 256;
+				carry = true;
+			}
+			getPin(CF).changedLevel(new LSLevelEvent(this, carry));
+			getPin(ZF).changedLevel(new LSLevelEvent(this, result == 0));
 
 			// output on the bus if enabled
 			if (getPin(OE).getLevel() == LOW) {

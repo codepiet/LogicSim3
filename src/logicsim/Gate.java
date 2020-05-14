@@ -613,10 +613,11 @@ public class Gate extends CircuitPart {
 			throw new RuntimeException(
 					"gates communicate with pins only! source is " + e.source.getId() + ", target is " + getId());
 		Pin p = (Pin) e.source;
-		if (p.isOutput() && e.level == HIGH) {
-			// if the level change comes from an output, this will crash the part
-			busted = true;
-		}
+//		if (p.isOutput() && e.level == HIGH) {
+		// if the level change comes from an output, this will crash the part
+		// TODO
+		// busted = true;
+//		}
 	}
 
 	/**

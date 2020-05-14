@@ -47,7 +47,6 @@ public class Simulation implements Runnable {
 
 	public synchronized void putEvent(LSLevelEvent evt) {
 		queue.add(evt);
-		//System.out.println(evt);
 		notifyAll();
 	}
 
@@ -55,12 +54,13 @@ public class Simulation implements Runnable {
 	public synchronized void run() {
 		int mode = WIRE;
 		while (true) {
-			if (queue.size() == 0)
+			if (queue.size() == 0) {
 				try {
 					wait();
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
+			}
 			boolean stillpresent = true;
 			while (stillpresent) {
 				stillpresent = false;
@@ -76,11 +76,6 @@ public class Simulation implements Runnable {
 							i--;
 						}
 					}
-					// try {
-					// Thread.sleep(10);
-					// } catch (InterruptedException ex) {
-					// ex.printStackTrace();
-					// }
 				}
 			}
 			// switch mode
@@ -88,5 +83,4 @@ public class Simulation implements Runnable {
 		}
 
 	}
-
 }

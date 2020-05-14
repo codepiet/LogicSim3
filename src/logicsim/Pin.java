@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.geom.Path2D;
 import java.util.ArrayList;
 
 public class Pin extends CircuitPart {
@@ -201,6 +202,35 @@ public class Pin extends CircuitPart {
 				} else {
 					g2.setPaint(getLevel() ? Color.red : Color.black);
 					g2.fillRect(x + offset + 1, y - 1, CONN_SIZE + 1, 3);
+					Path2D p = new Path2D.Double();
+					if (isOutput()) {
+						if (paintDirection == LEFT) {
+							p.moveTo(x-2, y-2);
+							p.lineTo(x, y);
+							p.moveTo(x, y+1);
+							p.lineTo(x-2, y+3);
+						} else {
+							p.moveTo(x+2, y-2);
+							p.lineTo(x, y);
+							p.moveTo(x, y+1);
+							p.lineTo(x+2, y+3);
+						}
+						//g2.drawString("O", x, y);
+					} else {
+						if (paintDirection == LEFT) {
+							p.moveTo(x+2, y-2);
+							p.lineTo(x, y);
+							p.moveTo(x, y+1);
+							p.lineTo(x+2, y+3);
+						} else {
+							p.moveTo(x-2, y-2);
+							p.lineTo(x, y);
+							p.moveTo(x, y+1);
+							p.lineTo(x-2, y+3);
+						}
+						//g2.drawString("I", x, y);	
+					}
+					g2.draw(p);
 				}
 			} else {
 				if (paintDirection == UP) {

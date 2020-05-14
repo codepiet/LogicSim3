@@ -6,7 +6,7 @@
         <gate type="alu8" x="550" y="340"/>
         <gate type="register8" x="550" y="470">
             <properties>
-                <property key="state">3</property>
+                <property key="state">1</property>
             </properties>
             <pin iotype="input" number="8" type="high">
                 <properties>
@@ -16,17 +16,18 @@
         </gate>
         <gate mirror="y" type="register8" x="550" y="210">
             <properties>
-                <property key="state">10</property>
+                <property key="state">28</property>
             </properties>
         </gate>
         <gate type="memory128" x="250" y="300">
             <properties>
-                <property key="state0">31</property>
-                <property key="state2">-32</property>
-                <property key="state1">46</property>
-                <property key="state15">7</property>
-                <property key="state14">3</property>
-                <property key="state3">-16</property>
+                <property key="state0">0</property>
+                <property key="state13">28</property>
+                <property key="state2">0</property>
+                <property key="state1">0</property>
+                <property key="state15">0</property>
+                <property key="state14">0</property>
+                <property key="state3">0</property>
             </properties>
         </gate>
         <gate mirror="x" type="register8" x="250" y="440">
@@ -49,7 +50,7 @@
         </gate>
         <gate type="register4" x="270" y="220">
             <properties>
-                <property key="state">3</property>
+                <property key="state">5</property>
             </properties>
             <pin iotype="input" number="4" type="high">
                 <properties>

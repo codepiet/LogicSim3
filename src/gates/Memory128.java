@@ -2,13 +2,17 @@ package gates;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+
+import javax.swing.JOptionPane;
 
 import logicsim.Gate;
 import logicsim.I18N;
 import logicsim.LSLevelEvent;
 import logicsim.LSMouseEvent;
+import logicsim.Lang;
 import logicsim.Pin;
 
 /**
@@ -32,6 +36,8 @@ public class Memory128 extends Gate {
 	private static final int DATA = 0;
 	private static final int ADD = 8;
 	private static final int CLK = 14;
+
+	private static final String PROGRAM = "program";
 
 	public Memory128() {
 		super("cpu");
@@ -139,10 +145,30 @@ public class Memory128 extends Gate {
 		}
 	}
 
+	private void clearMemory() {
+		for (int i = 0; i < mem.length; i++) {
+			mem[i] = 0;
+		}
+	}
+
+	private void set(int cell, int instruction, int address) {
+		mem[cell] = (byte) ((instruction << 4) + address);
+	}
+
+	private void set(int cell, int instruction) {
+		mem[cell] = (byte) instruction;
+	}
+
 	@Override
 	public void changedLevel(LSLevelEvent e) {
 		super.changedLevel(e);
 
+		if (e.source.equals(getPin(WE))) {
+			int ioType = e.level ? Pin.INPUT : Pin.HIGHIMP;
+			for (int i = 0; i < 8; i++) {
+				getPin(i + DATA).setIoType(ioType);
+			}
+		}
 		// edge detection for output enable
 		if (e.source.equals(getPin(OE))) {
 			int ioType = e.level ? Pin.HIGHIMP : Pin.OUTPUT;
@@ -184,8 +210,34 @@ public class Memory128 extends Gate {
 	}
 
 	@Override
+	public boolean showPropertiesUI(Component frame) {
+		super.showPropertiesUI(frame);
+
+		String h = (String) JOptionPane.showInputDialog(frame, I18N.getString(type, PROGRAM), I18N.tr(Lang.PROPERTIES),
+				JOptionPane.QUESTION_MESSAGE, null, null, text);
+		if (h != null) {
+			String[] instructions = h.split(" ");
+			clearMemory();
+			for (int i = 0; i < instructions.length; i++) {
+				String s = instructions[i];
+				int code = 0;
+				if (s.contains("x")) {
+					s = s.substring(2);
+					code = Integer.parseInt(s, 16);
+				} else {
+					code = Integer.parseInt(s);
+				}
+				set(i, code);
+			}
+		}
+		return true;
+	}
+
+	@Override
 	public void loadLanguage() {
 		I18N.add(I18N.ALL, "cpu", "CPU");
+		I18N.addGate(I18N.ALL, type, PROGRAM,
+				"Program (instructions divided by SPACE) - 0 NOP, 1 LDA, 2 ADD, 3 SUB, 4 STA, 5 LDI, 6 JMP, 7 JC, 8 JZ, 14 OUT, 15 HLT");
 		I18N.addGate(I18N.ALL, type, I18N.TITLE, "Memory 16Byte");
 		I18N.addGate(I18N.ALL, type, I18N.DESCRIPTION, "Static RAM: 16 x 8 bit registers");
 	}
