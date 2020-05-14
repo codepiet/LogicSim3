@@ -251,6 +251,36 @@ public class Pin extends CircuitPart {
 				} else {
 					g2.setPaint(getLevel() ? Color.red : Color.black);
 					g2.fillRect(x - 1, y + offset, 3, CONN_SIZE + 1);
+					
+					Path2D p = new Path2D.Double();
+					if (isOutput()) {
+						if (paintDirection == UP) {
+							p.moveTo(x-2, y-2);
+							p.lineTo(x, y);
+							p.moveTo(x+1, y);
+							p.lineTo(x+3, y-2);
+						} else {
+							p.moveTo(x-2, y+2);
+							p.lineTo(x, y);
+							p.moveTo(x+1, y);
+							p.lineTo(x+3, y+2);
+						}
+						//g2.drawString("O", x, y);
+					} else {
+						if (paintDirection == UP) {
+							p.moveTo(x-2, y+2);
+							p.lineTo(x, y);
+							p.moveTo(x+1, y);
+							p.lineTo(x+3, y+2);
+						} else {
+							p.moveTo(x-2, y-2);
+							p.lineTo(x, y);
+							p.moveTo(x+1, y);
+							p.lineTo(x+3, y-2);
+						}
+						//g2.drawString("I", x, y);	
+					}
+					g2.draw(p);
 				}
 			}
 		}

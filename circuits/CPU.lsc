@@ -6,7 +6,7 @@
         <gate type="alu8" x="550" y="340"/>
         <gate type="register8" x="550" y="470">
             <properties>
-                <property key="state">1</property>
+                <property key="state">7</property>
             </properties>
             <pin iotype="input" number="8" type="high">
                 <properties>
@@ -16,23 +16,25 @@
         </gate>
         <gate mirror="y" type="register8" x="550" y="210">
             <properties>
-                <property key="state">28</property>
+                <property key="state">63</property>
             </properties>
         </gate>
         <gate type="memory128" x="250" y="300">
             <properties>
-                <property key="state0">0</property>
-                <property key="state13">28</property>
-                <property key="state2">0</property>
-                <property key="state1">0</property>
-                <property key="state15">0</property>
+                <property key="state0">31</property>
+                <property key="state5">98</property>
+                <property key="state10">0</property>
+                <property key="state2">47</property>
+                <property key="state1">-32</property>
+                <property key="state15">5</property>
+                <property key="state4">74</property>
                 <property key="state14">0</property>
-                <property key="state3">0</property>
+                <property key="state3">-32</property>
             </properties>
         </gate>
         <gate mirror="x" type="register8" x="250" y="440">
             <properties>
-                <property key="state">240</property>
+                <property key="state">98</property>
             </properties>
         </gate>
         <gate type="disp4d" x="550" y="590">
@@ -44,8 +46,8 @@
         </gate>
         <gate rotate="180" type="clock" x="140" y="140">
             <properties>
-                <property key="hightime">50</property>
-                <property key="lowtime">50</property>
+                <property key="hightime">100</property>
+                <property key="lowtime">100</property>
             </properties>
         </gate>
         <gate type="register4" x="270" y="220">
@@ -60,10 +62,10 @@
         </gate>
         <gate type="pgmcnt4" x="550" y="120">
             <properties>
-                <property key="state">0</property>
+                <property key="state">2</property>
             </properties>
         </gate>
-        <gate type="ctrllogic" x="160" y="600"/>
+        <gate type="ctrllogic" x="180" y="600"/>
         <gate rotate="270" type="register4" x="690" y="400">
             <properties>
                 <property key="state">0</property>
@@ -74,17 +76,17 @@
                 </properties>
             </pin>
         </gate>
-        <gate rotate="180" type="not" x="150" y="690"/>
-        <gate type="not" x="430" y="750"/>
-        <gate type="not" x="390" y="730"/>
-        <gate rotate="180" type="not" x="110" y="650"/>
-        <gate rotate="180" type="not" x="110" y="710"/>
-        <gate rotate="180" type="not" x="150" y="730"/>
-        <gate type="not" x="390" y="800"/>
-        <gate type="not" x="430" y="710"/>
-        <gate type="not" x="430" y="880"/>
-        <gate type="not" x="390" y="860"/>
-        <gate type="not" x="430" y="840"/>
+        <gate rotate="270" type="not" x="110" y="680"/>
+        <gate rotate="270" type="not" x="430" y="720"/>
+        <gate rotate="270" type="not" x="390" y="710"/>
+        <gate rotate="270" type="not" x="150" y="660"/>
+        <gate rotate="270" type="not" x="80" y="690"/>
+        <gate rotate="270" type="not" x="50" y="700"/>
+        <gate rotate="270" type="not" x="500" y="750"/>
+        <gate rotate="270" type="not" x="350" y="700"/>
+        <gate rotate="270" type="not" x="640" y="790"/>
+        <gate rotate="270" type="not" x="600" y="780"/>
+        <gate rotate="270" type="not" x="560" y="770"/>
     </gates>
     <wires>
         <wire>
@@ -186,7 +188,7 @@
             <point node="false" number="5" x="890" y="110"/>
             <point node="true" number="6" x="890" y="160"/>
             <point node="true" number="7" x="890" y="300"/>
-            <point node="true" number="8" x="890" y="470"/>
+            <point node="true" number="8" x="890" y="480"/>
             <point node="true" number="9" x="890" y="560"/>
             <point node="false" number="10" x="890" y="660"/>
         </wire>
@@ -484,10 +486,10 @@
         </wire>
         <wire>
             <from id="clock@140:140" number="1" type="gate"/>
-            <to id="ctrllogic@160:600" number="4" type="gate"/>
+            <to id="ctrllogic@180:600" number="4" type="gate"/>
             <point node="false" number="0" x="130" y="150"/>
             <point node="false" number="1" x="130" y="590"/>
-            <point node="false" number="2" x="270" y="590"/>
+            <point node="false" number="2" x="290" y="590"/>
         </wire>
         <wire>
             <from id="pgmcnt4@550:120" number="0" type="gate"/>
@@ -526,11 +528,12 @@
             <to id="register4@690:400" number="3" type="gate"/>
         </wire>
         <wire>
-            <from id="890:470@10@register8@250:440-10@disp4d@550:590" type="wire"/>
+            <from id="890:480@10@register8@250:440-10@disp4d@550:590" type="wire"/>
             <to id="register4@690:400" number="6" type="gate"/>
+            <point node="false" number="0" x="740" y="480"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="9" type="gate"/>
+            <from id="ctrllogic@180:600" number="9" type="gate"/>
             <to id="clock@140:140" number="2" type="gate"/>
             <point node="false" number="0" x="110" y="660"/>
             <point node="false" number="1" x="110" y="140"/>
@@ -538,185 +541,194 @@
             <point node="false" number="3" x="240" y="180"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="18" type="gate"/>
+            <from id="ctrllogic@180:600" number="18" type="gate"/>
             <to id="alu8@550:340" number="25" type="gate"/>
-            <point node="false" number="0" x="260" y="850"/>
-            <point node="false" number="1" x="850" y="850"/>
-            <point node="false" number="2" x="850" y="380"/>
+            <point node="false" number="0" x="280" y="810"/>
+            <point node="false" number="1" x="560" y="810"/>
+            <point node="false" number="2" x="560" y="770"/>
+            <point node="false" number="3" x="850" y="770"/>
+            <point node="false" number="4" x="850" y="380"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="8" type="gate"/>
+            <from id="ctrllogic@180:600" number="8" type="gate"/>
             <to id="pgmcnt4@550:120" number="7" type="gate"/>
-            <point node="true" number="0" x="290" y="570"/>
+            <point node="true" number="0" x="310" y="570"/>
             <point node="false" number="1" x="530" y="570"/>
             <point node="false" number="2" x="530" y="200"/>
             <point node="false" number="3" x="630" y="200"/>
             <point node="false" number="4" x="630" y="170"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="12" type="gate"/>
-            <to id="not@150:690" number="0" type="gate"/>
+            <from id="ctrllogic@180:600" number="12" type="gate"/>
+            <to id="not@110:680" number="0" type="gate"/>
+            <point node="false" number="0" x="220" y="730"/>
         </wire>
         <wire>
-            <from id="not@150:690" number="1" type="gate"/>
+            <from id="not@110:680" number="1" type="gate"/>
             <to id="memory128@250:300" number="13" type="gate"/>
-            <point node="false" number="0" x="80" y="720"/>
+            <point node="false" number="0" x="80" y="690"/>
             <point node="false" number="1" x="80" y="350"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="11" type="gate"/>
+            <from id="ctrllogic@180:600" number="11" type="gate"/>
             <to id="memory128@250:300" number="12" type="gate"/>
-            <point node="false" number="0" x="190" y="700"/>
-            <point node="false" number="1" x="90" y="700"/>
-            <point node="false" number="2" x="90" y="330"/>
+            <point node="false" number="0" x="210" y="720"/>
+            <point node="false" number="1" x="160" y="720"/>
+            <point node="false" number="2" x="160" y="680"/>
+            <point node="false" number="3" x="90" y="680"/>
+            <point node="false" number="4" x="90" y="330"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="22" type="gate"/>
-            <to id="not@430:750" number="0" type="gate"/>
-            <point node="false" number="0" x="300" y="780"/>
+            <from id="ctrllogic@180:600" number="22" type="gate"/>
+            <to id="not@430:720" number="0" type="gate"/>
+            <point node="false" number="0" x="320" y="770"/>
         </wire>
         <wire>
-            <from id="not@430:750" number="1" type="gate"/>
+            <from id="not@430:720" number="1" type="gate"/>
             <to id="pgmcnt4@550:120" number="4" type="gate"/>
-            <point node="false" number="0" x="810" y="780"/>
+            <point node="false" number="0" x="810" y="730"/>
             <point node="false" number="1" x="810" y="140"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="23" type="gate"/>
-            <to id="not@390:730" number="0" type="gate"/>
-            <point node="false" number="0" x="310" y="760"/>
+            <from id="ctrllogic@180:600" number="23" type="gate"/>
+            <to id="not@390:710" number="0" type="gate"/>
+            <point node="false" number="0" x="330" y="760"/>
         </wire>
         <wire>
-            <from id="not@390:730" number="1" type="gate"/>
+            <from id="not@390:710" number="1" type="gate"/>
             <to id="pgmcnt4@550:120" number="5" type="gate"/>
-            <point node="false" number="0" x="800" y="760"/>
+            <point node="false" number="0" x="800" y="720"/>
             <point node="false" number="1" x="800" y="150"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="10" type="gate"/>
-            <to id="not@110:650" number="0" type="gate"/>
-            <point node="false" number="0" x="180" y="680"/>
+            <from id="ctrllogic@180:600" number="10" type="gate"/>
+            <to id="not@150:660" number="0" type="gate"/>
+            <point node="false" number="0" x="200" y="710"/>
         </wire>
         <wire>
-            <from id="not@110:650" number="1" type="gate"/>
+            <from id="not@150:660" number="1" type="gate"/>
             <to id="register4@270:220" number="5" type="gate"/>
-            <point node="false" number="0" x="100" y="680"/>
+            <point node="false" number="0" x="100" y="670"/>
             <point node="false" number="1" x="100" y="260"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="14" type="gate"/>
-            <to id="not@150:730" number="0" type="gate"/>
-            <point node="false" number="0" x="220" y="760"/>
+            <from id="ctrllogic@180:600" number="14" type="gate"/>
+            <to id="not@50:700" number="0" type="gate"/>
+            <point node="false" number="0" x="240" y="750"/>
         </wire>
         <wire>
-            <from id="not@150:730" number="1" type="gate"/>
+            <from id="not@50:700" number="1" type="gate"/>
             <to id="register8@250:440" number="9" type="gate"/>
-            <point node="false" number="0" x="60" y="760"/>
+            <point node="false" number="0" x="60" y="710"/>
             <point node="false" number="1" x="60" y="520"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="13" type="gate"/>
-            <to id="not@110:710" number="0" type="gate"/>
-            <point node="false" number="0" x="210" y="740"/>
+            <from id="ctrllogic@180:600" number="13" type="gate"/>
+            <to id="not@80:690" number="0" type="gate"/>
+            <point node="false" number="0" x="230" y="740"/>
         </wire>
         <wire>
-            <from id="not@110:710" number="1" type="gate"/>
+            <from id="not@80:690" number="1" type="gate"/>
             <to id="register8@250:440" number="8" type="gate"/>
-            <point node="false" number="0" x="70" y="740"/>
+            <point node="false" number="0" x="70" y="700"/>
             <point node="false" number="1" x="70" y="510"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="21" type="gate"/>
+            <from id="ctrllogic@180:600" number="21" type="gate"/>
             <to id="pgmcnt4@550:120" number="8" type="gate"/>
+            <point node="false" number="0" x="310" y="780"/>
+            <point node="false" number="1" x="490" y="780"/>
+            <point node="false" number="2" x="490" y="740"/>
+            <point node="false" number="3" x="820" y="740"/>
+            <point node="false" number="4" x="820" y="180"/>
+        </wire>
+        <wire>
+            <from id="ctrllogic@180:600" number="19" type="gate"/>
+            <to id="not@500:750" number="0" type="gate"/>
             <point node="false" number="0" x="290" y="800"/>
-            <point node="false" number="1" x="820" y="800"/>
-            <point node="false" number="2" x="820" y="180"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="19" type="gate"/>
-            <to id="not@390:800" number="0" type="gate"/>
-            <point node="false" number="0" x="270" y="830"/>
-        </wire>
-        <wire>
-            <from id="not@390:800" number="1" type="gate"/>
+            <from id="not@500:750" number="1" type="gate"/>
             <to id="register8@550:470" number="9" type="gate"/>
-            <point node="false" number="0" x="840" y="830"/>
+            <point node="false" number="0" x="840" y="760"/>
             <point node="false" number="1" x="840" y="550"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="24" type="gate"/>
-            <to id="not@430:710" number="0" type="gate"/>
-            <point node="false" number="0" x="320" y="740"/>
+            <from id="ctrllogic@180:600" number="24" type="gate"/>
+            <to id="not@350:700" number="0" type="gate"/>
+            <point node="false" number="0" x="340" y="750"/>
         </wire>
         <wire>
-            <from id="not@430:710" number="1" type="gate"/>
+            <from id="not@350:700" number="1" type="gate"/>
             <to id="register4@690:400" number="5" type="gate"/>
-            <point node="false" number="0" x="790" y="740"/>
+            <point node="false" number="0" x="790" y="710"/>
             <point node="false" number="1" x="790" y="490"/>
             <point node="false" number="2" x="730" y="490"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="15" type="gate"/>
-            <to id="not@430:880" number="0" type="gate"/>
-            <point node="false" number="0" x="230" y="910"/>
+            <from id="ctrllogic@180:600" number="15" type="gate"/>
+            <to id="not@640:790" number="0" type="gate"/>
+            <point node="false" number="0" x="250" y="840"/>
         </wire>
         <wire>
-            <from id="not@430:880" number="1" type="gate"/>
+            <from id="not@640:790" number="1" type="gate"/>
             <to id="register8@550:210" number="9" type="gate"/>
-            <point node="false" number="0" x="880" y="910"/>
+            <point node="false" number="0" x="880" y="800"/>
             <point node="false" number="1" x="880" y="290"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="16" type="gate"/>
-            <to id="not@390:860" number="0" type="gate"/>
-            <point node="false" number="0" x="240" y="890"/>
+            <from id="ctrllogic@180:600" number="16" type="gate"/>
+            <to id="not@600:780" number="0" type="gate"/>
+            <point node="false" number="0" x="260" y="830"/>
         </wire>
         <wire>
-            <from id="not@390:860" number="1" type="gate"/>
+            <from id="not@600:780" number="1" type="gate"/>
             <to id="register8@550:210" number="8" type="gate"/>
-            <point node="false" number="0" x="870" y="890"/>
+            <point node="false" number="0" x="870" y="790"/>
             <point node="false" number="1" x="870" y="280"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="17" type="gate"/>
-            <to id="not@430:840" number="0" type="gate"/>
-            <point node="false" number="0" x="250" y="870"/>
+            <from id="ctrllogic@180:600" number="17" type="gate"/>
+            <to id="not@560:770" number="0" type="gate"/>
+            <point node="false" number="0" x="270" y="820"/>
         </wire>
         <wire>
-            <from id="not@430:840" number="1" type="gate"/>
+            <from id="not@560:770" number="1" type="gate"/>
             <to id="alu8@550:340" number="24" type="gate"/>
-            <point node="false" number="0" x="860" y="870"/>
+            <point node="false" number="0" x="860" y="780"/>
             <point node="false" number="1" x="860" y="360"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="20" type="gate"/>
+            <from id="ctrllogic@180:600" number="20" type="gate"/>
             <to id="disp4d@550:590" number="8" type="gate"/>
-            <point node="false" number="0" x="280" y="810"/>
-            <point node="false" number="1" x="830" y="810"/>
-            <point node="false" number="2" x="830" y="620"/>
+            <point node="false" number="0" x="300" y="790"/>
+            <point node="false" number="1" x="500" y="790"/>
+            <point node="false" number="2" x="500" y="750"/>
+            <point node="false" number="3" x="830" y="750"/>
+            <point node="false" number="4" x="830" y="620"/>
         </wire>
         <wire>
             <from id="register8@250:440" number="16" type="gate"/>
-            <to id="ctrllogic@160:600" number="0" type="gate"/>
+            <to id="ctrllogic@180:600" number="0" type="gate"/>
             <point node="false" number="0" x="300" y="410"/>
-            <point node="false" number="1" x="170" y="410"/>
+            <point node="false" number="1" x="190" y="410"/>
         </wire>
         <wire>
             <from id="register8@250:440" number="17" type="gate"/>
-            <to id="ctrllogic@160:600" number="1" type="gate"/>
+            <to id="ctrllogic@180:600" number="1" type="gate"/>
             <point node="false" number="0" x="290" y="420"/>
-            <point node="false" number="1" x="180" y="420"/>
+            <point node="false" number="1" x="200" y="420"/>
         </wire>
         <wire>
             <from id="register8@250:440" number="18" type="gate"/>
-            <to id="ctrllogic@160:600" number="2" type="gate"/>
+            <to id="ctrllogic@180:600" number="2" type="gate"/>
             <point node="false" number="0" x="280" y="430"/>
-            <point node="false" number="1" x="190" y="430"/>
+            <point node="false" number="1" x="210" y="430"/>
         </wire>
         <wire>
             <from id="register8@250:440" number="19" type="gate"/>
-            <to id="ctrllogic@160:600" number="3" type="gate"/>
-            <point node="false" number="0" x="200" y="440"/>
+            <to id="ctrllogic@180:600" number="3" type="gate"/>
+            <point node="false" number="0" x="220" y="440"/>
         </wire>
         <wire>
             <from id="register4@270:220" number="8" type="gate"/>
@@ -799,16 +811,16 @@
             <to id="alu8@550:340" number="22" type="gate"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="5" type="gate"/>
+            <from id="ctrllogic@180:600" number="5" type="gate"/>
             <to id="register4@690:400" number="9" type="gate"/>
-            <point node="false" number="0" x="310" y="590"/>
+            <point node="false" number="0" x="330" y="590"/>
             <point node="false" number="1" x="370" y="590"/>
             <point node="false" number="2" x="370" y="690"/>
             <point node="false" number="3" x="770" y="690"/>
             <point node="false" number="4" x="770" y="430"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="6" type="gate"/>
+            <from id="ctrllogic@180:600" number="6" type="gate"/>
             <to id="register4@690:400" number="8" type="gate"/>
             <point node="false" number="0" x="360" y="600"/>
             <point node="false" number="1" x="360" y="700"/>
@@ -816,27 +828,28 @@
             <point node="false" number="3" x="780" y="420"/>
         </wire>
         <wire>
-            <from id="ctrllogic@160:600" number="7" type="gate"/>
+            <from id="ctrllogic@180:600" number="7" type="gate"/>
             <to id="register8@550:210" number="11" type="gate"/>
-            <point node="true" number="0" x="280" y="580"/>
+            <point node="true" number="0" x="300" y="580"/>
             <point node="true" number="1" x="680" y="580"/>
             <point node="true" number="2" x="680" y="570"/>
-            <point node="true" number="3" x="680" y="390"/>
-            <point node="false" number="4" x="680" y="310"/>
+            <point node="true" number="3" x="680" y="500"/>
+            <point node="true" number="4" x="680" y="390"/>
+            <point node="false" number="5" x="680" y="310"/>
         </wire>
         <wire>
-            <from id="680:570@7@ctrllogic@160:600-11@register8@550:210" type="wire"/>
+            <from id="680:570@7@ctrllogic@180:600-11@register8@550:210" type="wire"/>
             <to id="register8@550:470" number="11" type="gate"/>
         </wire>
         <wire>
-            <from id="280:580@7@ctrllogic@160:600-11@register8@550:210" type="wire"/>
+            <from id="300:580@7@ctrllogic@180:600-11@register8@550:210" type="wire"/>
             <to id="register4@270:220" number="7" type="gate"/>
             <point node="false" number="0" x="230" y="580"/>
             <point node="true" number="1" x="230" y="540"/>
             <point node="false" number="2" x="230" y="280"/>
         </wire>
         <wire>
-            <from id="230:540@280:580@7@ctrllogic@160:600-11@register8@550:210-7@register4@270:220" type="wire"/>
+            <from id="230:540@300:580@7@ctrllogic@180:600-11@register8@550:210-7@register4@270:220" type="wire"/>
             <to id="register8@250:440" number="11" type="gate"/>
         </wire>
         <wire>
@@ -850,11 +863,11 @@
             <to id="register4@690:400" number="1" type="gate"/>
         </wire>
         <wire>
-            <from id="680:390@7@ctrllogic@160:600-11@register8@550:210" type="wire"/>
+            <from id="680:390@7@ctrllogic@180:600-11@register8@550:210" type="wire"/>
             <to id="alu8@550:340" number="26" type="gate"/>
         </wire>
         <wire>
-            <from id="680:580@7@ctrllogic@160:600-11@register8@550:210" type="wire"/>
+            <from id="680:580@7@ctrllogic@180:600-11@register8@550:210" type="wire"/>
             <to id="disp4d@550:590" number="11" type="gate"/>
             <point node="false" number="0" x="710" y="580"/>
             <point node="false" number="1" x="710" y="600"/>
@@ -894,6 +907,11 @@
             <from id="450:210@4@led8@400:110-3@disp4d@550:590" type="wire"/>
             <to id="register4@270:220" number="3" type="gate"/>
             <point node="false" number="0" x="290" y="210"/>
+        </wire>
+        <wire>
+            <from id="680:500@7@ctrllogic@180:600-11@register8@550:210" type="wire"/>
+            <to id="register4@690:400" number="7" type="gate"/>
+            <point node="false" number="0" x="750" y="500"/>
         </wire>
     </wires>
 </logicsim>
