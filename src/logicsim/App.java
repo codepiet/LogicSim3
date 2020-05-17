@@ -53,6 +53,8 @@ public class App {
 		lsframe.setSize(frameSize);
 		lsframe.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
 		lsframe.setVisible(true);
+		
+		Wire.setColorMode();
 	}
 
 	private static void addToCategory(Gate g) {

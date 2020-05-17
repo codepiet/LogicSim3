@@ -390,6 +390,40 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		mnu.add(mnuMode);
 
+		//---------------------------------------------------------------
+		
+		m = new JMenu(I18N.tr(Lang.COLORMODE));
+		btnGroup = new ButtonGroup();
+		String cMode = LSProperties.getInstance().getProperty(LSProperties.COLORMODE,
+				LSProperties.COLORMODE_ON);
+
+		JRadioButtonMenuItem mCmOn = new JRadioButtonMenuItem();
+		mCmOn.setText(I18N.tr(Lang.COLORMODE_ON));
+		mCmOn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionColorMode(e);
+			}
+		});
+		mCmOn.setSelected(LSProperties.COLORMODE_ON.equals(cMode));
+		m.add(mCmOn);
+
+		JRadioButtonMenuItem mCmOff = new JRadioButtonMenuItem();
+		mCmOff.setText(I18N.tr(Lang.COLORMODE_OFF));
+		mCmOff.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionColorMode(e);
+			}
+		});
+		mCmOff.setSelected(LSProperties.COLORMODE_OFF.equals(cMode));
+		m.add(mCmOff);
+
+		btnGroup.add(mCmOn);
+		btnGroup.add(mCmOff);
+
+		mnu.add(m);
+		
+		
+		
 		JMenu mnuLang = new JMenu(I18N.tr(Lang.LANGUAGE));
 		String currentLanguage = LSProperties.getInstance().getProperty(LSProperties.LANGUAGE, "de");
 		createLanguageMenu(mnuLang, currentLanguage);
@@ -1062,6 +1096,34 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		this.lspanel.repaint();
 	}
 
+	/**
+	 * handles color mode (on-redblack / off - blackwhite for printing)
+	 * @param e
+	 */
+	private void actionColorMode(ActionEvent e) {
+		String mode = null;
+		JRadioButtonMenuItem src = (JRadioButtonMenuItem) e.getSource();
+		if (src.getText().equals(I18N.tr(Lang.COLORMODE_ON))) {
+			if (src.isSelected())
+				mode = LSProperties.COLORMODE_ON;
+			else
+				mode = LSProperties.COLORMODE_OFF;
+		} else {
+			// the expert item is clicked
+			if (src.isSelected()) {
+				mode = LSProperties.COLORMODE_OFF;
+			} else {
+				mode = LSProperties.COLORMODE_ON;
+			}
+		}
+		LSProperties.getInstance().setProperty(LSProperties.COLORMODE, mode);
+		
+		Wire.setColorMode();
+		
+		this.lspanel.repaint();
+	}
+
+	
 	/**
 	 * handles mode (normal/expert)
 	 * 

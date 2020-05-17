@@ -25,6 +25,13 @@ public class Wire extends CircuitPart implements Cloneable {
 
 	public static float WIDTH = 1.0f;
 
+	private static Color LOW_COLOR = Color.black;
+
+	private static Color HIGH_COLOR = Color.red;
+
+	private static float LOW_WIDTH = 1.0f;
+	private static float HIGH_WIDTH = 1.0f;
+
 	/**
 	 * Pin/Wire/WirePoint from which this wire is originating
 	 */
@@ -124,16 +131,19 @@ public class Wire extends CircuitPart implements Cloneable {
 	@Override
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
+		float width = 0;
 		if (getLevel()) {
-			g2.setColor(Color.red);
+			g2.setColor(HIGH_COLOR);
+			width = HIGH_WIDTH;
 		} else {
-			g2.setColor(Color.black);
+			g2.setColor(LOW_COLOR);
+			width = LOW_WIDTH;
 		}
 
 		if (selected) {
 			g2.setStroke(new BasicStroke(SEL_WIDTH, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		} else {
-			g2.setStroke(new BasicStroke(WIDTH, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+			g2.setStroke(new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		}
 
 		g2.draw(convertPointsToPath());
@@ -599,5 +609,21 @@ public class Wire extends CircuitPart implements Cloneable {
 				}
 			}
 		}
+	}
+
+	public static void setColorMode() {
+		String colmode = LSProperties.getInstance().getProperty(LSProperties.COLORMODE, LSProperties.COLORMODE_ON);
+		if (LSProperties.COLORMODE_OFF.equals(colmode)) {
+			HIGH_COLOR = Color.black;
+			LOW_COLOR = Color.black;
+			LOW_WIDTH = 1f;
+			HIGH_WIDTH = 3f;
+		} else {
+			HIGH_COLOR = Color.red;
+			LOW_COLOR = Color.black;
+			LOW_WIDTH = 1f;
+			HIGH_WIDTH = 1f;
+		}
+
 	}
 }

@@ -21,6 +21,10 @@ public class LSProperties {
 	public static final String GATEDESIGN_IEC = "iec";
 	public static final String GATEDESIGN_ANSI = "ansi";
 
+	public static final String COLORMODE = "colormode";
+	public static final String COLORMODE_ON = "colormodeon";
+	public static final String COLORMODE_OFF = "colormodeoff";
+
 	private static LSProperties instance = null;
 
 	private Properties properties = new Properties();
