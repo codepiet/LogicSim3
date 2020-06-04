@@ -151,10 +151,6 @@ public class Memory128 extends Gate {
 		}
 	}
 
-	private void set(int cell, int instruction, int address) {
-		mem[cell] = (byte) ((instruction << 4) + address);
-	}
-
 	private void set(int cell, int instruction) {
 		mem[cell] = (byte) instruction;
 	}

@@ -193,6 +193,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 			if (sim) {
 				currentAction = ACTION_NONE;
+				fireStatusText(NOTHING);
 			}
 
 			if (currentAction == ACTION_SELECT) {
@@ -263,6 +264,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					wire.getTo().connect(wire);
 					wire.finish();
 					currentAction = ACTION_NONE;
+					fireStatusText(NOTHING);
 					fireCircuitChanged();
 				} else if (cp instanceof Wire) {
 					Wire clickedWire = (Wire) cp;
@@ -277,6 +279,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					wire.getTo().connect(wire);
 					wire.finish();
 					currentAction = ACTION_NONE;
+					fireStatusText(NOTHING);
 					fireCircuitChanged();
 				} else if (cp instanceof WirePoint) {
 					WirePoint clickedWP = (WirePoint) cp;
@@ -292,6 +295,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 							wire.getTo().connect(wire);
 							wire.finish();
 							currentAction = ACTION_NONE;
+							fireStatusText(NOTHING);
 							fireCircuitChanged();
 						} else {
 							// shorten the wire and delete circles
@@ -305,6 +309,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 						wire.getTo().connect(wire);
 						wire.finish();
 						currentAction = ACTION_NONE;
+						fireStatusText(NOTHING);
 						fireCircuitChanged();
 					}
 				}
@@ -331,6 +336,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 						pin.setLevelType(currentAction);
 						pin.changedLevel(new LSLevelEvent(new Wire(null, null), pin.level, true));
 						currentAction = ACTION_NONE;
+						fireStatusText(NOTHING);
 						fireCircuitChanged();
 						return;
 					}
@@ -370,7 +376,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 
 			cp.mousePressed(new LSMouseEvent(e, currentAction, parts));
 			currentAction = ACTION_NONE;
-
+			fireStatusText(NOTHING);
 			repaint();
 		}
 
@@ -394,6 +400,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				}
 				fireStatusText(String.format(I18N.tr(Lang.PARTSSELECTED), String.valueOf(parts.length)));
 				currentAction = ACTION_NONE;
+				fireStatusText(NOTHING);
 				selectRect = null;
 				repaint();
 				return;
@@ -433,6 +440,8 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 	private static final long serialVersionUID = -6414072156700139318L;
 
 	public static final String MSG_ABORTED = "MSG_DESELECT_BUTTONS";
+
+	public static final String NOTHING = "NOTHING";
 
 	CircuitChangedListener changeListener;
 	public Circuit circuit = new Circuit();
@@ -564,6 +573,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 					w = null;
 					parts = null;
 					circuit.deselectAll();
+					fireStatusText(MSG_ABORTED);
 				}
 			} else if (currentAction == ACTION_ADDPOINT || currentAction == ACTION_DELPOINT
 					|| currentAction == ACTION_SELECT) {
@@ -596,6 +606,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 		if (keyCode == KeyEvent.VK_DELETE || keyCode == KeyEvent.VK_BACK_SPACE) {
 			if (circuit.remove(parts)) {
 				currentAction = ACTION_NONE;
+				fireStatusText(NOTHING);
 				fireStatusText(I18N.tr(Lang.PARTSDELETED, String.valueOf(parts.length)));
 				fireCircuitChanged();
 				repaint();

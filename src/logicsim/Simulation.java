@@ -46,6 +46,8 @@ public class Simulation implements Runnable {
 	}
 
 	public synchronized void putEvent(LSLevelEvent evt) {
+		if (queue.size() > 1000)
+			return;
 		queue.add(evt);
 		notifyAll();
 	}

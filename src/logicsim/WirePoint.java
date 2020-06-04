@@ -18,6 +18,8 @@ public class WirePoint extends CircuitPart {
 
 	protected boolean show = false;
 
+	private boolean level = false;
+
 	public WirePoint(int x, int y) {
 		super(x, y);
 	}
@@ -90,9 +92,13 @@ public class WirePoint extends CircuitPart {
 	@Override
 	public void changedLevel(LSLevelEvent e) {
 		super.changedLevel(e);
-		fireChangedLevel(e);
-		if (parent != null && !e.source.equals(parent))
-			parent.changedLevel(e);
+		if (getLevel() != e.level || e.force) {
+			level = e.level;
+			fireChangedLevel(e);
+			if (parent != null && !e.source.equals(parent)) {
+				parent.changedLevel(e);
+			}
+		}
 	}
 
 	@Override
@@ -100,5 +106,10 @@ public class WirePoint extends CircuitPart {
 		if (parent == null)
 			return super.getId();
 		return super.getId() + "@" + parent.getId();
+	}
+
+	@Override
+	public boolean getLevel() {
+		return level;
 	}
 }

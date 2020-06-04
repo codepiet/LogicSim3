@@ -390,12 +390,11 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		mnu.add(mnuMode);
 
-		//---------------------------------------------------------------
-		
+		// ---------------------------------------------------------------
+
 		m = new JMenu(I18N.tr(Lang.COLORMODE));
 		btnGroup = new ButtonGroup();
-		String cMode = LSProperties.getInstance().getProperty(LSProperties.COLORMODE,
-				LSProperties.COLORMODE_ON);
+		String cMode = LSProperties.getInstance().getProperty(LSProperties.COLORMODE, LSProperties.COLORMODE_ON);
 
 		JRadioButtonMenuItem mCmOn = new JRadioButtonMenuItem();
 		mCmOn.setText(I18N.tr(Lang.COLORMODE_ON));
@@ -421,9 +420,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		btnGroup.add(mCmOff);
 
 		mnu.add(m);
-		
-		
-		
+
 		JMenu mnuLang = new JMenu(I18N.tr(Lang.LANGUAGE));
 		String currentLanguage = LSProperties.getInstance().getProperty(LSProperties.LANGUAGE, "de");
 		createLanguageMenu(mnuLang, currentLanguage);
@@ -587,14 +584,23 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnLS, null);
 
-		btnLS = new LSButton("select", Lang.SELECT);
-		btnLS.addActionListener(new ActionListener() {
+		btnToggle = new LSToggleButton("select", Lang.SELECT);
+		btnToggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lspanel.setAction(LSPanel.ACTION_SELECT);
 				lspanel.requestFocusInWindow();
 			}
 		});
-		btnBar.add(btnLS, null);
+		btnBar.add(btnToggle, null);
+
+		//btnLS = new LSButton("select", Lang.SELECT);
+		//btnLS.addActionListener(new ActionListener() {
+		//	public void actionPerformed(ActionEvent e) {
+		//		lspanel.setAction(LSPanel.ACTION_SELECT);
+		//		lspanel.requestFocusInWindow();
+		//	}
+		//});
+		//btnBar.add(btnLS, null);
 
 		btnBar.add(getMenuGap());
 
@@ -1098,6 +1104,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 	/**
 	 * handles color mode (on-redblack / off - blackwhite for printing)
+	 * 
 	 * @param e
 	 */
 	private void actionColorMode(ActionEvent e) {
@@ -1117,13 +1124,12 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			}
 		}
 		LSProperties.getInstance().setProperty(LSProperties.COLORMODE, mode);
-		
+
 		Wire.setColorMode();
-		
+
 		this.lspanel.repaint();
 	}
 
-	
 	/**
 	 * handles mode (normal/expert)
 	 * 
@@ -1225,6 +1231,14 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	@Override
 	public void changedStatusText(String text) {
 		// this is a hack - maybe it is ok...
+		if (LSPanel.NOTHING.equals(text)) {
+			for (Component c : btnBar.getComponents()) {
+				if (c instanceof LSToggleButton) {
+					LSToggleButton b = (LSToggleButton) c;
+					b.setSelected(false);
+				}
+			}
+		}
 		if (LSPanel.MSG_ABORTED.equals(text)) {
 			for (Component c : btnBar.getComponents()) {
 				if (c instanceof LSToggleButton) {
