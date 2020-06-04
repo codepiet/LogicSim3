@@ -2,7 +2,7 @@
 
 	<tstamp />
 
-	<property name="version" value="3.2-${DSTAMP}" />
+	<property name="version" value="3.3-${DSTAMP}" />
 	<property name="main-class" value="logicsim.App" />
 
 	<property name="release.dir" value="release" />
@@ -59,7 +59,6 @@
 				<file file="logicsim.cfg" />
 				<file file="LICENSE.md" />
 				<file file="icon.png" />
-				<file file="modules" />
 				<file file="logicsim.bat" />
 				<file file="README.md" />
 			</resources>
@@ -72,6 +71,9 @@
 		</copy>
 		<copy todir="${dist.dir}/languages">
 			<fileset dir="languages" />
+		</copy>
+		<copy todir="${dist.dir}/docs">
+			<fileset dir="docs" />
 		</copy>
 		<zip destfile="${release.dir}/LogicSim-${version}.zip" basedir="${dist.dir}" />
 	</target>
