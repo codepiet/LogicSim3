@@ -151,7 +151,8 @@ public class Wire extends CircuitPart implements Cloneable {
 		// draw points
 		if (points.size() > 0) {
 			for (WirePoint point : points) {
-				if (selected || point.isSelected() || point.show || point.getListeners().size() > 1) {
+				//point.show || 
+				if (selected || point.isSelected() || point.getListeners().size() > 1) {
 					point.draw(g2);
 				}
 			}
