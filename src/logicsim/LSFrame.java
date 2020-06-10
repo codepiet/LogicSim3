@@ -1044,6 +1044,9 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	 * @param e
 	 */
 	void actionLstGatesSelected(ListSelectionEvent e) {
+		if (Simulation.getInstance().isRunning())
+			return;
+		
 		int sel = lstParts.getSelectedIndex();
 		if (sel < 0)
 			return;
