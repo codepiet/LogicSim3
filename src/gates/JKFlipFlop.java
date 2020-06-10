@@ -16,6 +16,12 @@ import logicsim.LSLevelEvent;
 public class JKFlipFlop extends Gate {
 	static final long serialVersionUID = -5614329713407328370L;
 
+	static final int CLK = 1;
+	static final int J = 0;
+	static final int K = 2;
+	static final int ON = 3;
+	static final int OI = 4;
+	
 	public JKFlipFlop() {
 		super("flipflops");
 		type = "jkff";
@@ -23,16 +29,16 @@ public class JKFlipFlop extends Gate {
 		createInputs(3);
 		createOutputs(2);
 
-		getPin(0).setProperty(TEXT, "J");
-		getPin(1).setProperty(TEXT, Pin.POS_EDGE_TRIG);
-		getPin(2).setProperty(TEXT, "K");
+		getPin(J).setProperty(TEXT, "J");
+		getPin(CLK).setProperty(TEXT, Pin.POS_EDGE_TRIG);
+		getPin(K).setProperty(TEXT, "K");
 
-		getPin(3).setProperty(TEXT, "Q");
-		getPin(4).setProperty(TEXT, "/Q");
+		getPin(ON).setProperty(TEXT, "Q");
+		getPin(OI).setProperty(TEXT, "/Q");
 
-		getPin(3).moveBy(0, 10);
-		getPin(4).moveBy(0, -10);
-		getPin(4).setLevelType(Pin.INVERTED);
+		getPin(ON).moveBy(0, 10);
+		getPin(OI).moveBy(0, -10);
+		getPin(OI).setLevelType(Pin.INVERTED);
 	}
 
 	@Override
@@ -40,15 +46,23 @@ public class JKFlipFlop extends Gate {
 		// clock: pin1
 		// j: pin0
 		// k: pin2
-		if (e.source.equals(getPin(1)) && e.level == HIGH) {
+		if (e.source.equals(getPin(CLK)) && e.level == HIGH) {
 			// clock rising edge detection
-			boolean j = getPin(0).getLevel();
-			boolean k = getPin(2).getLevel();
+			boolean j = getPin(J).getLevel();
+			boolean k = getPin(K).getLevel();
 			if (j && k) {
-				boolean out = getPin(3).getInternalLevel();
+				boolean out = getPin(ON).getInternalLevel();
 				LSLevelEvent evt = new LSLevelEvent(this, !out);
-				getPin(3).changedLevel(evt);
-				getPin(4).changedLevel(evt);
+				getPin(ON).changedLevel(evt);
+				getPin(OI).changedLevel(evt);
+			} else if (j) {
+				LSLevelEvent evt = new LSLevelEvent(this, true);
+				getPin(ON).changedLevel(evt);
+				getPin(OI).changedLevel(evt);			
+			} else if (k) {
+				LSLevelEvent evt = new LSLevelEvent(this, false);
+				getPin(ON).changedLevel(evt);
+				getPin(OI).changedLevel(evt);			
 			}
 		}
 	}
