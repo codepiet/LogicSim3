@@ -593,14 +593,14 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnToggle, null);
 
-		//btnLS = new LSButton("select", Lang.SELECT);
-		//btnLS.addActionListener(new ActionListener() {
-		//	public void actionPerformed(ActionEvent e) {
-		//		lspanel.setAction(LSPanel.ACTION_SELECT);
-		//		lspanel.requestFocusInWindow();
-		//	}
-		//});
-		//btnBar.add(btnLS, null);
+		// btnLS = new LSButton("select", Lang.SELECT);
+		// btnLS.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent e) {
+		// lspanel.setAction(LSPanel.ACTION_SELECT);
+		// lspanel.requestFocusInWindow();
+		// }
+		// });
+		// btnBar.add(btnLS, null);
 
 		btnBar.add(getMenuGap());
 
@@ -787,10 +787,13 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 				lspanel.circuit.deselectAll();
 				repaint();
 				Simulation.getInstance().start();
+				changedStatusText(I18N.tr(Lang.SIMULATION_STARTED));
 			}
 		} else {
-			if (Simulation.getInstance().isRunning())
+			if (Simulation.getInstance().isRunning()) {
 				Simulation.getInstance().stop();
+				changedStatusText(I18N.tr(Lang.SIMULATION_STOPPED));
+			}
 		}
 	}
 
@@ -1235,9 +1238,11 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			for (Component c : btnBar.getComponents()) {
 				if (c instanceof LSToggleButton) {
 					LSToggleButton b = (LSToggleButton) c;
-					b.setSelected(false);
+					if (!b.id.equals(I18N.langToStr(Lang.SIMULATE)))
+						b.setSelected(false);
 				}
 			}
+			return;
 		}
 		if (LSPanel.MSG_ABORTED.equals(text)) {
 			for (Component c : btnBar.getComponents()) {

@@ -187,13 +187,13 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			int rx = CircuitPart.round(e.getX());
 			int ry = CircuitPart.round(e.getY());
 
-			boolean sim = Simulation.getInstance().isRunning();
+			boolean simRunning = Simulation.getInstance().isRunning();
 			boolean expertMode = LSProperties.MODE_EXPERT
 					.equals(LSProperties.getInstance().getProperty(LSProperties.MODE, LSProperties.MODE_NORMAL));
 
-			if (sim) {
+			if (simRunning) {
 				currentAction = ACTION_NONE;
-				fireStatusText(NOTHING);
+				//fireStatusText(NOTHING);
 			}
 
 			if (currentAction == ACTION_SELECT) {
@@ -208,7 +208,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 			}
 			// if (cp != null)
 			// System.out.println(cp.toStringAll());
-			if (!sim && cp instanceof Pin && !e.isAltDown() && currentAction == ACTION_NONE) {
+			if (!simRunning && cp instanceof Pin && !e.isAltDown() && currentAction == ACTION_NONE) {
 				// we start a new wire if the pin we clicked is an output OR
 				// if we are in expert mode
 				if (((Pin) cp).isOutput() || expertMode)
@@ -325,7 +325,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				return;
 			}
 			// check if the part is a connector
-			if (cp instanceof Pin && !e.isAltDown() && !sim) {
+			if (cp instanceof Pin && !e.isAltDown() && !simRunning) {
 				Pin pin = ((Pin) cp);
 				fireStatusText(I18N.tr(Lang.PIN) + " (" + cp.getId() + ")");
 				// modify input (inverted or high or low or revert to normal type)
@@ -349,7 +349,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 				else
 					fireStatusText(I18N.getString(type, I18N.DESCRIPTION) + " (" + cp.getId() + ")");
 
-				if (parts.length > 0 && !sim) {
+				if (parts.length > 0 && !simRunning) {
 					// check if we clicked a new gate
 					if (!cp.isSelected()) {
 						cp.select();
@@ -359,7 +359,7 @@ public class LSPanel extends Viewer implements Printable, CircuitChangedListener
 						parts = circuit.getSelected();
 					}
 				}
-			} else if (cp instanceof Wire && !sim) {
+			} else if (cp instanceof Wire && !simRunning) {
 				String s = cp.getProperty(CircuitPart.TEXT);
 				String desc = I18N.tr(Lang.WIRE);
 				if (s != null)
