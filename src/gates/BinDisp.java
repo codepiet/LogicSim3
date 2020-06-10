@@ -52,18 +52,15 @@ public class BinDisp extends Gate {
 	}
 
 	@Override
-	protected void drawRotated(Graphics2D g2) {
-		Rectangle r = new Rectangle(xc - 15, yc - 15, 30, 30);
+	public void draw(Graphics2D g2) {
+		super.draw(g2);
+
+		Rectangle r = new Rectangle(xc - 20, yc - 15, 40, 30);
 		g2.setColor(Color.white);
 		g2.fill(r);
 		g2.setColor(Color.black);
 		g2.draw(r);
-	}
-
-	@Override
-	public void draw(Graphics2D g2) {
-		super.draw(g2);
-
+		
 		int value = 0;
 		for (int i = 0; i < 8; i++) {
 			if (getPin(i).getLevel())
@@ -72,7 +69,7 @@ public class BinDisp extends Gate {
 
 		String sval = displayType.toUpperCase();
 		g2.setFont(smallFont);
-		WidgetHelper.drawString(g2, sval, xc, yc + 10, WidgetHelper.ALIGN_CENTER);
+		WidgetHelper.drawString(g2, sval, xc, getY() + 10, WidgetHelper.ALIGN_CENTER);
 
 		g2.setFont(hugeFont);
 		if (DISPLAY_TYPE_DEC.equals(displayType))
@@ -85,7 +82,7 @@ public class BinDisp extends Gate {
 		if (sval.length() == 1)
 			sval = "0" + sval;
 		sval = sval.toUpperCase();
-		WidgetHelper.drawString(g2, sval, xc, yc + 3, WidgetHelper.ALIGN_CENTER);
+		WidgetHelper.drawString(g2, sval, xc, yc, WidgetHelper.ALIGN_CENTER);
 	}
 
 	@Override
@@ -123,7 +120,7 @@ public class BinDisp extends Gate {
 		pane.setOptions(new String[] { I18N.tr(Lang.OK), I18N.tr(Lang.CANCEL) });
 		JDialog dlg = pane.createDialog(frame, I18N.tr(Lang.SETTINGS));
 		dlg.setResizable(true);
-		dlg.setSize(290, 180);
+		dlg.setSize(320, 180);
 		dlg.setVisible(true);
 		if (I18N.tr(Lang.OK).equals((String) pane.getValue())) {
 			if (jRadioButton1.isSelected()) {
@@ -131,7 +128,6 @@ public class BinDisp extends Gate {
 			} else if (jRadioButton2.isSelected()) {
 				displayType = DISPLAY_TYPE_DEC;
 			}
-			label = displayType.toUpperCase();
 			return true;
 		}
 		return false;
