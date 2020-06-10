@@ -217,7 +217,7 @@ public class BinIn extends Gate {
 		pane.setOptions(new String[] { I18N.tr(Lang.OK), I18N.tr(Lang.CANCEL) });
 		JDialog dlg = pane.createDialog(frame, I18N.tr(Lang.SETTINGS));
 		dlg.setResizable(true);
-		dlg.setSize(290, 180);
+		dlg.setSize(320, 180);
 		dlg.setVisible(true);
 		if (I18N.tr(Lang.OK).equals((String) pane.getValue())) {
 			if (jRadioButton1.isSelected()) {
@@ -225,7 +225,6 @@ public class BinIn extends Gate {
 			} else if (jRadioButton2.isSelected()) {
 				displayType = DISPLAY_TYPE_DEC;
 			}
-			displayType = displayType.toUpperCase();
 			return true;
 		}
 		return false;
