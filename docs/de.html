@@ -9,20 +9,20 @@
 <body bgcolor="#ffffff">
 <h1>LogicSim Kurzanleitung</h1>
 
-<p>Aus der Liste auf der linken Seite wird durch Klick eine Komponenten ausgewählt. 
-Diese wird automatisch auf der Arbeitsfläche platziert.</p>
+<p>Aus der Liste auf der linken Seite wird durch Klick eine Komponenten ausgew&auml;hlt. 
+Diese wird automatisch auf der Arbeitsfl&auml;che platziert.</p>
 <p>Die Komponente wird verkabelt, indem auf den Ausgang (meist rechte Seite) eines Gatters 
-geklickt wird und das Kabel auch über Zwischenklicks bis zum Eingang (meist linke Seite) 
-eines anderen Gatters geführt wird.</p>
-<p>Gatter und Kabel können durch Anklicken ausgewählt werden. Verschieben (per Drag) und 
-Löschen (Entf./Del-Taste) ist möglich.</p>
-<p>Bei einigen Gattern (z.B. Clock, MonoFlop, LCD, TextLabel) können Einstellungen 
-verändert werden, indem im Kontext-Menü (rechte Maustaste) des Gatters "Eigenschaften" 
-ausgewählt wird.</p>
-<p>Einige Komponenten, normalerweise Eingabebauteile, unterstützen einen interaktiven Modus. 
-Durch Auswahl (Klick) und anschließendem Drücken der Leertaste wird eine Aktion ausgeführt. 
+geklickt wird und das Kabel auch &uuml;ber Zwischenklicks bis zum Eingang (meist linke Seite) 
+eines anderen Gatters gef&uuml;hrt wird.</p>
+<p>Gatter und Kabel k&ouml;nnen durch Anklicken ausgew&auml;hlt werden. Verschieben (per Drag) und 
+L&ouml;schen (Entf./Del-Taste) ist m&ouml;glich.</p>
+<p>Bei einigen Gattern (z.B. Clock, MonoFlop, LCD, TextLabel) k&ouml;nnen Einstellungen 
+ver&auml;ndert werden, indem im Kontext-Men&uuml; (rechte Maustaste) des Gatters "Eigenschaften" 
+ausgew&auml;hlt wird.</p>
+<p>Einige Komponenten, normalerweise Eingabebauteile, unterst&uuml;tzen einen interaktiven Modus. 
+Durch Auswahl (Klick) und anschlie&szlig;endem Dr&uuml;cken der Leertaste wird eine Aktion ausgef&uuml;hrt. 
 Bei Schaltern wird der Schaltzustand umgeschaltet.</p> 
-<p>Für manche Gatter (AND, OR, XOR, usw.) kann die Anzahl der Eingänge vor dem Einfügen
+<p>F&uuml;r manche Gatter (AND, OR, XOR, usw.) kann die Anzahl der Eing&auml;nge vor dem Einf&uuml;gen
 in der Auswahlbox unter der Gatterliste eingestellt werden, um Gatterkaskaden zu vermeiden, 
 s. Abbildung.</br>
 <img src="images/and4input.gif">
@@ -32,48 +32,48 @@ s. Abbildung.</br>
 
 <h2>Eingangsbeschaltung</h2>
 <img src="images/input.png" align=right valign=top>
-<p>Im Menü und über die dargestellten Schaltflächen können die Eingänge 
-von Gattern verändert werden. Für die Eingänge stehen die Verhaltensweisen "Normal", 
-"Negiert", "HIGH" und "LOW" zur Verfügung. Zur Veränderung eines Eingangs wird der gewünschte 
-Eingangsbeschaltung per Knopf oder Menüeintrag ausgewählt. Anschließend wird per Klick auf 
+<p>Im Men&uuml; und &uuml;ber die dargestellten Schaltfl&auml;chen k&ouml;nnen die Eing&auml;nge 
+von Gattern ver&auml;ndert werden. F&uuml;r die Eing&auml;nge stehen die Verhaltensweisen "Normal", 
+"Negiert", "HIGH" und "LOW" zur Verf&uuml;gung. Zur Ver&auml;nderung eines Eingangs wird der gew&uuml;nschte 
+Eingangsbeschaltung per Knopf oder Men&uuml;eintrag ausgew&auml;hlt. Anschlie&szlig;end wird per Klick auf 
 einen Eingangspin einer Komponente die Beschaltung aktiv.<br>
-Die Eingangsbeschaltungen HIGH und LOW bewirken einen ständigen, festgelegten Pegel am Eingang.</p>
+Die Eingangsbeschaltungen HIGH und LOW bewirken einen st&auml;ndigen, festgelegten Pegel am Eingang.</p>
 <br clear=all>
 <br>
 
 <h2>Erstellen eines Moduls</h2>
 <p>In einem Modul wird eine Schaltung zusammengefasst, die dann als Gatter
 in einer anderen Schaltung verwendet werden kann.</p>
-<p>Zum Erstellen aus dem Menü "Datei" den Menüpunkt "Modul erstellen" auswählen. Im 
+<p>Zum Erstellen aus dem Men&uuml; "Datei" den Men&uuml;punkt "Modul erstellen" ausw&auml;hlen. Im 
 Dialogfenster kann eine Beschreibung eingetragen werden.</p>
-<p>Es erscheinen nach dem Schließen des Dialogfenster zwei Gatter, die nicht gelöscht werden können: 
-INPUT und OUTPUT. An die Ausgänge des INPUT-Gatters können die Kabel angeschlossen werden, die zur
-Schaltung gehören. An die Eingänge des INPUT-Gatters können zum Test z.B. Schalter angeschlossen werden,
-diese werden bei Verwendung in einer Schaltung automatisch entfernt. Ebenso werden an die Eingänge des 
-OUTPUT-Gatters die späteren Ausgänge der Schaltung angeschlossen. An die Ausgänge des OUTPUT-Gatters
-können wiederum zum Test LEDs u.ä. angeschlossen werden. Diese werden ebenso automatisch beim Verwenden
-des Moduls gelöscht, werden jedoch nicht aus der Datei entfernt, so dass jederzeit eine Weiterentwicklung 
-möglich ist.</p>
-<p>Das Ein- und Ausgänge des Moduls können mit Beschriftungen (Labels) versehen werden. Dazu muss neben die
-Pins in das Gehäuse geklickt werden. Es öffnet sich dann ein Abfragefenster für die Beschriftung. Es ist jeweils
-Platz für ca. ein Zeichen.</p>
+<p>Es erscheinen nach dem Schlie&szlig;en des Dialogfenster zwei Gatter, die nicht gel&ouml;scht werden k&ouml;nnen: 
+INPUT und OUTPUT. An die Ausg&auml;nge des INPUT-Gatters k&ouml;nnen die Kabel angeschlossen werden, die zur
+Schaltung geh&ouml;ren. An die Eing&auml;nge des INPUT-Gatters k&ouml;nnen zum Test z.B. Schalter angeschlossen werden,
+diese werden bei Verwendung in einer Schaltung automatisch entfernt. Ebenso werden an die Eing&auml;nge des 
+OUTPUT-Gatters die sp&auml;teren Ausg&auml;nge der Schaltung angeschlossen. An die Ausg&auml;nge des OUTPUT-Gatters
+k&ouml;nnen wiederum zum Test LEDs u.&auml;. angeschlossen werden. Diese werden ebenso automatisch beim Verwenden
+des Moduls gel&ouml;scht, werden jedoch nicht aus der Datei entfernt, so dass jederzeit eine Weiterentwicklung 
+m&ouml;glich ist.</p>
+<p>Das Ein- und Ausg&auml;nge des Moduls k&ouml;nnen mit Beschriftungen (Labels) versehen werden. Dazu muss neben die
+Pins in das Geh&auml;use geklickt werden. Es &ouml;ffnet sich dann ein Abfragefenster f&uuml;r die Beschriftung. Es ist jeweils
+Platz f&uuml;r ca. ein Zeichen.</p>
 <p>Beim Speichern wird das Modul unter dem angegebenen Namen im "modules" Verzeichnis
 gespeichert. Der Name, unter dem gespeichert wird,
 ist gleichzeitig der Name des Moduls. Der Name sollte also kurz gehalten werden. Das Modul erscheint 
 in der Liste der Komponenten zuunterst und kann in neue Schaltungen eingebaut werden.</p>
 <p>Es sind bereits Module vorbereitet, HA und FA stellen ein Halbaddierer und ein 
-Volladdierer (Full Adder) zur Verfügung. Der Volladdierer verwendet Halbaddierer.</p>
+Volladdierer (Full Adder) zur Verf&uuml;gung. Der Volladdierer verwendet Halbaddierer.</p>
 
 <h3>Beispiel</h3>
 <p>Die beiden nachfolgenden Abbildungen zeigen den Volladdierern in der 
-Bearbeitungsansicht und in der Verwendung. Es ist erkennbar, dass die Ausgänge des OUTPUT-Gatters mit 
+Bearbeitungsansicht und in der Verwendung. Es ist erkennbar, dass die Ausg&auml;nge des OUTPUT-Gatters mit 
 Beschriftungen versehen wurden.</p>
 <div align="center">
 <img src="images/fa.png"/><br>
 Volladdierer in der Bearbeitungsansicht<br/><br/>
 
 <img src="images/fanet.png"/><br/>
-Addiernetz aus 8 Volladdierern zur Addition zweier 8-stelliger Binärzahlen (11+13=24)</br/>
+Addiernetz aus 8 Volladdierern zur Addition zweier 8-stelliger Bin&auml;rzahlen (11+13=24)</br/>
 </div>
 </body>
 </html>
