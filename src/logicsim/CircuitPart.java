@@ -60,9 +60,13 @@ public abstract class CircuitPart implements LSLevelListener {
 
 	public static final String TEXT = "text";
 
-	public String TEXT_DEFAULT = "";
+	public String TEXT_DEFAULT = "<Label>";
 
 	public String text;
+
+	public String type;
+	
+	protected String label;
 
 	public CircuitPart(int x, int y) {
 		this.x = x;

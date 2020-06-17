@@ -8,12 +8,11 @@ import javax.swing.JToggleButton;
 public class LSToggleButton extends JToggleButton {
 
 	private static final long serialVersionUID = 4992541122998327288L;
-	public final String id;
+
 	public LSToggleButton(String iconName, Lang toolTip) {
 		this.setDoubleBuffered(true);
 		this.setIcon(getIcon(iconName));
 		this.setToolTipText(I18N.tr(toolTip));
-		this.id = I18N.langToStr(toolTip);
 		// this.setBorderPainted(true);
 		// this.setBorder(BorderFactory.createLineBorder(Color.black));
 		// this.addMouseListener(this);

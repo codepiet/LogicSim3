@@ -170,14 +170,16 @@ public class Wire extends CircuitPart implements Cloneable {
 
 		g2.setColor(Color.black);
 
-		if (points.size() > 0) {
-			g2.drawString(text, (getFrom().getX() + points.get(0).getX()) / 2,
-					(getFrom().getY() + points.get(0).getY()) / 2);
-		} else {
-			if (getFrom() != null && getTo() == null && tempPoint != null) {
-				g2.drawString(text, (getFrom().getX() + tempPoint.x) / 2, (getFrom().getY() + tempPoint.y) / 2);
-			} else if (getFrom() != null && getTo() != null) {
-				g2.drawString(text, (getFrom().getX() + getTo().getX()) / 2, (getFrom().getY() + getTo().getY()) / 2);
+		if (text != null && text.length() > 0 && text != "<Label>") {
+			if (points.size() > 0) {
+				g2.drawString(text, (getFrom().getX() + points.get(0).getX()) / 2,
+						(getFrom().getY() + points.get(0).getY()) / 2);
+			} else {
+				if (getFrom() != null && getTo() == null && tempPoint != null) {
+					g2.drawString(text, (getFrom().getX() + tempPoint.x) / 2, (getFrom().getY() + tempPoint.y) / 2);
+				} else if (getFrom() != null && getTo() != null) {
+					g2.drawString(text, (getFrom().getX() + getTo().getX()) / 2, (getFrom().getY() + getTo().getY()) / 2);
+				}
 			}
 		}
 	}

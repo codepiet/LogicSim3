@@ -53,6 +53,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	private static final long serialVersionUID = -5281157929385660575L;
 
 	LogicSimFile lsFile;
+	VerilogFile vFile;
 
 	JMenuBar mnuBar;
 	JToolBar btnBar;
@@ -75,6 +76,7 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 
 		lsFile = new LogicSimFile(defaultCircuitFileName());
 		lsFile.circuit.setRepaintListener(lspanel);
+		vFile = new VerilogFile(defaultVerilogFileName());
 		lspanel.setChangeListener(this);
 
 		try {
@@ -107,6 +109,13 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		String fn = App.getCircuitPath();
 		fn += I18N.tr(Lang.UNNAMED);
 		fn += "." + App.CIRCUIT_FILE_SUFFIX;
+		return fn;
+	}
+	
+	private String defaultVerilogFileName() {
+		String fn = App.getVerilogPath();
+		fn += I18N.tr(Lang.UNNAMED);
+		fn += "." + App.VERILOG_FILE_SUFFIX;
 		return fn;
 	}
 
@@ -180,6 +189,14 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				exportImage();
+			}
+		});
+		mnu.add(m);
+		
+		m = createMenuItem(Lang.VEXPORT, 0, true);
+		m.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionVExport(e);
 			}
 		});
 		mnu.add(m);
@@ -593,14 +610,14 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		});
 		btnBar.add(btnToggle, null);
 
-		// btnLS = new LSButton("select", Lang.SELECT);
-		// btnLS.addActionListener(new ActionListener() {
-		// public void actionPerformed(ActionEvent e) {
-		// lspanel.setAction(LSPanel.ACTION_SELECT);
-		// lspanel.requestFocusInWindow();
-		// }
-		// });
-		// btnBar.add(btnLS, null);
+		//btnLS = new LSButton("select", Lang.SELECT);
+		//btnLS.addActionListener(new ActionListener() {
+		//	public void actionPerformed(ActionEvent e) {
+		//		lspanel.setAction(LSPanel.ACTION_SELECT);
+		//		lspanel.requestFocusInWindow();
+		//	}
+		//});
+		//btnBar.add(btnLS, null);
 
 		btnBar.add(getMenuGap());
 
@@ -787,13 +804,10 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 				lspanel.circuit.deselectAll();
 				repaint();
 				Simulation.getInstance().start();
-				changedStatusText(I18N.tr(Lang.SIMULATION_STARTED));
 			}
 		} else {
-			if (Simulation.getInstance().isRunning()) {
+			if (Simulation.getInstance().isRunning())
 				Simulation.getInstance().stop();
-				changedStatusText(I18N.tr(Lang.SIMULATION_STOPPED));
-			}
 		}
 	}
 
@@ -913,6 +927,21 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 		lsFile.changed = false;
 		fillGateList();
 	}
+	
+	void actionVExport(ActionEvent e) {
+		if (showVExportDialog() == false)
+			return;
+		vFile.circuit = lspanel.circuit;
+		try {
+			VerilogCreator.createVerilog(vFile);
+		} catch (RuntimeException err) {
+			System.err.println(err);
+			err.printStackTrace(System.err);
+			JOptionPane.showMessageDialog(this, I18N.tr(Lang.SAVEERROR) + " " + err.getMessage());
+		}
+		setStatusText(String.format(I18N.tr(Lang.SAVED), vFile.fileName));
+		fillGateList();
+	}
 
 	/**
 	 * helper method to show the save dialog
@@ -943,6 +972,48 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 				else
 					lsFile.fileName += "." + App.CIRCUIT_FILE_SUFFIX;
 			}
+			return true;
+		} else
+			return false;
+	}
+	
+	/**
+	 * helper method to show the verilog-export dialog
+	 * 
+	 * @return
+	 */
+	public boolean showVExportDialog() {
+		File file = new File(vFile.fileName);
+		String parentDirName = file.getParent();
+
+		JFileChooser chooser = new JFileChooser(parentDirName);
+		chooser.setDialogTitle(I18N.tr(Lang.SAVECIRCUIT));
+
+		String s = "Verilog Files (" + "." + App.VERILOG_FILE_SUFFIX + ")";
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(s, App.VERILOG_FILE_SUFFIX);
+		chooser.setFileFilter(filter);
+
+		if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+			vFile.fileName = chooser.getSelectedFile().getAbsolutePath();
+			// check fileName
+			int lastSeparator = vFile.fileName.lastIndexOf(File.separatorChar);
+			int lastDot = vFile.fileName.lastIndexOf(".");
+			if (lastDot < lastSeparator) {
+				// ending is missing
+				vFile.fileNameNE = vFile.fileName;
+				vFile.fileName += "." + App.VERILOG_FILE_SUFFIX;
+			}
+			else {
+				int iend = vFile.fileName.indexOf(".");
+				if (iend != -1) {
+				    vFile.fileNameNE = vFile.fileName.substring(0 , iend);
+				}
+			}
+			int lastSlash = vFile.fileNameNE.lastIndexOf("/");
+			if (lastSlash == 0) {
+				lastSlash = vFile.fileNameNE.lastIndexOf("\\");
+			}
+			vFile.fileNameNE = vFile.fileNameNE.substring(lastSlash+1,vFile.fileNameNE.length());
 			return true;
 		} else
 			return false;
@@ -1044,9 +1115,6 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 	 * @param e
 	 */
 	void actionLstGatesSelected(ListSelectionEvent e) {
-		if (Simulation.getInstance().isRunning())
-			return;
-		
 		int sel = lstParts.getSelectedIndex();
 		if (sel < 0)
 			return;
@@ -1241,11 +1309,9 @@ public class LSFrame extends JFrame implements ActionListener, CircuitChangedLis
 			for (Component c : btnBar.getComponents()) {
 				if (c instanceof LSToggleButton) {
 					LSToggleButton b = (LSToggleButton) c;
-					if (!b.id.equals(I18N.langToStr(Lang.SIMULATE)))
-						b.setSelected(false);
+					b.setSelected(false);
 				}
 			}
-			return;
 		}
 		if (LSPanel.MSG_ABORTED.equals(text)) {
 			for (Component c : btnBar.getComponents()) {

@@ -41,8 +41,6 @@ public class Gate extends CircuitPart {
 
 	protected int height = 60;
 
-	protected String label;
-
 	protected int labelOffsetX;
 
 	protected int labelOffsetY;
@@ -66,8 +64,6 @@ public class Gate extends CircuitPart {
 	 * degrees clockwise
 	 */
 	public int rotate90 = 0;
-
-	protected String type;
 
 	protected boolean variableInputCountSupported = false;
 

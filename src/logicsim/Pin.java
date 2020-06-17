@@ -30,6 +30,8 @@ public class Pin extends CircuitPart {
 
 	public int number;
 
+
+	
 	protected boolean level = false;
 	public int paintDirection = RIGHT;
 
@@ -55,8 +57,10 @@ public class Pin extends CircuitPart {
 
 	public Pin(int x, int y, Gate gate, int number) {
 		super(x, y);
+		this.type = "pin";
 		this.parent = gate;
 		this.number = number;
+		loadProperties();
 	}
 
 	/**
@@ -79,7 +83,7 @@ public class Pin extends CircuitPart {
 		int y = getY();
 
 		g2.setFont(smallFont);
-		if (text != null && text.length() > 0) {
+		if (text != null && text.length() > 0 && text != "<Label>") {
 			if (paintDirection == RIGHT) {
 				if (POS_EDGE_TRIG.equals(text)) {
 					Polygon tr = new Polygon();

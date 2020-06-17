@@ -96,8 +96,7 @@ public class HTMLHelp extends javax.swing.JFrame implements java.awt.event.Actio
 		jButton_ok = new javax.swing.JButton();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		jTextPane1 = new javax.swing.JTextPane();
-		jTextPane1.setContentType("text/html;charset=UTF-8");
-		
+
 		jButton_ok.setText("OK");
 		jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
